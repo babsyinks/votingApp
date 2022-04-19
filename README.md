@@ -5,5 +5,5 @@ available for use by anyone rather than only by the
 alumni of my school.This app is developed using 
 React, Redux, Express, PostgresSql and Node.
 The one I built for my school used MongoDB rather than
-PostgresSql.
+PostgresSql.Sequelize was used as ORM.
 
