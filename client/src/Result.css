@@ -1,0 +1,72 @@
+.resHeader{
+    font-size: 1.875vw;
+    text-align: center;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+.resWrap{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.result{
+    background-color: rgb(2, 8, 92);
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 1.25vw;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: bold;
+}
+
+.allResultsWrap{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.winner{
+    margin-left: 10px;
+}
+
+.winner i{
+    color:rgb(0, 255, 0);
+}
+
+.resTie{
+    color: rgb(172, 154, 0);
+    font-weight: bold;
+    font-family:'Nanum Myeongjo', serif; 
+}
+
+ .resDetails{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+} 
+
+img.resImg{
+    width: 100% !important;
+}
+
+.resultContainer{
+    height: auto !important;
+}
+
+@media only screen and (orientation:portrait){
+    .result{
+        font-size: 1.25vh;
+    }
+    .resHeader{
+        font-size: 1.875vh;
+    }
+}
