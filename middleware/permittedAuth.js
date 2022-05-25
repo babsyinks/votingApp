@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const path = require('path')
 const{Egca} = require('../model/model')
-require('dotenv').config({path:path.join('..','..','.env')});
+require('dotenv').config({path:path.join('..','.env')});
 require('dotenv').config({ debug: process.env.DEBUG })
 
 const permittedAuth = (permittedUsers)=> async (req,res,next)=>{

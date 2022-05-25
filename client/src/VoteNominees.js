@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 /* import Particles from 'react-particles-js' */
 import {adminLogin} from './actions/adminActions'
 import {loading,notLoading} from './actions/loadingActions'
@@ -34,6 +35,7 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
     const[arrOfContestants,setArrOfContestants] = useState([])
     const[myEgcaNum,setMyEgcaNum] = useState(0)
     const[failedFetch,setFailedFetch] = useState(false)
+    const navigate = useNavigate()
     
 
     useEffect(()=>{
@@ -43,21 +45,21 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
         if(!unmounted){
            try {
             load()
-            const {data:{eleObj:electionArr,myEgcaNum}} = await axios.get('/election/details',{headers:{
+            //{data:{eleObj:electionArr,myEgcaNum}}
+            const {data} = await axios.get('/election/details',{headers:{
               'Accept':'application/json',
               'Content-Type':'application/json',
               'X-Auth-Token':localStorage.getItem('token')
             },cancelToken: source.token})
-            setMyEgcaNum(myEgcaNum)
-            setArrOfContestants(electionArr)
+            console.log(data)
+            //setMyEgcaNum(myEgcaNum)
+            //setArrOfContestants(electionArr)
             } catch (error) {
               setFailedFetch(true)  
       
             if (axios.isCancel(error)) {
                 console.log(`request cancelled:${error.message}`);
-            } else {
-                console.log("another error thrown:" + error.message);
-            }
+            } 
             }
             stopLoading()
           }
@@ -81,19 +83,16 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
       }
 
     const handleLogin = async()=>{
-    
         try {
-          
             const data = await login()
-           
             if(data === 'success'){
                 history.push('/admin') 
             }
             else{
-                setAlert('failed','Only An Administrator Has The Privileges To Add A Contestant!!!')
+                navigate('/admin-signin')
             }
         } catch (error) {
-            setAlert('failed','Only An Administrator Has The Privileges To Add A Contestant!!!')
+                navigate('/admin-signin')
         }
     }
 

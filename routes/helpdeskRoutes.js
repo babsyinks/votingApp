@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const {Egca} = require('../model/model')
 const permittedAuth = require('../middleware/permittedAuth')
-require('dotenv').config({path:path.join('..','..','.env')});
+require('dotenv').config({path:path.join('..','.env')});
 const Router = express.Router()
 Router.use(express.json())
 

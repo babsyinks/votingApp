@@ -4,10 +4,10 @@ const sharp = require('sharp')
 const multer = require('multer')
 const fs = require('fs')
 const imgbbUploader = require("imgbb-uploader");
-const permittedAuth = require('../middleware/permittedAuth')
+//const permittedAuth = require('../middleware/permittedAuth')
 const electionAuth = require('../middleware/electionAuth')
-const {Election} = require('../model/model')
-require('dotenv').config({path:path.join('..','..','.env')});
+const {Votes} = require('../models') //Election
+require('dotenv').config({path:path.join('..','.env')});
 const Router = express.Router()
 Router.use(express.json())  
  
@@ -24,8 +24,8 @@ const upload = multer({
         next(err);
       }
     })  
-
-Router.post('/contestants',permittedAuth([67]),upload.single('picture'),async(req,res)=>{
+//,permittedAuth([67]
+Router.post('/contestants'),upload.single('picture'),async(req,res)=>{
     let filePath
     const fileName = req.file.originalname
     try {
@@ -96,19 +96,21 @@ Router.post('/contestants',permittedAuth([67]),upload.single('picture'),async(re
         })
     }
 
-},(error, req, res, next) => {
-    res.status(400).send({error: error.message})
-    })
+}
 
 Router.get('/details',electionAuth,async(req,res)=>{
-    const{myEgcaNum} = req.user
-    let allElections = await Election.find({})
-    const allELeObj = allElections[0]
+    const user = req.user
+    //console.log(user)
+    let allElections =  await Votes.findAll()
+    console.log(allElections)
+    
+    //const allELeObj = allElections[0]
     if(allElections.length === 0){
      return res.status(404).send({message:'There Is Currently No Election.'})
     }
     else{
-        res.json({eleObj:allELeObj.positions,myEgcaNum})
+        //res.json({eleObj:allELeObj.positions,myEgcaNum})
+        res.json({electObj:allElections,myEgcaNum:user.user_id})
     }
 })
 

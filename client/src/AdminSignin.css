@@ -40,6 +40,9 @@
 input.admin_input{
     font-size: 1.171vw;
     width: auto;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid black;
 }
 
 @media only screen and (orientation:portrait) {

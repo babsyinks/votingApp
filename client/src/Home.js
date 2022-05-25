@@ -37,7 +37,6 @@ function Home({history,grantAccess,denyAccess,setInfo,userInformation,toVote,tim
   const[emailPhone,setEmailPhone] = useState(null)
 
   useEffect(()=>{
-
     const getTimerStatus = async ()=>{
       load()
       const {data:timerStatus} = await axios.get('/timer/status')
@@ -215,4 +214,4 @@ const mapStateToProps = (state)=>({
   isLoading:state.isLoading
 })
 
-export default  connect(mapStateToProps,{grantAccess:userAuthenticated,denyAccess:userNotAuthenticated,setInfo:setUserInfo,enableTimer:timerIsEnabled,disableTimer:timerIsDisabled,enableLiveTimer:liveTimerIsEnabled,disableLiveTimer:liveTimerIsDisabled,load:loading,stopLoading:notLoading})(Home);
+export default connect(mapStateToProps,{grantAccess:userAuthenticated,denyAccess:userNotAuthenticated,setInfo:setUserInfo,enableTimer:timerIsEnabled,disableTimer:timerIsDisabled,enableLiveTimer:liveTimerIsEnabled,disableLiveTimer:liveTimerIsDisabled,load:loading,stopLoading:notLoading})(Home);

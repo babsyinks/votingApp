@@ -1,7 +1,6 @@
 import React,{useEffect} from "react";
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {timerIsDisabled} from './actions/timerActions'
 import "./TimerComp.css";
@@ -30,7 +29,7 @@ const getTimeMinutes = (time) => ((time % hourSeconds) / minuteSeconds) | 0;
 const getTimeHours = (time) => ((time % daySeconds) / hourSeconds) | 0;
 const getTimeDays = (time) => (time / daySeconds) | 0;
 
-function TimerComp({endTime,disableTimer,history}) {
+function TimerComp({endTime,disableTimer}) {
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
   const remainingTime = endTime/1000 - startTime;
   const days = Math.ceil(remainingTime / daySeconds);
@@ -62,7 +61,7 @@ function TimerComp({endTime,disableTimer,history}) {
   return ()=>{
     clearInterval(timerInterval)
   }
-  },[disableTimer,history,endTime])
+  },[disableTimer,endTime])
 
   return (
     <div className="App">
@@ -119,4 +118,4 @@ function TimerComp({endTime,disableTimer,history}) {
   );
 }
 
-export default withRouter(connect(null,{disableTimer:timerIsDisabled}) (TimerComp)) 
+export default connect(null,{disableTimer:timerIsDisabled}) (TimerComp)

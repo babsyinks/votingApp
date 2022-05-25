@@ -2,12 +2,12 @@ const express = require('express')
 const path = require('path')
 const helmet = require('helmet')
 const xss = require('xss-clean')
-const mongoSanitize = require('express-mongo-sanitize')
 const cors = require('cors')
-const authRoutes = require('./server/routes/authRoutes')
-const electionRoutes = require('./server/routes/electionRoutes')
-const timerRoutes = require('./server/routes/timerRoutes')
-const helpDeskRoutes = require('./server/routes/helpdeskRoutes')
+const authRoutes = require('./routes/authRoutes')
+const {sequelize} = require('./models')
+const electionRoutes = require('./routes/electionRoutes')
+//const timerRoutes = require('./server/routes/timerRoutes')
+//const helpDeskRoutes = require('./server/routes/helpdeskRoutes')
 const port = process.env.PORT || 3001
 const app = express()
 
@@ -31,9 +31,8 @@ app.use(helmet.contentSecurityPolicy({
     },
   })) 
 app.use(xss())
-app.use(mongoSanitize())
 
-require('./server/db/connectToDB')
+//require('./server/db/connectToDB')
 
 const assetFolder = process.env.NODE_ENV === 'production'?'build':'public'
 
@@ -43,9 +42,9 @@ app.use('/auth',authRoutes)
 
 app.use('/election',electionRoutes)
 
-app.use('/timer', timerRoutes)
+//app.use('/timer', timerRoutes)
 
-app.use('/help',helpDeskRoutes)
+//app.use('/help',helpDeskRoutes)
 
 app.get('*',(req,res)=>{
     res.sendFile(path.join(__dirname,'client',`${assetFolder}`,'index.html'))
@@ -55,6 +54,8 @@ app.use((err,req,res,next)=>{
     res.send({err}) 
 })
 
-app.listen(port,()=>{ 
+app.listen(port,async()=>{ 
+    await sequelize.authenticate()
+    console.log("Database Connection Successful")
     console.log(`Server listening on port ${port}`)  
 })    
