@@ -6,7 +6,7 @@ const cors = require('cors')
 const authRoutes = require('./routes/authRoutes')
 const {sequelize} = require('./models')
 const electionRoutes = require('./routes/electionRoutes')
-//const timerRoutes = require('./server/routes/timerRoutes')
+const timerRoutes = require('./routes/timerRoutes')
 //const helpDeskRoutes = require('./server/routes/helpdeskRoutes')
 const port = process.env.PORT || 3001
 const app = express()
@@ -42,7 +42,7 @@ app.use('/auth',authRoutes)
 
 app.use('/election',electionRoutes)
 
-//app.use('/timer', timerRoutes)
+app.use('/timer', timerRoutes)
 
 //app.use('/help',helpDeskRoutes)
 

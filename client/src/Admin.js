@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import DisplayErrorMessage from './DisplayErrorMessage'
 import './Admin.css'
 
-const Admin = ({adminAuthenticated,history})=>{
+const Admin = ({adminAuthenticated})=>{
   const[surname,setSurname] = useState('')
   const[firstName,setFirstName] = useState('')
   const[egcaNum,setEgcaNum] = useState('')
@@ -14,9 +15,8 @@ const Admin = ({adminAuthenticated,history})=>{
   let[resetFile,setResetFile] = useState(0)
   const[isDisabled,setIsDisabled] = useState(true)
   const[displayAlert,setDisplayAlert] = useState({display:false,cls:'',message:''})
-
+  const navigate = useNavigate()
   useEffect(()=>{
-
     if(surname&&firstName&&post&&manifesto&&picture){
       setIsDisabled(false)
     }
@@ -49,15 +49,15 @@ const Admin = ({adminAuthenticated,history})=>{
   }
 
   const goHome = ()=>{
-    history.push('/')
+    navigate('/')
   }
 
   const goVote = ()=>{
-    history.push('/vote')
+    navigate('/vote')
   }
 
   const goSetTime = ()=>{
-    history.push('/time')
+    navigate('/time')
   }
 
   const setAlert = (cls,message)=>{
@@ -100,7 +100,6 @@ const Admin = ({adminAuthenticated,history})=>{
   } 
 
   if(adminAuthenticated){
-
     return(
       <div className="admin">
         {displayAlert.display && <DisplayErrorMessage status = {displayAlert.cls}>{displayAlert.message}</DisplayErrorMessage>}
@@ -146,7 +145,7 @@ const Admin = ({adminAuthenticated,history})=>{
   )
   }
   else{
-    history.push('/vote')
+    navigate('/vote')
     return null
   }
     

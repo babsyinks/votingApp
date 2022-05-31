@@ -4,12 +4,13 @@ import './AdminSignin.css'
 import {adminLogin} from './actions/adminActions'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 function AdminSignIn({login,history}) {
-
     const[password,setPassword] = useState('')
     const[username,setUsername] = useState('')
     const[errorMsg,setErrorMsg] = useState('')
+    const navigate = useNavigate()
 
     const handleSetUsername = (e)=>{
          setUsername(e.target.value)
@@ -20,21 +21,19 @@ function AdminSignIn({login,history}) {
     }
 
     const adminLogin = async ()=>{
-
         const alumniInfo = {username,password}
         try {
-            const {data:{token}} = await axios.post('/auth/checkIdentity',alumniInfo)
-
+            const {data:{token}} = await axios.post('/auth/login',alumniInfo)
             if(token){
-            localStorage.setItem('token',token)
+                localStorage.setItem('token',token)
             }
             else{
                 setErrorMsg('Invalid Login Credentials!')
             }
             const data = await login()
-           
+            
             if(data === 'success'){
-                history.push('/admin') 
+                navigate('/admin') 
             }
             else{
                 setErrorMsg('Only An Administrator Can Login!')
@@ -43,8 +42,6 @@ function AdminSignIn({login,history}) {
             setErrorMsg('Only An Administrator Can Login!')
         }
     }
-
-
     return (
         <ComposeComp>
             <div className = 'admin_signin_Wrap'>

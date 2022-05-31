@@ -18,10 +18,10 @@ export const adminLogin = ()=> async(dispatch)=>{
          type:action
       })  
          if(authenticated){
-            return Promise.resolve('success')
+            return 'success'
          }
          else{
-            return Promise.reject('failure')
+            return 'failure'
          }
       
    } catch (error) {

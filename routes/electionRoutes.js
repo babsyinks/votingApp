@@ -102,7 +102,6 @@ Router.get('/details',electionAuth,async(req,res)=>{
     const user = req.user
     //console.log(user)
     let allElections =  await Votes.findAll()
-    console.log(allElections)
     
     //const allELeObj = allElections[0]
     if(allElections.length === 0){

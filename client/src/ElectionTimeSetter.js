@@ -1,5 +1,6 @@
 import React, { useState,useEffect,Fragment } from 'react'
 import {connect} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import ComposeComp from './ComposeComp'
 import DisplayErrorMessage from './DisplayErrorMessage'
@@ -7,7 +8,7 @@ import './DisplayErrorMessage.css'
 import './ElectionTimeSetter.css'
 import {timerIsEnabled,timerIsDisabled,liveTimerIsEnabled,liveTimerIsDisabled,resetTimer} from './actions/timerActions'
 
-function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer,enableLiveTimer,disableLiveTimer,timer,resetTimer}) {
+function ElectionTimeSetter({adminAuthenticated,enableTimer,disableTimer,enableLiveTimer,disableLiveTimer,timer,resetTimer}) {
 
     const[startDate,setStartDate] = useState('')
     const[startTime,setStartTime] = useState('')
@@ -17,11 +18,12 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
     const[alert,setAlert] = useState({isSet:false})
     const[electionStartDate,setElectionStartDate] = useState(0)
     const[electionEndDate,setElectionEndDate] = useState(0)
+    const navigate = useNavigate()
 
     useEffect(()=>{
         const getTimerStatus = async ()=>{
-
             const {data:timerStatus} = await axios.get('/timer/status')
+            console.log(timerStatus)
             if(!timerStatus){
               disableTimer()
               disableLiveTimer()
@@ -30,7 +32,6 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
               console.log(timerStatus.message)
             }
             else{
-                delete timerStatus._id
               enableTimer({...timerStatus,electionStartSet:true})
               enableLiveTimer({electionEndSet:true})
             }
@@ -117,7 +118,7 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
         setAlert({status,msg,isSet:true})
          setTimeout(()=>{
             setAlert({isSet:false})
-            history.push('/')
+            navigate('/')
         },3000)
     }
 
@@ -129,7 +130,6 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
                 'X-Auth-Token':localStorage.getItem('token')
             }
             })
-            console.log(message)
             if(message === 'timer set'){
                 enableTimer({...timerObj,electionStartSet:true})
                 enableLiveTimer({electionEndSet:true})
@@ -155,8 +155,6 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
               }})
               console.log(message)
             if(message === 'timer cancelled'){
-/*                 disableTimer()
-                disableLiveTimer() */
                 resetTimer()
                 handleTimerMessage('Timer Successfully Cancelled!','success')
             }
@@ -190,7 +188,7 @@ function ElectionTimeSetter({adminAuthenticated,history,enableTimer,disableTimer
         )
     }
     else{
-        history.push('/vote')
+        navigate('/vote')
         return null
     }
 

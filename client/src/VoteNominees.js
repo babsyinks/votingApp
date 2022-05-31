@@ -30,14 +30,13 @@ import './VoteNominees.css'
                                       "remove":{"particles_nb":2}}},"retina_detect":true}
  */
 
-const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},load,stopLoading,isLoading,timer})=>{
+const VoteNominees = ({login,userAuthenticated,userInfo:{egcaNum,name},load,stopLoading,isLoading,timer})=>{
     const[displayAlert,setDisplayAlert] = useState({display:false,cls:'',message:''})
     const[arrOfContestants,setArrOfContestants] = useState([])
     const[myEgcaNum,setMyEgcaNum] = useState(0)
     const[failedFetch,setFailedFetch] = useState(false)
     const navigate = useNavigate()
     
-
     useEffect(()=>{
       let unmounted = false;
       let source = axios.CancelToken.source()
@@ -85,8 +84,10 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
     const handleLogin = async()=>{
         try {
             const data = await login()
+            
             if(data === 'success'){
-                history.push('/admin') 
+
+                navigate('/admin') 
             }
             else{
                 navigate('/admin-signin')
@@ -97,12 +98,12 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
     }
 
     const goHome = ()=>{
-        history.push('/')
+        navigate('/')
     }
 
     const logOut = ()=>{
       localStorage.removeItem('token')
-      history.push('/')
+      navigate('/')
     }
         if(userAuthenticated){ 
           if(!timer.electionStartSet && !timer.electionEndSet && timer.startDate === null && timer.endDate === null){
@@ -144,7 +145,7 @@ const VoteNominees = ({login,history,userAuthenticated,userInfo:{egcaNum,name},l
 
         }
         else{ 
-            history.push('/')
+            navigate('/')
             return null  
         } 
 }

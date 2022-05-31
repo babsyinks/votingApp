@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const {User} = require('../models')
 //const {Egca} = require('../model/model')
 //const electionAuth = require('../middleware/electionAuth')
-//const permittedAuth = require('../middleware/permittedAuth')
+const permittedAuth = require('../middleware/permittedAuth')
 require('dotenv').config();
 const Router = express.Router()
 Router.use(express.json())
@@ -25,14 +25,13 @@ Router.post('/register',async (req,res)=>{
     }
 })
 //emal_phone
- Router.post('/login',async(req,res)=>{
+Router.post('/login',async(req,res)=>{
     try {
         const{username,password} = req.body
         if(!username || !password){
             return res.status(400).json({error:"Provide Username and Password"})
         }
         const user = await User.findOne({where:{username}})
-        console.log(user)
         const checkPassword = await bcrypt.compare(password,user.password)
         if(!checkPassword){
         return res.status(401).json({error:"Wrong Username or Password"})
@@ -44,8 +43,8 @@ Router.post('/register',async (req,res)=>{
     }
 })
 
-/* Router.get('/admin/login',permittedAuth([67]),(req,res)=>{
+Router.get('/admin/login',permittedAuth(['babsyinks','admin']),(req,res)=>{
      res.json({authenticated:true})
-})  */
+})
 
 module.exports = Router
