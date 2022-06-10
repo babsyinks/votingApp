@@ -13,10 +13,10 @@ module.exports = {
         defaultValue:Sequelize.UUIDV4
       },
       user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       contestant_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       position: {
         type: Sequelize.STRING

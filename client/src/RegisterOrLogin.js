@@ -3,6 +3,7 @@ import './RegisterOrLogin.css'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import DisplayErrorMessage from './DisplayErrorMessage'
+import setAlert from './util/setAlert';
 import {connect} from 'react-redux'
 import LiveTimer  from './LiveTimer'
 import Result from './Result'
@@ -24,7 +25,7 @@ useEffect(()=>{
   const getTimerStatus = async ()=>{
     load()
     const {data:timerStatus} = await axios.get('/timer/status')
-    if(!timerStatus){
+    if(timerStatus.isEmpty){
       disableTimer()
       disableLiveTimer()
     }
@@ -55,11 +56,12 @@ async function handleSubmit(){
   try {
      const{data:{token}} = await axios.post(`/auth/${action.toLowerCase()}`,{username,password})
      localStorage.setItem('token',token)
+     setInfo(username)
      grantAccess()
       navigate('/vote')  
   } catch (error) {
     denyAccess()
-    action === "Register"?setAlert('failed',`${username} username already exists.`):setAlert('failed',"Username or password is incorrect")
+    action === "Register"?setAlert('failed',`${username} username already exists.`,setDisplayAlert):setAlert('failed',"Username or password is incorrect",setDisplayAlert)
   }
 
 }
@@ -70,12 +72,12 @@ const handlePasswordChange = (e)=>{
     setPassword(e.target.value)
 }
 
-const setAlert = (cls,message)=>{
+/* const setAlert = (cls,message)=>{
   setDisplayAlert({display:true,cls,message})
   setTimeout(()=>{
     setDisplayAlert({display:false,cls:'',message:''})
   },5000)
-}
+} */
 
 if(isLoading){
   return null

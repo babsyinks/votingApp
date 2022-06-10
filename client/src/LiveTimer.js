@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {timerIsDisabled,liveTimerIsDisabled} from './actions/timerActions'
 import Countdown from 'react-countdown';
 import './LiveTimer.css';
@@ -12,6 +13,7 @@ const crt = (t)=>{
 }
 
 function LiveTimer({electionEndTime,disableTimer,disableLiveTimer}){
+  const navigate = useNavigate()
   const[countDownOver,setCountDownOver] = useState(false)
   useEffect(()=>{
     const checkCountDown = async()=>{
@@ -21,6 +23,7 @@ function LiveTimer({electionEndTime,disableTimer,disableLiveTimer}){
               if(res.data.message === 'election over'){
                 disableTimer({startDate:null,endDate:null})
                 disableLiveTimer() 
+                //navigate('/')
               }        
               else{
                 console.log(res.message)
@@ -28,12 +31,10 @@ function LiveTimer({electionEndTime,disableTimer,disableLiveTimer}){
             } catch (error) {
               console.log(error.message)
             }
-
-
           }
     }
     checkCountDown()
-  },[countDownOver,disableTimer,disableLiveTimer])
+  },[countDownOver,disableTimer,disableLiveTimer,navigate])
 
   // Renderer callback with condition
 const renderer = ({days, hours, minutes, seconds, completed }) => {

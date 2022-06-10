@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       manifesto: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       picture: {
         type: Sequelize.STRING

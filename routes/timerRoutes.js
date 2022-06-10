@@ -52,8 +52,11 @@ Router.get('/status',async(req,res)=>{
     try {
         const electionTimer = await Timer.findAll()
         let electionObj
-        if(electionTimer.length === 0 || (electionTimer[0].dataValues.startDate === null && electionTimer[0].dataValues.endDate === null)){
-            electionObj = null
+        if(electionTimer.length === 0 ){
+            electionObj = {isEmpty:true}
+        }
+        else if(electionTimer[0].dataValues.startDate === null && electionTimer[0].dataValues.endDate === null){
+            electionObj = {startDate:null,endDate:null}
         }
         else{
             electionObj = {startDate:new Date(electionTimer[0].dataValues.startDate).getTime(),endDate:new Date(electionTimer[0].dataValues.endDate).getTime()}

@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Votes.belongsTo(models.User,{
+        foreignKey:'user_id'
+      })
+      Votes.belongsTo(models.Contestants,{
+        foreignKey:'contestant_id'
+      })
     }
     toJSON(){
       return {...this.get(),id:undefined}
@@ -22,11 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue:DataTypes.UUIDV4
     },
     user_id:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull:false,
     },
     contestant_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull:false,
     },
     position: {

@@ -24,7 +24,7 @@ function ElectionTimeSetter({adminAuthenticated,enableTimer,disableTimer,enableL
         const getTimerStatus = async ()=>{
             const {data:timerStatus} = await axios.get('/timer/status')
             console.log(timerStatus)
-            if(!timerStatus){
+            if(timerStatus.isEmpty){
               disableTimer()
               disableLiveTimer()
             }

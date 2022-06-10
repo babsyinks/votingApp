@@ -4,7 +4,7 @@
     top: 0;
     height: 100vh;
     width: 100%;
-    z-index: 10; 
+    z-index: 60; 
     background-color: rgb(0, 0, 0,0.8);
  
  }
@@ -26,11 +26,12 @@
      height: fit-content;
      max-height: 60%;
      margin:auto;
-     z-index: 50;
+     z-index: 70;
  }
 
  #modal_msg{
     padding:10px 5px;
+    line-height: 25px;
     font-family: 'Roboto', sans-serif;
     /* font-size: 1.171vw; */
 }

@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Contestants.hasOne(models.Votes,{
+        foreignKey:'contestant_id'
+      })
     }
 
     toJSON(){
@@ -35,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     manifesto: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull:false
     },
     picture: {

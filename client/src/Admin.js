@@ -1,14 +1,14 @@
 import React,{useState,useEffect} from 'react'
+import DisplayErrorMessage from './DisplayErrorMessage'
+import setAlert from './util/setAlert'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import DisplayErrorMessage from './DisplayErrorMessage'
 import './Admin.css'
 
 const Admin = ({adminAuthenticated})=>{
   const[surname,setSurname] = useState('')
   const[firstName,setFirstName] = useState('')
-  const[egcaNum,setEgcaNum] = useState('')
   const[post,setPost] = useState('President')  
   const[manifesto,setManifesto] = useState('')
   const[picture,setPicture] = useState('')
@@ -16,6 +16,7 @@ const Admin = ({adminAuthenticated})=>{
   const[isDisabled,setIsDisabled] = useState(true)
   const[displayAlert,setDisplayAlert] = useState({display:false,cls:'',message:''})
   const navigate = useNavigate()
+
   useEffect(()=>{
     if(surname&&firstName&&post&&manifesto&&picture){
       setIsDisabled(false)
@@ -31,9 +32,6 @@ const Admin = ({adminAuthenticated})=>{
   }
   const onSetFirstName = (e)=>{
     setFirstName(e.target.value)
-  }
-  const onSetEgcaNum = (e)=>{
-    setEgcaNum(e.target.value)
   }
   const onSetPost = (e)=>{
     setPost(e.target.value)
@@ -60,39 +58,35 @@ const Admin = ({adminAuthenticated})=>{
     navigate('/time')
   }
 
-  const setAlert = (cls,message)=>{
+/*   const setAlert = (cls,message)=>{
     setDisplayAlert({display:true,cls,message})
     setTimeout(()=>{
       setDisplayAlert({display:false,cls:'',message:''})
     },5000)
-  }
+  } */
 
   const handleSubmitVals = async(e)=>{
     const formData = new FormData()
     formData.set('surname',surname)
     formData.set('firstName',firstName)
-    formData.set('egcaNum',egcaNum)
     formData.set('post',post)
     formData.set('manifesto',manifesto)
     formData.set('picture',picture)
-    try {  
-   
+
+  try {  
       await axios.post('/election/contestants',formData,{headers:{
       'Content-Type':'multipart/form-data',
       'X-Auth-Token':localStorage.getItem('token')
    }
   })
- 
-  setAlert('success','New Contestant Successfully Added!!!')
-  
+  setAlert('success','New Contestant Successfully Added!!!',setDisplayAlert)
   }
   catch (err) {
-    setAlert('failed',err.error?err.error:'Oops Something Went Wrong!!!')
+    setAlert('failed',err.error?err.error:'Oops Something Went Wrong!!!',setDisplayAlert)
     
   }
    setSurname('')
    setFirstName('')
-   setEgcaNum('')
    setPost('President')
    setManifesto('')
    setPicture('')
@@ -109,9 +103,6 @@ const Admin = ({adminAuthenticated})=>{
           </div>
           <div>
             <label htmlFor='firstName'>First Name:</label><input type = "text" name = "firstName" value = {firstName} onChange = {onSetFirstName} ></input>
-          </div>
-          <div>
-            <label htmlFor='egcaNum'>E.G.C.A Number:</label><input type = "text" name = "egcaNum" minLength = "3" maxLength = "4" value = {egcaNum} onChange = {onSetEgcaNum} ></input>
           </div>
           <div>
             <label htmlFor='post'>Post:</label>

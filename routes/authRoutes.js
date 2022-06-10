@@ -21,7 +21,7 @@ Router.post('/register',async (req,res)=>{
         const token = jwt.sign({user:{id:user.dataValues.user_id}},process.env.TOKEN_SECRET,{expiresIn:24*60*60*1000})
         res.status(200).json({token})
     } catch (error) {
-        res.json({error:error.message})
+        res.status(401).json({error:error.message})
     }
 })
 //emal_phone

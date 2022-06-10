@@ -9,6 +9,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    
 }
 
 .result{
@@ -53,6 +54,22 @@
     justify-content: center;
     flex-direction: column;
 } 
+
+.endElection{
+    display: flex;
+    justify-content: flex-end;
+    padding: 0px 10px;
+}
+.endElection>button{
+    padding: 10px;
+    background-color: rgb(197, 2, 2);
+    color: white;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
 
 img.resImg{
     width: 100% !important;

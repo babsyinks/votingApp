@@ -2,11 +2,11 @@ import React, { useState,useEffect} from 'react'
 import Contestant from './Contestant'
 import './ElectivePosition.css'
 
-const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr})=>{
+const ElectivePosition = ({userId,totalVotes,contestants,position,categoryArr})=>{
 
     const[totCatVotes,setTotCatVotes] = useState(totalVotes)
     const[buttonisDisabled,setButtonisDisabled] = useState(false)
-    const[egcaNumber,setEgcaNumber] = useState(0)
+    const[contestantId,setContestantId] = useState('')
     const[votePercentColor,setVotePercentColor] = useState({})
     const[theContestants,setTheContestants] = useState(contestants)
     
@@ -18,54 +18,54 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
 
         if(sortedContestants.length>1){
             if(smallest.votes.length === 0 && biggest.votes.length === 0){
-                obj[smallest.egcaNum] = 'yellow' 
-                obj[biggest.egcaNum] = 'yellow'
+                obj[smallest.contestant_id] = 'yellow' 
+                obj[biggest.contestant_id] = 'yellow'
             }
             else if(sortedContestants.length === 2){
                  if(smallest.votes.length === 0 && biggest.votes.length !== 0){
-                    obj[smallest.egcaNum] = 'red'
-                    obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+                    obj[smallest.contestant_id] = 'red'
+                    obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
                 }
                 else if(smallest.votes.length ===  biggest.votes.length){
-                    obj[smallest.egcaNum] = 'rgb(0, 255, 0)'
-                    obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+                    obj[smallest.contestant_id] = 'rgb(0, 255, 0)'
+                    obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
                 }
                 else{
-                    obj[smallest.egcaNum] = 'red'
-                    obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+                    obj[smallest.contestant_id] = 'red'
+                    obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
                 }
             }
 
             else{
-                obj[smallest.egcaNum] = 'red'
-                obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+                obj[smallest.contestant_id] = 'red'
+                obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
             }
         }
         else{
-            obj[smallest.egcaNum] = 'yellow'
+            obj[smallest.contestant_id] = 'yellow'
         }
         if(sortedContestants.length>2){
             if(smallest.votes.length ===  biggest.votes.length){
-                obj[smallest.egcaNum] = 'rgb(0, 255, 0)'
-                obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+                obj[smallest.contestant_id] = 'rgb(0, 255, 0)'
+                obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
             }
             const[last] = sortedContestants.slice().splice(0,1)
             const[first] = sortedContestants.slice().splice(sortedContestants.length-1,1)
                 sortedContestants.forEach((contestantObj)=>{
                      if(contestantObj.votes.length === last.votes.length){
-                         if(obj[smallest.egcaNum] === 'rgb(0, 255, 0)'){
-                            obj[contestantObj.egcaNum] = 'rgb(0, 255, 0)'
+                         if(obj[smallest.contestant_id] === 'rgb(0, 255, 0)'){
+                            obj[contestantObj.contestant_id] = 'rgb(0, 255, 0)'
                          }
                          else{
-                             obj[contestantObj.egcaNum] = 'red'
+                             obj[contestantObj.contestant_id] = 'red'
                          }
                         
                     }
                     else if(contestantObj.votes.length === first.votes.length){
-                        obj[contestantObj.egcaNum] = 'rgb(0, 255, 0)'
+                        obj[contestantObj.contestant_id] = 'rgb(0, 255, 0)'
                     }
                     else{
-                        obj[contestantObj.egcaNum] = 'yellow'
+                        obj[contestantObj.contestant_id] = 'yellow'
                     }
                 
         })
@@ -73,8 +73,8 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
         }
         if(sortedContestants.length === 1){
             console.log(sortedContestants.length)
-            obj[smallest.egcaNum] = 'rgb(0, 255, 0)'
-            obj[biggest.egcaNum] = 'rgb(0, 255, 0)'
+            obj[smallest.contestant_id] = 'rgb(0, 255, 0)'
+            obj[biggest.contestant_id] = 'rgb(0, 255, 0)'
         }
         setVotePercentColor(obj)
     }
@@ -85,15 +85,15 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
     },[])
 
     useEffect(()=>{
-        if(categoryArr.includes(myEgcaNum)){
+        if(categoryArr.includes(userId)){
             setButtonisDisabled(true)
         }
         
-    },[myEgcaNum,setButtonisDisabled,categoryArr])
+    },[userId,setButtonisDisabled,categoryArr])
 
-    const updateContestantVotes = (votes,egcaNum)=>{
+    const updateContestantVotes = (votes,contestant_id)=>{
        const updatedContestants = theContestants.map((c)=>{    
-                if(c.egcaNum === egcaNum){
+                if(c.contestant_id === contestant_id){
                         c.votes = votes
                         return c
                     }
@@ -107,9 +107,9 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
         setTotCatVotes(votes)
     }
 
-    const disableButtons = (egcaNumber)=>{
+    const disableButtons = (contestant_id)=>{
         setButtonisDisabled(true)
-        setEgcaNumber(egcaNumber)
+        setContestantId(contestant_id)
     }
 
     return(
@@ -128,11 +128,11 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
             </div>
 
             <div className = "listOfContestants">
-            {theContestants.map(({egcaNum,surname,firstName,manifesto,picture,votes})=>{return(
+            {theContestants.map(({contestant_id,surname,firstname,manifesto,picture,votes})=>{return(
             <Contestant 
-              myEgcaNum = {myEgcaNum}  
-              egcaNum = {egcaNum}
-              name = {`${surname} ${firstName}`}
+              userId = {userId}  
+              contestantId = {contestant_id}
+              name = {`${surname} ${firstname}`}
               manifesto = {manifesto}
               picture = {picture} 
               votes = {votes.length} 
@@ -141,10 +141,10 @@ const ElectivePosition = ({myEgcaNum,totalVotes,contestants,position,categoryArr
               position = {position} 
               disableButton = {disableButtons}
               isButtonDisabled = {buttonisDisabled}
-              votedForThisContestant = {egcaNumber === egcaNum || votes.includes(myEgcaNum)}
+              votedForThisContestant = {contestantId === contestant_id || votes.includes(userId)}
               votePercentColor = {votePercentColor}
-              addToContestantVotes = {updateContestantVotes}
-              key = {egcaNum} />
+              addToContestantVotes = {updateContestantVotes} 
+              key = {contestant_id} />
             )})}
             </div>
         </div>
