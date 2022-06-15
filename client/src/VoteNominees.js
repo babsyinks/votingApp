@@ -120,7 +120,7 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
                    <div className = "headerTab">
                          <i className="fas fa-home" onClick = {goHome}></i>
                          <div>Welcome <span style = {{textTransform:'capitalize'}}>{username.toLowerCase()}.</span> Please Proceed To Vote.</div>
-                         {(username === 'admin'||username === 'babsyinks')?<button onClick = {handleLogin} className = {isLoading?'sp':''}>{isLoading?<i className="fas fa-circle-notch fa-spin fa-xs"></i>:'Add Contestants'}</button>:<button onClick = {logOut}>Log Out</button>}   
+                         {(username === 'admin'||username === 'babsyinks')?<button onClick = {handleLogin} className = {isLoading?'sp':''}>{isLoading?<i className="fas fa-circle-notch fa-spin fa-xs"></i>:'Access Admin'}</button>:<button onClick = {logOut}>Log Out</button>}   
                    </div> 
                    {timer.electionEndSet && <div className = 'voteTm'><LiveTimer electionEndTime = {timer.endDate} /></div>}
                    {arrOfContestants.map(({allVotes,contestants,position},i)=>{ 

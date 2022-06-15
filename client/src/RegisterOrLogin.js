@@ -126,7 +126,7 @@ else {
         </div>
           </div>
         </div>
-        <footer style={{color:'white',paddingTop:'10px',marginBottom:'0px'}}>&copy; Corestack Tech {new Date().getFullYear()}</footer>
+        <footer style={{color:'white'}}>&copy; Corestack Tech {new Date().getFullYear()}</footer>
       </div> 
     )
   }

@@ -23,8 +23,8 @@ function HelpDesk({ userAuthenticated, grantAccess, denyAccess }) {
     const linearGrad =
         'linear-gradient(to right, rgb(3 3 94), rgb(159 255 241), rgb(154 54 249))'
 
-    const handleSetStatusMessage = (msg, status) => {
-        setStatusMsg({ msg, status })
+    const handleSetStatusMessage = (msg,status) => {
+        setStatusMsg({ msg,status })
         setTimeout(() => {
             setStatusMsg({ msg: '', status: '' })
         }, 4000)

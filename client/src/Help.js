@@ -43,12 +43,12 @@ function Help() {
                     <a href = 'https://api.whatsapp.com/send?phone=2348099444495' target = 'blank'>
                         <button onMouseOver = {setColors} onMouseOut = {unSetColors}
                         style = {styleObj} 
-                        className = 'whatsapp'>Chat With Tola On <i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp}></i></button>
+                        className = 'whatsapp'>Chat With Help Desk 1<i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp}></i></button>
                     </a>
                     <a href = 'https://api.whatsapp.com/send?phone=2347062298897' target = 'blank'>
                         <button onMouseOver = {setColors1} onMouseOut = {unSetColors1}
                         style = {styleObj1}
-                        className = 'whatsapp'>Chat With Tope On <i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp1}></i></button>
+                        className = 'whatsapp'>Chat With Help Desk 2<i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp1}></i></button>
                     </a>
                     
                 </div>

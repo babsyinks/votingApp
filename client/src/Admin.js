@@ -18,6 +18,12 @@ const Admin = ({adminAuthenticated})=>{
   const navigate = useNavigate()
 
   useEffect(()=>{
+    if(!adminAuthenticated){
+      navigate('/')
+    }
+  },[adminAuthenticated,navigate])
+
+  useEffect(()=>{
     if(surname&&firstName&&post&&manifesto&&picture){
       setIsDisabled(false)
     }
@@ -93,11 +99,10 @@ const Admin = ({adminAuthenticated})=>{
    setResetFile(++resetFile)
   } 
 
-  if(adminAuthenticated){
     return(
       <div className="admin">
         {displayAlert.display && <DisplayErrorMessage status = {displayAlert.cls}>{displayAlert.message}</DisplayErrorMessage>}
-        <h1>Add A Contestant</h1>
+          <h1>Add A Contestant</h1>
           <div>
             <label htmlFor='surname'>Surname:</label><input type = "text" name = "surname" value = {surname} onChange = {onSetSurname} ></input>
           </div>
@@ -127,18 +132,21 @@ const Admin = ({adminAuthenticated})=>{
             <label htmlFor='picture'>Upload Picture:</label><input type = "file" name = "picture" key = {resetFile}  onChange = {onSetPicture}></input>
           </div>
           <div className = "buttons">
-          <button className = "roundButton" id="submit" type="button" disabled = {isDisabled} onClick = {handleSubmitVals}><i className="fas fa-plus"></i></button>
-          <button className = "roundButton" id="goHome" type="button" onClick = {goHome}><i className="fas fa-home"></i></button>
-          <button className = "roundButton" id="goVote" type="button" onClick = {goVote}><i className="fas fa-poll"></i></button>
-          <button className = "roundButton" id="goSetTime" type="button" onClick = {goSetTime}><i className="fas fa-stopwatch"></i></button>
-          </div>
+          <div data-tooltip = "Add A New Contestant">
+            <button className = "roundButton" id="submit" type="button" disabled = {isDisabled} onClick = {handleSubmitVals}><i className="fas fa-plus"></i></button>
+          </div>  
+          <div data-tooltip = "Go To The Home Page">
+            <button className = "roundButton" id="goHome" type="button" onClick = {goHome}><i className="fas fa-home"></i></button>
+          </div>  
+          <div data-tooltip = "Go To The Voting Page">
+            <button className = "roundButton" id="goVote" type="button" onClick = {goVote}><i className="fas fa-poll"></i></button>
+          </div>  
+          <div data-tooltip = "Go To The Page Where You Can Set Day And Time Election Will Start And End">
+            <button className = "roundButton" id="goSetTime" type="button" onClick = {goSetTime}><i className="fas fa-stopwatch"></i></button>
+          </div>  
+        </div>
       </div>
   )
-  }
-  else{
-    navigate('/vote')
-    return null
-  }
     
 }
 

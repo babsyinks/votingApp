@@ -8,12 +8,17 @@
     overflow-x: hidden;
 }
 .admin h1{
-    margin-left: 35%;
+    /* margin-left: 35%; */
+    display: flex;
+    align-self: center;
+    justify-self: center;
     text-align: center;
     font-family: 'Roboto', sans-serif;
 }
 .admin div{
-    margin-left: 35%;
+    display: flex;
+    align-self: center;
+    justify-self: center;
     margin-bottom: 2%;
 }
 .admin div label{
@@ -100,13 +105,56 @@
     justify-content: space-between;
 }
 
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px silver;    
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    background: black;
+    color: white;
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+[data-tooltip]:not([data-tooltip-persistent]):before {
+    pointer-events: none;
+}
+
 @media screen and (max-width:500px){
     .admin div{
         margin-left: 3%;
+        align-self: flex-start;
     }
-    .admin h1{
+
+    .admin div label {
+        width: 120px;
+    }
+
+    .admin textarea {
+        width: 250px;
+        height: 100px;
+    }
+
+    .admin input[type="text"] {
+        width: 250px;
+    }
+/*     .admin h1{
         margin-left: 3%;
 
+    } */
+}
+
+@media screen and (max-width:400px) {
+    .admin textarea,.admin input[type="text"] {
+        width: 200px;
     }
 }
 
@@ -119,11 +167,13 @@
         margin-left:2%;
         margin-bottom:1%;
     }
-    .admin h1{
+
+
+/*     .admin h1{
         margin-left:2%;
         margin-top:0px;
         margin-bottom:0px;
-    }
+    } */
 }
 
 @media screen and (max-height:600px) {
@@ -134,24 +184,34 @@
 
 @media screen and (max-height:350px){
     .admin{
-        height:150vh;
+        height:170vh;
     }
 }
 
-@media screen and (min-height:600px) and (orientation:portrait) {
-    .admin{
-        height:130vh;
-    }
-}
 
-@media screen and (max-width:300px){
+@media screen and (max-width:350px){
     .admin input[type="text"]{
-        width: 200px;
+        width: 150px;
       }
-      .admin textarea{
-        max-width: 70%;
+
+      .admin textarea, select{
+        width: 150px;
     }
-/*     #submit{
-        width:340%;
-    } */
+
+    .admin div label{
+        font-size:14px;
+        width:80px
+    }
+
+    .admin{
+        justify-content: flex-start;
+        height: 100vh;
+    }
 }
+
+@media screen and (max-height:300px){
+    .admin{
+        height: 170vh;
+    }
+}
+
