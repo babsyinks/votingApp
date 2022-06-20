@@ -24,7 +24,7 @@ const creds = {
         require: true,
         rejectUnauthorized: false 
       }
-    },
+    }
   }
 }
 
