@@ -43,7 +43,6 @@ app.use('/election',electionRoutes)
 
 app.use('/timer', timerRoutes)
 
-
 app.get('*',(req,res)=>{
     res.sendFile(path.join(__dirname,'client',`${assetFolder}`,'index.html'))
 })
