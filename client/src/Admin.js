@@ -64,13 +64,6 @@ const Admin = ({adminAuthenticated})=>{
     navigate('/time')
   }
 
-/*   const setAlert = (cls,message)=>{
-    setDisplayAlert({display:true,cls,message})
-    setTimeout(()=>{
-      setDisplayAlert({display:false,cls:'',message:''})
-    },5000)
-  } */
-
   const handleSubmitVals = async(e)=>{
     const formData = new FormData()
     formData.set('surname',surname)

@@ -40,15 +40,15 @@ function Help() {
                 <p className = 'help_msg'>So sorry to learn that you can't log in; but hey,that's why we are here for you.</p>
                 <p className = 'help_msg'>Please select any help desk personnel below to assist you to log in.</p>
                 <div className = 'whatsapp-buttons'>
-                    <a href = 'https://api.whatsapp.com/send?phone=2348099444495' target = 'blank'>
+                    <a href = 'https://api.whatsapp.com/send?phone=2348051750010' target = 'blank'>
                         <button onMouseOver = {setColors} onMouseOut = {unSetColors}
                         style = {styleObj} 
-                        className = 'whatsapp'>Chat With Help Desk 1<i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp}></i></button>
+                        className = 'whatsapp'>Chat With Help Desk 1 <i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp}></i></button>
                     </a>
-                    <a href = 'https://api.whatsapp.com/send?phone=2347062298897' target = 'blank'>
+                    <a href = 'https://api.whatsapp.com/send?phone=2349154549010' target = 'blank'>
                         <button onMouseOver = {setColors1} onMouseOut = {unSetColors1}
                         style = {styleObj1}
-                        className = 'whatsapp'>Chat With Help Desk 2<i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp1}></i></button>
+                        className = 'whatsapp'>Chat With Help Desk 2 <i className="fab fa-whatsapp whatsapp_icon" style = {styleObjWhatsapp1}></i></button>
                     </a>
                     
                 </div>

@@ -73,5 +73,4 @@ Router.post('/namesearch',permittedAuth([178,182]),async (req,res)=>{
 
 })
 
-
 module.exports = Router

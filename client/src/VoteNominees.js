@@ -2,10 +2,10 @@ import React,{useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-/* import Particles from 'react-particles-js' */
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import {adminLogin} from './actions/adminActions'
 import {loading,notLoading} from './actions/loadingActions'
-/* import DisplayErrorMessage from './DisplayErrorMessage' */
 import ElectivePosition from './ElectivePosition'
 import LiveTimer  from './LiveTimer'
 import Result from './Result'
@@ -31,11 +31,100 @@ import './VoteNominees.css'
  */
 
 const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoading,isLoading,timer})=>{
-    //const[displayAlert,setDisplayAlert] = useState({display:false,cls:'',message:''})
     const[arrOfContestants,setArrOfContestants] = useState([])
     const[id,setId] = useState('')
     const[failedFetch,setFailedFetch] = useState(false)
     const navigate = useNavigate()
+
+    const particlesInit = async (main) => {
+      console.log(main);
+  
+      // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
+      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+      // starting from v2 you can add only the features you need reducing the bundle size
+      await loadFull(main);
+    };
+  
+    const particlesLoaded = (container) => {
+      console.log(container);
+    };
+
+    const params = {
+      fps_limit: 60,
+      interactivity: {
+        detect_on: "canvas", 
+        events: {
+          onclick: { enable: true, mode: "push" },
+          onhover: {
+            enable: true,
+            mode: "repulse",
+            parallax: { enable: false, force: 60, smooth: 10 }
+          },
+          resize: true
+        },
+        modes: {
+          push: { quantity: 4 },
+          attract: { distance: 200, duration: 0.4, factor: 5 }
+        }
+      },
+      particles: {
+        color: { value: "#ffffff" },
+        line_linked: {
+          color: "#ffffff",
+          distance: 150,
+          enable: true,
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          attract: { enable: false, rotateX: 600, rotateY: 1200 },
+          bounce: false,
+          direction: "none",
+          enable: true,
+          out_mode: "out",
+          random: false,
+          speed: 2,
+          straight: false
+        },
+        number: { density: { enable: true, value_area: 800 }, value: 80 },
+        opacity: {
+          anim: { enable: false, opacity_min: 0.1, speed: 1, sync: false },
+          random: false,
+          value: 0.5
+        },
+        shape: {
+          character: {
+            fill: false,
+            font: "Verdana",
+            style: "",
+            value: "*",
+            weight: "400"
+          },
+          image: {
+            height: 100,
+            replace_color: true,
+            src: "images/github.svg",
+            width: 100
+          },
+          polygon: { nb_sides: 5 },
+          stroke: { color: "#000000", width: 0 },
+          type: "circle"
+        },
+        size: {
+          anim: { enable: false, size_min: 0.1, speed: 40, sync: false },
+          random: true,
+          value: 5
+        }
+      },
+      polygon: {
+        draw: { enable: false, lineColor: "#ffffff", lineWidth: 0.5 },
+        move: { radius: 10 },
+        scale: 1,
+        type: "none",
+        url: ""
+      },
+      retina_detect: true
+    }
     
     useEffect(()=>{
       let unmounted = false;
@@ -44,7 +133,7 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
         if(!unmounted){
            try {
             load()
-            //{data:{eleObj:electionArr}}
+            
             const {data:{electObj:electionArr,myId}} = await axios.get('/election/details',{headers:{
               'Accept':'application/json',
               'Content-Type':'application/json',
@@ -75,13 +164,6 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
       }
       //eslint-disable-next-line
     },[userAuthenticated])
-
-/*       const setAlert = (cls,message)=>{
-        setDisplayAlert({display:true,cls,message})
-        setTimeout(()=>{
-          setDisplayAlert({display:false,cls:'',message:''})
-        },5000)
-      } */
 
     const handleLogin = async()=>{
         try {
@@ -115,8 +197,12 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
             if(!failedFetch){
               return(
              <div className = "voteNomineesWrapper">
-                {/* <Particles params = {params} className = 'particles' /> */}
-                 {/* {displayAlert.display && <DisplayErrorMessage status = {displayAlert.cls}>{displayAlert.message}</DisplayErrorMessage>} */}
+                   <Particles
+                      id="tsparticles"
+                      init={particlesInit}
+                      loaded={particlesLoaded}
+                      options={params} />
+                 
                    <div className = "headerTab">
                          <i className="fas fa-home" onClick = {goHome}></i>
                          <div>Welcome <span style = {{textTransform:'capitalize'}}>{username.toLowerCase()}.</span> Please Proceed To Vote.</div>

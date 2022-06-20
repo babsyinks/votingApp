@@ -14,7 +14,7 @@ const electionAuth = async (req,res,next)=>{
     if(!user){ 
         return res.json({authenticated:false})
     }
-    req.user = user //{myUserNum:user.UserNum}
+    req.user = user 
     next()
     } catch (error) {    
         return res.status(401).json({authenticated:false})

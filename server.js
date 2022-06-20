@@ -7,7 +7,7 @@ const authRoutes = require('./routes/authRoutes')
 const {sequelize} = require('./models')
 const electionRoutes = require('./routes/electionRoutes')
 const timerRoutes = require('./routes/timerRoutes')
-//const helpDeskRoutes = require('./server/routes/helpdeskRoutes')
+
 const port = process.env.PORT || 3001
 const app = express()
 
@@ -32,7 +32,6 @@ app.use(helmet.contentSecurityPolicy({
   })) 
 app.use(xss())
 
-//require('./server/db/connectToDB')
 
 const assetFolder = process.env.NODE_ENV === 'production'?'build':'public'
 
@@ -44,7 +43,6 @@ app.use('/election',electionRoutes)
 
 app.use('/timer', timerRoutes)
 
-//app.use('/help',helpDeskRoutes)
 
 app.get('*',(req,res)=>{
     res.sendFile(path.join(__dirname,'client',`${assetFolder}`,'index.html'))

@@ -2,13 +2,11 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const {User} = require('../models')
-//const {Egca} = require('../model/model')
-//const electionAuth = require('../middleware/electionAuth')
 const permittedAuth = require('../middleware/permittedAuth')
 require('dotenv').config();
 const Router = express.Router()
 Router.use(express.json())
-//checkidentity
+
 Router.post('/register',async (req,res)=>{
     try {
         let{username,password} = req.body
@@ -24,7 +22,7 @@ Router.post('/register',async (req,res)=>{
         res.status(401).json({error:error.message})
     }
 })
-//emal_phone
+
 Router.post('/login',async(req,res)=>{
     try {
         const{username,password} = req.body
