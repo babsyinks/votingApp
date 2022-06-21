@@ -1,10 +1,13 @@
+const path = require('path')
+require('dotenv').config({path:path.join('..','.env')});
+
 const creds = {
   "development": {
     "username": "postgres",
     "password": "postgres",
     "database": "votingAppDB",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres" 
   },
   "test": {
     "username": "root",
