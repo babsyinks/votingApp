@@ -10,7 +10,7 @@ function ComposeComp({children,linearGrad,overflow,width,height}) {
     }
     return (
         <div className = "compContainers compOuter" style = {{backgroundImage:linearGrad}}>
-            <div className = "compInner" style = {{overflowY:overflow?'scroll':'hidden',width:width?width:'70%',height:height?height:'70%',...compContainers}}>
+            <div className = "compInner" style = {{overflowY:overflow?'scroll':'hidden',width:width?width:'80%',height:height?height:'70%',...compContainers}}>
                 {children}
             </div>
             
