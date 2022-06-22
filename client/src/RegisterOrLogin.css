@@ -91,6 +91,12 @@
     width: 50%;
 }
 
+.eleMsg_start, .eleMsg_cb {
+ font-size: 1.875vw;   
+}
+
+
+
 @media screen and (max-width:850px) {
     .wrapper_div{
         width: 80%;
@@ -170,6 +176,9 @@
     .sizer{
         width: 85%;
     }
+    .eleMsg_start, .eleMsg_cb {
+        font-size: 2.5vw;   
+       }
 }
 
 @media screen and (min-height:1000px) and (orientation:portrait) {

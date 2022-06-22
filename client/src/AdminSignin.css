@@ -38,7 +38,6 @@
 }
 
 input.admin_input{
-    font-size: 1.171vw;
     width: auto;
     outline: none;
     border: none;
@@ -51,11 +50,6 @@ input.admin_input{
     }
     .admin_signin_Wrap label{
         font-size: 1.171vh;
-    }
-
-    .admin_input{
-        font-size: 1.171vh;
-        
     }
 }
 /* 

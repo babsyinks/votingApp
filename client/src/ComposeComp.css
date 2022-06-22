@@ -20,55 +20,16 @@
     
 }
 
+@media screen and (max-width:700px) and (orientation:landscape) {
+    .compInner{
+        width: 95% !important;
+    }
+}
+
 @media only screen and (orientation:portrait){
     .compInner{
-        height:50%;
+        height: 95% !important;
     }
-}
-/* 
-@media only screen and (max-height:900px) and (orientation:portrait){
-    .compInner{
-        height:80%;
-    }
-  
 }
 
-@media only screen and (max-height:800px) and (orientation:portrait){
-    .compInner{
-        height:90%;
-    }
-  
-}
-@media only screen and (max-height:700px) and (orientation:portrait){
-    .compInner{
-        height:98%;
-    }
-  
-}
-@media only screen and (max-height:650px) and (orientation:portrait){
-    .compOuter{
-        height:auto;
-    }
-} */
-
-
-/* @media only screen and (max-width:700px) and (orientation:landscape){
-    .compInner{
-        width:80%;
-    }
-  
-}
-@media only screen and (max-width:600px) and (orientation:landscape){
-    .compInner{
-        width:95%;
-    }
-  
-}
-
-@media only screen and (max-height:400px) and (orientation:landscape){
-    .compInner{
-        height:auto;
-    }
-  
-} */
 
