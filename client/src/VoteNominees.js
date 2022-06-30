@@ -18,7 +18,6 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
     const navigate = useNavigate()
 
     const particlesInit = async (main) => {
-      console.log(main);
       await loadFull(main);
     };
   
