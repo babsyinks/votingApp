@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  server:
+    build: .
+    image: demo-myapp-server
+    container_name: demo-myapp-node-server
+    command: npm start
+    volumes:
+      - .:/code
+      - /code/node_modules
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    env_file: ./.env
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+  client:
+    build:
+      context: ./client
+    image: demo-myapp-client
+    container_name: demo-myapp-react-client
+    command: npm start
+    volumes:
+      - ./client/:/app
+      - /app/node_modules
+      # mydirectory:container directory
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"

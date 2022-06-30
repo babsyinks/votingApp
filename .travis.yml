@@ -1,0 +1,22 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t babsyinks/demo-voting-app-server .
+
+script:
+  - docker run babsyinks/demo-voting-app-server npm run test -- --coverage
+
+after_success:
+  - docker build -t babsyinks/demo-voting-app-client ./client
+  - docker build -t babsyinks/demo-voting-app-nginx ./nginx
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push babsyinks/demo-voting-app-server
+  - docker push babsyinks/demo-voting-app-client
+  - docker push babsyinks/demo-voting-app-nginx
+  
+
