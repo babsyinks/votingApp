@@ -6,8 +6,9 @@ const creds = {
     "username": "postgres",
     "password": "postgres",
     "database": "votingAppDB",
-    "host": "127.0.0.1",
-    "dialect": "postgres" 
+    /* "host": "127.0.0.1", */
+    "host": "postgres",
+    "dialect": "postgres"
   },
   "test": {
     "username": "root",

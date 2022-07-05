@@ -1,27 +1,10 @@
 version: '3.7'
 
 services:
-  server:
-    build: .
-    image: demo-myapp-server
-    container_name: demo-myapp-node-server
-    command: npm start
-    volumes:
-      - .:/code
-      - /code/node_modules
-    ports:
-      - "3001:3001"
-    depends_on:
-      - postgres
-    env_file: ./.env
-  postgres:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
   client:
     build:
       context: ./client
+      dockerfile: Dockerfile.dev
     image: demo-myapp-client
     container_name: demo-myapp-react-client
     command: npm start
@@ -30,6 +13,34 @@ services:
       - /app/node_modules
       # mydirectory:container directory
     depends_on:
-      - server
+      - myserver
     ports:
       - "3000:3000"
+  postgres:
+    image: postgres
+    container_name: postgres
+    ##restart: always
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=votingAppDB
+  myserver:
+    build: .
+    image: demo-myapp-server
+    container_name: myserver
+    hostname: myserver
+    environment:
+      - WAIT_HOSTS=postgres:5432
+    ##command: npm start
+    volumes:
+      - .:/code
+      - /code/node_modules
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    env_file: ./.env
+
