@@ -19,7 +19,7 @@ services:
   postgres:
     image: postgres
     container_name: postgres
-    ##restart: always
+    
     hostname: postgres
     ports:
       - "5432:5432"
@@ -34,7 +34,6 @@ services:
     hostname: myserver
     environment:
       - WAIT_HOSTS=postgres:5432
-    ##command: npm start
     volumes:
       - .:/code
       - /code/node_modules
