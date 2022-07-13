@@ -1,6 +1,6 @@
-const path = require('path')
-require('dotenv').config({path:path.join('..','.env')});
-let DATABASE_URL = process.env.DATABASE_URL
+//const path = require('path')
+//require('dotenv').config({path:path.join('..','.env')});
+//let DATABASE_URL = process.env.DATABASE_URL
 /* let host,username,password,database */
 /* if(process.env.NODE_ENV === 'production'){
   const dbUrlExtract = DATABASE_URL.slice(11)
@@ -27,12 +27,13 @@ const creds = {
     "dialect": "postgres"
   },
   "production": {
-    "use_env_variable": DATABASE_URL,
+    "use_env_variable": 'DATABASE_URL',
 /*     "username": username,
     "password": password,
     "database": database,
     "host": host, */
     "dialect": "postgres",
+    "protocol":"postgres",
     dialectOptions: {
       ssl: {     
         require: true,
