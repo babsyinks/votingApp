@@ -1,7 +1,7 @@
 {
   "name": "voting-app-rebuild",
   "version": "1.0.0",
-  "description": "egca alumni voting app",
+  "description": "demo alumni voting app",
   "main": "server.js",
   "scripts": {
     "test": "jest",
