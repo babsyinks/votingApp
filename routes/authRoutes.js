@@ -41,7 +41,7 @@ Router.post('/login',async(req,res)=>{
     }
 })
 
-Router.get('/admin/login',permittedAuth(['babsyinks','admin']),(req,res)=>{
+Router.get('/admin/login',permittedAuth(['babsyinks']),(req,res)=>{
      res.json({authenticated:true})
 })
 

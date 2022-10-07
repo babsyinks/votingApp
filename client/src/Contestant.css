@@ -12,12 +12,9 @@
 
 .contestant_picture{
   overflow: hidden;
-   /* transition: transform 6s cubic-bezier(0.25,0.45,0.45.0.95); */
   
 }
-/* .contestant img{
- 
-} */
+
 
 .contestant img{
   transform: scale(1);

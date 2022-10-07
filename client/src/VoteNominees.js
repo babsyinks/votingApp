@@ -1,29 +1,33 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState, useCallback} from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import Particles from 'react-tsparticles'
+import { loadFull } from 'tsparticles'
 import {adminLogin} from './actions/adminActions'
 import {loading,notLoading} from './actions/loadingActions'
 import ElectivePosition from './ElectivePosition'
 import LiveTimer  from './LiveTimer'
 import Result from './Result'
 import './VoteNominees.css'
-
+ 
 const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoading,isLoading,timer})=>{
     const[arrOfContestants,setArrOfContestants] = useState([])
     const[id,setId] = useState('')
     const[failedFetch,setFailedFetch] = useState(false)
     const navigate = useNavigate()
 
-    const particlesInit = async (main) => {
-      await loadFull(main);
-    };
+    const particlesInit =  useCallback(async (engine) => {
+      console.log(engine);
+      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
+      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+      // starting from v2 you can add only the features you need reducing the bundle size
+      await loadFull(engine);
+    }, []);
   
-    const particlesLoaded = (container) => {
-      console.log(container);
-    };
+    const particlesLoaded = useCallback(async (container) => {
+      await console.log(container);
+    }, []);
 
     const params = {
       fps_limit: 60,

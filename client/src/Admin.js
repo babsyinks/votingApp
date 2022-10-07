@@ -108,14 +108,14 @@ const Admin = ({adminAuthenticated})=>{
               <option value = "president" >President</option>
               <option value = "vice president">Vice President</option>
               <option value = "general secretary">General Secretary</option>
-              <option value = "assistant general secretary">Assistant General Secretary</option>
-              <option value = "national treasurer">National Treasurer</option>
-              <option value = "national financial secretary">National Financial Secretary</option>
-              <option value = "national social welfare officer">National Social/Welfare Officer</option>
-              <option value = "national public relations officer">National Public Relations Officer</option>
-              <option value = "national legal adviser">National Legal Adviser</option>
+              {/* <option value = "assistant general secretary">Assistant General Secretary</option> */}
+              <option value = "treasurer">Treasurer</option>
+              {/* <option value = "national financial secretary">National Financial Secretary</option> */}
+              <option value = "welfare secretary">Welfare Secretary</option>
+              <option value = "publicity secretary">Publicity Secretary</option>
+{/*               <option value = "national legal adviser">National Legal Adviser</option>
               <option value = "national internal auditor">National Internal Auditor</option>
-              <option value = "chief whip">Chief Whip</option>
+              <option value = "chief whip">Chief Whip</option> */}
             </select>
           </div>
           <div>
