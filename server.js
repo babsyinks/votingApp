@@ -1,5 +1,5 @@
 const express = require('express')
-const path = require('path')
+//const path = require('path')
 const helmet = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
@@ -33,9 +33,9 @@ app.use(helmet.contentSecurityPolicy({
 app.use(xss())
 
 
-const assetFolder = process.env.NODE_ENV === 'production'?'build':'public'
+//const assetFolder = process.env.NODE_ENV === 'production'?'build':'public'
 
-app.use(express.static(path.join(__dirname,'client',`${assetFolder}`)))
+//app.use(express.static(path.join(__dirname,'client',`${assetFolder}`)))
 
 app.use('/auth',authRoutes)
 
@@ -43,9 +43,9 @@ app.use('/election',electionRoutes)
 
 app.use('/timer', timerRoutes)
 
-app.get('*',(req,res)=>{
+/* app.get('*',(req,res)=>{
     res.sendFile(path.join(__dirname,'client',`${assetFolder}`,'index.html'))
-})
+}) */
 
 app.use((err,req,res,next)=>{
     res.send({err}) 
