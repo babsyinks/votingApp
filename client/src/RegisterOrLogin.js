@@ -93,7 +93,7 @@ else {
       <div className='container_div'>
         {displayAlert.display&& <DisplayErrorMessage status = {displayAlert.cls}>{displayAlert.message}</DisplayErrorMessage>}
         {timer.electionEndSet && <LiveTimer electionEndTime = {timer.endDate} />}
-        <h1>Unilorin Elect 07 Alumni Voting App</h1>
+        <h1>Demo School Alumni Voting App</h1>
         <div className='wrapper_div'>
           <h2>Time To Vote! <img src='images/vote.png' alt='vote icon'></img></h2>
           <div className='content_div'>
