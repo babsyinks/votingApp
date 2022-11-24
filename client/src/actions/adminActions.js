@@ -6,7 +6,7 @@ export const adminLogin = ()=> async(dispatch)=>{
       type:LOADING
    })
    try {
-         const {data:{authenticated}} = await axios.get('auth/admin/login',{headers:{
+         const {data:{authenticated}} = await axios.get('https://votingapp-pmev.onrender.com/auth/admin/login',{headers:{
          'Accept':'application/json',
          'Content-Type':'application/json',
          'X-Auth-Token':localStorage.getItem('token')

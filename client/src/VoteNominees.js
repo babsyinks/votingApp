@@ -114,7 +114,7 @@ const VoteNominees = ({login,userAuthenticated,userInfo:{username},load,stopLoad
            try {
             load()
             
-            const {data:{electObj:electionArr,myId}} = await axios.get('/election/details',{headers:{
+            const {data:{electObj:electionArr,myId}} = await axios.get('https://votingapp-pmev.onrender.com/election/details',{headers:{
               'Accept':'application/json',
               'Content-Type':'application/json',
               'X-Auth-Token':localStorage.getItem('token')

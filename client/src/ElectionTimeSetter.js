@@ -22,7 +22,7 @@ function ElectionTimeSetter({adminAuthenticated,enableTimer,disableTimer,enableL
 
     useEffect(()=>{
         const getTimerStatus = async ()=>{
-            const {data:timerStatus} = await axios.get('/timer/status')
+            const {data:timerStatus} = await axios.get('https://votingapp-pmev.onrender.com/timer/status')
             console.log(timerStatus)
             if(timerStatus.isEmpty){
               disableTimer()
@@ -125,7 +125,7 @@ function ElectionTimeSetter({adminAuthenticated,enableTimer,disableTimer,enableL
     const setTimer = async ()=>{
         const timerObj = {startDate:electionStartDate,endDate:electionEndDate}
         try {
-           const{data:{message}} = await axios.post('/timer/set',timerObj,{headers:{
+           const{data:{message}} = await axios.post('https://votingapp-pmev.onrender.com/timer/set',timerObj,{headers:{
                 'Content-Type':'application/json',
                 'X-Auth-Token':localStorage.getItem('token')
             }
@@ -148,7 +148,7 @@ function ElectionTimeSetter({adminAuthenticated,enableTimer,disableTimer,enableL
 
     const cancelTimer = async ()=>{
         try {
-            const{data:{message}} = await axios.get('/timer/cancel',{headers:{
+            const{data:{message}} = await axios.get('https://votingapp-pmev.onrender.com/timer/cancel',{headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json',
                 'X-Auth-Token':localStorage.getItem('token')

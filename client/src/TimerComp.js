@@ -43,7 +43,7 @@ function TimerComp({endTime,disableTimer}) {
        const remainingTimeSecs = endTimeSecs - Date.now()/1000
        const timerStatus = async ()=>{
         if(remainingTimeSecs <=0){
-            const res = await axios.get('/timer/cancelStart')
+            const res = await axios.get('https://votingapp-pmev.onrender.com/timer/cancelStart')
               if(res.data.message === 'timer cancelled'){
                   disableTimer()
                   clearInterval(timerInterval)

@@ -15,7 +15,7 @@ function Result() {
 
     useEffect(() => {  
         const resultStatus = async () => {
-            const res = await axios.get('/election/details',{headers:{
+            const res = await axios.get('https://votingapp-pmev.onrender.com/election/details',{headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json',
                 'X-Auth-Token':localStorage.getItem('token')

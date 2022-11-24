@@ -27,7 +27,7 @@ function AdminSignIn({login,resetElection,resetTimer}) {
     const adminLogin = async ()=>{
         const alumniInfo = {username,password}
         try {
-            const {data:{token}} = await axios.post('/auth/login',alumniInfo)
+            const {data:{token}} = await axios.post('https://votingapp-pmev.onrender.com/auth/login',alumniInfo)
             if(token){
                 localStorage.setItem('token',token)
             }
@@ -39,7 +39,7 @@ function AdminSignIn({login,resetElection,resetTimer}) {
             if(data === 'success'){
                 if(resetElection){
                     try {
-                         await axios.delete('/election/delete',{headers:{
+                         await axios.delete('https://votingapp-pmev.onrender.com/election/delete',{headers:{
                             'Accept':'application/json',
                             'Content-Type':'application/json',
                             'X-Auth-Token':localStorage.getItem('token')

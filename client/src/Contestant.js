@@ -40,7 +40,7 @@ const Contestant = ({userId,contestantId,name,manifesto,picture,votes,totalVotes
 
     const voteForContestant = async()=>{
        setDisableVote(true)
-       const{data:{allVotes,contestantVotes}} = await axios.patch('/election/vote',{myId:userId,contestantId,position},{headers:{
+       const{data:{allVotes,contestantVotes}} = await axios.patch('https://votingapp-pmev.onrender.com/election/vote',{myId:userId,contestantId,position},{headers:{
             'Accept':'application/json',
             'Content-Type':'application/json',
             'X-Auth-Token':localStorage.getItem('token')

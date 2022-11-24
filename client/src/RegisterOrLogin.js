@@ -14,7 +14,7 @@ import { setUserInfo } from './actions/userInfoAction'
 import {timerIsEnabled,timerIsDisabled,liveTimerIsEnabled,liveTimerIsDisabled} from './actions/timerActions'
 import {loading,notLoading} from './actions/loadingActions'
 
-function RegisterOrLogin ({grantAccess,denyAccess,setInfo,userInformation,timer,enableTimer,disableTimer,enableLiveTimer,disableLiveTimer,load,stopLoading,isLoading}){
+function RegisterOrLogin ({grantAccess,denyAccess,setInfo,timer,enableTimer,disableTimer,enableLiveTimer,disableLiveTimer,load,stopLoading,isLoading}){
 const [username,setUsername] = useState("")
 const [password,setPassword] = useState("")
 const [action,setAction] = useState("Register")
@@ -24,7 +24,7 @@ const navigate = useNavigate()
 useEffect(()=>{
   const getTimerStatus = async ()=>{
     load()
-    const {data:timerStatus} = await axios.get('/timer/status')
+    const {data:timerStatus} = await axios.get('https://votingapp-pmev.onrender.com/timer/status')
     if(timerStatus.isEmpty){
       disableTimer()
       disableLiveTimer()
@@ -54,7 +54,7 @@ useEffect(()=>{
 
 async function handleSubmit(){
   try {
-     const{data:{token}} = await axios.post(`/auth/${action.toLowerCase()}`,{username,password})
+     const{data:{token}} = await axios.post(`https://votingapp-pmev.onrender.com/auth/${action.toLowerCase()}`,{username,password})
      localStorage.setItem('token',token)
      setInfo(username)
      grantAccess()

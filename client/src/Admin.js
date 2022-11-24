@@ -73,7 +73,7 @@ const Admin = ({adminAuthenticated})=>{
     formData.set('picture',picture)
 
   try {  
-      await axios.post('/election/contestants',formData,{headers:{
+      await axios.post('https://votingapp-pmev.onrender.com/election/contestants',formData,{headers:{
       'Content-Type':'multipart/form-data',
       'X-Auth-Token':localStorage.getItem('token')
    }

@@ -19,7 +19,7 @@ function LiveTimer({electionEndTime,disableTimer,disableLiveTimer}){
     const checkCountDown = async()=>{
           if(countDownOver){
             try {
-              const res = await axios.get('/timer/end')
+              const res = await axios.get('https://votingapp-pmev.onrender.com/timer/end')
               if(res.data.message === 'election over'){
                 disableTimer({startDate:null,endDate:null})
                 disableLiveTimer() 
