@@ -72,13 +72,6 @@ const handlePasswordChange = (e)=>{
     setPassword(e.target.value)
 }
 
-/* const setAlert = (cls,message)=>{
-  setDisplayAlert({display:true,cls,message})
-  setTimeout(()=>{
-    setDisplayAlert({display:false,cls:'',message:''})
-  },5000)
-} */
-
 if(isLoading){
   return null
 }

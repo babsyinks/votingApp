@@ -4,7 +4,6 @@ import './Contestant.css'
 const Contestant = ({userId,contestantId,name,manifesto,picture,votes,totalVotes,position,setCategoryVotes,disableButton,isButtonDisabled,votedForThisContestant,addToContestantVotes,votePercentColor})=>{
     
     const[readManifesto,setManifesto] = useState(false)
-    //const[contestantVotes,setContestantVotes] = useState(votes)
     const[disableVote,setDisableVote] = useState(false)
 
     const votePercent = ()=>{
@@ -26,10 +25,6 @@ const Contestant = ({userId,contestantId,name,manifesto,picture,votes,totalVotes
     const closeManifesto = ()=>{
         setManifesto(false)
     }
-
-/*     const updateContestantVotes = (votes)=>{
-        setContestantVotes(votes)
-    } */
 
     const updateContestantVotes = (votes,contestant_id)=>{
         addToContestantVotes(votes,contestant_id)

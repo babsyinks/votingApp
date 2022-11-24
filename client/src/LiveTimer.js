@@ -23,7 +23,6 @@ function LiveTimer({electionEndTime,disableTimer,disableLiveTimer}){
               if(res.data.message === 'election over'){
                 disableTimer({startDate:null,endDate:null})
                 disableLiveTimer() 
-                //navigate('/')
               }        
               else{
                 console.log(res.message)
