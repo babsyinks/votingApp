@@ -23,7 +23,6 @@ const navigate = useNavigate()
 
 useEffect(()=>{
   const getTimerStatus = async ()=>{
-    load()
     const {data:timerStatus} = await axios.get('https://votingapp-pmev.onrender.com/timer/status')
     if(timerStatus.isEmpty){
       disableTimer()
@@ -45,7 +44,7 @@ useEffect(()=>{
       enableTimer({...timerStatus,electionStartSet:true})
       enableLiveTimer({electionEndSet:true})
     }
-    stopLoading() 
+    
   }
 
   getTimerStatus()
@@ -54,13 +53,16 @@ useEffect(()=>{
 
 async function handleSubmit(){
   try {
+    load()
      const{data:{token}} = await axios.post(`https://votingapp-pmev.onrender.com/auth/${action.toLowerCase()}`,{username,password})
      localStorage.setItem('token',token)
      setInfo(username)
      grantAccess()
-      navigate('/vote')  
+     stopLoading() 
+     navigate('/vote')  
   } catch (error) {
     denyAccess()
+    stopLoading() 
     action === "Register"?setAlert('failed',`${username} username already exists.`,setDisplayAlert):setAlert('failed',"Username or password is incorrect",setDisplayAlert)
   }
 
@@ -72,10 +74,6 @@ const handlePasswordChange = (e)=>{
     setPassword(e.target.value)
 }
 
-if(isLoading){
-  return null
-}
-else {
   if(timer.electionStartSet){
       return (
             <ComposeComp>
@@ -110,7 +108,7 @@ else {
                   <input type={'password'} value = {password} onChange = {handlePasswordChange}></input>              
                 </div>
                 <div className='action_btn'>
-                  <input type={'button'} value = {action} onClick = {handleSubmit} disabled = {!username || !password}></input>  
+                  <button onClick = {handleSubmit} disabled = {!username || !password}>{isLoading?<i className="fas fa-circle-notch fa-spin fa-xs"></i>:action}</button>  
                 </div>
             </div>
         </div>
@@ -123,8 +121,6 @@ else {
       </div> 
     )
   }
-
-}
 }
 
 const mapStateToProps = (state)=>({

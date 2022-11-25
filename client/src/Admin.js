@@ -1,12 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import DisplayErrorMessage from './DisplayErrorMessage'
+import {loading,notLoading} from './actions/loadingActions'
 import setAlert from './util/setAlert'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import './Admin.css'
 
-const Admin = ({adminAuthenticated})=>{
+const Admin = ({adminAuthenticated,isLoading,load,stopLoading})=>{
   const[surname,setSurname] = useState('')
   const[firstName,setFirstName] = useState('')
   const[post,setPost] = useState('President')  
@@ -71,8 +72,8 @@ const Admin = ({adminAuthenticated})=>{
     formData.set('post',post)
     formData.set('manifesto',manifesto)
     formData.set('picture',picture)
-
   try {  
+      load()
       await axios.post('https://votingapp-pmev.onrender.com/election/contestants',formData,{headers:{
       'Content-Type':'multipart/form-data',
       'X-Auth-Token':localStorage.getItem('token')
@@ -90,6 +91,7 @@ const Admin = ({adminAuthenticated})=>{
    setManifesto('')
    setPicture('')
    setResetFile(++resetFile)
+   stopLoading()
   } 
 
     return(
@@ -126,7 +128,7 @@ const Admin = ({adminAuthenticated})=>{
           </div>
           <div className = "buttons">
           <div data-tooltip = "Add A New Contestant">
-            <button className = "roundButton" id="submit" type="button" disabled = {isDisabled} onClick = {handleSubmitVals}><i className="fas fa-plus"></i></button>
+            <button className = "roundButton" id="submit" type="button" disabled = {isDisabled} onClick = {handleSubmitVals}>{isLoading?<i className="fas fa-circle-notch fa-spin fa-xs"></i>:<i className="fas fa-plus"></i>}</button>
           </div>  
           <div data-tooltip = "Go To The Home Page">
             <button className = "roundButton" id="goHome" type="button" onClick = {goHome}><i className="fas fa-home"></i></button>
@@ -145,6 +147,7 @@ const Admin = ({adminAuthenticated})=>{
 
 const mapStateToProps = (state)=>({
   adminAuthenticated:state.admin.adminIsAuthenticated,
+  isLoading:state.isLoading
 })
 
-export default connect(mapStateToProps)(Admin)
+export default connect(mapStateToProps,{load:loading,stopLoading:notLoading})(Admin)

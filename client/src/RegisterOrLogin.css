@@ -67,13 +67,14 @@
     justify-content: center;
     align-items: center;
 }
-.action_btn input{
+.action_btn button{
     padding: 10px 20px;
     cursor: pointer;
     background-color: green;
     color:white;
     border:none;
     outline: none;
+    width: 40%;
 }
 
 #currentSelected{
