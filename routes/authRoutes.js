@@ -15,7 +15,7 @@ Router.post('/register',async (req,res)=>{
         }
         let user = await User.findOne({where:{username}})
         if(user){
-            return res.status(403).json({error:"Username Exists! Choose Another Name!"})
+            return res.status(403).json({error:"Username Exists! Choose Another Username!"})
         }
         const salt = await bcrypt.genSalt(10)
         password = await bcrypt.hash(password, salt)
