@@ -39,12 +39,12 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         // Prepare form data
         const formData = new FormData();
         // formData.append('key', process.env.IMGBB_API_KEY);
-        formData.append('image', resizedBuffer.toString('base64'), fileName);
-        console.log('filename')
-        console.log(fileName)
+        formData.append('image', resizedBuffer, fileName);
+        console.log('buffer')
+        console.log(resizedBuffer)
         // Upload image to imgbb server
         const imgbbResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, formData);
-        console.log('aftere imgb req')
+        console.log('after imgbb req')
         // save contestant to the database
         const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imgbbResponse.data.data.display_url }
         await Contestants.create(contestant)
