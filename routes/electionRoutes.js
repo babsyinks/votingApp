@@ -39,14 +39,10 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         // Prepare form data
         const form = new FormData();
         form.append('key', process.env.IMGBB_API_KEY);
-        form.append('image', fs.createReadStream(filePath));
+        form.append('image', fs.createReadStream(filePath), fileName);
         
         // Upload image to imgbb server
-        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
+        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form);
         
         // Get the image URL
         const imageUrl = imgbbResponse.data.data.display_url;
