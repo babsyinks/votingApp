@@ -29,43 +29,30 @@ const upload = multer({
     })  
 
 Router.post('/contestants',upload.single('picture'),async(req,res)=>{
+    let filePath
     const fileName = req.file.originalname
     try {
-        if (!req.file) {
-            return res.status(400).json({ error: 'No file uploaded' });
-        }
-
-        const formData = new FormData();
-        formData.append('key', process.env.IMGBB_API_KEY);
-        formData.append('image', req.file.buffer.toString('base64'));
-
-        console.log('Base64 Image:', req.file.buffer.toString('base64').slice(0, 100));
-
-
-        const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
-            headers: formData.getHeaders(),
-        });
-
-        res.json({ message: 'success', imageUrl: response.data.data.display_url });
-/*         const{surname,firstName,post,manifesto} = req.body  
-        // Resize image
-        const resizedBuffer = await sharp(req.file.buffer)
-            .resize({ width: 300, height: 300 })
-            .toBuffer();
-        // Prepare form data
-        const formData = new FormData();
-        // formData.append('key', process.env.IMGBB_API_KEY);
-        formData.append('image', resizedBuffer, fileName);
-        console.log('buffer')
-        console.log(resizedBuffer)
-        // Upload image to imgbb server
-        const imgbbResponse = await axios.post(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, formData);
+        const{surname,firstName,post,manifesto} = req.body  
+        await sharp(req.file.buffer).resize({width:300,height:300}).toFile(`${fileName}`)
+        filePath = path.join(__dirname,'..',fileName) 
+        console.log('API Key:', `"${process.env.IMGBB_API_KEY}"`);
+        const resp = await imgbbUploader(`${process.env.IMGBB_API_KEY}`,filePath)
         console.log('after imgbb req')
-        // save contestant to the database
-        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imgbbResponse.data.data.display_url }
+        fs.unlink(filePath,(err)=>{
+            if(err){
+                console.log(err.message)
+            }
+        })
+        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:resp.display_url}
         await Contestants.create(contestant)
-        res.json({message:'success'}) */
+            res.json({message:'success'})
     } catch (error) {
+        console.log(error)
+        fs.unlink(filePath,(err)=>{
+            if(err){
+                console.log(err.message)
+            }
+        })
         const errMsg = error.response ? error.response.data : error.message
         console.error('Error:', errMsg);
         res.status(500).json({ error: errMsg });
