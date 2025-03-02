@@ -36,9 +36,7 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         const{surname,firstName,post,manifesto} = req.body  
         await sharp(req.file.buffer).resize({width:300,height:300}).toFile(`${fileName}`)
         filePath = path.join(__dirname,'..',fileName) 
-        console.log('API Key:', `"${process.env.IMGBB_API_KEY}"`);
         const resp = await imgbbUploader(`${process.env.IMGBB_API_KEY}`,filePath)
-        console.log('after imgbb req')
         fs.unlink(filePath,(err)=>{
             if(err){
                 console.log(err.message)
@@ -46,7 +44,7 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         })
         const contestant = {surname,firstname:firstName,position:post,manifesto,picture:resp.display_url}
         await Contestants.create(contestant)
-            res.json({message:'success'})
+        res.json({message:'success'})
     } catch (error) {
         console.log(error)
         fs.unlink(filePath,(err)=>{
