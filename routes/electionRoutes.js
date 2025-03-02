@@ -31,7 +31,23 @@ const upload = multer({
 Router.post('/contestants',upload.single('picture'),async(req,res)=>{
     const fileName = req.file.originalname
     try {
-        const{surname,firstName,post,manifesto} = req.body  
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const formData = new FormData();
+        formData.append('key', process.env.IMGBB_API_KEY);
+        formData.append('image', req.file.buffer.toString('base64'));
+
+        console.log('Base64 Image:', req.file.buffer.toString('base64').slice(0, 100));
+
+
+        const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
+            headers: formData.getHeaders(),
+        });
+
+        res.json({ message: 'success', imageUrl: response.data.data.display_url });
+/*         const{surname,firstName,post,manifesto} = req.body  
         // Resize image
         const resizedBuffer = await sharp(req.file.buffer)
             .resize({ width: 300, height: 300 })
@@ -48,7 +64,7 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         // save contestant to the database
         const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imgbbResponse.data.data.display_url }
         await Contestants.create(contestant)
-        res.json({message:'success'})
+        res.json({message:'success'}) */
     } catch (error) {
         const errMsg = error.response ? error.response.data : error.message
         console.error('Error:', errMsg);
