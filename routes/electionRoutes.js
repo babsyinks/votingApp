@@ -1,10 +1,11 @@
-const axios = require('axios');
-const FormData = require('form-data');
+/* const axios = require('axios');
+const FormData = require('form-data'); */
 const express = require('express')
 const path = require('path')
 const sharp = require('sharp')
 const multer = require('multer')
 const fs = require('fs')
+const imgbbUploader = require('imgbb-uploader')
 const permittedAuth = require('../middleware/permittedAuth')
 const electionAuth = require('../middleware/electionAuth')
 const {Votes} = require('../models') 
