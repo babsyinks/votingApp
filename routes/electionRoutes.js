@@ -1,9 +1,10 @@
+const axios = require('axios');
+const FormData = require('form-data');
 const express = require('express')
 const path = require('path')
 const sharp = require('sharp')
 const multer = require('multer')
 const fs = require('fs')
-const imgbbUploader = require('imgbb-uploader');
 const permittedAuth = require('../middleware/permittedAuth')
 const electionAuth = require('../middleware/electionAuth')
 const {Votes} = require('../models') 
@@ -32,17 +33,30 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
     const fileName = req.file.originalname
     try {
         const{surname,firstName,post,manifesto} = req.body  
+        // resize image
         await sharp(req.file.buffer).resize({width:300,height:300}).toFile(`${fileName}`)
         filePath = path.join(__dirname,'..',fileName) 
-        const resp = await imgbbUploader(`${process.env.IMGBB_API_KEY}`,filePath)
+        // Prepare form data
+        const form = new FormData();
+        form.append('key', process.env.IMGBB_API_KEY);
+        form.append('image', fs.createReadStream(filePath));
+        
+        // Upload image to imgbb server
+        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form, {
+            headers: form.getHeaders(),
+        });
+        
+        // Get the image URL
+        const imageUrl = imgbbResponse.data.data.display_url;
         fs.unlink(filePath,(err)=>{
             if(err){
                 console.log(err.message)
             }
         })
-        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:resp.display_url}
+        // save contestant to the database
+        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imageUrl }
         await Contestants.create(contestant)
-            res.json({message:'success'})
+        res.json({message:'success'})
     } catch (error) {
         console.log(error)
         fs.unlink(filePath,(err)=>{
