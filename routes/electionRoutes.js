@@ -29,39 +29,27 @@ const upload = multer({
     })  
 
 Router.post('/contestants',upload.single('picture'),async(req,res)=>{
-    let filePath
     const fileName = req.file.originalname
     try {
         const{surname,firstName,post,manifesto} = req.body  
-        // resize image
-        await sharp(req.file.buffer).resize({width:300,height:300}).toFile(`${fileName}`)
-        filePath = path.join(__dirname,'..',fileName) 
+        // Resize image
+        const resizedBuffer = await sharp(req.file.buffer)
+            .resize({ width: 300, height: 300 })
+            .toBuffer();
         // Prepare form data
-        const form = new FormData();
-        form.append('key', process.env.IMGBB_API_KEY);
-        form.append('image', fs.createReadStream(filePath), fileName);
-        
+        const formData = new FormData();
+        formData.append('key', process.env.IMGBB_API_KEY);
+        formData.append('image', resizedBuffer.toString('base64'), fileName);
         // Upload image to imgbb server
-        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form);
-        
-        // Get the image URL
-        const imageUrl = imgbbResponse.data.data.display_url;
-        fs.unlink(filePath,(err)=>{
-            if(err){
-                console.log(err.message)
-            }
-        })
+        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', formData);
         // save contestant to the database
-        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imageUrl }
+        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:imgbbResponse.data.data.display_url }
         await Contestants.create(contestant)
         res.json({message:'success'})
     } catch (error) {
-        console.log(error)
-        fs.unlink(filePath,(err)=>{
-            if(err){
-                console.log(err.message)
-            }
-        })
+        const errMsg = error.response ? error.response.data : error.message
+        console.error('Error:', errMsg);
+        res.status(500).json({ error: errMsg });
     }
 })
 
