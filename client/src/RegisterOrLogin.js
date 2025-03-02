@@ -63,7 +63,7 @@ async function handleSubmit(){
   } catch (error) {
     denyAccess()
     stopLoading() 
-    setAlert('failed',error.message,setDisplayAlert)
+    action === "Register"?setAlert('failed',`${username} username already exists.`,setDisplayAlert):setAlert('failed',"Username or password is incorrect",setDisplayAlert)
   }
 
 }
