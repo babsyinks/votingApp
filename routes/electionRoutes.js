@@ -42,9 +42,7 @@ Router.post('/contestants',upload.single('picture'),async(req,res)=>{
         form.append('image', fs.createReadStream(filePath));
         
         // Upload image to imgbb server
-        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form, {
-            headers: form.getHeaders(),
-        });
+        const imgbbResponse = await axios.post('https://api.imgbb.com/1/upload', form);
         
         // Get the image URL
         const imageUrl = imgbbResponse.data.data.display_url;
