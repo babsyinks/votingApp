@@ -1,11 +1,6 @@
-const axios = require('axios');
-const FormData = require('form-data');
 const express = require('express')
 const path = require('path')
-const sharp = require('sharp')
-const multer = require('multer')
-const fs = require('fs')
-// const imgbbUploader = require('imgbb-uploader')
+const { upload } = require('../middleware/uploadMedia')
 const permittedAuth = require('../middleware/permittedAuth')
 const electionAuth = require('../middleware/electionAuth')
 const {Votes} = require('../models') 
@@ -14,108 +9,30 @@ const {Timer} = require('../models')
 require('dotenv').config({path:path.join('..','.env')});
 const Router = express.Router()
 Router.use(express.json())  
- 
-const upload = multer({
-    limits:{fileSize:1000000 },
-    fileFilter(req,file,cb){    
-    if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
-       return cb(new Error("invalid image format."))
-    }
-    cb(undefined,true)
-       },
-       onError : function(err, next) {
-        console.log('error', err);
-        next(err);
-      }
-    })  
 
-    Router.post('/contestants', upload.single('picture'), async (req, res) => {
-        let filePath;
-        try {
-            if (!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
-            }
-    
-            // Resize image using sharp
-            const fileName = `${Date.now()}_${req.file.originalname}`;
-            filePath = path.join(__dirname, '..', fileName);
-            await sharp(req.file.buffer).resize({ width: 300, height: 300 }).toFile(filePath);
-    
-            // Read file as binary
-            const imageBuffer = fs.readFileSync(filePath);
-            const base64Image = imageBuffer.toString('base64');
-    
-            // Prepare Imgur request
-            const formData = new FormData();
-            formData.append('image', base64Image);
-            formData.append('type', 'base64');
-    
-            const response = await axios.post('https://api.imgur.com/3/upload', formData, {
-                headers: {
-                    Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
-                    ...formData.getHeaders(),
-                },
-            });
-    
-            // Delete temp file after upload
-            fs.unlink(filePath, (err) => {
-                if (err) console.error('File delete error:', err.message);
-            });
-    
-            // Save contestant to database
-            const { surname, firstName, post, manifesto } = req.body;
-            const contestant = {
-                surname,
-                firstname: firstName,
-                position: post,
-                manifesto,
-                picture: response.data.data.link, // Imgur image URL
-            };
-            await Contestants.create(contestant);
-    
-            res.json({ message: 'success', imageUrl: response.data.data.link });
-        } catch (error) {
-            console.error('Error:', error.response ? error.response.data : error.message);
-    
-            // Delete temp file in case of error
-            if (filePath) {
-                fs.unlink(filePath, (err) => {
-                    if (err) console.error('File delete error:', err.message);
-                });
-            }
-    
-            res.status(500).json({ error: 'Image upload failed', details: error.response?.data });
-        }
-    });
-
-/* Router.post('/contestants',upload.single('picture'),async(req,res)=>{
-    let filePath
-    const fileName = req.file.originalname
+Router.post('/contestants', upload.single('picture'), async (req, res) => {
     try {
-        const{surname,firstName,post,manifesto} = req.body  
-        await sharp(req.file.buffer).resize({width:300,height:300}).toFile(`${fileName}`)
-        filePath = path.join(__dirname,'..',fileName) 
-        const resp = await imgbbUploader(`${process.env.IMGBB_API_KEY}`,filePath)
-        fs.unlink(filePath,(err)=>{
-            if(err){
-                console.log(err.message)
-            }
-        })
-        const contestant = {surname,firstname:firstName,position:post,manifesto,picture:resp.display_url}
-        await Contestants.create(contestant)
-        res.json({message:'success'})
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+    
+        const { surname, firstName, post, manifesto } = req.body;
+        const contestant = {
+            surname,
+            firstname: firstName,
+            position: post,
+            manifesto,
+            picture: req.file.path, // Image link from cloudinary
+        };
+        // Save contestant to database
+        await Contestants.create(contestant);
+    
+        res.json({ message: 'success', imageUrl: req.file.path });
     } catch (error) {
-        console.log(error)
-        fs.unlink(filePath,(err)=>{
-            if(err){
-                console.log(err.message)
-            }
-        })
-        const errMsg = error.response ? error.response.data : error.message
-        console.error('Error:', errMsg);
-        res.status(500).json({ error: errMsg });
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Image upload failed', details: error.message });
     }
-}) */
+});
 
 Router.get('/details',electionAuth,async(req,res)=>{
     const user = req.user
