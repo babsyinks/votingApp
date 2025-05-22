@@ -1,0 +1,9 @@
+.election-position-summary{
+    border-radius: 5px;
+    border: 2px solid white;
+    background-color:var(--color-background-black);
+    color: var(--color-text-white);
+    margin:10px 5px;
+    text-transform: capitalize;
+    font-family: 'Patrick Hand', cursive;
+}

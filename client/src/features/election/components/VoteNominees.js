@@ -264,7 +264,6 @@ const VoteNominees = () => {
     }
   } else {
     navigate("/");
-    return null;
   }
 };
 

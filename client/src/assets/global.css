@@ -132,6 +132,8 @@ input[type = button]:disabled:hover,button:disabled:hover{
 
   --color-text-black: var(--palette-black);
 
+  --color-text-sky-blue: var(--palette-blue-soft);
+
   --color-input-box-border-bottom: var(--palette-black);
 
   --color-datatooltip-before: var(--palette-grey-dark);
@@ -156,26 +158,6 @@ input[type = button]:disabled:hover,button:disabled:hover{
   --color-message-success: var(--palette-lime);
   --color-message-failure: var(--palette-red);
 
-/* 
-  --color-button-disabled: var(--palette-text-light-3);
-  --color-background: var(--palette-white);
-  --color-background-soft: var(--palette-white-soft);
-  --color-background-mute: var(--palette-white-mute);
-  --color-background-underlay: var(--palette-black-soft);
-
-  --color-border-1: var(--palette-divider-light-1);
-  --color-border-2: var(--palette-divider-light-2);
-  --color-border-hover-1: var(--palette-divider-light-2);
-
-  --color-heading-1: var(--palette-text-light-1);
-  --color-heading-2: var(--palette-text-light-3);
-  --color-text-1: var(--palette-text-light-2);
-  --color-text-2: var(--palette-text-light-1);
-  --color-text-3: var(--palette-text-light-4);
-
-  --color-error: var(--palette-error);
-  --color-error-text: var(--palette-white);
-  --color-success: var(--palette-success);
-  --color-success-text: var(--palette-white);
-  --color-pending: var(--palette-text-light-3); */
+  --color-background-white: var(--palette-white);
+  --color-background-black: var(--palette-black);
 }

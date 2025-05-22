@@ -1,0 +1,13 @@
+.election-position-summary-part-wrapper{
+    background-color: var(--color-text-black);
+    z-index: 30;
+}
+
+.election-position-summary-part-heading{
+    margin: 7px 0px;
+    font-family: 'Patrick Hand', cursive;
+}
+
+.election-position-summary-part-value{
+    color: var(--color-text-sky-blue);
+}

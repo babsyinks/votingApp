@@ -1,26 +1,27 @@
 import React from "react";
+import Block from "../../../components/ui/Block";
+import ElectivePositionDetailsSummaryPart from "./ElectivePositionDetailsSummaryPart";
+import defaultStyle from "./ElectivePositionDetailsSummary.module.css";
 
-const ElectivePositionDetails = ({ position, totalVotes, totalContestants}) => {
-
+const ElectivePositionDetailsSummary = ({
+  position,
+  totalVotes,
+  totalContestants,
+}) => {
+  const summaryParts = [
+    { label: "Position", value: position },
+    { label: "Number Of Contestants", value: totalContestants },
+    { label: "Total Votes Cast", value: totalVotes },
+  ];
   return (
-      <div className="electionIntro">
-        <div className="electionHead">
-          <h2>
-            Position: <span>{position}</span>
-          </h2>
-        </div>
-        <div className="electionHead">
-          <h3>
-            Number Of Contestants:{" "}
-            <span className="numOfContestants">{totalContestants}</span>
-          </h3>
-        </div>
-        <div className="electionHead">
-          <h3>
-            Total Votes Cast: <span>{totalVotes}</span>
-          </h3>
-        </div>
-      </div>
+    <Block
+      type="flex-vert"
+      className={defaultStyle["election-position-summary"]}
+    >
+      {summaryParts.map((partDetails, i) => (
+        <ElectivePositionDetailsSummaryPart {...partDetails} key={i} />
+      ))}
+    </Block>
   );
 };
-export default ElectivePositionDetails;
+export default ElectivePositionDetailsSummary;
