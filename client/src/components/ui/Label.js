@@ -17,7 +17,7 @@ export default function Label({
   custom = { custClass: "", custStyle: {} },
   children,
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   return (
     <label
       htmlFor={name}

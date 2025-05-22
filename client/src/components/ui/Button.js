@@ -22,7 +22,7 @@ export default function Button({
   custom = { custClass: "", custStyle: {} },
   children,
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   return (
     <button
       type={type}
@@ -40,7 +40,7 @@ export default function Button({
 Button.propTypes = {
   name: PropTypes.string,
   type: PropTypes.oneOf(["button", "reset", "submit"]),
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   disabled: PropTypes.bool,
   custom: PropTypes.shape({
     custClass: PropTypes.string,

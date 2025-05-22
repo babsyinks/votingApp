@@ -16,7 +16,7 @@ export default function Tab({
   custom = { custClass: "", custStyle: {} },
 }) {
   const [action, setAction] = useState(labels[0]);
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   const width = `${Math.floor(100 / labels.length) - 1}%`;
   return (
     <>

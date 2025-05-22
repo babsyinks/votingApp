@@ -26,7 +26,7 @@ export default function TextArea({
   disabled = false,
   custom = { custClass: "", custStyle: {} },
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   const isPortrait = useOrientation();
   if (isPortrait) {
     cols = 25;

@@ -16,7 +16,7 @@ export default function Grid({
   custom = { custClass: "", custStyle: {} },
   children,
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   return (
     <div
       className={`${defaultStyle.grid} ${getCompClasses(defaultStyle, custClass)}`}

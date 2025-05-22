@@ -23,7 +23,7 @@ export default function Select({
   disabled = false,
   custom = { custClass: "", custStyle: {} },
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   return (
     <select
       name={name}

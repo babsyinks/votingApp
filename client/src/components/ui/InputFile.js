@@ -18,7 +18,7 @@ export default function InputFile({
   disabled,
   custom = { custClass: "", custStyle: {} },
 }) {
-  const { custClass, custStyle } = custom;
+  const { custClass = "", custStyle = {} } = custom;
   return (
     <input
       type="file"
