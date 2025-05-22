@@ -37,8 +37,8 @@ const logger = createLogger({
       filename: path.join(logDir, "combined-%DATE%.log"),
       datePattern: "YYYY-MM-DD",
       zippedArchive: true, // compress old logs
-      maxSize: "20m", // rotate after 20MB
-      maxFiles: "14d", // keep logs for 14 days
+      maxSize: "10m", // rotate after 10MB
+      maxFiles: "7d", // keep logs for 7 days
       level: "info",
     }),
 
@@ -47,8 +47,8 @@ const logger = createLogger({
       filename: path.join(logDir, "error-%DATE%.log"),
       datePattern: "YYYY-MM-DD",
       zippedArchive: true,
-      maxSize: "10m",
-      maxFiles: "30d",
+      maxSize: "5m",
+      maxFiles: "10d",
       level: "error",
     }),
   ],
