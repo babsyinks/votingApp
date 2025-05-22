@@ -1,0 +1,35 @@
+{
+    "files.autoSave": "afterDelay",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Andromeda Colorizer",
+    "editor.linkedEditing": true,
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "redhat.telemetry.enabled": false,
+    "prettier.endOfLine": "crlf",
+    "php.validate.executablePath": "C:/xampp/php/php.exe",
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+    ],
+    "eslint.codeActionsOnSave.rules": null,
+    "eslint.debug": true,
+    "eslint.format.enable": true,
+    "eslint.lintTask.enable": true,
+
+    "eslint.problems.shortenToSingleLine": true,
+    "eslint.useFlatConfig": true,
+    "diffEditor.hideUnchangedRegions.enabled": true,
+    "prettier.printWidth": 100,
+    "git.ignoreLimitWarning": true
+  }

@@ -1,0 +1,11 @@
+.inp-txt{
+    width: auto;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid var(--color-input-box-border-bottom);
+    background: transparent;
+}
+
+.wd-300{
+    width: 300px;
+}

@@ -1,0 +1,12 @@
+.tb{
+    border: 1px solid black;
+    display: inline-block;
+    text-align: center;
+    padding: 5px 0px;
+    cursor: pointer;
+}
+
+#currentSelected{
+    background-color: rgb(53, 43, 191);
+    color: white;
+}

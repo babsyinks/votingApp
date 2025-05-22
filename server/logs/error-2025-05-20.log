@@ -1,0 +1,20 @@
+2025-05-20T17:33:06.285Z [ERROR] Error: Username Exists! Choose Another Username!
+    at failRegistrationIfUserExists (C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:47:19)
+    at C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:15:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-20T17:33:12.903Z [ERROR] Error: Username Exists! Choose Another Username!
+    at failRegistrationIfUserExists (C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:47:19)
+    at C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:15:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-20T17:54:49.203Z [ERROR] Error: Username Exists! Choose Another Username!
+    at failRegistrationIfUserExists (C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:47:19)
+    at C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:15:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-20T17:57:49.763Z [ERROR] Error: Username Exists! Choose Another Username!
+    at failRegistrationIfUserExists (C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:47:19)
+    at C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:15:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-05-20T17:58:08.733Z [ERROR] Error: Username Exists! Choose Another Username!
+    at failRegistrationIfUserExists (C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:47:19)
+    at C:\Users\HP\workspacejs\votingApp\server\routes\authRoutes.js:15:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

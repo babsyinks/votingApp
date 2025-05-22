@@ -1,0 +1,44 @@
+.flex-horz {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-vert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.flex-horz-sb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-horz-fs{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.flex-vert-fs{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.block{
+    display: block;
+    width: 100%;
+}
+
+.inline{
+    display: inline;
+}
+
+.sp-2{
+    margin-bottom: 2%;
+}

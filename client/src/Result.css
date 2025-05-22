@@ -13,7 +13,7 @@
 }
 
 .result{
-    background-color: rgb(2, 8, 92);
+    background-color: rgb(2, 8, 92); /** mute */
     color: white;
     font-weight: bold;
     padding: 5px;
@@ -39,7 +39,7 @@
 }
 
 .winner i{
-    color:rgb(0, 255, 0);
+    color: lime;
 }
 
 .resTie{
@@ -62,7 +62,7 @@
 }
 .endElection>button{
     padding: 10px;
-    background-color: rgb(197, 2, 2);
+    background-color: red;
     color: white;
     font-weight: bold;
     border: none;

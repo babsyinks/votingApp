@@ -1,0 +1,16 @@
+.contestant-picture-wrapper{
+  overflow: hidden;
+}
+
+
+.contestant-picture{
+  transform: scale(1);
+  transition: all 2s ease-in-out;
+  width: 97%;
+  
+}
+
+.contestant-picture:hover{
+  transform: scale(1.1);
+  transition: all 2s ease-in-out;
+}

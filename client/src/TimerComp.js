@@ -1,8 +1,10 @@
-import React,{useEffect} from "react";
-import axios from 'axios'
-import {connect} from 'react-redux'
+import axios from "axios";
+import React, { useEffect, memo } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import {timerIsDisabled} from './actions/timerActions'
+import { useDispatch } from "react-redux";
+
+import { setTimerData } from "./features/timer/timerSlice";
+
 import "./TimerComp.css";
 
 const minuteSeconds = 60;
@@ -12,7 +14,7 @@ const daySeconds = 86400;
 const timerProps = {
   isPlaying: true,
   size: 120,
-  strokeWidth: 6
+  strokeWidth: 6,
 };
 
 const renderTime = (dimension, time) => {
@@ -29,39 +31,42 @@ const getTimeMinutes = (time) => ((time % hourSeconds) / minuteSeconds) | 0;
 const getTimeHours = (time) => ((time % daySeconds) / hourSeconds) | 0;
 const getTimeDays = (time) => (time / daySeconds) | 0;
 
-function TimerComp({endTime,disableTimer}) {
+function TimerComp({ endTime }) {
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
-  const remainingTime = endTime/1000 - startTime;
+  const remainingTime = endTime / 1000 - startTime;
   const days = Math.ceil(remainingTime / daySeconds);
   const daysDuration = days * daySeconds;
+  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    let timerInterval
-    const checkTimerStatus = async ()=>{
-      const endTimeSecs = endTime/1000
-      timerInterval = setInterval(()=>{
-       const remainingTimeSecs = endTimeSecs - Date.now()/1000
-       const timerStatus = async ()=>{
-        if(remainingTimeSecs <=0){
-            const res = await axios.get('https://votingapp-pmev.onrender.com/timer/cancelStart')
-              if(res.data.message === 'timer cancelled'){
-                  disableTimer()
-                  clearInterval(timerInterval)
-              }
-              else{
-                console.log(res.data.message)
-              }  
-      } 
-       }
-       timerStatus()
-      },1000)
-  }
-  checkTimerStatus()
+  useEffect(() => {
+    let timerInterval;
+    const checkTimerStatus = async () => {
+      const endTimeSecs = endTime / 1000;
+      timerInterval = setInterval(() => {
+        const remainingTimeSecs = endTimeSecs - Date.now() / 1000;
+        const timerStatus = async () => {
+          if (remainingTimeSecs <= 0) {
+            try {
+              const { data: timerObj } = await axios.get(
+                // "https://votingapp-pmev.onrender.com/timer/cancelStart",
+                "/timer/cancelStart",
+              );
+              dispatch(setTimerData(timerObj));
+              clearInterval(timerInterval);
+            } catch (error) {
+              console.log(error.message);
+            }
+          }
+        };
+        timerStatus();
+      }, 1000);
+    };
+    checkTimerStatus();
 
-  return ()=>{
-    clearInterval(timerInterval)
-  }
-  },[disableTimer,endTime])
+    return () => {
+      clearInterval(timerInterval);
+    };
+  }, [dispatch, endTime]);
 
   return (
     <div className="App">
@@ -81,7 +86,7 @@ function TimerComp({endTime,disableTimer}) {
         duration={daySeconds}
         initialRemainingTime={remainingTime % daySeconds}
         onComplete={(totalElapsedTime) => [
-          remainingTime - totalElapsedTime > hourSeconds
+          remainingTime - totalElapsedTime > hourSeconds,
         ]}
       >
         {({ elapsedTime }) =>
@@ -94,7 +99,7 @@ function TimerComp({endTime,disableTimer}) {
         duration={hourSeconds}
         initialRemainingTime={remainingTime % hourSeconds}
         onComplete={(totalElapsedTime) => [
-          remainingTime - totalElapsedTime > minuteSeconds
+          remainingTime - totalElapsedTime > minuteSeconds,
         ]}
       >
         {({ elapsedTime }) =>
@@ -107,7 +112,7 @@ function TimerComp({endTime,disableTimer}) {
         duration={minuteSeconds}
         initialRemainingTime={remainingTime % minuteSeconds}
         onComplete={(totalElapsedTime) => [
-          remainingTime - totalElapsedTime > 0
+          remainingTime - totalElapsedTime > 0,
         ]}
       >
         {({ elapsedTime }) =>
@@ -118,4 +123,4 @@ function TimerComp({endTime,disableTimer}) {
   );
 }
 
-export default connect(null,{disableTimer:timerIsDisabled}) (TimerComp)
+export default memo(TimerComp);

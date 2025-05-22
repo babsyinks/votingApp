@@ -1,0 +1,29 @@
+.mg-r-5{
+    margin-right: 5px;
+}
+
+.mg-r-10{
+    margin-right: 10px;
+}
+
+.wd-auto{
+    width: auto;
+}
+
+.wd-md{
+    width: 150px;
+}
+
+.pd-05{
+    padding: 0px 5px;
+}
+
+.bld{
+    font-weight: bold;
+}
+
+@media screen and (orientation:portrait) {
+    .wd-md{
+        width: 100px;
+    }
+}

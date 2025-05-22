@@ -1,0 +1,40 @@
+.fx{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
+}
+
+.fx-cn-cn-rw{
+    justify-content: center;
+    align-items: center;
+}
+
+.fx-cn-cn-cm{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fx-cn-fs-cm{
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.fx-sb-cn-rw{
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (max-height:600px) {
+    .fx{
+        height:130vh;
+    }
+}
+
+@media screen and (max-height:350px){
+    .fx{
+        height:170vh;
+    }
+}
+

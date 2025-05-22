@@ -1,0 +1,10 @@
+.contestant-votes{
+    color: var(--color-info-votes-stat);
+    font-style: italic;
+    padding: 5px 0px;
+}
+
+.total-votes{
+    color: var(--color-info-votes-total-stat);
+    font-style: italic;
+}

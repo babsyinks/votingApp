@@ -28,7 +28,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=votingAppDB
   myserver:
-    build: .
+    build: 
+      context: ./server
     image: demo-myapp-server
     container_name: myserver
     hostname: myserver

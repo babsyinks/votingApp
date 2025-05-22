@@ -1,0 +1,22 @@
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: var(--color-datatooltip-before);
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px var(--palette-silver);    
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    background: var(--bg-color-datatooltip-hover);
+    color: var(--color-text-white);
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+[data-tooltip]:not([data-tooltip-persistent]):before {
+    pointer-events: none;
+}

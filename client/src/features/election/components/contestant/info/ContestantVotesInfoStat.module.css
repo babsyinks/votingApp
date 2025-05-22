@@ -1,0 +1,8 @@
+.vote-percent{
+    font-style: italic;
+    font-weight: bold;
+    padding: 5px 5px;
+    background-color: var(--color-vote-percent-bg);
+    border-radius: 100%;
+    color: var(--color-vote-percent-txt);
+}

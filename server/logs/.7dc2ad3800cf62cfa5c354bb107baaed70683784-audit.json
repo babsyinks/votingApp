@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\HP\\workspacejs\\votingApp\\server\\logs\\.7dc2ad3800cf62cfa5c354bb107baaed70683784-audit.json",
+    "files": [
+        {
+            "date": 1747132487833,
+            "name": "C:\\Users\\HP\\workspacejs\\votingApp\\server\\logs\\combined-2025-05-13.log",
+            "hash": "8ee74cf74c949360fbdbb3affea7b9b0eaee3f026f06fded77575dd9a91c0043"
+        },
+        {
+            "date": 1747761718213,
+            "name": "C:\\Users\\HP\\workspacejs\\votingApp\\server\\logs\\combined-2025-05-20.log",
+            "hash": "0f16de7fc76ed6fc674c67d2788fd32c5418aaa12051508829c8f72eb2f9a3ff"
+        }
+    ],
+    "hashType": "sha256"
+}

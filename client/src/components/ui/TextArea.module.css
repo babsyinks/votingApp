@@ -1,0 +1,25 @@
+.txt-area{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    max-width: 100%;
+    background: transparent;
+}
+
+.no-bg{
+    background: none;
+}
+
+
+@media screen and (max-width:500px){
+    .txt-area textarea {
+        width: 250px;
+        height: 100px;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .txt-area textarea {
+        width: 200px;
+    }
+}

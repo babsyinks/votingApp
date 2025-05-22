@@ -52,9 +52,3 @@ input.admin_input{
         font-size: 1.171vh;
     }
 }
-/* 
-@media only screen and (max-width:400px) {
-input[type='text']{
-    width: auto;
-}
-} */
