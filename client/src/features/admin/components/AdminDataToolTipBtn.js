@@ -5,14 +5,14 @@ import Button from "../../../components/ui/Button";
 const AdminDataToolTipBtn = ({
   data,
   disabled = false,
-  custClass,
+  className,
   onClick,
   children,
 }) => {
   const buttonProps = {
     onClick,
     disabled,
-    custom: { custClass: `rnd-btn ${custClass}` },
+    className: `rnd-btn ${className}`
   };
 
   return (

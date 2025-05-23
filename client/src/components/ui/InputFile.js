@@ -8,7 +8,8 @@ import React from "react";
  * @param {Number} props.resetKey - The key used to reset the file input field.
  * @param {Function} props.onChange - The function that runs whenever a file input is received.
  * @param {Boolean} props.disabled - Indicates if the input file picker should be disabled or not.
- * @param {Object} props.custom - Optional object to customize the styling of this component
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @returns {JSX.Element} The rendered input file component.
  */
 export default function InputFile({
@@ -16,9 +17,9 @@ export default function InputFile({
   resetKey,
   onChange,
   disabled,
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   return (
     <input
       type="file"
@@ -26,8 +27,8 @@ export default function InputFile({
       key={resetKey}
       onChange={onChange}
       disabled={disabled}
-      className={custClass || ""}
-      style={custStyle || {}}
+      className={className}
+      style={style}
     />
   );
 }

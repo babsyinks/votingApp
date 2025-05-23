@@ -8,19 +8,20 @@ import getCompClasses from "../util/getCompClasses";
  *
  * @param {Object} props - Component props.
  * @param {String} [props.type] - The type of the Grid. E.g Grid or flex-vert.
- * @param {Object} [props.custom] - Additional style classes and objects to pass to the element.
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @param {React.ReactNode} props.children - Child elements to render inside the Grid.
  * @returns {JSX.Element} The rendered Grid component.
  */
 export default function Grid({
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
   children,
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   return (
     <div
-      className={`${defaultStyle.grid} ${getCompClasses(defaultStyle, custClass)}`}
-      style={custStyle || {}}
+      className={`${defaultStyle.grid} ${getCompClasses(defaultStyle, className)}`}
+      style={style}
     >
       {children}
     </div>
@@ -28,6 +29,7 @@ export default function Grid({
 }
 
 Grid.propTypes = {
-  custom: PropTypes.object,
+  className: PropTypes.string,
+  style: PropTypes.object,
   children: PropTypes.node,
 };

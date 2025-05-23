@@ -20,7 +20,7 @@ const ContestantButtonManifesto = ({ manifestoControl }) => {
     return (
       <ContestantButtonManifestoTemplate
         handler={() => setShowManifesto(true)}
-        custClass="swp-col-blv"
+        className="swp-col-blv"
       >
         Read Manifesto
       </ContestantButtonManifestoTemplate>
@@ -29,8 +29,8 @@ const ContestantButtonManifesto = ({ manifestoControl }) => {
     return (
       <ContestantButtonManifestoTemplate
         handler={() => setShowManifesto(false)}
-        custClass="swp-col-crm"
-        custStyle={{ marginTop: "5px" }}
+        className="swp-col-crm"
+        style={{ marginTop: "5px" }}
       >
         Close Manifesto
       </ContestantButtonManifestoTemplate>

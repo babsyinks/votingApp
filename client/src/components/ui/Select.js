@@ -12,7 +12,8 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {Function} props.onChange - The function that runs whenever an item is selected.
  * @param {Array<Object>} props.selectOptions - The list of items to render as options in this component.
  * @param {Boolean} props.disabled - Indicates if this component should be disabled or not.
- * @param {Object} props.custom - Optional object to customize the select component.
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @returns {JSX.Element} The rendered select component.
  */
 export default function Select({
@@ -21,17 +22,17 @@ export default function Select({
   onChange,
   selectOptions,
   disabled = false,
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   return (
     <select
       name={name}
       value={value}
       onChange={onChange}
       disabled={disabled}
-      className={`${defaultStyle.sel} ${getCompClasses(defaultStyle, custClass)}`}
-      style={custStyle || {}}
+      className={`${defaultStyle.sel} ${getCompClasses(defaultStyle, className)}`}
+      style={style}
     >
       {selectOptions.map(({ optionLabel, optionValue }, i) => (
         <option value={optionValue || optionLabel.toLowerCase()} key={i}>
@@ -53,8 +54,6 @@ Select.propTypes = {
     }).isRequired,
   ).isRequired,
   disabled: PropTypes.bool,
-  custom: PropTypes.shape({
-    custClass: PropTypes.string,
-    custStyle: PropTypes.object,
-  }),
+  className: PropTypes.string,
+  style: PropTypes.object,
 };

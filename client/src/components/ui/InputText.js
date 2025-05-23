@@ -12,7 +12,8 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {Function} props.onChange - The function that runs whenever a text input is received.
  * @param {String} props.placeholder - The default text to show when the component first renders.
  * @param {Boolean} props.disabled - Indicates if the input text box should be disabled or not.
- * @param {Object} props.custom - Optional object to customize the input style.
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @returns {JSX.Element} The rendered input text component.
  */
 export default function InputText({
@@ -22,9 +23,9 @@ export default function InputText({
   onChange,
   placeholder,
   disabled,
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   return (
     <input
       type={type}
@@ -33,8 +34,8 @@ export default function InputText({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      className={`${defaultStyle["inp-txt"]} ${getCompClasses(defaultStyle, custClass)}`}
-      style={custStyle || {}}
+      className={`${defaultStyle["inp-txt"]} ${getCompClasses(defaultStyle, className)}`}
+      style={style}
     />
   );
 }

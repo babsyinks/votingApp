@@ -49,14 +49,14 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
     }
   }, [dataSubmitted, resetFile]);
 
-  const custom = { custClass: "wd-md bld" };
-  const blockProp = { type: "flex-horz-fs", custom: { custClass: "sp-2" } };
+  const labelClassName = "wd-md bld";
+  const horzBlockProps = { type: "flex-horz-fs", className: "sp-2" };
   return (
     <>
       <Heading>Add A Contestant</Heading>
       <Block type="flex-vert-fs">
-        <Block {...blockProp}>
-          <Label name="surname" custom={custom}>
+        <Block {...horzBlockProps}>
+          <Label name="surname" className={labelClassName}>
             Surname:
           </Label>
           <Input
@@ -68,8 +68,8 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
             }}
           />
         </Block>
-        <Block {...blockProp}>
-          <Label name="firstName" custom={custom}>
+        <Block {...horzBlockProps}>
+          <Label name="firstName" className={labelClassName}>
             First Name:
           </Label>
           <Input
@@ -81,8 +81,8 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
             }}
           />
         </Block>
-        <Block {...blockProp}>
-          <Label name="post" custom={custom}>
+        <Block {...horzBlockProps}>
+          <Label name="post" className={labelClassName}>
             Post:
           </Label>
           <Select
@@ -94,8 +94,8 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
             selectOptions={getOptions()}
           />
         </Block>
-        <Block {...blockProp}>
-          <Label name="manifesto" custom={custom}>
+        <Block {...horzBlockProps}>
+          <Label name="manifesto" className={labelClassName}>
             Manifesto:
           </Label>
           <TextArea
@@ -106,8 +106,8 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
             }}
           />
         </Block>
-        <Block {...blockProp}>
-          <Label name="picture" custom={custom}>
+        <Block {...horzBlockProps}>
+          <Label name="picture" className={labelClassName}>
             Upload Picture:
           </Label>
           <Input

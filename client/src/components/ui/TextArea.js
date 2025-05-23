@@ -14,7 +14,8 @@ import useOrientation from "../../hooks/useOrientation";
  * @param {Function} props.onChange - The function that runs whenever a text area input is received.
  * @param {String} props.placeholder - The default text to show when the component first renders.
  * @param {Boolean} props.disabled - Indicates if the text area should be disabled or not.
- * @param {Object} props.custom - Optional object to customize the textarea style.
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @returns {JSX.Element} The rendered text area component.
  */
 export default function TextArea({
@@ -24,9 +25,9 @@ export default function TextArea({
   onChange,
   placeholder,
   disabled = false,
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   const isPortrait = useOrientation();
   if (isPortrait) {
     cols = 25;
@@ -40,8 +41,8 @@ export default function TextArea({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      className={`${defaultStyle["txt-area"]} ${getCompClasses(defaultStyle, custClass)}`}
-      style={{ resize: "none", ...custStyle }}
+      className={`${defaultStyle["txt-area"]} ${getCompClasses(defaultStyle, className)}`}
+      style={{ resize: "none", ...style }}
     ></textarea>
   );
 }
@@ -56,8 +57,6 @@ TextArea.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
-  custom: PropTypes.shape({
-    custClass: PropTypes.string,
-    custStyle: PropTypes.object,
-  }),
+  className: PropTypes.string,
+  style: PropTypes.object,
 };

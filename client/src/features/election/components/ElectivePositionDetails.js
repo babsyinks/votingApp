@@ -11,11 +11,13 @@ import "./ElectivePositionDetails.css";
 
 const ElectivePositionDetails = ({ contestantsDetailsByPosition }) => {
   const { position } = contestantsDetailsByPosition;
-  const listOfVotesCastInCategory = useSelector(getAllVotesInACategory(position));
+  const listOfVotesCastInCategory = useSelector(
+    getAllVotesInACategory(position),
+  );
   const contestantsList = useSelector(getAllContestantsInCategory(position));
 
   return (
-    <Block custom={{ custStyle: { textAlign: "center" } }}>
+    <Block style={{ textAlign: "center" }}>
       <ElectivePositionDetailsSummary
         position={position}
         totalContestants={contestantsList.length}

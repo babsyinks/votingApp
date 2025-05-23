@@ -32,10 +32,8 @@ Input.propTypes = {
   disabled: PropTypes.bool,
   resetKey: PropTypes.number,
   placeholder: PropTypes.string,
-  custom: PropTypes.shape({
-    custClass: PropTypes.string,
-    custStyle: PropTypes.object,
-  }),
+  className: PropTypes.string,
+  style: PropTypes.object,
 };
 
 export default Input;

@@ -22,7 +22,7 @@ const AdminDataToolTipsBtnsList = ({
 
   return (
     <>
-      {listDetails.map(({ data, custClass, route, iClasses }, i) => {
+      {listDetails.map(({ data, compClass, route, iClasses }, i) => {
         if (data === "Add A New Contestant") {
           const classes = isLoading
             ? "fa-circle-notch fa-spin fa-xs"
@@ -31,7 +31,7 @@ const AdminDataToolTipsBtnsList = ({
             <AdminDataToolTipBtn
               data={data}
               disabled={isSubmitBtnDisabled}
-              custClass={custClass}
+              className={compClass}
               onClick={handleSubmitVals}
               key={i}
             >
@@ -42,7 +42,7 @@ const AdminDataToolTipsBtnsList = ({
         return (
           <AdminDataToolTipBtn
             data={data}
-            custClass={custClass}
+            className={compClass}
             onClick={navigateFn(route)}
             key={i}
           >

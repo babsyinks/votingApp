@@ -29,12 +29,12 @@
      z-index: 70;
  }
 
- .modal_msg{
+ .modal-msg{
     padding:10px 5px;
     line-height: 25px;
     font-family: 'Roboto', sans-serif;
 }
-.modal_positive,.modal_negative{
+.modal-positive,.modal-negative{
    padding: 5px 10px;
    margin:5px 10px;
    color: white;
@@ -43,10 +43,10 @@
    font-family: 'Roboto', sans-serif;
    cursor: pointer;
 }
-.modal_positive{
+.modal-positive{
    background-color: green;
 }
-.modal_negative{
+.modal-negative{
    background-color:red;
 }
 

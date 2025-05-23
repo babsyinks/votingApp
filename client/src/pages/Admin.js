@@ -77,7 +77,7 @@ const Admin = () => {
         setFormData={setFormData}
         setIsDisabled={setIsDisabled}
       />
-      <Block type="flex-horz-sb" custom={{ custClass: "sp-2" }}>
+      <Block type="flex-horz-sb" className="sp-2">
         <AdminDataToolTipsBtnsList
           handleSubmitVals={handleSubmitVals}
           isSubmitBtnDisabled={isDisabled}

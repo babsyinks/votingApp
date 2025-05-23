@@ -7,31 +7,31 @@ import getCompClasses from "../../util/getCompClasses";
  *
  * @param {Object} props - Component props.
  * @param {String} [props.type] - The type of the heading.
- * @param {Object} [props.custom] - Additional classes and styles to be passed to this component
- * @param {String} [props.className] - The className to use to additionally style this component.
- * @param {React.ReactNode} props.children - Child elements to render inside this component.
+ * @param {String} [props.className] - The space-separated classNames to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
+ * @param {React.ReactNode} [props.children] - Child elements to render inside this component.
  * @returns {JSX.Element} The rendered heading component.
  */
 export default function Heading({
   type = "h1",
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
   children,
-  className,
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   const headingType = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(type)
     ? type
     : "h1";
-  const cn = `${defaultStyle.heading} ${getCompClasses(defaultStyle, custClass)} ${className}`;
+  const allClassNames = `${defaultStyle.heading} ${getCompClasses(defaultStyle, className)}`;
   return React.createElement(
     headingType,
-    { className: cn, style: custStyle },
+    { className: allClassNames, style },
     children,
   );
 }
 
 Heading.propTypes = {
   type: PropTypes.oneOf(["h1", "h2", "h3", "h4", "h5", "h6"]),
+  className: PropTypes.string,
   style: PropTypes.object,
   children: PropTypes.node,
 };

@@ -8,15 +8,16 @@ import getCompClasses from "../../util/getCompClasses";
  *
  * @param {Object} props - Component props.
  * @param {Array} props.labels - The list of labels of the tabs to be rendered.
- * @param {Object} props.custom - Optional object to customize this component's style.
+ * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @returns {JSX.Element} The rendered tab component.
  */
 export default function Tab({
   labels,
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
 }) {
   const [action, setAction] = useState(labels[0]);
-  const { custClass = "", custStyle = {} } = custom;
   const width = `${Math.floor(100 / labels.length) - 1}%`;
   return (
     <>
@@ -24,9 +25,9 @@ export default function Tab({
         return (
           <span
             id={action === label ? "currentSelected" : ""}
-            className={getCompClasses(defaultStyle.tb, custClass)}
+            className={getCompClasses(defaultStyle.tb, className)}
             onClick={() => setAction(label)}
-            style={{ ...custStyle, width }}
+            style={{ ...style, width }}
           >
             {label}
           </span>
@@ -38,8 +39,6 @@ export default function Tab({
 
 Tab.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  custom: PropTypes.shape({
-    custClass: PropTypes.string,
-    custStyle: PropTypes.object,
-  }),
+  className: PropTypes.string,
+  style: PropTypes.object,
 };

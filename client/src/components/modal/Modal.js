@@ -11,17 +11,17 @@ const Modal = ({
 }) => {
   const positiveBtnProp = {
     onClick: positiveHandler,
-    custom: { custClass: defaultStyle.modal_positive },
+    className: defaultStyle["modal-positive"]
   };
 
   const negativeBtnProp = {
     onClick: negativeHandler,
-    custom: { custClass: defaultStyle.modal_negative },
+    className: defaultStyle["modal-negative"]
   }
   return (
     <div className={defaultStyle.backdrop}>
       <div className={defaultStyle.modal}>
-        <div className={defaultStyle.modal_msg}>{message}</div>
+        <div className={defaultStyle["modal-msg"]}>{message}</div>
         <span>
           {positiveBtnTxt && (
             <Button {...positiveBtnProp} >

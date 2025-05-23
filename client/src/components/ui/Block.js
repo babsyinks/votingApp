@@ -8,22 +8,21 @@ import getCompClasses from "../../util/getCompClasses";
  *
  * @param {Object} props - Component props.
  * @param {String} [props.type] - The type of the block. E.g block or flex-vert.
- * @param {Object} [props.custom] - Additional style classes and objects to pass to the element.
- * @param {React.ReactNode} [props.children] - Child elements to render inside the block.
  * @param {String} [props.className] - The className to use to additionally style this component.
+ * @param {Object} [props.style] - Additional inline styles to use to style this component.
+ * @param {React.ReactNode} [props.children] - Child elements to render inside the block.
  * @returns {JSX.Element} The rendered block component.
  */
 export default function Block({
   type = "block",
-  custom = { custClass: "", custStyle: {} },
+  className = "",
+  style = {},
   children,
-  className,
 }) {
-  const { custClass = "", custStyle = {} } = custom;
   return (
     <div
-      className={`${defaultStyle[type]} ${getCompClasses(defaultStyle, custClass)} ${className}`}
-      style={custStyle || {}}
+      className={`${defaultStyle[type]} ${getCompClasses(defaultStyle, className)}`}
+      style={style}
     >
       {children}
     </div>
@@ -39,6 +38,7 @@ Block.propTypes = {
     "block",
     "inline",
   ]),
-  custom: PropTypes.object,
+  className: PropTypes.string,
+  style: PropTypes.object,
   children: PropTypes.node,
 };
