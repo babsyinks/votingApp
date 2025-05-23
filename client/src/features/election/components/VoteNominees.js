@@ -149,7 +149,7 @@ const VoteNominees = () => {
     if (response) {
       const { electionData, userId, username, role } = response;
       dispatch(setAllElectionData(electionData));
-      dispatch(userAuthenticated());
+      dispatch(userAuthenticated({ username, userId, role }));
       dispatch(setUserInfo({ username, userId, role }));
       dispatch(fetchThenSetCurrentTimerStatus());
       if (electionData.length === 0) {

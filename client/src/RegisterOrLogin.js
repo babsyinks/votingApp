@@ -52,7 +52,7 @@ function RegisterOrLogin() {
       const { token, user } = response;
       setToken(token);
       dispatch(setUserInfo(user));
-      dispatch(userAuthenticated());
+      dispatch(userAuthenticated(user));
     }
   }, [response, dispatch, setToken, username]);
 

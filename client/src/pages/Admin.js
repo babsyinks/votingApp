@@ -2,6 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminAuth } from "../features/auth/admin/adminAuthSlice";
+import { userIsAdmin } from "../features/auth/user/userAuthSlice";
 import { useAxios } from "../hooks/useAxios";
 import { useToastMessage } from "../hooks/useToastMessage";
 import Container from "../layout/Container";
@@ -16,14 +17,14 @@ const Admin = () => {
   const [formData, setFormData] = useState(null);
   const { toast, triggerToast, toastDetailsSet } = useToastMessage();
   const navigate = useNavigate();
-  const adminAuthenticated = useSelector(adminAuth);
+  const userAdminAccess = useSelector(userIsAdmin);
   const { response, error, triggerRequest } = useAxios();
 
   useEffect(() => {
-    if (!adminAuthenticated) {
+    if (!userAdminAccess) {
       navigate("/");
     }
-  }, [adminAuthenticated, navigate]);
+  }, [userAdminAccess, navigate]);
 
   useEffect(() => {
     if (submitData) {
