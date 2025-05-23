@@ -9,7 +9,7 @@ import { useRemoveFromLocalStorage } from "../../../hooks/useLocalStorage";
 
 import { selectLoadingState } from "../../../app/loaderSlice";
 import ElectivePositionDetails from "./ElectivePositionDetails";
-import { adminAuth, login } from "../../auth/admin/adminAuthSlice";
+import { userIsAdmin } from "../../auth/user/userAuthSlice";
 import {
   userAuth,
   userAuthenticated,
@@ -29,7 +29,7 @@ const VoteNominees = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userDetails = useSelector(userInfo);
-  const adminAuthenticated = useSelector(adminAuth);
+  const userAdminAccess = useSelector(userIsAdmin);
   const userIsAuthenticated = useSelector(userAuth);
   const timer = useSelector(timerData);
   const isLoading = useSelector(selectLoadingState);
@@ -167,14 +167,13 @@ const VoteNominees = () => {
 
   const handleLogin = async () => {
     try {
-      dispatch(login());
-      if (adminAuthenticated) {
+      if (userAdminAccess) {
         navigate("/admin");
       } else {
-        navigate("/admin-signin");
+        navigate("/");
       }
     } catch (error) {
-      navigate("/admin-signin");
+      navigate("/");
     }
   };
 

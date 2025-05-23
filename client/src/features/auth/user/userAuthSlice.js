@@ -14,9 +14,9 @@ const userAuthSlice = createSlice({
   name: "user_auth",
   initialState,
   reducers: {
-    userAuthenticated(state, payload) {
+    userAuthenticated(state, action) {
       state.userIsAuthenticated = true;
-      setUserAdminStatus(state, payload);
+      setUserAdminStatus(state, action);
     },
     userNotAuthenticated(state) {
       state.userIsAuthenticated = false;
@@ -25,9 +25,8 @@ const userAuthSlice = createSlice({
   },
 });
 
-const setUserAdminStatus = (state, payload) => {
-  console.log('payload', payload)
-  if (payload.role === "admin") {
+const setUserAdminStatus = (state, action) => {
+  if (action.payload.role === "admin") {
     state.userIsAdmin = true;
   } else {
     state.userIsAdmin = false;
@@ -38,6 +37,6 @@ export const { userAuthenticated, userNotAuthenticated } =
   userAuthSlice.actions;
 
 export const userAuth = (state) => state.userAuth.userIsAuthenticated;
-export const userIsAdmin = (state) => state.user.userIsAdmin;
+export const userIsAdmin = (state) => state.userAuth.userIsAdmin;
 
 export default userAuthSlice.reducer;
