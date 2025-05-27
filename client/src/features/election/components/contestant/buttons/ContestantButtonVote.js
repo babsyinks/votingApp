@@ -56,7 +56,7 @@ const ContestantButtonVote = ({ contestantId, position }) => {
   return (
     <Button
       onClick={voteForContestant}
-      className="rnd-corner-btn swp-col-grn"
+      className="rnd-corner-btn rnd-corner-btn-sized swp-col-grn"
       disabled={disableVote}
     >
       Vote

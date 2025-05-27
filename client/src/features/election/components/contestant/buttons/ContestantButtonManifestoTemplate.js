@@ -23,7 +23,7 @@ const ContestantButtonManifestoTemplate = ({
     <Block>
       <Button
         onClick={handler}
-        className={`rnd-corner-btn ${className}`}
+        className={`rnd-corner-btn rnd-corner-btn-sized ${className}`}
         style={style}
       >
         {children}

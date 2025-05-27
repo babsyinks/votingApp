@@ -34,6 +34,7 @@ Block.propTypes = {
     "flex-vert",
     "flex-horz",
     "flex-horz-sb",
+    "flex-vert-sb",
     "flex-vert-fs",
     "flex-horz-fs",
     "block",

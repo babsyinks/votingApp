@@ -13,7 +13,7 @@ import {
   userAuthenticated,
   userNotAuthenticated,
   userAuth,
-} from "./features/auth/user/userAuthSlice";
+} from "./features/auth/userAuthSlice";
 import {
   timerData,
   fetchThenSetCurrentTimerStatus,
@@ -33,7 +33,7 @@ function RegisterOrLogin() {
   const userIsAuthenticated = useSelector(userAuth);
 
   const dispatch = useDispatch();
-  const [token, setToken] = useAddToLocalStorage("token");
+  const { token, setToken } = useAddToLocalStorage("token");
   const { response, error, triggerRequest, clearError } = useAxios();
   const { toast, triggerToast, toastDetailsSet } = useToastMessage();
 

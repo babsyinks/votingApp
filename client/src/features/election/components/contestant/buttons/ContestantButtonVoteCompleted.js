@@ -17,7 +17,7 @@ const ContestantButtonVoteCompleted = ({ votedFor }) => {
     : { color: "voted-against", class: "fa-times-circle" };
   return (
     <Button
-      className={`rnd-corner-btn ${style["vote-completed"]} ${style[iTagDetails.color]}`}
+      className={`rnd-corner-btn rnd-corner-btn-sized ${style["vote-completed"]} ${style[iTagDetails.color]}`}
     >
       <i className={`far ${iTagDetails.class} fa-lg`}></i>
     </Button>

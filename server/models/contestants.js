@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Contestants extends Model {
     /**
@@ -10,45 +8,47 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Contestants.hasOne(models.Votes,{
-        foreignKey:'contestant_id'
-      })
+      Contestants.hasOne(models.Votes, {
+        foreignKey: "contestant_id",
+      });
     }
 
-    toJSON(){
-      return {...this.get(),id:undefined}
+    toJSON() {
+      return { ...this.get(), id: undefined };
     }
   }
-  Contestants.init({
-    contestant_id:{
-      type:DataTypes.UUID,
-      defaultValue:DataTypes.UUIDV4
+  Contestants.init(
+    {
+      contestant_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      surname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      firstname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      position: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      manifesto: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      picture: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    surname:{
-      type: DataTypes.STRING,
-      allowNull:false
+    {
+      sequelize,
+      modelName: "Contestants",
+      tableName: "contestants",
     },
-    firstname: {
-      type: DataTypes.STRING,
-      allowNull:false
-    },
-    position: {
-      type: DataTypes.STRING,
-      allowNull:false
-    },
-    manifesto: {
-      type: DataTypes.TEXT,
-      allowNull:false
-    },
-    picture: {
-      type: DataTypes.STRING,
-      allowNull:false
-    }
-  }, {
-    sequelize,
-    modelName: 'Contestants',
-    tableName: 'contestants'
-  });
+  );
   return Contestants;
 };

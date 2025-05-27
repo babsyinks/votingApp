@@ -17,6 +17,13 @@
     justify-content: space-between;
 }
 
+.flex-vert-sb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
 .flex-horz-fs{
     display: flex;
     align-items: flex-start;
@@ -32,13 +39,8 @@
 
 .block{
     display: block;
-    width: 100%;
 }
 
 .inline{
     display: inline;
-}
-
-.sp-2{
-    margin-bottom: 2%;
 }

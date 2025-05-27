@@ -50,7 +50,7 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
   }, [dataSubmitted, resetFile]);
 
   const labelClassName = "wd-md bld";
-  const horzBlockProps = { type: "flex-horz-fs", className: "sp-2" };
+  const horzBlockProps = { type: "flex-horz-fs", className: "mb-2p" };
   return (
     <>
       <Heading>Add A Contestant</Heading>

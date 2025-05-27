@@ -1,8 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { adminAuth } from "../features/auth/admin/adminAuthSlice";
-import { userIsAdmin } from "../features/auth/user/userAuthSlice";
+import { userIsAdmin } from "../features/auth/userAuthSlice";
 import { useAxios } from "../hooks/useAxios";
 import { useToastMessage } from "../hooks/useToastMessage";
 import Container from "../layout/Container";
@@ -78,7 +77,7 @@ const Admin = () => {
         setFormData={setFormData}
         setIsDisabled={setIsDisabled}
       />
-      <Block type="flex-horz-sb" className="sp-2">
+      <Block type="flex-horz-sb" className="mb-2p">
         <AdminDataToolTipsBtnsList
           handleSubmitVals={handleSubmitVals}
           isSubmitBtnDisabled={isDisabled}

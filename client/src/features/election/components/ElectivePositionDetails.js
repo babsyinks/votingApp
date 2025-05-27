@@ -7,7 +7,6 @@ import {
   getAllVotesInACategory,
   getAllContestantsInCategory,
 } from "../electionSlice";
-import "./ElectivePositionDetails.css";
 
 const ElectivePositionDetails = ({ contestantsDetailsByPosition }) => {
   const { position } = contestantsDetailsByPosition;
@@ -17,7 +16,7 @@ const ElectivePositionDetails = ({ contestantsDetailsByPosition }) => {
   const contestantsList = useSelector(getAllContestantsInCategory(position));
 
   return (
-    <Block style={{ textAlign: "center" }}>
+    <Block className="ta-center">
       <ElectivePositionDetailsSummary
         position={position}
         totalContestants={contestantsList.length}

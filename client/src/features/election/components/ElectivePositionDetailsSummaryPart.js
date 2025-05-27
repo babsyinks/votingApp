@@ -1,18 +1,17 @@
 import React from "react";
 import Block from "../../../components/ui/Block";
 import Heading from "../../../components/ui/Heading";
-import defaultStyle from "./ElectivePositionDetailsSummaryPart.module.css";
 
 const ElectivePositionDetailsSummaryPart = ({ label, value }) => {
   const headingType = label === "Position" ? "h2" : "h3";
   return (
-    <Block className={defaultStyle["election-position-summary-part-wrapper"]}>
+    <Block className="z-30 bg-black w-full">
       <Heading
-        className={defaultStyle["election-position-summary-part-heading"]}
+        className="ff-patrick my-7"
         type={headingType}
       >
         {label}:{" "}
-        <span className={defaultStyle["election-position-summary-part-value"]}>{value}</span>
+        <span className='text-sky-blue'>{value}</span>
       </Heading>
     </Block>
   );

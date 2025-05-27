@@ -1,30 +1,30 @@
 import { useState, useEffect } from "react";
 
 export function useAddToLocalStorage(key, initialValue = "") {
-  const [value, setValue] = useState(() => {
+  const [token, setToken] = useState(() => {
     return getItem(key, initialValue);
   });
 
   useEffect(() => {
-    if (value) {
-      setItem(key, value);
+    if (token) {
+      setItem(key, token);
     } else {
     }
-  }, [key, value]);
+  }, [key, token]);
 
-  return [value, setValue];
+  return { token, setToken };
 }
 
 export function useRemoveFromLocalStorage(key) {
-  const [removeValue, setRemoveValue] = useState(false);
+  const [removeToken, setRemoveToken] = useState(false);
 
   useEffect(() => {
-    if (removeValue) {
+    if (removeToken) {
       removeItem(key);
     }
-  }, [key, removeValue]);
+  }, [key, removeToken]);
 
-  return [removeValue, setRemoveValue];
+  return { removeToken, setRemoveToken };
 }
 
 const getItem = (key, initialValue) => {

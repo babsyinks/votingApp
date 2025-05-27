@@ -9,7 +9,7 @@ export const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const [token] = useAddToLocalStorage("token");
+  const { token } = useAddToLocalStorage("token");
 
   const cancelSourceRef = useRef(null);
 

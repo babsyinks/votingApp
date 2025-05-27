@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Votes extends Model {
     /**
@@ -10,39 +8,41 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Votes.belongsTo(models.User,{
-        foreignKey:'user_id'
-      })
-      Votes.belongsTo(models.Contestants,{
-        foreignKey:'contestant_id'
-      })
+      Votes.belongsTo(models.User, {
+        foreignKey: "user_id",
+      });
+      Votes.belongsTo(models.Contestants, {
+        foreignKey: "contestant_id",
+      });
     }
-    toJSON(){
-      return {...this.get(),id:undefined}
+    toJSON() {
+      return { ...this.get(), id: undefined };
     }
   }
-  Votes.init({
-    vote_id:{
-      type:DataTypes.UUID,
-      defaultValue:DataTypes.UUIDV4
+  Votes.init(
+    {
+      vote_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      user_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      contestant_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      position: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    user_id:{
-      type: DataTypes.UUID,
-      allowNull:false,
+    {
+      sequelize,
+      modelName: "Votes",
+      tableName: "votes",
     },
-    contestant_id: {
-      type: DataTypes.UUID,
-      allowNull:false,
-    },
-    position: {
-      type: DataTypes.STRING,
-      allowNull:false
-    }
-  }, {
-    sequelize,
-    modelName: 'Votes',
-    tableName: 'votes'
-  });
+  );
   return Votes;
 };

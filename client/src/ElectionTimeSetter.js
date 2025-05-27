@@ -3,13 +3,13 @@ import React, { useState, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useToastMessage } from "./hooks/useToastMessage";
+import { userIsAdmin } from "./features/auth/userAuthSlice";
 
 import {
   fetchThenSetCurrentTimerStatus,
   timerData,
   setTimerData,
 } from "./features/timer/timerSlice";
-import { adminAuth } from "./features/auth/admin/adminAuthSlice";
 
 import ComposeComp from "./components/ComposeComp";
 import ToastMessage from "./components/ui/ToastMessage";
@@ -25,7 +25,7 @@ function ElectionTimeSetter() {
   const [electionEndDate, setElectionEndDate] = useState(0);
   const navigate = useNavigate();
   const timer = useSelector(timerData);
-  const adminAuthenticated = useSelector(adminAuth);
+  const userAdminAccess = useSelector(userIsAdmin);
   const dispatch = useDispatch();
   const { toast, triggerToast, toastDetailsSet } = useToastMessage();
 
@@ -163,7 +163,7 @@ function ElectionTimeSetter() {
     }
   };
 
-  if (adminAuthenticated) {
+  if (userAdminAccess) {
     return (
       <ComposeComp linearGrad="linear-gradient(to right, rgb(135 243 135), rgb(227 247 119), rgb(101 223 251))">
         <>

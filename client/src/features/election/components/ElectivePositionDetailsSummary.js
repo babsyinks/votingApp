@@ -1,7 +1,5 @@
-import React from "react";
 import Block from "../../../components/ui/Block";
 import ElectivePositionDetailsSummaryPart from "./ElectivePositionDetailsSummaryPart";
-import defaultStyle from "./ElectivePositionDetailsSummary.module.css";
 
 const ElectivePositionDetailsSummary = ({
   position,
@@ -16,7 +14,7 @@ const ElectivePositionDetailsSummary = ({
   return (
     <Block
       type="flex-vert"
-      className={defaultStyle["election-position-summary"]}
+      className="border-rounded-5 border-2-white bg-black text-white my-10-mx-5 tt-cap ff-patrick"
     >
       {summaryParts.map((partDetails, i) => (
         <ElectivePositionDetailsSummaryPart {...partDetails} key={i} />
