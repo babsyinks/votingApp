@@ -7,7 +7,7 @@ const ElectivePositionDetailsSummaryPart = ({ label, value }) => {
   return (
     <Block className="z-30 bg-black w-full">
       <Heading
-        className="ff-patrick my-7"
+        className="ff-patrick my-7 ta-center"
         type={headingType}
       >
         {label}:{" "}

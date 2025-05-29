@@ -53,7 +53,7 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
   const horzBlockProps = { type: "flex-horz-fs", className: "mb-2p" };
   return (
     <>
-      <Heading>Add A Contestant</Heading>
+      <Heading className="ta-center">Add A Contestant</Heading>
       <Block type="flex-vert-fs">
         <Block {...horzBlockProps}>
           <Label name="surname" className={labelClassName}>

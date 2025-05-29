@@ -1,7 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import defaultStyle from "./Heading.module.css";
-import getCompClasses from "../../util/getCompClasses";
 /**
  * A component that renders a heading. E.g h1, h2, h3, etc.
  *
@@ -21,10 +19,9 @@ export default function Heading({
   const headingType = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(type)
     ? type
     : "h1";
-  const allClassNames = `${defaultStyle.heading} ${getCompClasses(defaultStyle, className)}`;
   return React.createElement(
     headingType,
-    { className: allClassNames, style },
+    { className, style },
     children,
   );
 }

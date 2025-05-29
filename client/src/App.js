@@ -14,8 +14,8 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<RegisterOrLogin />} />
-          <Route exact path="/home" element={<HomePage />} />
+          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/login" element={<RegisterOrLogin />} />
           <Route exact path="/admin" element={<Admin />} />
           <Route exact path="/vote" element={<ElectionDetails />} />
           <Route exact path="/time" element={<ElectionTimeSetter />} />

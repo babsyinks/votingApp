@@ -16,3 +16,15 @@
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
+
+.grid-basic {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  grid-template-rows: none;
+}
+
+@media (min-width: 768px) {
+  .grid-basic {
+    grid-template-columns: 1fr 1fr;
+  }
+}
