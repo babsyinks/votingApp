@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import defaultStyle from "./Block.module.css";
+import defaultStyle from "./Base.module.css";
 import getCompClasses from "../../util/getCompClasses";
 /**
  * A block component that renders its children inside a div. Its main purpose is to logically group
@@ -33,8 +33,10 @@ Block.propTypes = {
   type: PropTypes.oneOf([
     "flex-vert",
     "flex-horz",
-    "flex-horz-sb",
     "flex-vert-sb",
+    "flex-horz-sb",
+    "flex-vert-sa",
+    "flex-horz-sa",
     "flex-vert-fs",
     "flex-horz-fs",
     "block",

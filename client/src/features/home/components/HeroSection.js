@@ -1,18 +1,20 @@
+import useWindowSize from "../../../hooks/useWindowSize";
 import Section from "../../../components/ui/Section";
 import Block from "../../../components/ui/Block";
 import HeroSectionMessage from "./HeroSectionMessage";
 import HeroSectionLink from "./HeroSectionLink";
 import HeroSectionImage from "./HeroSectionImage";
-import styles from "./HeroSection.module.css";
 
 export default function HeroSection({ userIsAuthenticated }) {
+  const { width } = useWindowSize();
+  const type = width >= 768 ? "flex-horz-sb" : "flex-vert";
   return (
-    <Section className={styles.heroSection}>
-      <Block className={styles.heroContent}>
+    <Section type={type} className="py-4r-px-1p5r b-l-g-blue text-white">
+      <Block className="flex-1 p-1r fadeInLeft">
         <HeroSectionMessage />
         <HeroSectionLink userIsAuthenticated={userIsAuthenticated} />
       </Block>
-      <Block className={styles.heroImage}>
+      <Block type="flex-horz" className="flex-1 p-1r fadeInLeft">
         <HeroSectionImage />
       </Block>
     </Section>

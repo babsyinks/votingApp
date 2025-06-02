@@ -4,6 +4,7 @@ import { userAuth } from "../features/auth/userAuthSlice";
 import Main from "../components/ui/Main";
 import HeroSection from "../features/home/components/HeroSection";
 import FeatureSection from "../features/home/components/FeatureSection";
+import HelpSection from "../features/home/components/HelpSection";
 
 export default function HomePage() {
   const userIsAuthenticated = useSelector(userAuth);
@@ -12,6 +13,7 @@ export default function HomePage() {
     <Main className="mnh-100vh">
       <HeroSection userIsAuthenticated={userIsAuthenticated} />
       <FeatureSection />
+      <HelpSection />
     </Main>
   );
 }

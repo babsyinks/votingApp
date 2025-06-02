@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import useWindowSize from "./useWindowSize";
 
 const getBreakpoint = (width) => {
   if (width <= 640) return 'mobile';
@@ -7,19 +7,8 @@ const getBreakpoint = (width) => {
 };
 
 const useBreakpoint = () => {
-  const [breakpoint, setBreakpoint] = useState(() => getBreakpoint(window.innerWidth));
-
-  useEffect(() => {
-    const handleResize = () => {
-      const current = getBreakpoint(window.innerWidth);
-      setBreakpoint(current);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return breakpoint;
+  const { width } = useWindowSize();
+  return getBreakpoint(width);
 };
 
 export default useBreakpoint;
