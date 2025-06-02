@@ -21,7 +21,7 @@ export default function InputTime(props) {
 }
 
 InputTime.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

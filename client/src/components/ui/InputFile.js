@@ -22,7 +22,7 @@ export default function InputFile(props) {
 }
 
 InputFile.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   resetKey: PropTypes.number,
   disabled: PropTypes.bool,

@@ -21,7 +21,7 @@ export default function InputDate(props) {
 }
 
 InputDate.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

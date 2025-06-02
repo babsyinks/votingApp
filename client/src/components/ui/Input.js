@@ -28,7 +28,7 @@ function Input(props) {
 
 Input.propTypes = {
   type: PropTypes.oneOf(["text", "password", "file", "date", "time"]).isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
