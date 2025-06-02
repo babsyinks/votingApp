@@ -2,6 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import InputFile from "./InputFile";
 import InputText from "./InputText";
+import InputDate from "./InputDate";
+import InputTime from "./InputTime";
+
+const componentMap = {
+  file: InputFile,
+  text: InputText,
+  password: InputText,
+  date: InputDate,
+  time: InputTime,
+};
 
 /**
  * A component that renders input components depending on the type.
@@ -10,22 +20,14 @@ import InputText from "./InputText";
  * @returns {JSX.Element} The rendered input component.
  */
 function Input(props) {
-  const { type } = props;
+  const { type = "text" } = props;
+  const Component = componentMap[type] || InputText;
 
-  switch (type) {
-    case "file":
-      return <InputFile {...props} />;
-    case "text":
-    case "password":
-      return <InputText {...props} />;
-    default:
-      props.type = "text";
-      return <InputText {...props} />;
-  }
+  return <Component {...props} />;
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf(["text", "password", "file"]).isRequired,
+  type: PropTypes.oneOf(["text", "password", "file", "date", "time"]).isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
