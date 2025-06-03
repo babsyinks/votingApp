@@ -8,7 +8,6 @@ export function useAddToLocalStorage(key, initialValue = "") {
   useEffect(() => {
     if (token) {
       setItem(key, token);
-    } else {
     }
   }, [key, token]);
 
