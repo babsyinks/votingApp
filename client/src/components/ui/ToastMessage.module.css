@@ -14,6 +14,6 @@
     background-color: var(--color-message-success);
 }
 
-.failed{
+.failure{
     background-color: var(--color-message-failure);
 }
