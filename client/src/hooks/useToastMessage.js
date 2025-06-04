@@ -17,9 +17,28 @@ export const useToastMessage = (autoClearMs = 5000) => {
     setToast({ status, message });
   }, []);
 
+  const triggerSuccessToast = useCallback(
+    (message) => {
+      triggerToast({ status: "success", message });
+    },
+    [triggerToast],
+  );
+
+  const triggerFailureToast = useCallback(
+    (message) => {
+      triggerToast({ status: "failure", message });
+    },
+    [triggerToast],
+  );
+
   const toastDetailsSet = () => {
     return Object.values(toast).every((v) => !!v);
   };
 
-  return { toast, triggerToast, toastDetailsSet };
+  return {
+    toast,
+    triggerSuccessToast,
+    triggerFailureToast,
+    toastDetailsSet,
+  };
 };
