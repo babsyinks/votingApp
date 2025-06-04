@@ -20,7 +20,7 @@ const ContestantButtonVote = ({ contestantId, position }) => {
   const dispatch = useDispatch();
   const { userId } = useSelector(userInfo);
   const { response, error, triggerRequest } = useAxios();
-  const { triggerToast } = useToastMessage();
+  const { triggerFailureToast } = useToastMessage();
 
   useEffect(() => {
     if (response) {
@@ -34,12 +34,9 @@ const ContestantButtonVote = ({ contestantId, position }) => {
 
   useEffect(() => {
     if (error) {
-      triggerToast({
-        status: "failed",
-        message: "An error occured! Try again later.",
-      });
+      triggerFailureToast("An error occured! Try again later.");
     }
-  }, [error, triggerToast]);
+  }, [error, triggerFailureToast]);
 
   const voteForContestant = async () => {
     setDisableVote(true);
