@@ -14,7 +14,8 @@ const Admin = () => {
   const [submitData, setSubmitData] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [formData, setFormData] = useState(null);
-  const { toast, triggerToast, toastDetailsSet } = useToastMessage();
+  const { toast, triggerSuccessToast, triggerFailureToast, toastDetailsSet } =
+    useToastMessage();
   const navigate = useNavigate();
   const userAdminAccess = useSelector(userIsAdmin);
   const { response, error, triggerRequest } = useAxios();
@@ -46,21 +47,15 @@ const Admin = () => {
 
   useEffect(() => {
     if (response) {
-      triggerToast({
-        status: "success",
-        message: "New Contestant Successfully Added!!!",
-      });
+      triggerSuccessToast("New Contestant Successfully Added!!!");
     }
-  }, [response, triggerToast]);
+  }, [response, triggerSuccessToast]);
 
   useEffect(() => {
     if (error) {
-      triggerToast({
-        status: "failed",
-        message: `${error.message || "Something went wrong!"}`,
-      });
+      triggerFailureToast(`${error.message || "Something went wrong!"}`);
     }
-  }, [error, triggerToast]);
+  }, [error, triggerFailureToast]);
 
   const handleSubmitVals = async () => {
     setSubmitData(true);
