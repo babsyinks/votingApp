@@ -24,5 +24,5 @@ export default function I({ className = "", style = {}, children }) {
 I.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
