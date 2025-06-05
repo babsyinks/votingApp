@@ -261,6 +261,7 @@ a, i, button {
 .text-blueviolet-dark { color: var(--palette-blueviolet-dark); }
 .text-blueviolet-mute { color: var(--palette-blueviolet-mute); }
 .text-sky-blue { color: var(--palette-blue-soft); }
+.text-red-cool {color: var(--palette-red-cool);}
 .text-grey-dark { color: var(--palette-grey-dark); }
 .text-grey-mute { color: var(--palette-grey-mute); }
 .text-black-cool { color: var(--palette-black-cool); }
