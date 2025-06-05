@@ -208,6 +208,8 @@ a, i, button {
 .mt-3r { margin-top: 3rem; }
 /* Fixed margin */
 .m-10 { margin: 10px; }
+.m-25 { margin: 25px; }
+.ml-0 { margin-left: 0px; }
 .ml-5 { margin-left: 5px; }
 .mr-5 { margin-right: 5px; }
 .mb-5 { margin-bottom: 5px; }
