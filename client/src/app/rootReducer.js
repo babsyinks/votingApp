@@ -1,16 +1,30 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import loaderReducer from "./loaderSlice";
 import userInfoReducer from "../features/user/userSlice";
 import userAuthReducer from "../features/auth/userAuthSlice";
 import timerReducer from "../features/timer/timerSlice";
 import electionReducer from "../features/election/electionSlice";
 
-export const store = configureStore({
-  reducer: {
-    loader: loaderReducer,
-    userInfo: userInfoReducer,
-    userAuth: userAuthReducer,
-    timer: timerReducer,
-    election: electionReducer,
-  },
+const rootReducer = combineReducers({
+  loader: loaderReducer,
+  userInfo: userInfoReducer,
+  userAuth: userAuthReducer,
+  timer: timerReducer,
+  election: electionReducer,
 });
+
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["userAuth"],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+});
+
+export const persistor = persistStore(store);
