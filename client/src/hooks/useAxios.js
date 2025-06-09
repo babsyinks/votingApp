@@ -1,17 +1,46 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { useAddToLocalStorage } from "./useLocalStorage";
-
-// axios.defaults.baseURL = 'https://votingapp-pmev.onrender.com';
 
 export const useAxios = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const { token } = useAddToLocalStorage("token");
 
   const cancelSourceRef = useRef(null);
+
+  (function setAxiosDefaults(defaults) {
+    Object.keys(defaults).forEach((key) => {
+      axios.defaults[key] = defaults[key];
+    });
+  })({
+    withCredentials: true,
+    // baseURL: "https://votingapp-pmev.onrender.com",
+  });
+
+  (function addResponseInterceptors() {
+    axios.interceptors.response.use(
+      (res) => res,
+      async (err) => {
+        const originalRequest = err.config;
+        if (
+          err.response?.status === 401 &&
+          !originalRequest._retry &&
+          !originalRequest.url.includes("/token/refresh")
+        ) {
+          originalRequest._retry = true;
+          try {
+            await axios.post("/token/refresh");
+            return axios(originalRequest); // retry once. We only want to retry once to prevent infinite retries.
+          } catch (refreshError) {
+            return Promise.reject(refreshError); // still unauthorized, don't retry
+          }
+        }
+
+        return Promise.reject(err);
+      },
+    );
+  })();
 
   /**
    * Handles api requests for the application using axios.
@@ -41,7 +70,7 @@ export const useAxios = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, token],
+    [dispatch],
   );
 
   const initCancelToken = () => {
@@ -68,17 +97,7 @@ export const useAxios = () => {
         },
       };
     }
-    if (token) {
-      addTokenHeader(axiosHeaders);
-    }
     return { ...axiosHeaders, ...params };
-  };
-
-  const addTokenHeader = (axiosHeaders) => {
-    if (!axiosHeaders.headers) {
-      axiosHeaders.headers = {};
-    }
-    axiosHeaders.headers["X-Auth-Token"] = token;
   };
 
   const makeRequest = async (params) => {
