@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useRemoveFromLocalStorage } from "../../../hooks/useLocalStorage";
 import useOrientation from "../../../hooks/useOrientation";
+import { useAxios } from "../../../hooks/useAxios";
 import { userIsAdmin } from "../../auth/userAuthSlice";
 import { userNotAuthenticated } from "../../auth/userAuthSlice";
 import Block from "../../../components/ui/Block";
@@ -11,7 +11,8 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userAdminAccess = useSelector(userIsAdmin);
-  const { setRemoveToken } = useRemoveFromLocalStorage("token");
+  // const { setRemoveToken } = useRemoveFromLocalStorage("token");
+  const { triggerRequest } = useAxios();
   const isPortrait = useOrientation();
 
   const accessAdmin = async () => {
@@ -26,8 +27,14 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
     }
   };
 
-  const logOut = () => {
-    setRemoveToken(true);
+  const logOut = async () => {
+    await triggerRequest({
+      params: {
+        method: "POST",
+        url: "/auth//logout",
+      },
+    });
+    // setRemoveToken(true);
     dispatch(userNotAuthenticated());
   };
 
