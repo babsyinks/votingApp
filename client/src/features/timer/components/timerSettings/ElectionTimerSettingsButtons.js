@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { timerData } from "../timerSlice";
+import { timerData } from "../../timerSlice";
 import ElectionTimerSettingsButton from "./ElectionTimerSettingsButton";
 
 function ElectionTimerSettingsButtons({ enableDone, ...rest }) {

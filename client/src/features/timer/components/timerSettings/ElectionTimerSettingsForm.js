@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import useTimerSchedule from "../hooks/useTimerSchedule";
-import Block from "../../../components/ui/Block";
+import useTimerSchedule from "../../hooks/useTimerSchedule";
+import Block from "../../../../components/ui/Block";
 import ElectionTimerSettingsFormInput from "./ElectionTimerSettingsFormInput";
 
 function ElectionTimerSettingsForm({
