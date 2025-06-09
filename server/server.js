@@ -1,3 +1,4 @@
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const helmet = require("helmet");
@@ -8,6 +9,7 @@ const errorHandler = require("./middleware/errorHandler");
 const { sequelize } = require("./models");
 const authRoutes = require("./routes/authRoutes");
 const electionRoutes = require("./routes/electionRoutes");
+const refreshRoute = require("./routes/refreshTokenRoute");
 const timerRoutes = require("./routes/timerRoutes");
 const logger = require("./utils/logger");
 
@@ -17,10 +19,12 @@ const app = express();
 app.use(cors());
 app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurityPolicy));
 app.use(xss());
+app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/election", electionRoutes);
 app.use("/timer", timerRoutes);
+app.use("/token", refreshRoute);
 app.use(errorHandler);
 
 process.on("unhandledRejection", (err) => {
