@@ -10,6 +10,10 @@ Router.post("/set", checkAdminAuthorization, async (req, res) => {
   try {
     const timer = await Timer.findAll();
     const { startDate, endDate } = req.body;
+    if (!startDate || !endDate) {
+      throw new Error("Start and end dates must be set!");
+    }
+    const timer = await Timer.findAll();
     if (timer.length === 0) {
       await Timer.create(req.body);
     } else {
