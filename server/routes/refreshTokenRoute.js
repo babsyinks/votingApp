@@ -12,6 +12,7 @@ router.post("/refresh", (req, res) => {
 
   try {
     const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    if (!user) return res.sendStatus(403);
     const accessToken = generateAccessToken(user);
     setAccessTokenOnCookie({ res: res.status(200), accessToken }).json({
       success: true,
