@@ -1,13 +1,21 @@
 const bcrypt = require("bcryptjs");
 const express = require("express");
-const jwt = require("jsonwebtoken");
 
 const { User } = require("../models");
-require("dotenv").config();
-const Router = express.Router();
-Router.use(express.json());
+const {
+  setAccessTokenOnCookie,
+  setRefreshTokenOnCookie,
+} = require("../utils/setCookies");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/tokenGenerators");
 
-Router.post("/register", async (req, res, next) => {
+require("dotenv").config();
+const router = express.Router();
+router.use(express.json());
+
+router.post("/register", async (req, res, next) => {
   try {
     let { username, password } = req.body;
     failIfUsernameAndPasswordNotSet(username, password);
@@ -16,24 +24,29 @@ Router.post("/register", async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
     user = await User.create({ username, password });
-    const token = generateToken(user);
-    res.status(200).json({ token, user: getStrippedDownUser(user) });
+    generateTokensAndSendResponse({ res, user });
   } catch (error) {
     next(error);
   }
 });
 
-Router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
     failIfUsernameAndPasswordNotSet(username, password);
     const user = await User.findOne({ where: { username } });
     await validateCredentials(user, password);
-    const token = generateToken(user);
-    res.status(200).json({ token, user: getStrippedDownUser(user) });
+    generateTokensAndSendResponse({ res, user });
   } catch (error) {
     next(error);
   }
+});
+
+router.post("/logout", (req, res) => {
+  res
+    .clearCookie("access_token")
+    .clearCookie("refresh_token")
+    .json({ message: "Logged out" });
 });
 
 const failIfUsernameAndPasswordNotSet = (username, password) => {
@@ -50,14 +63,6 @@ const failRegistrationIfUserExists = (user) => {
   }
 };
 
-const generateToken = (user) => {
-  return jwt.sign(
-    { user: { id: user.dataValues.user_id } },
-    process.env.TOKEN_SECRET,
-    { expiresIn: 24 * 60 * 60 * 1000 },
-  );
-};
-
 const validateCredentials = async (user, password) => {
   let checkPassword;
   if (user) {
@@ -70,8 +75,35 @@ const validateCredentials = async (user, password) => {
   }
 };
 
+const generateTokensAndSendResponse = ({ res, user }) => {
+  const { accessToken, refreshToken } = generateTokens(user);
+  sendResponseForAuthenticatedUser({ res, accessToken, refreshToken, user });
+};
+
+const generateTokens = (user) => {
+  return {
+    accessToken: generateAccessToken(user),
+    refreshToken: generateRefreshToken(user),
+  };
+};
+
+const sendResponseForAuthenticatedUser = ({
+  res,
+  accessToken,
+  refreshToken,
+  user,
+}) => {
+  setRefreshTokenOnCookie({
+    res: setAccessTokenOnCookie({ res: res.status(200), accessToken }),
+    refreshToken,
+  }).json({
+    isAuthenticated: true,
+    user: getStrippedDownUser(user),
+  });
+};
+
 const getStrippedDownUser = ({ username, user_id, role }) => {
   return { username, userId: user_id, role };
 };
 
-module.exports = Router;
+module.exports = router;

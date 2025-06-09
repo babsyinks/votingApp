@@ -2,17 +2,19 @@ const path = require("path");
 
 const express = require("express");
 
-const authenticateUser = require("../middleware/auth/authenticateUser");
-const checkAdminAuthorization = require("../middleware/auth/checkAdminAuthorization");
+const {
+  checkAuthenticationStatus,
+  checkAuthorizationStatus,
+} = require("../middleware/auth");
 const { upload } = require("../middleware/uploadMedia");
 const { Votes } = require("../models");
 const { Contestants } = require("../models");
 const { Timer } = require("../models");
 require("dotenv").config({ path: path.join("..", ".env") });
-const Router = express.Router();
-Router.use(express.json());
+const router = express.Router();
+router.use(express.json());
 
-Router.post("/contestants", upload.single("picture"), async (req, res) => {
+router.post("/contestants", upload.single("picture"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -35,7 +37,7 @@ Router.post("/contestants", upload.single("picture"), async (req, res) => {
   }
 });
 
-Router.get("/details", authenticateUser, async (req, res) => {
+router.get("/details", checkAuthenticationStatus, async (req, res) => {
   const user = req.user;
 
   const allContestants = await Contestants.findAll();
@@ -72,7 +74,6 @@ Router.get("/details", authenticateUser, async (req, res) => {
 
         myObj.position = obj.dataValues.position;
         myObj.contestants = [];
-        console.log(myObj);
         const contestantVote = allElections
           .filter(
             (v) => v.dataValues.contestant_id === obj.dataValues.contestant_id,
@@ -135,7 +136,7 @@ Router.get("/details", authenticateUser, async (req, res) => {
   }
 });
 
-Router.patch("/vote", authenticateUser, async (req, res) => {
+router.patch("/vote", checkAuthenticationStatus, async (req, res) => {
   try {
     const { userId, contestantId, position } = req.body;
 
@@ -159,7 +160,7 @@ Router.patch("/vote", authenticateUser, async (req, res) => {
   }
 });
 
-Router.delete("/delete", checkAdminAuthorization(), async (req, res) => {
+router.delete("/delete", checkAuthorizationStatus, async (req, res) => {
   try {
     await Votes.destroy({ truncate: true });
     await Timer.destroy({ truncate: true });
@@ -169,4 +170,4 @@ Router.delete("/delete", checkAdminAuthorization(), async (req, res) => {
   }
 });
 
-module.exports = Router;
+module.exports = router;

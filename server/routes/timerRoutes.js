@@ -1,14 +1,13 @@
 const express = require("express");
 
-const checkAdminAuthorization = require("../middleware/auth/checkAdminAuthorization");
+const { checkAuthorizationStatus } = require("../middleware/auth");
 const { Timer } = require("../models");
-const Router = express.Router();
+const router = express.Router();
 
-Router.use(express.json());
+router.use(express.json());
 
-Router.post("/set", checkAdminAuthorization, async (req, res) => {
+router.post("/set", checkAuthorizationStatus, async (req, res) => {
   try {
-    const timer = await Timer.findAll();
     const { startDate, endDate } = req.body;
     if (!startDate || !endDate) {
       throw new Error("Start and end dates must be set!");
@@ -27,7 +26,7 @@ Router.post("/set", checkAdminAuthorization, async (req, res) => {
   }
 });
 
-Router.get("/cancel", checkAdminAuthorization, async (req, res) => {
+router.get("/cancel", checkAuthorizationStatus, async (req, res) => {
   try {
     await Timer.destroy({ truncate: true });
     res.json({});
@@ -36,7 +35,7 @@ Router.get("/cancel", checkAdminAuthorization, async (req, res) => {
   }
 });
 
-Router.get("/cancelStart", async (req, res) => {
+router.get("/cancelStart", async (req, res) => {
   try {
     const timer = await Timer.findAll();
     const timerObj = timer[0];
@@ -48,7 +47,7 @@ Router.get("/cancelStart", async (req, res) => {
   }
 });
 
-Router.get("/status", async (req, res) => {
+router.get("/status", async (req, res) => {
   try {
     const electionTimer = await Timer.findAll();
     let electionObj;
@@ -75,7 +74,7 @@ Router.get("/status", async (req, res) => {
   }
 });
 
-Router.get("/end", async (req, res) => {
+router.get("/end", async (req, res) => {
   try {
     const timer = await Timer.findAll();
     const timerObj = timer[0];
@@ -87,4 +86,4 @@ Router.get("/end", async (req, res) => {
   }
 });
 
-module.exports = Router;
+module.exports = router;
