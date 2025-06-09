@@ -25,11 +25,8 @@ Router.post("/set", checkAdminAuthorization, async (req, res) => {
 
 Router.get("/cancel", checkAdminAuthorization, async (req, res) => {
   try {
-    const timer = await Timer.findAll();
-    const timerObj = timer[0];
-    timerObj.set({ startDate: null, endDate: null });
-    await timerObj.save();
-    res.json({ startDate: null, endDate: null });
+    await Timer.destroy({ truncate: true });
+    res.json({});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
