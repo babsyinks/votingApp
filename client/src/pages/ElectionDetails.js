@@ -2,7 +2,6 @@ import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
-import { useRemoveFromLocalStorage } from "../hooks/useLocalStorage";
 import {
   userAuth,
   userAuthenticated,
@@ -27,18 +26,16 @@ const ElectionDetails = () => {
   const userIsAuthenticated = useSelector(userAuth);
   const timer = useSelector(timerData);
   const listOfElectionData = useSelector(allElectionData);
-  const { removeToken } = useRemoveFromLocalStorage("token");
   const { response, error, triggerRequest } = useAxios();
 
   useEffect(() => {
     if (
       !userIsAuthenticated ||
-      removeToken ||
       (timer.startDate === null && timer.endDate === null)
     ) {
       navigate("/");
     }
-  }, [navigate, removeToken, userIsAuthenticated, timer]);
+  }, [navigate, userIsAuthenticated, timer]);
 
   useEffect(() => {
     const fetch = async () => {
