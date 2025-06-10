@@ -1,13 +1,13 @@
 import { useState, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userIsAdmin } from "../features/auth/userAuthSlice";
-import { fetchThenSetCurrentTimerStatus } from "../features/timer/timerSlice";
-import { useToastMessage } from "../hooks/useToastMessage";
-import ToastMessage from "../components/ui/ToastMessage";
-import Block from "../components/ui/Block";
-import ElectionTimerSettingsForm from "../features/timer/components/ElectionTimerSettingsForm";
-import ElectionTimerSettingsButtons from "../features/timer/components/ElectionTimerSettingsButtons";
+import { userIsAdmin } from "features/auth/userAuthSlice";
+import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
+import { useToastMessage } from "hooks/useToastMessage";
+import ToastMessage from "components/ui/ToastMessage";
+import Block from "components/ui/Block";
+import ElectionTimerSettingsForm from "features/timer/components/timerSettings/ElectionTimerSettingsForm";
+import ElectionTimerSettingsButtons from "features/timer/components/timerSettings/ElectionTimerSettingsButtons";
 
 function ElectionTimerSettings() {
   const [electionSchedule, setElectionSchedule] = useState({

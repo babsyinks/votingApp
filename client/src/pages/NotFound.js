@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import Block from "../components/ui/Block";
-import Heading from "../components/ui/Heading";
-import Button from "../components/ui/Button";
-import Container from "../layout/Container";
+import Block from "components/ui/Block";
+import Heading from "components/ui/Heading";
+import Button from "components/ui/Button";
+import Container from "layout/Container";
 
 const NotFound = () => {
   const navigate = useNavigate();

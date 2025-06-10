@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { userAuth } from "../features/auth/userAuthSlice";
-import Main from "../components/ui/Main";
-import HeroSection from "../features/home/components/HeroSection";
-import FeatureSection from "../features/home/components/FeatureSection";
-import HelpSection from "../features/home/components/HelpSection";
+import { userAuth } from "features/auth/userAuthSlice";
+import Main from "components/ui/Main";
+import HeroSection from "features/home/components/HeroSection";
+import FeatureSection from "features/home/components/FeatureSection";
+import HelpSection from "features/home/components/HelpSection";
 
 export default function HomePage() {
   const userIsAuthenticated = useSelector(userAuth);
