@@ -1,41 +1,33 @@
 import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAxios } from "../hooks/useAxios";
+import { useAxios } from "hooks/useAxios";
 import {
   userAuth,
   userAuthenticated,
   userNotAuthenticated,
-} from "../features/auth/userAuthSlice";
-import {
-  timerData,
-  fetchThenSetCurrentTimerStatus,
-} from "../features/timer/timerSlice";
-import { setUserInfo } from "../features/user/userSlice";
+} from "features/auth/userAuthSlice";
+import { setUserInfo } from "features/user/userSlice";
 import {
   allElectionData,
   setAllElectionData,
-} from "../features/election/electionSlice";
-import ElectionDetailsAllData from "../features/election/components/ElectionDetailsAllData";
-import ElectionDetailsNoData from "../features/election/components/ElectionDetailsNoData";
+} from "features/election/electionSlice";
+import ElectionDetailsAllData from "features/election/components/ElectionDetailsAllData";
+import ElectionDetailsNoData from "features/election/components/ElectionDetailsNoData";
 
 const ElectionDetails = () => {
   const [failedFetch, setFailedFetch] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userIsAuthenticated = useSelector(userAuth);
-  const timer = useSelector(timerData);
   const listOfElectionData = useSelector(allElectionData);
   const { response, error, triggerRequest } = useAxios();
 
   useEffect(() => {
-    if (
-      !userIsAuthenticated ||
-      (timer.startDate === null && timer.endDate === null)
-    ) {
+    if (!userIsAuthenticated) {
       navigate("/");
     }
-  }, [navigate, userIsAuthenticated, timer]);
+  }, [navigate, userIsAuthenticated]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -55,7 +47,6 @@ const ElectionDetails = () => {
       dispatch(setAllElectionData(electionData));
       dispatch(userAuthenticated({ username, userId, role }));
       dispatch(setUserInfo({ username, userId, role }));
-      dispatch(fetchThenSetCurrentTimerStatus());
       if (electionData.length === 0) {
         setFailedFetch(true);
       }
