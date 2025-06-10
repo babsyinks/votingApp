@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import useOrientation from "../hooks/useOrientation";
 
 /**
- * This component wraps its children components, dictating how they should be laid out. It is the 
+ * This component wraps its children components, dictating how they should be laid out. It is the
  * main wrapper that sets the structure of how its children components are to be displayed. It uses
  * flexbox to layout its children.
  *
@@ -18,16 +18,18 @@ import useOrientation from "../hooks/useOrientation";
  * @param {React.ReactNode} props.children - Child elements to render inside the wrapper.
  * @param {Boolean} [props.flipDirectionOnOrientationChange] - Determines if flex-direction specific properties should be applied
  * to the layout whenever there is a change of orientation.
+ * @param {String} [props.className] - Optional className(s) to style the layout.
  * @returns {JSX.Element} The rendered wrapper component.
  */
 const Container = ({
   justifyContent = "center",
   alignItems = "center",
   flexDirection = "column",
-  flexWrap = 'nowrap',
+  flexWrap = "nowrap",
   backgroundImage,
   children,
   flipDirectionOnOrientationChange = false,
+  className = "",
 }) => {
   const isPortrait = useOrientation();
   const objComplements = {
@@ -57,7 +59,11 @@ const Container = ({
       : flexDirection;
   }
 
-  return <div style={containerStyle}>{children}</div>;
+  return (
+    <div className={className} style={containerStyle}>
+      {children}
+    </div>
+  );
 };
 
 export default Container;
@@ -93,5 +99,5 @@ Container.propTypes = {
   ]),
   backgroundImage: PropTypes.string,
   children: PropTypes.node,
-  flipDirectionOnOrientationChange: PropTypes.bool, 
+  flipDirectionOnOrientationChange: PropTypes.bool,
 };
