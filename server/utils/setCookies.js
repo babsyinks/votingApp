@@ -3,7 +3,7 @@ function setAccessTokenOnCookie({ res, accessToken }) {
     httpOnly: true,
     secure: true,
     sameSite: "Strict",
-    maxAge: 15 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
   });
 }
 

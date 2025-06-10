@@ -4,7 +4,7 @@ function generateAccessToken(user) {
   return generateToken({
     user,
     secret: "ACCESS_TOKEN_SECRET",
-    expiresIn: "15m",
+    expiresIn: "1d",
   });
 }
 
