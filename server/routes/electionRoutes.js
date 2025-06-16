@@ -15,26 +15,22 @@ const router = express.Router();
 router.use(express.json());
 
 router.post("/contestants", upload.single("picture"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    const { surname, firstName, post, manifesto } = req.body;
-    const contestant = {
-      surname,
-      firstname: firstName,
-      position: post,
-      manifesto,
-      picture: req.file.path, // Image link from cloudinary
-    };
-    // Save contestant to database
-    await Contestants.create(contestant);
-
-    res.json({ message: "success", imageUrl: req.file.path });
-  } catch (error) {
-    res.status(error.statusCode || 400).json({ error });
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
   }
+
+  const { surname, firstName, post, manifesto } = req.body;
+  const contestant = {
+    surname,
+    firstname: firstName,
+    position: post,
+    manifesto,
+    picture: req.file.path, // Image link from cloudinary
+  };
+  // Save contestant to database
+  await Contestants.create(contestant);
+
+  res.json({ message: "success", imageUrl: req.file.path });
 });
 
 router.get("/details", checkAuthenticationStatus, async (req, res) => {
@@ -137,37 +133,29 @@ router.get("/details", checkAuthenticationStatus, async (req, res) => {
 });
 
 router.patch("/vote", checkAuthenticationStatus, async (req, res) => {
-  try {
-    const { userId, contestantId, position } = req.body;
+  const { userId, contestantId, position } = req.body;
 
-    await Votes.create({
-      user_id: userId,
-      contestant_id: contestantId,
-      position,
-    });
-    const allElections = await Votes.findAll();
+  await Votes.create({
+    user_id: userId,
+    contestant_id: contestantId,
+    position,
+  });
+  const allElections = await Votes.findAll();
 
-    const allVotes = allElections
-      .filter((v) => v.dataValues.position === position)
-      .map((fv) => fv.dataValues.user_id);
+  const allVotes = allElections
+    .filter((v) => v.dataValues.position === position)
+    .map((fv) => fv.dataValues.user_id);
 
-    const contestantVotes = allElections
-      .filter((v) => v.dataValues.contestant_id === contestantId)
-      .map((fv) => fv.dataValues.user_id);
-    res.json({ allVotes, contestantVotes });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
+  const contestantVotes = allElections
+    .filter((v) => v.dataValues.contestant_id === contestantId)
+    .map((fv) => fv.dataValues.user_id);
+  res.json({ allVotes, contestantVotes });
 });
 
 router.delete("/delete", checkAuthorizationStatus, async (req, res) => {
-  try {
-    await Votes.destroy({ truncate: true });
-    await Timer.destroy({ truncate: true });
-    res.json({ message: "success" });
-  } catch (error) {
-    res.status(500).json({ error: "delete operation failed!" });
-  }
+  await Votes.destroy({ truncate: true });
+  await Timer.destroy({ truncate: true });
+  res.json({ message: "success" });
 });
 
 module.exports = router;

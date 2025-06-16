@@ -7,83 +7,63 @@ const router = express.Router();
 router.use(express.json());
 
 router.post("/set", checkAuthorizationStatus, async (req, res) => {
-  try {
-    const { startDate, endDate } = req.body;
-    if (!startDate || !endDate) {
-      throw new Error("Start and end dates must be set!");
-    }
-    const timer = await Timer.findAll();
-    if (timer.length === 0) {
-      await Timer.create(req.body);
-    } else {
-      const timerObj = timer[0];
-      timerObj.set(req.body);
-      await timerObj.save();
-    }
-    res.json({ startDate, endDate });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  const { startDate, endDate } = req.body;
+  if (!startDate || !endDate) {
+    throw new Error("Start and end dates must be set!");
   }
+  const timer = await Timer.findAll();
+  if (timer.length === 0) {
+    await Timer.create(req.body);
+  } else {
+    const timerObj = timer[0];
+    timerObj.set(req.body);
+    await timerObj.save();
+  }
+  res.json({ startDate, endDate });
 });
 
 router.get("/cancel", checkAuthorizationStatus, async (req, res) => {
-  try {
-    await Timer.destroy({ truncate: true });
-    res.json({});
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  await Timer.destroy({ truncate: true });
+  res.json({});
 });
 
 router.get("/cancelStart", async (req, res) => {
-  try {
-    const timer = await Timer.findAll();
-    const timerObj = timer[0];
-    timerObj.set({ startDate: null });
-    await timerObj.save();
-    res.json(timerObj);
-  } catch (error) {
-    res.json({ message: error.message });
-  }
+  const timer = await Timer.findAll();
+  const timerObj = timer[0];
+  timerObj.set({ startDate: null });
+  await timerObj.save();
+  res.json(timerObj);
 });
 
 router.get("/status", async (req, res) => {
-  try {
-    const electionTimer = await Timer.findAll();
-    let electionObj;
-    const electionDataValues = electionTimer[0]?.dataValues;
-    const timerNotSet =
-      !electionDataValues?.startDate && !electionDataValues?.endDate;
-    if (electionTimer.length === 0) {
-      electionObj = {};
-    } else if (timerNotSet) {
-      electionObj = { startDate: null, endDate: null };
-    } else {
-      electionObj = {
-        startDate: electionDataValues.startDate
-          ? new Date(electionDataValues.startDate).getTime()
-          : electionDataValues.startDate,
-        endDate: electionDataValues.endDate
-          ? new Date(electionDataValues.endDate).getTime()
-          : electionDataValues.endDate,
-      };
-    }
-    res.json(electionObj);
-  } catch (error) {
-    res.json({ message: error.message });
+  const electionTimer = await Timer.findAll();
+  let electionObj;
+  const electionDataValues = electionTimer[0]?.dataValues;
+  const timerNotSet =
+    !electionDataValues?.startDate && !electionDataValues?.endDate;
+  if (electionTimer.length === 0) {
+    electionObj = {};
+  } else if (timerNotSet) {
+    electionObj = { startDate: null, endDate: null };
+  } else {
+    electionObj = {
+      startDate: electionDataValues.startDate
+        ? new Date(electionDataValues.startDate).getTime()
+        : electionDataValues.startDate,
+      endDate: electionDataValues.endDate
+        ? new Date(electionDataValues.endDate).getTime()
+        : electionDataValues.endDate,
+    };
   }
+  res.json(electionObj);
 });
 
 router.get("/end", async (req, res) => {
-  try {
-    const timer = await Timer.findAll();
-    const timerObj = timer[0];
-    timerObj.set({ endDate: null });
-    await timerObj.save();
-    res.json(timerObj);
-  } catch (error) {
-    res.status(error.statusCode || 400).json({ message: error.message });
-  }
+  const timer = await Timer.findAll();
+  const timerObj = timer[0];
+  timerObj.set({ endDate: null });
+  await timerObj.save();
+  res.json(timerObj);
 });
 
 module.exports = router;
