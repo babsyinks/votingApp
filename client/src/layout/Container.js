@@ -44,8 +44,6 @@ const Container = ({
     alignItems,
     flexDirection,
     height: "100vh",
-    overflowX: "hidden",
-    overflowY: "scroll",
     flexWrap,
   };
 
