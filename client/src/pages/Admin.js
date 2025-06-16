@@ -9,6 +9,7 @@ import Block from "components/ui/Block";
 import ToastMessage from "components/ui/ToastMessage";
 import AdminFormDetails from "features/admin/components/AdminFormDetails";
 import AdminDataToolTipsBtnsList from "features/admin/components/AdminDataToolTipsBtnsList";
+import AdminElectionEnd from "features/admin/components/AdminElectionEnd";
 
 const Admin = () => {
   const [submitData, setSubmitData] = useState(false);
@@ -67,6 +68,7 @@ const Admin = () => {
   return (
     <Container backgroundImage={backgroundImage}>
       {toastDetailsSet() && <ToastMessage toast={toast} />}
+      <AdminElectionEnd />
       <AdminFormDetails
         dataSubmitted={submitData}
         setFormData={setFormData}
