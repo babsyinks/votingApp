@@ -6,7 +6,6 @@ import Block from "../../../components/ui/Block";
 import ElectionDetailsHeader from "./ElectionDetailsHeader";
 import ElectivePositionDetails from "./ElectivePositionDetails";
 import { timerData } from "../../timer/timerSlice";
-// import LiveTimer from "../../../LiveTimer";
 import LiveTimer from "features/timer/components/liveElectionTimer/LiveTimer";
 import params from "../config/particlesConfig";
 
