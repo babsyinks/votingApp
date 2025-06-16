@@ -13,7 +13,12 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {React.ReactNode} [props.children] - Child elements.
  * @returns {JSX.Element}
  */
-export default function Section({ type = "flex-vert", className = "", style = {}, children }) {
+export default function Section({
+  type = "flex-vert",
+  className = "",
+  style = {},
+  children,
+}) {
   return (
     <section
       className={`${defaultStyle.section} ${defaultStyle[type]} ${getCompClasses(defaultStyle, className)}`}
@@ -25,16 +30,18 @@ export default function Section({ type = "flex-vert", className = "", style = {}
 }
 
 Section.propTypes = {
-    type: PropTypes.oneOf([
-      "flex-vert",
-      "flex-horz",
-      "flex-vert-sb",
-      "flex-horz-sb",
-      "flex-vert-sa",
-      "flex-horz-sa",
-      "flex-vert-fs",
-      "flex-horz-fs",
-    ]),
+  type: PropTypes.oneOf([
+    "flex-vert",
+    "flex-horz",
+    "flex-vert-sb",
+    "flex-horz-sb",
+    "flex-vert-sa",
+    "flex-horz-sa",
+    "flex-vert-fs",
+    "flex-horz-fs",
+    "flex-vert-fe",
+    "flex-horz-fe",
+  ]),
   className: PropTypes.string,
   style: PropTypes.object,
   children: PropTypes.node,
