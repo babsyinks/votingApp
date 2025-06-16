@@ -2,7 +2,7 @@ import React from "react";
 import Block from "components/ui/Block";
 import Modal from "components/modal/Modal";
 
-function AdminElectionEndWarningModal({ openModal, setOpenModal, endElection }) {
+function AdminElectionDeleteWarningModal({ openModal, setOpenModal, deleteElection }) {
   const message =
     "Election Result And Timer Will Be Deleted. Are You Sure You Want To Proceed?";
 
@@ -13,7 +13,7 @@ function AdminElectionEndWarningModal({ openModal, setOpenModal, endElection }) 
           message={message}
           positiveBtnTxt="Yes"
           negativeBtnTxt="No"
-          positiveHandler={endElection}
+          positiveHandler={deleteElection}
           negativeHandler={() => setOpenModal(false)}
         />
       )}
@@ -21,4 +21,4 @@ function AdminElectionEndWarningModal({ openModal, setOpenModal, endElection }) 
   );
 }
 
-export default AdminElectionEndWarningModal;
+export default AdminElectionDeleteWarningModal;
