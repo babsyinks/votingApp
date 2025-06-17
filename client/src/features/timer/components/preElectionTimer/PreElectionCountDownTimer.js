@@ -66,7 +66,7 @@ function PreElectionCountDownTimer({ endTime }) {
       type={isPortrait ? "flex-vert-sa" : "flex-horz-sa"}
       className="ta-center"
     >
-      {countdownTimerPartList.map((parts, i) => (
+      {preElectionTimerConfig.map((parts, i) => (
         <PreElectionCountDownTimerPart
           remainingTime={remainingTime}
           {...parts}
