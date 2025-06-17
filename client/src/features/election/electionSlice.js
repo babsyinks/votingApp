@@ -1,31 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
+import { mapTimerStatusToElectionStatus } from "./utils/mapTimerStatusToElectionStatus";
 
-const initialState = [];
+const initialState = {
+  contestantsData: [],
+  electionStatus: "inActive",
+};
+
 /**
  * electionSlice
  *
- * It handles election-related data.
+ * Handles election-related data and the election's current status.
  */
 const electionSlice = createSlice({
   name: "election",
   initialState,
   reducers: {
     setAllElectionData(state, action) {
-      return action.payload;
+      state.contestantsData = action.payload;
     },
     updateVotes(state, action) {
-      const { allVotes, contestantVotes, contestantId, position } =
-        action.payload;
-      const contestantsCategoryObj = getByPosition(state, position);
-      updateTotalCategoryVotes(contestantsCategoryObj, allVotes);
+      const { allVotes, contestantVotes, contestantId, position } = action.payload;
+      const category = getByPosition(state.contestantsData, position);
+      updateTotalCategoryVotes(category, allVotes);
       if (contestantId) {
-        updateContestantVote(
-          contestantsCategoryObj,
-          contestantId,
-          contestantVotes,
-        );
+        updateContestantVote(category, contestantId, contestantVotes);
       }
     },
+    updateElectionStatusFromTimer(state, action) {
+      state.electionStatus = mapTimerStatusToElectionStatus(action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchThenSetCurrentTimerStatus.fulfilled, (state, action) => {
+      state.electionStatus = mapTimerStatusToElectionStatus(action.payload);
+    });
   },
 });
 
@@ -33,9 +42,8 @@ const updateTotalCategoryVotes = (categoryObj, allVotes) => {
   categoryObj.allVotes = allVotes;
 };
 
-const findContestant = (categoryObj, contestantId) => {
-  return categoryObj.contestants.find((c) => c.contestant_id === contestantId);
-};
+const findContestant = (categoryObj, contestantId) =>
+  categoryObj.contestants.find((c) => c.contestant_id === contestantId);
 
 const updateContestantVote = (categoryObj, contestantId, contestantVotes) => {
   const contestant = findContestant(categoryObj, contestantId);
@@ -44,24 +52,26 @@ const updateContestantVote = (categoryObj, contestantId, contestantVotes) => {
   }
 };
 
-const getByPosition = (state, targetPosition) => {
-  return state.find(({ position }) => position === targetPosition);
-};
+const getByPosition = (data, targetPosition) =>
+  data.find(({ position }) => position === targetPosition);
 
-export const { setAllElectionData } = electionSlice.actions;
+export const {
+  setAllElectionData,
+  updateVotes,
+  updateElectionStatusFromTimer,
+} = electionSlice.actions;
 
-export const { updateVotes } = electionSlice.actions;
-
-export const allElectionData = (state) => state.election;
+export const allElectionData = (state) => state.election.contestantsData;
+export const electionStatus = (state) => state.election.electionStatus;
 
 export const getAllVotesInACategory = (targetPosition) => (state) =>
-  getByPosition(state.election, targetPosition).allVotes;
+  getByPosition(state.election.contestantsData, targetPosition)?.allVotes;
 
 export const getAllContestantsInCategory = (targetPosition) => (state) =>
-  getByPosition(state.election, targetPosition).contestants;
+  getByPosition(state.election.contestantsData, targetPosition)?.contestants;
 
 export const getContestantById = (contestantId, targetPosition) => (state) =>
-  getByPosition(state.election, targetPosition).contestants.find(
+  getByPosition(state.election.contestantsData, targetPosition)?.contestants.find(
     (c) => c.contestant_id === contestantId,
   );
 
