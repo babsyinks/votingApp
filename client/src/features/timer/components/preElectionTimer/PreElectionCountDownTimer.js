@@ -2,6 +2,7 @@ import { useAxios } from "hooks/useAxios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useOrientation from "hooks/useOrientation";
+import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import { setTimerData } from "features/timer/timerSlice";
 import getTimeStatus from "features/timer/helpers/getTimeStatus";
 import getPreElectionTimerConfig from "features/timer/config/getPreElectionTimerConfig";
@@ -51,6 +52,7 @@ function PreElectionCountDownTimer({ endTime }) {
   useEffect(() => {
     if (response) {
       dispatch(setTimerData(response));
+      dispatch(updateElectionStatusFromTimer(response));
     }
   }, [dispatch, response]);
 

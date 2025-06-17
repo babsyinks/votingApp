@@ -4,6 +4,7 @@ import Countdown from "react-countdown";
 import { useDispatch } from "react-redux";
 
 import { setTimerData } from "features/timer/timerSlice";
+import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import LiveTimerRenderer from "./LiveTimerRenderer";
 
 function LiveTimer({ electionEndTime }) {
@@ -29,6 +30,7 @@ function LiveTimer({ electionEndTime }) {
   useEffect(() => {
     if (response) {
       dispatch(setTimerData(response));
+      dispatch(updateElectionStatusFromTimer(response));
     }
   }, [dispatch, response]);
 

@@ -11,7 +11,9 @@ import { setUserInfo } from "features/user/userSlice";
 import {
   allElectionData,
   setAllElectionData,
+  updateElectionStatusFromTimer,
 } from "features/election/electionSlice";
+import { timerData } from "features/timer/timerSlice";
 import ElectionDetailsAllData from "features/election/components/ElectionDetailsAllData";
 import ElectionDetailsNoData from "features/election/components/ElectionDetailsNoData";
 
@@ -21,6 +23,7 @@ const ElectionDetails = () => {
   const dispatch = useDispatch();
   const userIsAuthenticated = useSelector(userAuth);
   const listOfElectionData = useSelector(allElectionData);
+  const timer = useSelector(timerData);
   const { response, error, triggerRequest } = useAxios();
 
   useEffect(() => {
@@ -47,11 +50,12 @@ const ElectionDetails = () => {
       dispatch(setAllElectionData(electionData));
       dispatch(userAuthenticated({ username, userId, role }));
       dispatch(setUserInfo({ username, userId, role }));
+      dispatch(updateElectionStatusFromTimer(timer));
       if (electionData.length === 0) {
         setFailedFetch(true);
       }
     }
-  }, [response, dispatch]);
+  }, [response, dispatch, timer]);
 
   useEffect(() => {
     if (error) {
