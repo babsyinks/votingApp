@@ -3,28 +3,16 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useOrientation from "hooks/useOrientation";
 import { setTimerData } from "features/timer/timerSlice";
-import {
-  minuteSeconds,
-  hourSeconds,
-  daySeconds,
-} from "../../config/timePartsInSeconds";
+import getTimeStatus from "features/timer/helpers/getTimeStatus";
+import getPreElectionTimerConfig from "features/timer/config/getPreElectionTimerConfig";
 import Block from "components/ui/Block";
 import PreElectionCountDownTimerPart from "./PreElectionCountDownTimerPart";
 
 function PreElectionCountDownTimer({ endTime }) {
-  const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
-  const remainingTime = endTime / 1000 - startTime;
-  const days = Math.ceil(remainingTime / daySeconds);
-  const daysDuration = days * daySeconds;
+  const { remainingTime, daysDuration } = getTimeStatus(endTime);
+  const preElectionTimerConfig = getPreElectionTimerConfig(daysDuration);
   const dispatch = useDispatch();
   const isPortrait = useOrientation();
-
-  const countdownTimerPartList = [
-    { color: "#7E2E84", duration: daysDuration, type: "days" },
-    { color: "#D14081", duration: daySeconds, type: "hours" },
-    { color: "#EF798A", duration: hourSeconds, type: "minutes" },
-    { color: "#218380", duration: minuteSeconds, type: "seconds" },
-  ];
 
   useEffect(() => {
     const endCountDown = async () => {
