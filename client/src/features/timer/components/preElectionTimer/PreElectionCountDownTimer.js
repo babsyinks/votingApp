@@ -1,4 +1,4 @@
-import axios from "axios";
+import { useAxios } from "hooks/useAxios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useOrientation from "hooks/useOrientation";
@@ -13,22 +13,21 @@ function PreElectionCountDownTimer({ endTime }) {
   const preElectionTimerConfig = getPreElectionTimerConfig(daysDuration);
   const dispatch = useDispatch();
   const isPortrait = useOrientation();
+  const { response, triggerRequest } = useAxios();
 
   useEffect(() => {
-    const endCountDown = async () => {
-      try {
-        const { data: timerObj } = await axios.get(
-          // "https://votingapp-pmev.onrender.com/timer/cancelStart",
-          "/timer/cancelStart",
-        );
-        dispatch(setTimerData(timerObj));
-        clearInterval(timerInterval);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
     let timerInterval;
+
+    const endCountDown = async () => {
+      await triggerRequest({
+        params: {
+          method: "GET",
+          url: "/timer/cancelStart",
+        },
+      });
+      // "https://votingapp-pmev.onrender.com/timer/cancelStart",
+      clearInterval(timerInterval);
+    };
 
     const checkTimerStatus = async () => {
       const endTimeSecs = endTime / 1000;
@@ -47,7 +46,13 @@ function PreElectionCountDownTimer({ endTime }) {
     return () => {
       clearInterval(timerInterval);
     };
-  }, [dispatch, endTime]);
+  }, [triggerRequest, endTime]);
+
+  useEffect(() => {
+    if (response) {
+      dispatch(setTimerData(response));
+    }
+  }, [dispatch, response]);
 
   return (
     <Block
