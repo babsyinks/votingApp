@@ -9,24 +9,31 @@ const ContestantMainInfo = ({
   totalVotes,
   isButtonDisabled,
   votePercentColor,
+  showExpandedStats = true,
 }) => {
   const { contestant_id, surname, firstname, picture, votes } = contestant;
 
   return (
     <>
-      <ContestantPicture picture={picture} />
+      <ContestantPicture
+        picture={picture}
+        showFullPicture={!showExpandedStats}
+      />
       <ContestantBasicInfo type="Name" value={`${surname} ${firstname}`} />
       <ContestantVotesInfoSummary
         showInfo={isButtonDisabled}
         contestantVotes={votes.length}
         totalVotes={totalVotes}
+        showExpandedStats={showExpandedStats}
       />
-      <ContestantVotesInfoStat
-        showInfo={isButtonDisabled}
-        contestantVotes={votes.length}
-        totalVotes={totalVotes}
-        contestantElectionStatusColor={votePercentColor[contestant_id]}
-      />
+      {showExpandedStats && (
+        <ContestantVotesInfoStat
+          showInfo={showInfo}
+          contestantVotes={votes.length}
+          totalVotes={totalVotes}
+          contestantElectionStatusColor={votePercentColor[contestant_id]}
+        />
+      )}
     </>
   );
 };
