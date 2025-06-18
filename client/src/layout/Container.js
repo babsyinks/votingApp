@@ -8,15 +8,15 @@ import useOrientation from "../hooks/useOrientation";
  * flexbox to layout its children.
  *
  * @param {Object} props - Component props.
- * @param {String} [props.justifyContent] - Based on the flex direction (default is column), it determines horizontal layout
+ * @param {string} [props.justifyContent] - Based on the flex direction (default is column), it determines horizontal layout
  * of contents, however, if flex-direction is row, it determines vertical layout of contents.
- * @param {String} [props.alignItems] - Similar to the justifyContent, but acts in opposite. That is it determines vertical
+ * @param {string} [props.alignItems] - Similar to the justifyContent, but acts in opposite. That is it determines vertical
  * layout, but if flex-direction is row, it determines horizontal layout.
- * @param {String} [props.flexDirection] - The layout direction. E.g if contents should be laid out horizontally or vertically.
- * @param {String} [props.flexWrap] - Determines how components should the laid out when there is no space left to place them.
- * @param {String} [props.backgroundImage] - Optional background image of the container.
+ * @param {string} [props.flexDirection] - The layout direction. E.g if contents should be laid out horizontally or vertically.
+ * @param {string} [props.flexWrap] - Determines how components should the laid out when there is no space left to place them.
+ * @param {string} [props.backgroundImage] - Optional background image of the container.
  * @param {React.ReactNode} props.children - Child elements to render inside the wrapper.
- * @param {Boolean} [props.flipDirectionOnOrientationChange] - Determines if flex-direction specific properties should be applied
+ * @param {boolean} [props.flipDirectionOnOrientationChange] - Determines if flex-direction specific properties should be applied
  * to the layout whenever there is a change of orientation.
  * @param {String} [props.className] - Optional className(s) to style the layout.
  * @returns {JSX.Element} The rendered wrapper component.
