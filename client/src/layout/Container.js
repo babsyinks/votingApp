@@ -18,7 +18,9 @@ import useOrientation from "../hooks/useOrientation";
  * @param {React.ReactNode} props.children - Child elements to render inside the wrapper.
  * @param {boolean} [props.flipDirectionOnOrientationChange] - Determines if flex-direction specific properties should be applied
  * to the layout whenever there is a change of orientation.
- * @param {String} [props.className] - Optional className(s) to style the layout.
+ * @param {string} [props.height] - Optional height of the container.
+ * @param {string} [props.width] - Optional width of the container.
+ * @param {string} [props.className] - Optional className(s) to style the layout.
  * @returns {JSX.Element} The rendered wrapper component.
  */
 const Container = ({
@@ -29,6 +31,8 @@ const Container = ({
   backgroundImage,
   children,
   flipDirectionOnOrientationChange = false,
+  height = "100vh",
+  width = "100vw",
   className = "",
 }) => {
   const isPortrait = useOrientation();
@@ -43,7 +47,8 @@ const Container = ({
     justifyContent,
     alignItems,
     flexDirection,
-    height: "100vh",
+    height,
+    width,
     flexWrap,
   };
 
@@ -98,4 +103,6 @@ Container.propTypes = {
   backgroundImage: PropTypes.string,
   children: PropTypes.node,
   flipDirectionOnOrientationChange: PropTypes.bool,
+  height: PropTypes.string,
+  width: PropTypes.string,
 };
