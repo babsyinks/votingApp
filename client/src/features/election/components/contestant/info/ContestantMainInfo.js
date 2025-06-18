@@ -7,7 +7,7 @@ import ContestantVotesInfoStat from "./ContestantVotesInfoStat";
 const ContestantMainInfo = ({
   contestant,
   totalVotes,
-  isButtonDisabled,
+  showInfo,
   votePercentColor,
   showExpandedStats = true,
 }) => {
@@ -21,7 +21,7 @@ const ContestantMainInfo = ({
       />
       <ContestantBasicInfo type="Name" value={`${surname} ${firstname}`} />
       <ContestantVotesInfoSummary
-        showInfo={isButtonDisabled}
+        showInfo={showInfo}
         contestantVotes={votes.length}
         totalVotes={totalVotes}
         showExpandedStats={showExpandedStats}

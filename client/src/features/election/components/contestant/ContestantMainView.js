@@ -38,7 +38,7 @@ const ContestantMainView = ({
       <ContestantMainInfo
         contestant={contestant}
         totalVotes={totalVotes}
-        isButtonDisabled={isButtonDisabled}
+        showInfo={isButtonDisabled}
         votePercentColor={votePercentColor}
       />
       <ContestantButtonManifesto manifestoControl={manifestoControl} />
