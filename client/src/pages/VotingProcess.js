@@ -3,8 +3,7 @@ import {
   timerData,
   fetchThenSetCurrentTimerStatus,
 } from "features/timer/timerSlice";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ElectionDetails from "features/election/components/ElectionDetails";
 import PreElectionCountDown from "features/timer/components/preElectionTimer/PreElectionCountDown";
 
