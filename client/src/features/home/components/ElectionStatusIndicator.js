@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import useCountdownStatus from "hooks/useCountdownStatus";
 import { electionStatus } from "features/election/electionSlice";
+import { timerData } from "features/timer/timerSlice";
 import getStatusMessage from "../helpers/getStatusMessage";
 import Block from "components/ui/Block";
 
@@ -8,6 +10,9 @@ export default function ElectionStatusIndicator() {
   const [blinking, setBlinking] = useState(false);
   const [message, setMessage] = useState("");
   const status = useSelector(electionStatus);
+  const timer = useSelector(timerData);
+  useCountdownStatus(timer.startDate);
+  useCountdownStatus(timer.endDate);
 
   useEffect(() => {
     const messageUpdate = getStatusMessage(status);
