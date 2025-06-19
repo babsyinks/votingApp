@@ -1,38 +1,23 @@
-import { useAxios } from "hooks/useAxios";
 import React, { useState, useEffect, memo } from "react";
 import Countdown from "react-countdown";
-import { useDispatch } from "react-redux";
-
-import { setTimerData } from "features/timer/timerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { timerData } from "features/timer/timerSlice";
 import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import LiveTimerRenderer from "./LiveTimerRenderer";
 
 function LiveTimer({ electionEndTime }) {
   const [countDownOver, setCountDownOver] = useState(false);
   const dispatch = useDispatch();
-  const { response, triggerRequest } = useAxios();
+  const timer = useSelector(timerData);
 
   useEffect(() => {
     const checkCountDown = async () => {
       if (countDownOver) {
-        await triggerRequest({
-          params: {
-            method: "GET",
-            url: "/timer/end",
-          },
-        });
-        // https://votingapp-pmev.onrender.com/timer/end
+        dispatch(updateElectionStatusFromTimer(timer));
       }
     };
     checkCountDown();
-  }, [countDownOver, triggerRequest]);
-
-  useEffect(() => {
-    if (response) {
-      dispatch(setTimerData(response));
-      dispatch(updateElectionStatusFromTimer(response));
-    }
-  }, [dispatch, response]);
+  }, [countDownOver, dispatch, timer]);
 
   return (
     <Countdown
