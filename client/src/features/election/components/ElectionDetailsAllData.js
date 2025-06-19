@@ -2,10 +2,10 @@ import { memo } from "react";
 import { useSelector } from "react-redux";
 import Particles from "react-tsparticles";
 import { useParticles } from "../hooks/useParticles";
-import Block from "../../../components/ui/Block";
+import Block from "components/ui/Block";
 import ElectionDetailsHeader from "./ElectionDetailsHeader";
 import ElectivePositionDetails from "./ElectivePositionDetails";
-import { timerData } from "../../timer/timerSlice";
+import { timerData } from "features/timer/timerSlice";
 import LiveTimer from "features/timer/components/liveElectionTimer/LiveTimer";
 import params from "../config/particlesConfig";
 
@@ -22,7 +22,7 @@ const ElectionDetailsAllData = ({ listOfElectionData }) => {
         options={params}
       />
       <ElectionDetailsHeader message={"Please Proceed To Vote."} />
-      {timer.endDate && (
+      {timer.endDate > Date.now() && (
         <Block type="flex-horz">
           <LiveTimer electionEndTime={timer.endDate} />
         </Block>
