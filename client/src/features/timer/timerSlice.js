@@ -24,7 +24,6 @@ const fetchThenSetCurrentTimerStatus = createAsyncThunk(
  *
  * The startDate and endDate accept timestamps for when election will start and end when the election schedule is set.
  *
- * When the election is over, both the startDate and endDate properties of the state are set to null
  */
 const timerSlice = createSlice({
   name: "timer",
