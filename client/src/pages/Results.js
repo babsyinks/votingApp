@@ -51,11 +51,22 @@ function Results() {
     }
   }, [response]);
 
-  if (resultsLoaded) {
-    if (result.length > 0) return <ResultsAll result={result} />;
-    else return <ResultsNone />;
+    useEffect(() => {
+      if (error) {
+        dispatch(userNotAuthenticated());
+        navigate("/login");
+      }
+    }, [error, dispatch, navigate]);
+
+  if (statusOfElection === "active_election_ended") {
+    if (resultsLoaded) {
+      if (result.length > 0) return <ResultsAll result={result} />;
+      else return <ResultsRemoved />;
+    } else {
+      return null;
+    }
   } else {
-    return null;
+    if (resultsLoaded) return <ResultsNotAvailable />;
   }
 }
 
