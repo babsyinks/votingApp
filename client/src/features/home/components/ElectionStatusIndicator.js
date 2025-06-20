@@ -16,7 +16,7 @@ export default function ElectionStatusIndicator() {
 
   useEffect(() => {
     const messageUpdate = getStatusMessage(status);
-    if (messageUpdate.includes("Ongoing")) {
+    if (messageUpdate.includes("Live")) {
       setBlinking(true);
     } else {
       setBlinking(false);
