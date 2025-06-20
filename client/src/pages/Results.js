@@ -1,12 +1,35 @@
 import { useAxios } from "hooks/useAxios";
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
+import { electionStatus } from "features/election/electionSlice";
+import {
+  userAuth,
+  userNotAuthenticated,
+} from "features/auth/userAuthSlice";
 import ResultsAll from "features/results/components/ResultsAll";
-import ResultsNone from "features/results/components/ResultsNone";
+import ResultsRemoved from "features/results/components/ResultsRemoved";
+import ResultsNotAvailable from "features/results/components/ResultsNotAvailable";
 
 function Results() {
   const [result, setResult] = useState([]);
   const [resultsLoaded, setResultsLoaded] = useState(false);
-  const { response, triggerRequest } = useAxios();
+  const { response, triggerRequest, error } = useAxios();
+  const statusOfElection = useSelector(electionStatus);
+  const dispatch = useDispatch();
+  const userIsAuthenticated = useSelector(userAuth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userIsAuthenticated) {
+      navigate("/login");
+    }
+  }, [navigate, userIsAuthenticated]);
+
+  useEffect(() => {
+    dispatch(fetchThenSetCurrentTimerStatus());
+  }, [dispatch]);
 
   useEffect(() => {
     const resultStatus = async () => {
