@@ -3,13 +3,13 @@ const getStatusMessage = (status) => {
 
   switch (status) {
     case "active_preElectionCountdown":
-      message = "Election countdown in progress";
+      message = "Election Countdown In Progress";
       break;
     case "active_election_live":
-      message = "🟢 Live Election Ongoing";
+      message = "🟢 Election Is Live";
       break;
     case "active_election_ended":
-      message = "⚠️ Live Election Has Ended";
+      message = "⚠️ Election Has Ended";
       break;
     default:
       message = "";
