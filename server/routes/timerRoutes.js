@@ -46,12 +46,4 @@ router.get("/status", async (req, res) => {
   res.json(electionObj);
 });
 
-router.get("/end", async (req, res) => {
-  const timer = await Timer.findAll();
-  const timerObj = timer[0];
-  timerObj.set({ endDate: null });
-  await timerObj.save();
-  res.json(timerObj);
-});
-
 module.exports = router;
