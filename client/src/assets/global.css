@@ -338,6 +338,7 @@ a, i, button {
 .border-rounded-16 { border-radius: 16px; }
 
 /* Rem-based Borders */
+.border-rounded-0p4r {border-radius: 0.4rem;}
 .border-rounded-1r { border-radius: 1rem; }
 
 /* % based Borders */
