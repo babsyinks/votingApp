@@ -516,6 +516,12 @@ a, i, button {
   }
 }
 
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
 /* ========== ANIMATION CLASSES ========== */
 
 .fadeIn {
@@ -576,6 +582,10 @@ a, i, button {
 
 .transition-transform:hover {
   transform: scale(1.05);
+}
+
+.blink {
+  animation: blink-animation 1s steps(2, start) infinite;
 }
 
 /* Responsive texts  */
