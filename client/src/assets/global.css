@@ -418,6 +418,7 @@ a, i, button {
 
 /* box shadows */
 .bs-black { box-shadow: 0 4px 12px var(--palette-black-carpet-pattern); }
+.bs-black-lite {box-shadow: 0 0 10px var(--palette-black-carpet-pattern); }
 
 /* line heights */
 .lh-1p6 { line-height: 1.6; }
