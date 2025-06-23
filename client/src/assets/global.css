@@ -416,11 +416,6 @@ a, i, button {
 .mxw-600 { max-width: 600px; }
 .mxw-960 { max-width: 960px; }
 
-/* z-indexes */
-.z-10 { z-index: 10; }
-.z-20 { z-index: 20; }
-.z-30 { z-index: 30; }
-
 /* box shadows */
 .bs-black { box-shadow: 0 4px 12px var(--palette-black-carpet-pattern); }
 
