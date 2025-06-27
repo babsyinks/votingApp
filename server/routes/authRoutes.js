@@ -17,7 +17,6 @@ const {
   generateRandomCode,
 } = require("../utils/randomCodeGenerator");
 
-require("dotenv").config();
 const FAILURE_REDIRECT = "/login";
 const router = express.Router();
 router.use(express.json());
@@ -86,7 +85,7 @@ router.post("/login", async (req, res, next) => {
     failIfEmpty(identity, password);
     const isUserName = identity === username;
     const user = await User.findOne({
-      where: { [isUserName ? username : email]: identity },
+      where: { [isUserName ? "username" : "email"]: identity },
     });
     await validateCredentials(user, password);
     generateTokensAndSendResponse({ res, user });

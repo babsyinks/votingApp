@@ -10,7 +10,7 @@ const { upload } = require("../middleware/uploadMedia");
 const { Votes } = require("../models");
 const { Contestants } = require("../models");
 const { Timer } = require("../models");
-require("dotenv").config({ path: path.join("..", ".env") });
+
 const router = express.Router();
 router.use(express.json());
 
