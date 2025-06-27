@@ -2,8 +2,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const helmet = require("helmet");
+const passport = require("passport");
 const xss = require("xss-clean");
 
+require("./config/passport");
 const helmetConfig = require("./config/helmet");
 const errorHandler = require("./middleware/errorHandler");
 const { sequelize } = require("./models");
@@ -16,6 +18,7 @@ const logger = require("./utils/logger");
 const port = process.env.PORT || 3001;
 const app = express();
 
+app.use(passport.initialize());
 app.use(cors());
 app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurityPolicy));
 app.use(xss());
