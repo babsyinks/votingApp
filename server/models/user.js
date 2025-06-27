@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
@@ -12,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       return { ...this.get(), id: undefined };
     }
   }
+
   User.init(
     {
       user_id: {
@@ -27,6 +29,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      firstname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       role: {
         type: DataTypes.ENUM("user", "admin"),
         allowNull: false,
@@ -38,5 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "users",
     },
   );
+
   return User;
 };
