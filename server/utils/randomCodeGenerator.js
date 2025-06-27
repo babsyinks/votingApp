@@ -26,4 +26,4 @@ const getHashedCode = async (randCode, codeLength) => {
   return randomHashedCode;
 };
 
-export { generateRandomCode, getHashedCode };
+module.exports = { generateRandomCode, getHashedCode };

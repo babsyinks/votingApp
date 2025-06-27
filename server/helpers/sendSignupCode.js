@@ -1,4 +1,4 @@
-import transporter from "./mailTransporter";
+const transporter = require("./mailTransporter");
 
 async function sendSignupCode({ to, code }) {
   await transporter.sendMail({
