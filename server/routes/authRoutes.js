@@ -32,7 +32,7 @@ router.post("/request-signup-code", async (req, res, next) => {
       codeHash: await getHashedCode(code),
       expiresAt: Date.now() + 10 * 60 * 1000,
     });
-    await sendSignupCode({ to: email, code });
+    await sendSignupCode({ toEmail: email, otpCode: code }); //
     res.json({ success: true, email });
   } catch (e) {
     next(e);
@@ -51,6 +51,7 @@ router.post("/verify-signup-code", async (req, res, next) => {
       order: [["createdAt", "DESC"]],
     });
     await failIfVerificationCodeIsNotValid(code, row);
+    await row.destroy();
     res.json({ success: true, email });
   } catch (e) {
     next(e);
@@ -122,7 +123,7 @@ router.get(
 
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email"] }),
+  passport.authenticate("github", { scope: ["user:email", "read:user"] }),
 );
 
 router.get(
