@@ -15,13 +15,18 @@ import getCompClasses from "../../util/getCompClasses";
  * @returns {JSX.Element} The rendered span element.
  */
 export default function Span({
+  type = "inline",
   className = "",
   style = {},
   onClick,
   children,
 }) {
   return (
-    <span className={className} style={style} onClick={onClick}>
+    <span
+      className={`${defaultStyle[type]} ${getCompClasses(defaultStyle, className)}`}
+      style={style}
+      onClick={onClick}
+    >
       {children}
     </span>
   );
