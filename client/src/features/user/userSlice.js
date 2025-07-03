@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import isEmail from "validator/lib/isEmail";
 
 const initialState = { username: "", userId: "", role: "" };
 
@@ -13,6 +14,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUserInfo(state, action) {
+      let { username } = action.payload;
+      if (username && isEmail(username)) {
+        action.payload.username = username.split("@")[0];
+      }
       Object.assign(state, action.payload);
     },
   },
