@@ -46,6 +46,14 @@ const generateTokensAndSendResponse = ({ res, user }) => {
   sendResponseForAuthenticatedUser({ res, accessToken, refreshToken, user });
 };
 
+const generateTokensAndRedirect = ({ res, user, redirectUri }) => {
+  const { accessToken, refreshToken } = generateTokens(user);
+  setRefreshTokenOnCookie({
+    res: setAccessTokenOnCookie({ res, accessToken }),
+    refreshToken,
+  }).redirect(redirectUri);
+};
+
 const generateTokens = (user) => {
   return {
     accessToken: generateAccessToken(user),
@@ -77,5 +85,6 @@ module.exports = {
   failIfUserExists,
   validateCredentials,
   generateTokensAndSendResponse,
+  generateTokensAndRedirect,
   failIfVerificationCodeIsNotValid,
 };
