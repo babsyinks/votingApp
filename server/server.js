@@ -20,7 +20,12 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(passport.initialize());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // https://demovotingapp.onrender.com/
+    credentials: true,
+  }),
+);
 app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurityPolicy));
 app.use(xss());
 app.use(cookieParser());
