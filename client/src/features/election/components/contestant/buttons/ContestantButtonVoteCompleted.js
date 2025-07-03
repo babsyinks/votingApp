@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../../../../components/ui/Button";
+import I from "components/ui/I";
 import style from "./ContestantButtonVoteCompleted.module.css";
 
 /**
@@ -19,7 +20,7 @@ const ContestantButtonVoteCompleted = ({ votedFor }) => {
     <Button
       className={`rnd-corner-btn rnd-corner-btn-sized ${style["vote-completed"]} ${style[iTagDetails.color]}`}
     >
-      <i className={`far ${iTagDetails.class} fa-lg`}></i>
+      <I className={`far ${iTagDetails.class} fa-lg`}></I>
     </Button>
   );
 };

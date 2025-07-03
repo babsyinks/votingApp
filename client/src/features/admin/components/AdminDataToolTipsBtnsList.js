@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { selectLoadingState } from "../../../app/loaderSlice";
 import AdminDataToolTipBtn from "./AdminDataToolTipBtn";
 import tooltipBtnDetails from "../helpers/tooltipBtnDetails";
+import I from "components/ui/I";
 
 const AdminDataToolTipsBtnsList = ({
   isSubmitBtnDisabled,
@@ -35,7 +36,7 @@ const AdminDataToolTipsBtnsList = ({
               onClick={handleSubmitVals}
               key={i}
             >
-              <i className={`fas ${classes}`}></i>
+              <I className={`fas ${classes}`}></I>
             </AdminDataToolTipBtn>
           );
         }
@@ -46,7 +47,7 @@ const AdminDataToolTipsBtnsList = ({
             onClick={navigateFn(route)}
             key={i}
           >
-            <i className={`fas ${iClasses}`}></i>
+            <I className={`fas ${iClasses}`}></I>
           </AdminDataToolTipBtn>
         );
       })}
