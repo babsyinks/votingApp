@@ -11,10 +11,11 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import loaderReducer from "./loaderSlice";
-import userInfoReducer from "../features/user/userSlice";
-import userAuthReducer from "../features/auth/userAuthSlice";
-import timerReducer from "../features/timer/timerSlice";
-import electionReducer from "../features/election/electionSlice";
+import userInfoReducer from "features/user/userSlice";
+import userAuthReducer from "features/auth/userAuthSlice";
+import timerReducer from "features/timer/timerSlice";
+import electionReducer from "features/election/electionSlice";
+import verificationReducer from "features/auth/verificationSlice";
 
 const rootReducer = combineReducers({
   loader: loaderReducer,
@@ -22,12 +23,13 @@ const rootReducer = combineReducers({
   userAuth: userAuthReducer,
   timer: timerReducer,
   election: electionReducer,
+  justVerified: verificationReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userAuth", "timer", "election"],
+  whitelist: ["userAuth", "timer", "election", "justVerified"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
