@@ -1,19 +1,22 @@
+const cookieSettings = {
+  httpOnly: true,
+  secure: false,
+  sameSite: "lax",
+};
+
+if (process.env.NODE_ENV === "production") {
+  cookieSettings.secure = true;
+  cookieSettings.sameSite = "none";
+}
+
 function setAccessTokenOnCookie({ res, accessToken }) {
-  return res.cookie("access_token", accessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  cookieSettings.maxAge = 24 * 60 * 60 * 1000;
+  return res.cookie("access_token", accessToken, cookieSettings);
 }
 
 function setRefreshTokenOnCookie({ res, refreshToken }) {
-  return res.cookie("refresh_token", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+  cookieSettings.maxAge = 7 * 24 * 60 * 60 * 1000;
+  return res.cookie("refresh_token", refreshToken, cookieSettings);
 }
 
 module.exports = { setAccessTokenOnCookie, setRefreshTokenOnCookie };
