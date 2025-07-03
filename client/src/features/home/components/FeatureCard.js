@@ -7,11 +7,7 @@ export default function FeatureCard({ title, items }) {
       <Heading type="h2" className="text-2xl fw-600 mb-1r">
         {title}
       </Heading>
-      <List className="pl-1p25r text-grey-dark lh-1p6">
-        {items.map((item, i) => (
-          <li key={i}>{item}</li>
-        ))}
-      </List>
+      <List className="pl-1p25r text-grey-dark lh-1p6" items={items} />
     </Block>
   );
 }
