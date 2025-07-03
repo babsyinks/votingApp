@@ -7,11 +7,13 @@ import InputTime from "./InputTime";
 
 const componentMap = {
   file: InputFile,
-  text: InputText,
-  password: InputText,
   date: InputDate,
   time: InputTime,
 };
+
+["text", "password", "email"].forEach((type) => {
+  componentMap[type] = InputText;
+});
 
 /**
  * A component that renders input components depending on the type.
@@ -20,14 +22,15 @@ const componentMap = {
  * @returns {JSX.Element} The rendered input component.
  */
 function Input(props) {
-  const { type = "text" } = props;
+  let { type } = props;
+  if (!type) type = "text";
   const Component = componentMap[type] || InputText;
 
-  return <Component {...props} />;
+  return <Component {...props} type={type} />;
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf(["text", "password", "file", "date", "time"]).isRequired,
+  type: PropTypes.oneOf(["text", "password", "email", "file", "date", "time"]),
   name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
