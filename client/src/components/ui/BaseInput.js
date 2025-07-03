@@ -54,7 +54,7 @@ export default function BaseInput({
 }
 
 BaseInput.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
