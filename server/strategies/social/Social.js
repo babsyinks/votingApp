@@ -29,7 +29,7 @@ class Social {
     const { firstname, lastname } = this.__extractFirstAndLastNames();
     return await User.create({
       user_id: uuidv4(),
-      username: this.profile.username || email.split("@")[0],
+      username: this.profile.username || email,
       email,
       password: await bcrypt.hash(uuidv4(), 10), // unused placeholder
       firstname,
