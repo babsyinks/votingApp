@@ -45,7 +45,7 @@ const ElectionDetails = () => {
     if (response) {
       const { electionData, userId, username, role } = response;
       dispatch(setAllElectionData(electionData));
-      dispatch(userAuthenticated({ username, userId, role }));
+      dispatch(userAuthenticated({ role }));
       dispatch(setUserInfo({ username, userId, role }));
       if (electionData.length === 0) {
         setFailedFetch(true);
