@@ -43,6 +43,7 @@ Block.propTypes = {
     "flex-horz-fe",
     "block",
     "inline",
+    "inline-block",
   ]),
   className: PropTypes.string,
   style: PropTypes.object,
