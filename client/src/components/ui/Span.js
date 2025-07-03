@@ -33,6 +33,21 @@ export default function Span({
 }
 
 Span.propTypes = {
+  type: PropTypes.oneOf([
+    "flex-vert",
+    "flex-horz",
+    "flex-vert-sb",
+    "flex-horz-sb",
+    "flex-vert-sa",
+    "flex-horz-sa",
+    "flex-vert-fs",
+    "flex-horz-fs",
+    "flex-vert-fe",
+    "flex-horz-fe",
+    "block",
+    "inline",
+    "inline-block",
+  ]),
   className: PropTypes.string,
   style: PropTypes.object,
   onClick: PropTypes.func,
