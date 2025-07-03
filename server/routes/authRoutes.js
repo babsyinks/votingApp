@@ -11,13 +11,17 @@ const {
   generateTokensAndSendResponse,
 } = require("../helpers/authRouteHelpers");
 const sendSignupCode = require("../helpers/sendSignupCode");
+const { checkAuthenticationStatus } = require("../middleware/auth");
 const { User, SignupToken } = require("../models");
+const {
+  sessionOff,
+  handleOauthCallback,
+} = require("../strategies/common/oAuthCallbackHandler");
 const {
   getHashedCode,
   generateRandomCode,
 } = require("../utils/randomCodeGenerator");
 
-const FAILURE_REDIRECT = "/login";
 const router = express.Router();
 router.use(express.json());
 
@@ -52,7 +56,7 @@ router.post("/verify-signup-code", async (req, res, next) => {
     });
     await failIfVerificationCodeIsNotValid(code, row);
     await row.destroy();
-    res.json({ success: true, email });
+    res.json({ success: true });
   } catch (e) {
     next(e);
   }
@@ -97,42 +101,64 @@ router.post("/login", async (req, res, next) => {
 
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["email", "profile"] }),
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+    session: false,
+  }),
 );
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: FAILURE_REDIRECT }),
-  (req, res) => {
-    generateTokensAndSendResponse({ res, user: req.user });
-  },
-);
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate(
+    "google",
+    sessionOff,
+    handleOauthCallback()(req, res, next),
+  )(req, res, next);
+});
 
 router.get(
   "/facebook",
-  passport.authenticate("facebook", { scope: ["email", "public_profile"] }),
+  passport.authenticate("facebook", {
+    scope: ["email", "public_profile"],
+    session: false,
+  }),
 );
 
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: FAILURE_REDIRECT }),
-  (req, res) => {
-    generateTokensAndSendResponse({ res, user: req.user });
-  },
-);
+router.get("/facebook/callback", (req, res, next) => {
+  passport.authenticate(
+    "facebook",
+    sessionOff,
+    handleOauthCallback()(req, res, next),
+  )(req, res, next);
+});
 
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email", "read:user"] }),
+  passport.authenticate("github", {
+    scope: ["user:email", "read:user"],
+    session: false,
+  }),
 );
 
-router.get(
-  "/github/callback",
-  passport.authenticate("github", { failureRedirect: FAILURE_REDIRECT }),
-  (req, res) => {
-    generateTokensAndSendResponse({ res, user: req.user });
-  },
-);
+router.get("/github/callback", (req, res, next) => {
+  passport.authenticate(
+    "github",
+    sessionOff,
+    handleOauthCallback()(req, res, next),
+  )(req, res, next);
+});
+
+router.get("/me", checkAuthenticationStatus, async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { username, userId: user_id, role } = user;
+    res.json({
+      isAuthenticated: true,
+      user: { username, userId: user_id, role },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post("/logout", (req, res) => {
   res
