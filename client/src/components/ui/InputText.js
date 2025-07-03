@@ -8,7 +8,7 @@ import getCompClasses from "../../util/getCompClasses";
  * A component that renders a text input.
  *
  * @param {Object} props - Component props.
- * @param {string} props.type - The type of the Input. It must be one of "text" and "password"
+ * @param {string} props.type - The type of the Input. It must be one of "text","password", and "email"
  * @param {string} props.name - The name of the text input component.
  * @param {string} props.value - The value of the text input which is displayed in a text box.
  * @param {function} props.onChange - The function that runs whenever a text input is received.
@@ -30,7 +30,7 @@ export default function InputText(props) {
 }
 
 InputText.propTypes = {
-  type: PropTypes.oneOf(["text", "password"]).isRequired,
+  type: PropTypes.oneOf(["text", "password", "email"]).isRequired,
   name: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
