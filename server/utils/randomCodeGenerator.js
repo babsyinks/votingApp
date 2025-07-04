@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 const generateRandomCode = (codeLength = 6) => {
   const adder = "1".padEnd(codeLength, 0);
   const multiplier = "9".padEnd(codeLength, 0);
-  return Math.floor(adder + Math.random() * multiplier).toString();
+  return Math.floor(+adder + Math.random() * +multiplier).toString();
 };
 
 /**
