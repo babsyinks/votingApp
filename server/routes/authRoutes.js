@@ -28,6 +28,7 @@ router.use(express.json());
 router.post("/request-signup-code", async (req, res, next) => {
   try {
     const { email } = req.body;
+    failIfEmpty({ email });
     const user = await User.findOne({ where: { email } });
     failIfUserExists(user);
     const code = generateRandomCode();
@@ -64,8 +65,8 @@ router.post("/verify-signup-code", async (req, res, next) => {
 
 router.post("/register", async (req, res, next) => {
   try {
+    failIfEmpty(req.body);
     let { username, password, email, firstname, lastname } = req.body;
-    failIfEmpty(username, password, email, firstname, lastname);
     let user = await User.findOne({ where: { username } });
     failIfUserExists(user);
     const salt = await bcrypt.genSalt(10);
@@ -87,8 +88,8 @@ router.post("/login", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const identity = username || email;
-    failIfEmpty(identity, password);
     const isUserName = identity === username;
+    failIfEmpty({ [isUserName ? "username" : "email"]: identity, password });
     const user = await User.findOne({
       where: { [isUserName ? "username" : "email"]: identity },
     });
