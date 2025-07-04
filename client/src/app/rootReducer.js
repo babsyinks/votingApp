@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   userAuth: userAuthReducer,
   timer: timerReducer,
   election: electionReducer,
-  justVerified: verificationReducer,
+  verificationStatus: verificationReducer,
 });
 
 const persistConfig = {
