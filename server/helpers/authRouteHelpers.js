@@ -9,9 +9,16 @@ const {
   generateRefreshToken,
 } = require("../utils/tokenGenerators");
 
-const failIfEmpty = (...args) => {
-  if (args.some((arg) => !arg)) {
-    throw new Error("All fields must be filled!");
+const failIfEmpty = (fieldsObj) => {
+  const keys = Object.keys(fieldsObj);
+  const emptyField = [];
+  if (
+    keys.some((key) => {
+      if (!fieldsObj[key]) emptyField.push(key);
+      return !fieldsObj[key];
+    })
+  ) {
+    throw new Error(`${emptyField[0].toLowerCase()} field must be filled!`);
   }
 };
 
