@@ -470,6 +470,9 @@ a, i, button {
   flex: 1;
 }
 
+.gap-1r{
+  gap: 1rem;
+}
 
 .gap-1p5r{
   gap: 1.5rem;
