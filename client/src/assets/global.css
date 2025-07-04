@@ -76,7 +76,7 @@ a, i, button {
   --palette-blue-soft: 	#00aeff;
 
   --palette-blueviolet: #8a2be2;
-  --palette-blueviolet-cool: #7207d6;
+  --palette-blueviolet-cool: #7ab5fd;
   --palette-blueviolet-mute: #2563eb;
   --palette-blueviolet-soft: #352bbf;
   --palette-blueviolet-dark: #1e40af;
@@ -98,6 +98,7 @@ a, i, button {
   --palette-grey-cool: #a1a1a1;
   --palette-grey-dark: #444;
   --palette-grey-mute: #6b7280;
+  --palette-grey-soft: #4b5563;
   --palette-grey-light-transparent: rgba(199, 199, 199, 0.7);
 
   --palette-black: 	#000000;
@@ -364,6 +365,18 @@ a, i, button {
 .bg-black { background-color: var(--palette-black); }
 .bg-white { background-color: var(--palette-white); }
 .bg-white-soft {background-color: var(--palette-white-soft);}
+.bg-grey-mute{
+  background-color: var(--palette-grey-mute);
+}
+.bg-grey-mute:hover{
+  background-color: var(--palette-grey-soft);
+}
+.bg-blueviolet-cool {
+  background: var(--palette-blueviolet-cool);
+}
+.bg-blueviolet-cool:hover {
+  background: var(--palette-blueviolet-firm-lite);
+}
 
 /* Background Linear Gradients */
 .bg-gradient-blueviolet {
