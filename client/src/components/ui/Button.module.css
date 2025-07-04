@@ -134,14 +134,17 @@
 
 .primary-btn,
 .primary-btn-2,
-.secondary-btn {
+.secondary-btn,
+.neutral-btn {
   display: inline-flex;
   color: var(--color-text-white);
   font-weight: 600;
 }
 
 .primary-btn,
-.secondary-btn {
+.secondary-btn,
+.neutral-btn
+ {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
   border-radius: 0.75rem;
@@ -178,3 +181,4 @@
   background-color: var(--color-primary-btn2-hover);
   transform: scale(1.05);
 }
+
