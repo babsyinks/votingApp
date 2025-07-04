@@ -112,7 +112,12 @@ export const useAxios = () => {
     if (axios.isCancel(err)) {
       console.warn("Request canceled:", err.message);
     } else {
-      setError(err);
+      const message =
+        err.response?.data?.error?.message ||
+        err.response?.data?.message ||
+        err.message ||
+        "Something went wrong";
+      setError({ message });
       dispatch({ type: "loader/rejected" });
     }
   };
