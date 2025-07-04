@@ -77,6 +77,7 @@ router.post("/register", async (req, res, next) => {
       email,
       firstname,
       lastname,
+      role: "user",
     });
     generateTokensAndSendResponse({ res, user });
   } catch (error) {
