@@ -20,6 +20,12 @@ export default function VerifyCode() {
   const { toast, triggerFailureToast, toastDetailsSet } = useToastMessage();
 
   useEffect(() => {
+    if (!email) {
+      navigate("/signup-start");
+    }
+  });
+
+  useEffect(() => {
     if (response?.success) {
       dispatch(setUserJustVerified(response.success));
       navigate(`/register?email=${encodeURIComponent(email)}`, {
