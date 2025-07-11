@@ -85,7 +85,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/signin", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const identity = username || email;
