@@ -1,0 +1,18 @@
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  top: 28%;
+  left: 1.1rem;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.input-with-icon {
+  padding-left: 2.5rem !important;
+}
