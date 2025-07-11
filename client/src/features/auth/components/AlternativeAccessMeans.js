@@ -10,8 +10,14 @@ export default function AlternativeAccessMeans({
   const navigate = useNavigate();
 
   return (
-    <Paragraph className="text-sm">
-      {question} <Button onClick={() => navigate(route)}>{btnLabel}</Button>
+    <Paragraph className="text-sm ta-center">
+      {question}{" "}
+      <Button
+        className="text-blueviolet-mute td-none-with-hover fw-500 bg-transparent"
+        onClick={() => navigate(route)}
+      >
+        {btnLabel}
+      </Button>
     </Paragraph>
   );
 }
