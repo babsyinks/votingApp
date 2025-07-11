@@ -30,7 +30,7 @@ export default function InputText(props) {
 }
 
 InputText.propTypes = {
-  type: PropTypes.oneOf(["text", "password", "email"]).isRequired,
+  type: PropTypes.oneOf(["text", "password", "email", "number"]).isRequired,
   name: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

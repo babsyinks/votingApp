@@ -30,7 +30,15 @@ function Input(props) {
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf(["text", "password", "email", "file", "date", "time"]),
+  type: PropTypes.oneOf([
+    "text",
+    "password",
+    "email",
+    "file",
+    "date",
+    "time",
+    "number",
+  ]),
   name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
