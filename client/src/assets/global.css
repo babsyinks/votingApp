@@ -1,8 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-y: auto;
@@ -15,8 +20,26 @@ input[type = button]:disabled:hover,button:disabled:hover{
   cursor:not-allowed;
 }
 
+/* Remove number input spinners - cross-browser */
+input[type="number"] {
+  appearance: textfield;     
+  -moz-appearance: textfield; 
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+
 a, i, button {
   cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 /* color palette */
@@ -74,13 +97,15 @@ a, i, button {
   --palette-blue-cool: #070775;
   --palette-blue-mute: #03035e;
   --palette-blue-soft: 	#00aeff;
+  --palette-blue-faded: #e6f0ff;
+  --palette-blue-faded-mild: #cad9f0;
 
   --palette-blueviolet: #8a2be2;
   --palette-blueviolet-cool: #7ab5fd;
   --palette-blueviolet-mute: #2563eb;
   --palette-blueviolet-soft: #352bbf;
   --palette-blueviolet-dark: #1e40af;
-  --palette-blueviolet-firm: #3b82f6;
+  --palette-blueviolet-firm: #1877f2;
   --palette-blueviolet-firm-lite: #60a5fa;
 
   --palette-slateblue: #6a5acd;
@@ -90,6 +115,7 @@ a, i, button {
   --palette-red-dark:  	#530004;
   --palette-red-cool: #ac1d1d;
   --palette-red-soft: #8b0d0d;
+  --palette-red-mute: #db4437;
 
   --palette-crimson: #dc143c;
 
@@ -99,6 +125,7 @@ a, i, button {
   --palette-grey-dark: #444;
   --palette-grey-mute: #6b7280;
   --palette-grey-soft: #4b5563;
+  --palette-grey-firm:  #333333;
   --palette-grey-light-transparent: rgba(199, 199, 199, 0.7);
 
   --palette-black: 	#000000;
@@ -107,7 +134,7 @@ a, i, button {
   --palette-black-cool: #374151;
   --palette-black-firm: #111827;
   --palette-black-carpet-pattern: rgba(0, 0, 0, 0.1);
-
+  --palette-black-carpet-pattern-lite: rgba(0, 0, 0, 0.04);
 }
 
 /* semantic color variables used for this project */
@@ -155,7 +182,9 @@ a, i, button {
   --color-text-sky-blue: var(--palette-blue-soft);
   --color-text-blueviolet-firm: var(--palette-blueviolet-firm);
   --color-text-grey-mute: var(--palette-grey-mute);
+  --color-text-grey-firm: var(--palette-grey-firm);
   --color-text-blueviolet-mute: var(--palette-blueviolet-mute);
+  --color-text-red-mute: var(--palette-red-mute);
 
   --color-input-box-border-bottom: var(--palette-black);
 
@@ -194,6 +223,8 @@ a, i, button {
   --color-background-blueviolet-firm: var(--color-text-blueviolet-firm);
   --color-background-blueviolet-firm-hover: var(--palette-blueviolet-dark);
   --color-background-blueviolet-firm-lite: var(--palette-blueviolet-firm-lite);
+  --color-background-blue-faded: var(--palette-blue-faded);
+  --color-background-blue-faded-mild: var(--palette-blue-faded-mild);
   --color-background-grey-light-transparent: var(--palette-grey-light-transparent);
 
   --color-border-black: var(--palette-black);
@@ -214,6 +245,7 @@ a, i, button {
 .mb-2p5r { margin-bottom: 2.5rem; }
 .mt-3r { margin-top: 3rem; }
 .mt-1r { margin-top: 1rem; }
+.mt-1p5r { margin-top: 1.5rem; }
 
 /* Fixed margin */
 .m-0  {margin: 0px; }
@@ -254,7 +286,8 @@ a, i, button {
 .pl-1p25r { padding-left: 1.25rem; }
 .p-1p5r { padding: 1.5rem; }
 .p-2r { padding: 2rem; }
-.py-0p5-px-1r {padding: 0.5rem 1rem;}
+.p-1xr { padding: 0rem 1rem; }
+.py-0p5-px-1r { padding: 0.5rem 1rem; }
 .py-4r-px-1p5r { padding: 4rem 1.5rem; }
 
 /* Positioning */
@@ -352,15 +385,18 @@ a, i, button {
 
 /* Rem-based Borders */
 .border-rounded-0p4r {border-radius: 0.4rem;}
+.border-rounded-0p75r {border-radius: 0.75rem;}
 .border-rounded-1r { border-radius: 1rem; }
 
 /* % based Borders */
 .border-rounded-50p { border-radius: 50%; }
 
 /* Background Colors */
+.bg-transparent { background-color: transparent; }
 .bg-white-transparent { background-color: var(--palette-white-transparent); }
 .bg-slateblue  { background-color: var(--palette-slateblue); }
 .bg-blue-mute { background-color: var(--palette-blue-mute); }
+.bg-blue-faded {background-color: var(--palette-blue-faded); }
 .bg-red {background-color: var(--palette-red);}
 .bg-black { background-color: var(--palette-black); }
 .bg-white { background-color: var(--palette-white); }
@@ -387,6 +423,14 @@ a, i, button {
   );
 }
 
+.bg-gradient-test {
+  background: linear-gradient(
+    135deg,
+    var(--palette-blueviolet-cool) 50%,
+    var(--palette-violet-soft) 100%
+  );
+}
+
 
 /* Font utilities */
 .ff-cormorant { font-family: 'Cormorant Garamond', serif; }
@@ -396,11 +440,14 @@ a, i, button {
 
 /* Text style utilities */
 .fw-bold { font-weight: bold; }
+.fw-500 { font-weight: 500; }
 .fw-600 { font-weight: 600; }
 .fw-700 { font-weight: 700; }
 .fs-italic { font-style: italic; }
 .tt-cap { text-transform: capitalize; }
 .td-none { text-decoration: none; }
+.td-none-with-hover { text-decoration: none; }
+.td-none-with-hover:hover { text-decoration: underline; }
 
 /* Text alignment utilities */
 .ta-left { text-align: left; }
@@ -411,7 +458,10 @@ a, i, button {
 /* Width (px and %) */
 .w-25 { width: 25px; }
 .w-100 { width: 100px; }
+.w-10p { width: 10%; }
 .w-50p { width: 50%; }
+.w-60p { width: 60%; }
+.w-70p { width: 70%; }
 .w-80p { width: 80%; }
 .w-full { width: 100%; }
 
@@ -440,15 +490,22 @@ a, i, button {
 .mnh-100vh { min-height: 100vh; }
 
 /* max widths*/
+ 
+.mxw-28 {max-width: 28rem; }
 .mxw-600 { max-width: 600px; }
 .mxw-960 { max-width: 960px; }
 
 /* box shadows */
 .bs-black { box-shadow: 0 4px 12px var(--palette-black-carpet-pattern); }
 .bs-black-lite {box-shadow: 0 0 10px var(--palette-black-carpet-pattern); }
+.bs-black-mixed {box-shadow: 0 20px 25px -5px var(--palette-black-carpet-pattern), 0 10px 10px -5px var(--palette-black-carpet-pattern-lite); }
+.bs-blue-faded {  box-shadow: 8px 8px 16px var(--palette-blue-faded-mild), -8px -8px 16px var(--palette-white);}
 
 /* line heights */
 .lh-1p6 { line-height: 1.6; }
+
+/* line heights Rem-based */
+.lh-2r { line-height: 2rem; }
 
 /* cursor values */
 .cs-pointer { cursor: pointer; }
