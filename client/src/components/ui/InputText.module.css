@@ -1,9 +1,27 @@
-.inp-txt{
-    width: auto;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid var(--color-input-box-border-bottom);
-    background: transparent;
+.inp-txt {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.input:focus {
+  border-color: var(--color-primary-btn);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.neumorphic-input {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.75rem 1.25rem;
+  box-shadow:
+    inset 4px 4px 8px var(--color-background-blue-faded-mild),
+    inset -4px -4px 8px var(--color-background-white);
+  font-size: 1rem;
+  width: 100%;
+  outline: none;
 }
 
 .wd-300{
