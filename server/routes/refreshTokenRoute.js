@@ -6,19 +6,20 @@ const { generateAccessToken } = require("../utils/tokenGenerators");
 
 const router = express.Router();
 
-router.post("/refresh", (req, res) => {
-  const refreshToken = req.cookies.refresh_token;
-  if (!refreshToken) return res.sendStatus(403);
-
+router.post("/refresh", (req, res, next) => {
   try {
+    const error = new Error("Access Denied!");
+    error.statusCode = 403;
+    const refreshToken = req.cookies.refresh_token;
+    if (!refreshToken) throw error;
     const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    if (!user) return res.sendStatus(403);
+    if (!user) throw error;
     const accessToken = generateAccessToken(user);
     setAccessTokenOnCookie({ res: res.status(200), accessToken }).json({
       success: true,
     });
-  } catch {
-    res.sendStatus(403);
+  } catch (err) {
+    next(err);
   }
 });
 
