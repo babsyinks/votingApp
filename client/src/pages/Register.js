@@ -5,7 +5,7 @@ import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElection
 import { selectUserJustVerified } from "features/auth/verificationSlice";
 import Heading from "components/ui/Heading";
 import Block from "components/ui/Block";
-import RegistrationForm from "features/auth/components/RegistrationForm";
+import RegistrationForm from "features/auth/components/signup/RegistrationForm";
 
 export default function Register() {
   const navigate = useNavigate();
