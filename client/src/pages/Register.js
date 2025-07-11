@@ -24,7 +24,7 @@ export default function Register() {
     return (
       <Block className="space-y-4 max-w-md mx-auto">
         {" "}
-        <Heading type="h1" className="text-2xl font-semibold">
+        <Heading type="h1" className="text-2xl fw-600">
           Complete Your Registration
         </Heading>
         <RegistrationForm email={email} />
