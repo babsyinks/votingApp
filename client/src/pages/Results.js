@@ -23,7 +23,7 @@ function Results() {
 
   useEffect(() => {
     if (!userIsAuthenticated) {
-      navigate("/login");
+      navigate("/signin");
     }
   }, [navigate, userIsAuthenticated]);
 
@@ -54,7 +54,7 @@ function Results() {
     useEffect(() => {
       if (error) {
         dispatch(userNotAuthenticated());
-        navigate("/login");
+        navigate("/signin");
       }
     }, [error, dispatch, navigate]);
 

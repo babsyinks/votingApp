@@ -45,7 +45,7 @@ export default function OAuthSuccess() {
   useEffect(() => {
     if (error) {
       dispatch(userNotAuthenticated());
-      navigate("/login");
+      navigate("/signin");
     }
   }, [error, dispatch, navigate]);
 
