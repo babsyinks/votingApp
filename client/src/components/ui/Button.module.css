@@ -1,5 +1,4 @@
 .btn{
-    font-weight: bold;
     outline: none;
     border: none;
     text-decoration: none;
@@ -138,7 +137,6 @@
 .neutral-btn {
   display: inline-flex;
   color: var(--color-text-white);
-  font-weight: 600;
 }
 
 .primary-btn,
@@ -182,3 +180,54 @@
   transform: scale(1.05);
 }
 
+.neumorphic-button {
+  background: var(--color-background-blue-faded);
+  border: none;
+  border-radius: 2rem;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    6px 6px 12px var(--color-background-blue-faded-mild),
+    -6px -6px 12px var(--color-background-white);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.neumorphic-button:hover {
+  box-shadow:
+    inset 2px 2px 4px var(--color-background-blue-faded-mild),
+    inset -2px -2px 4px var(--color-background-white);
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.btn-social:active {
+  transform: scale(0.98);
+}
+
+
+.btn-social.google {
+  color: var(--color-text-red-mute);
+}
+
+.btn-social.facebook {
+  color: var(--color-text-blueviolet-firm);
+}
+
+.btn-social.github {
+  color: var(--color-text-grey-firm);
+}
+
+
+@media screen and (max-width:500px) {
+  .btn-social {
+    font-size: 0.8rem;
+  }
+}
