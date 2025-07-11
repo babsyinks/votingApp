@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import defaultStyle from "./Button.module.css";
 import getCompClasses from "../../util/getCompClasses";
+
 /**
  * A component that renders a button
  *
