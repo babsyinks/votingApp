@@ -34,7 +34,7 @@ export default function HeroSectionLink({ userIsAuthenticated }) {
         </Link>
       ) : (
         <Block type="flex-horz-fs" className="gap-1r">
-          <Link to="/login">
+          <Link to="/signin">
             <Button className="neutral-btn bg-blueviolet-cool">{`Sign In`}</Button>
           </Link>
           <Link to="/signup-start">
