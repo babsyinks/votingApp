@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import InputText from "components/ui/InputText";
-import Block from "components/ui/Block";
-import Button from "components/ui/Button";
-import Heading from "components/ui/Heading";
+import Paragraph from "components/ui/Paragraph";
 import ToastMessage from "components/ui/ToastMessage";
+import AuthFrame from "features/auth/components/AuthFrame";
+import AuthHeading from "features/auth/components/AuthHeading";
+import AuthFieldCode from "features/auth/components/AuthFieldCode";
+import AuthButton from "features/auth/components/AuthButton";
 import { useAxios } from "hooks/useAxios";
 import { useToastMessage } from "hooks/useToastMessage";
 import { useDispatch } from "react-redux";
@@ -51,24 +52,19 @@ export default function VerifyCode() {
   }
 
   return (
-    <Block className="space-y-4 max-w-md mx-auto">
+    <AuthFrame>
       {toastDetailsSet() && <ToastMessage toast={toast} />}
-      <Heading type="h1" className="text-2xl font-semibold">
-        {`Enter the 6-digit code sent to ${email}`}
-      </Heading>
-      <InputText
-        type="text"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        maxLength={6}
-      />
-      <Button
-        className="btn-primary w-full"
+      <AuthHeading>Enter the 6-digit code sent to</AuthHeading>
+      <Paragraph className="text-2xl fw-600 fs-italic">
+        {email}
+      </Paragraph>
+      <AuthFieldCode value={code} onChange={(e) => setCode(e.target.value)} />
+      <AuthButton
         onClick={verify}
         disabled={code.length !== 6}
       >
         Verify
-      </Button>
-    </Block>
+      </AuthButton>
+    </AuthFrame>
   );
 }
