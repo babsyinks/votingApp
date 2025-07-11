@@ -10,12 +10,9 @@ import PropTypes from "prop-types";
  * @param {React.ReactNode} props.children - Content inside the <i> tag.
  * @returns {JSX.Element} The rendered <i> element.
  */
-export default function I({ className = "", style = {}, children }) {
+export default function I({ className = "", style = {}, onClick, children }) {
   return (
-    <i
-      className={className}
-      style={style}
-    >
+    <i className={className} style={style} onClick={onClick}>
       {children}
     </i>
   );
