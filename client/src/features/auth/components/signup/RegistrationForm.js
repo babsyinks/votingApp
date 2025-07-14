@@ -8,8 +8,9 @@ import {
 } from "features/auth/userAuthSlice";
 import { setUserInfo } from "features/user/userSlice";
 import { resetUserJustVerified } from "features/auth/verificationSlice";
-import InputAndLabelGroup from "components/ui/InputAndLabelGroup";
-import Button from "components/ui/Button";
+import AuthFieldUser from "../AuthFieldUser";
+import AuthFieldPassword from "../AuthFieldPassword";
+import AuthButton from "../AuthButton";
 import ToastMessage from "components/ui/ToastMessage";
 import RegistrationFormPasswordValidator from "./RegistrationFormPasswordValidator";
 
@@ -51,37 +52,31 @@ export default function RegistrationForm({ email }) {
   return (
     <>
       {toastDetailsSet() && <ToastMessage toast={toast} />}
-      <InputAndLabelGroup
-        label="Firstname:"
-        type="text"
+      <AuthFieldUser
         value={firstname}
         onChange={(e) => setFirstname(e.target.value)}
+        placeholder="Firstname"
       />
-      <InputAndLabelGroup
-        label="Lastname:"
-        type="text"
+      <AuthFieldUser
         value={lastname}
         onChange={(e) => setLastname(e.target.value)}
+        placeholder="Lastname"
       />
-      <InputAndLabelGroup
-        label="Username:"
-        type="text"
+      <AuthFieldUser
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        placeholder="Username"
       />
-      <InputAndLabelGroup
-        label="Password:"
-        type="password"
+      <AuthFieldPassword
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button
-        className="btn-primary w-full"
+      <AuthButton
         onClick={register}
         disabled={!passwordValid}
       >
         Register
-      </Button>
+      </AuthButton>
       <RegistrationFormPasswordValidator
         password={password}
         setPasswordValid={setPasswordValid}
