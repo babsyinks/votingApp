@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import useWindowSize from "hooks/useWindowSize";
 import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElectionRedirect";
 import { selectUserJustVerified } from "features/auth/verificationSlice";
-import Heading from "components/ui/Heading";
-import Block from "components/ui/Block";
+import AuthFrame from "features/auth/components/AuthFrame";
+import AuthHeading from "features/auth/components/AuthHeading";
 import RegistrationForm from "features/auth/components/signup/RegistrationForm";
 
 export default function Register() {
@@ -13,6 +14,8 @@ export default function Register() {
   const email = params.get("email");
   const userJustVerified = useSelector(selectUserJustVerified);
   const redirect = useStatusOfElectionRedirect();
+  const { height } = useWindowSize();
+  const mb = height < 940 ? "mb-1p5r" : "";
 
   useEffect(() => {
     if (redirect.length > 0) {
@@ -22,13 +25,12 @@ export default function Register() {
 
   if (email && userJustVerified) {
     return (
-      <Block className="space-y-4 max-w-md mx-auto">
-        {" "}
-        <Heading type="h1" className="text-2xl fw-600">
+      <AuthFrame className={mb}>
+        <AuthHeading>
           Complete Your Registration
-        </Heading>
+        </AuthHeading>
         <RegistrationForm email={email} />
-      </Block>
+      </AuthFrame>
     );
   } else return null;
 }
