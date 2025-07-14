@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import criteria from "../../config/strongPasswordConf";
-import Block from "components/ui/Block";
 import Heading from "components/ui/Heading";
+import AuthFrame from "../AuthFrame";
 import Span from "components/ui/Span";
 import List from "components/ui/List";
 import Li from "components/ui/Li";
@@ -19,9 +19,9 @@ export default function RegistrationFormPasswordValidator({
   }, [password, setPasswordValid, results]);
 
   return (
-    <Block className="mt-1r p-1r bg-white-soft border-1-silver-soft border-rounded-10">
-      <Heading type="h4" className="mb-1r fw-600 text-base text-black-firm">
-        Password must meet the following criteria:
+    <AuthFrame type="flex" isFull={false} className="align-items-start">
+      <Heading type="h4" className="mb-1r fw-600 text-base text-black-firm ta-center">
+        Password must have:
       </Heading>
       <List className="no-list-style m-0 pl-0">
         {criteria.map((criterion, index) => (
@@ -40,6 +40,6 @@ export default function RegistrationFormPasswordValidator({
           </Li>
         ))}
       </List>
-    </Block>
+    </AuthFrame>
   );
 }
