@@ -10,7 +10,9 @@ function ElectionTimerSettingsFormInput({ label, type, value, onChange }) {
   const timer = useSelector(timerData);
   return (
     <Block className="p-10">
-      <Label className={`mg-r-10 ${fontSize}`}>{label}:</Label>{" "}
+      <Label className={`mg-r-10 ${fontSize}`} name={label}>
+        {label}:
+      </Label>{" "}
       <Input
         className={fontSize}
         type={type}
