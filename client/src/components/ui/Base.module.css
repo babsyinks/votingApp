@@ -63,6 +63,10 @@
     flex-direction: column;
 }
 
+.flex {
+    display: flex;
+}
+
 .block{
     display: block;
 }
