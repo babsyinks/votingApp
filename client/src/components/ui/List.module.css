@@ -19,3 +19,7 @@
 .no-list-style{
   list-style: none;
 }
+
+.no-left-padding{
+  padding-left: unset;
+}

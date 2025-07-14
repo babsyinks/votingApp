@@ -1,3 +1,4 @@
+// components/ui/A.js
 import React from "react";
 import PropTypes from "prop-types";
 import defaultStyle from "./A.module.css";
@@ -13,6 +14,11 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {String} [props.rel] - The relationship between current and linked page.
  * @param {String} [props.className] - Additional class names for styling.
  * @param {Object} [props.style] - Inline styles.
+ * @param {String} [props.role] - ARIA role attribute.
+ * @param {String} [props.ariaLabel] - ARIA label for screen readers.
+ * @param {String} [props.ariaLabelledBy] - ID reference of a label element.
+ * @param {String} [props.ariaDescribedBy] - ID reference of a description element.
+ * @param {String} [props.title] - Tooltip text.
  * @returns {JSX.Element} The rendered <a> element.
  */
 export default function A({
@@ -22,6 +28,11 @@ export default function A({
   rel = "",
   className = "",
   style = {},
+  role,
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
+  title,
 }) {
   return (
     <a
@@ -30,6 +41,11 @@ export default function A({
       rel={rel || (target === "_blank" ? "noopener noreferrer" : undefined)}
       className={`${defaultStyle.link} ${getCompClasses(defaultStyle, className)}`}
       style={style}
+      role={role}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
+      title={title}
     >
       {children}
     </a>
@@ -43,4 +59,9 @@ A.propTypes = {
   rel: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
+  role: PropTypes.string,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
+  ariaDescribedBy: PropTypes.string,
+  title: PropTypes.string,
 };

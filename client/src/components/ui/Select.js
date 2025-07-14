@@ -14,6 +14,9 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {Boolean} props.disabled - Indicates if this component should be disabled or not.
  * @param {String} [props.className] - The className to use to additionally style this component.
  * @param {Object} [props.style] - Additional inline styles to use to style this component.
+ * @param {String} [props.ariaLabel] - Aria label for screen readers.
+ * @param {String} [props.ariaLabelledBy] - ID of a visible label element.
+ * @param {String} [props.ariaDescribedBy] - ID of helper text element.
  * @returns {JSX.Element} The rendered select component.
  */
 export default function Select({
@@ -24,6 +27,9 @@ export default function Select({
   disabled = false,
   className = "",
   style = {},
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
 }) {
   return (
     <select
@@ -33,6 +39,9 @@ export default function Select({
       disabled={disabled}
       className={`${defaultStyle.sel} ${getCompClasses(defaultStyle, className)}`}
       style={style}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
     >
       {selectOptions.map(({ optionLabel, optionValue }, i) => (
         <option value={optionValue || optionLabel.toLowerCase()} key={i}>
@@ -51,9 +60,12 @@ Select.propTypes = {
     PropTypes.shape({
       optionLabel: PropTypes.string.isRequired,
       optionValue: PropTypes.string,
-    }).isRequired,
+    }).isRequired
   ).isRequired,
   disabled: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.object,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
+  ariaDescribedBy: PropTypes.string,
 };

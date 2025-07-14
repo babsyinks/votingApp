@@ -22,6 +22,11 @@ import PropTypes from "prop-types";
  * @param {string} [props.className] - Additional class names for styling.
  * @param {Object} [props.style] - Inline styles for the input.
  * @param {string} [props.accept] - A string defining file types the file input should accept (for file input only).
+ * @param {string} [props.role] - Defines the ARIA role of the input element.
+ * @param {string} [props.ariaLabel] - Defines a string label for screen readers (maps to `aria-label`).
+ * @param {string} [props.ariaLabelledBy] - ID of the element that labels the input (maps to `aria-labelledby`).
+ * @param {string} [props.ariaDescribedBy] - ID of the element that describes the input (maps to `aria-describedby`).
+ * @param {string} [props.title] - Native tooltip text shown on hover and read by screen readers.
  *
  * @returns {JSX.Element} A styled <input> element.
  */
@@ -36,6 +41,11 @@ export default function BaseInput({
   className = "",
   style = {},
   accept,
+  role,
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
+  title,
 }) {
   return (
     <input
@@ -49,6 +59,11 @@ export default function BaseInput({
       className={className}
       style={style}
       accept={accept}
+      role={role}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
+      title={title}
     />
   );
 }
@@ -64,4 +79,9 @@ BaseInput.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   accept: PropTypes.string,
+  role: PropTypes.string,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
+  ariaDescribedBy: PropTypes.string,
+  title: PropTypes.string,
 };

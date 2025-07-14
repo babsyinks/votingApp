@@ -14,6 +14,11 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {String} [props.className] - The className to use to additionally style this component.
  * @param {Object} [props.style] - Additional inline styles to use to style this component.
  * @param {React.ReactNode | String} props.children - Child elements or string to render inside the button.
+ * @param {String} [props.role] - ARIA role for the button (if a custom role is needed).
+ * @param {String} [props.ariaLabel] - Defines a string label for screen readers.
+ * @param {String} [props.ariaLabelledBy] - ID reference to another element that labels this button.
+ * @param {String} [props.ariaDescribedBy] - ID reference to another element that describes this button.
+ * @param {String} [props.title] - Native HTML title attribute for tooltips/screen readers.
  * @returns {JSX.Element} The rendered button component.
  */
 export default function Button({
@@ -24,6 +29,11 @@ export default function Button({
   className = "",
   style = {},
   children,
+  role,
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
+  title,
 }) {
   return (
     <button
@@ -33,6 +43,11 @@ export default function Button({
       disabled={disabled}
       className={`${defaultStyle.btn} ${getCompClasses(defaultStyle, className)}`}
       style={style}
+      role={role}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
+      title={title}
     >
       {children}
     </button>
@@ -47,4 +62,9 @@ Button.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   children: PropTypes.node,
+  role: PropTypes.string,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
+  ariaDescribedBy: PropTypes.string,
+  title: PropTypes.string,
 };

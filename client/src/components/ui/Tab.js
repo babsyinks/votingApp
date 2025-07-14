@@ -4,36 +4,44 @@ import defaultStyle from "Tab.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
 /**
- * This component renders a tab, which when clicked, changes its style and performs an action
+ * Accessible tab component following WAI-ARIA best practices.
  *
  * @param {Object} props - Component props.
  * @param {Array} props.labels - The list of labels of the tabs to be rendered.
- * @param {String} [props.className] - The className to use to additionally style this component.
- * @param {Object} [props.style] - Additional inline styles to use to style this component.
- * @returns {JSX.Element} The rendered tab component.
+ * @param {string} [props.className] - Additional class names.
+ * @param {Object} [props.style] - Inline styles.
+ * @returns {JSX.Element}
  */
 export default function Tab({
   labels,
   className = "",
   style = {},
 }) {
-  const [action, setAction] = useState(labels[0]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const width = `${Math.floor(100 / labels.length) - 1}%`;
+
   return (
-    <>
-      {labels.map((label) => {
+    <div role="tablist" aria-label="Tab list">
+      {labels.map((label, index) => {
+        const isSelected = selectedIndex === index;
+
         return (
-          <span
-            id={action === label ? "currentSelected" : ""}
+          <button
+            key={label}
+            role="tab"
+            aria-selected={isSelected}
+            aria-controls={`panel-${index}`}
+            id={`tab-${index}`}
+            tabIndex={isSelected ? 0 : -1}
             className={getCompClasses(defaultStyle.tb, className)}
-            onClick={() => setAction(label)}
+            onClick={() => setSelectedIndex(index)}
             style={{ ...style, width }}
           >
             {label}
-          </span>
+          </button>
         );
       })}
-    </>
+    </div>
   );
 }
 

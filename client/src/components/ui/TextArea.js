@@ -5,7 +5,7 @@ import getCompClasses from "../../util/getCompClasses";
 import useOrientation from "../../hooks/useOrientation";
 
 /**
- * A component that renders a text area.
+ * A component that renders an accessible text area input.
  *
  * @param {Object} props - Component props.
  * @param {String} props.name - The name of the text area component.
@@ -14,8 +14,11 @@ import useOrientation from "../../hooks/useOrientation";
  * @param {Function} props.onChange - The function that runs whenever a text area input is received.
  * @param {String} props.placeholder - The default text to show when the component first renders.
  * @param {Boolean} props.disabled - Indicates if the text area should be disabled or not.
- * @param {String} [props.className] - The className to use to additionally style this component.
- * @param {Object} [props.style] - Additional inline styles to use to style this component.
+ * @param {String} [props.className] - Additional class names to style this component.
+ * @param {Object} [props.style] - Inline styles to apply to the text area.
+ * @param {String} [props.ariaLabel] - Defines a string label for screen readers.
+ * @param {String} [props.ariaLabelledBy] - ID of element that labels this textarea.
+ * @param {String} [props.ariaDescribedBy] - ID of element that describes this textarea.
  * @returns {JSX.Element} The rendered text area component.
  */
 export default function TextArea({
@@ -27,11 +30,15 @@ export default function TextArea({
   disabled = false,
   className = "",
   style = {},
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
 }) {
   const isPortrait = useOrientation();
   if (isPortrait) {
     cols = 25;
   }
+
   return (
     <textarea
       name={name}
@@ -41,9 +48,12 @@ export default function TextArea({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       className={`${defaultStyle["txt-area"]} ${getCompClasses(defaultStyle, className)}`}
       style={{ resize: "none", ...style }}
-    ></textarea>
+    />
   );
 }
 
@@ -59,4 +69,7 @@ TextArea.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
   style: PropTypes.object,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
+  ariaDescribedBy: PropTypes.string,
 };
