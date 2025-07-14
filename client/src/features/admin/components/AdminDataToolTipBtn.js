@@ -12,11 +12,15 @@ const AdminDataToolTipBtn = ({
   const buttonProps = {
     onClick,
     disabled,
-    className: `rnd-btn ${className}`
+    className: `rnd-btn ${className}`,
   };
 
   return (
-    <DataToolTip data={data}>
+    <DataToolTip
+      data={data}
+      withAccessibility
+      ariaLabel={data}
+    >
       <Button {...buttonProps}>{children}</Button>
     </DataToolTip>
   );
