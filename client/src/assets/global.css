@@ -463,6 +463,7 @@ a:hover {
 .w-60p { width: 60%; }
 .w-70p { width: 70%; }
 .w-80p { width: 80%; }
+.w-90p { width: 90%; }
 .w-full { width: 100%; }
 
 /* Height (px and %) */
@@ -515,11 +516,15 @@ a:hover {
     display: flex;
 }
 
-.flex-align-items-center{
+.align-items-center{
   align-items: center;
 }
 
-.flex-justify-content-center{
+.align-items-start{
+  align-items: flex-start;
+}
+
+.justify-content-center{
   justify-content: center;
 }
 
