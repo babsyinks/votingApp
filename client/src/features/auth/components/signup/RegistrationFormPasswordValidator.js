@@ -23,14 +23,14 @@ export default function RegistrationFormPasswordValidator({
       <Heading type="h4" className="mb-1r fw-600 text-base text-black-firm ta-center">
         Password must have:
       </Heading>
-      <List className="no-list-style m-0 pl-0">
+      <List className="no-list-style m-0 pl-0 no-left-padding">
         {criteria.map((criterion, index) => (
           <Li
             key={index}
-            className={`${results[index] ? "text-green" : "text-red"} flex flex-align-items-center mb-0p5r text-base transition-color`}
+            className={`${results[index] ? "text-green" : "text-red"} flex align-items-center mb-0p5r text-base transition-color`}
           >
-            {criterion.label}
-            <Span type="inline-block" className="ml-10 text-lg ta-center w-25">
+            <Span type="inline-block" className="w-90p">{criterion.label}</Span> 
+            <Span type="inline-block" className="ml-10 text-lg ta-right w-10p">
               <I
                 className={`fas ${
                   results[index] ? "fa-check-circle" : "fa-times-circle"
