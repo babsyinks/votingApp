@@ -9,6 +9,7 @@ const {
   failIfVerificationCodeIsNotValid,
   validateCredentials,
   generateTokensAndSendResponse,
+  passwordStrenghtStatus,
 } = require("../helpers/authRouteHelpers");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { checkAuthenticationStatus } = require("../middleware/auth");
@@ -67,6 +68,12 @@ router.post("/register", async (req, res, next) => {
   try {
     failIfEmpty(req.body);
     let { username, password, email, firstname, lastname } = req.body;
+    const passwordStrenghtStatusMessage = passwordStrenghtStatus(password);
+    if (passwordStrenghtStatusMessage) {
+      res.status(400).json({
+        message: `Password must have ${passwordStrenghtStatusMessage.toLowerCase()}`,
+      });
+    }
     let user = await User.findOne({ where: { username } });
     failIfUserExists(user);
     const salt = await bcrypt.genSalt(10);

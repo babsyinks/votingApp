@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 
+const strongPasswordCriteria = require("../config/strongPasswordConf");
 const {
   setAccessTokenOnCookie,
   setRefreshTokenOnCookie,
@@ -87,6 +88,12 @@ const getStrippedDownUser = ({ username, user_id, role }) => {
   return { username, userId: user_id, role };
 };
 
+const passwordStrenghtStatus = (password) => {
+  for (const { message, test } of strongPasswordCriteria) {
+    if (!test(password)) return message;
+  }
+};
+
 module.exports = {
   failIfEmpty,
   failIfUserExists,
@@ -94,4 +101,5 @@ module.exports = {
   generateTokensAndSendResponse,
   generateTokensAndRedirect,
   failIfVerificationCodeIsNotValid,
+  passwordStrenghtStatus,
 };
