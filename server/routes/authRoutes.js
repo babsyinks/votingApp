@@ -78,11 +78,26 @@ router.post("/register", async (req, res, next) => {
         message: `Password must have ${passwordStrengthStatusMessage.toLowerCase()}`,
       });
     }
-    let user = await User.findOne({ where: { username } });
-    failIfUserExists(user);
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username }, { email }],
+      },
+    });
+
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return res.status(400).json({ message: "Username is already taken." });
+      }
+      if (existingUser.email === email) {
+        return res
+          .status(400)
+          .json({ message: "Email is already registered." });
+      }
+    }
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
-    user = await User.create({
+
+    const user = await User.create({
       username,
       password,
       email,
