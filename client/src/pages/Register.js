@@ -6,7 +6,7 @@ import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElection
 import { selectUserJustVerified } from "features/auth/verificationSlice";
 import AuthFrame from "features/auth/components/AuthFrame";
 import AuthHeading from "features/auth/components/AuthHeading";
-import RegistrationForm from "features/auth/components/signup/RegistrationForm";
+import SignUpRegistrationForm from "features/auth/components/signup/SignUpRegistrationForm";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function Register() {
         <AuthHeading>
           Complete Your Registration
         </AuthHeading>
-        <RegistrationForm email={email} />
+        <SignUpRegistrationForm email={email} />
       </AuthFrame>
     );
   } else return null;
