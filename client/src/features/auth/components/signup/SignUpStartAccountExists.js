@@ -1,8 +1,8 @@
-import AlternativeAccessMeans from "../AlternativeAccessMeans";
+import AuthAlternativeAccessMeans from "../AuthAlternativeAccessMeans";
 
 export default function SignUpStartAccountExists() {
   return (
-    <AlternativeAccessMeans
+    <AuthAlternativeAccessMeans
       question="Already have an account?"
       btnLabel="Sign in"
       route="/signin"

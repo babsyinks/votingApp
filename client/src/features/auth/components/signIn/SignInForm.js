@@ -13,7 +13,7 @@ import isEmail from "validator/lib/isEmail";
 import AuthFieldUser from "../AuthFieldUser";
 import AuthFieldPassword from "../AuthFieldPassword";
 import AuthButton from "../AuthButton";
-import AlternativeAccessMeans from "../AlternativeAccessMeans";
+import AuthAlternativeAccessMeans from "../AuthAlternativeAccessMeans";
 import ToastMessage from "components/ui/ToastMessage";
 
 export default function SignInForm() {
@@ -39,7 +39,7 @@ export default function SignInForm() {
   }, [response, navigate, dispatch]);
 
   useEffect(() => {
-    if (error ) {
+    if (error) {
       dispatch(userNotAuthenticated());
       triggerFailureToast(error.message);
     }
@@ -79,7 +79,10 @@ export default function SignInForm() {
       >
         Sign In
       </AuthButton>
-      <AlternativeAccessMeans btnLabel="Forgot password?" route="/" />
+      <AuthAlternativeAccessMeans
+        btnLabel="Forgot password?"
+        route="/forgot-password"
+      />
     </>
   );
 }
