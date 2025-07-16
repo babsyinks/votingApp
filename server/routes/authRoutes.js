@@ -11,6 +11,7 @@ const {
   generateTokensAndSendResponse,
   passwordStrengthStatus,
 } = require("../helpers/authRouteHelpers");
+const sendPasswordResetLink = require("../helpers/sendPasswordResetLink");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { checkAuthenticationStatus } = require("../middleware/auth");
 const { User, Code } = require("../models");
@@ -124,6 +125,65 @@ router.post("/signin", async (req, res, next) => {
     generateTokensAndSendResponse({ res, user });
   } catch (error) {
     next(error);
+  }
+});
+
+router.post("/forgot-password", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    failIfEmpty({ email });
+    const user = await User.findOne({ where: { email } });
+    const message = `A reset link has been sent to ${email}`;
+    // intentionally conceal the fact that a user with this email does not exist.
+    if (!user) return res.status(200).json({ message });
+    const resetCode = generateRandomHexCode();
+    await Code.create({
+      email,
+      codeHash: getHashedHexCode(resetCode),
+      type: "password_reset",
+      expiresAt: Date.now() + 10 * 60 * 1000,
+    });
+    await sendPasswordResetLink({ toEmail: email, resetCode });
+    res.json({
+      success: true,
+      message: `Reset link has been sent to ${email}.`,
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post("/reset-password", async (req, res, next) => {
+  try {
+    const { resetCode, password } = req.body;
+    const hash = getHashedHexCode(resetCode);
+
+    const resetCodeRecord = await Code.findOne({
+      where: {
+        codeHash: hash,
+        expiresAt: { [Op.gt]: new Date() },
+      },
+    });
+
+    if (!resetCodeRecord) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    const user = await User.findOne({
+      where: { email: resetCodeRecord.email },
+    });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    await resetCodeRecord.destroy(); // Invalidate token after use
+
+    res.json({ message: "Password successfully updated" });
+  } catch (e) {
+    next(e);
   }
 });
 
