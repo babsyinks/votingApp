@@ -2,7 +2,11 @@ import { useState } from "react";
 import AuthFieldWithIcon from "./AuthFieldWithIcon";
 import I from "components/ui/I";
 
-export default function AuthFieldPassword({ value, onChange }) {
+export default function AuthFieldPassword({
+  value,
+  onChange,
+  placeholder = "Password",
+}) {
   const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -14,7 +18,7 @@ export default function AuthFieldPassword({ value, onChange }) {
       type={visible ? "text" : "password"}
       value={value}
       onChange={onChange}
-      placeholder="Password"
+      placeholder={placeholder}
       iconClass="fa-lock"
       rightIcon={
         <I
