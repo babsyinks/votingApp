@@ -88,7 +88,7 @@ const getStrippedDownUser = ({ username, user_id, role }) => {
   return { username, userId: user_id, role };
 };
 
-const passwordStrenghtStatus = (password) => {
+const passwordStrengthStatus = (password) => {
   for (const { message, test } of strongPasswordCriteria) {
     if (!test(password)) return message;
   }
@@ -101,5 +101,5 @@ module.exports = {
   generateTokensAndSendResponse,
   generateTokensAndRedirect,
   failIfVerificationCodeIsNotValid,
-  passwordStrenghtStatus,
+  passwordStrengthStatus,
 };
