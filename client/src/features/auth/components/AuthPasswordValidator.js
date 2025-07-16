@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
-import criteria from "../../config/strongPasswordConf";
+import criteria from "../config/strongPasswordConf";
 import Heading from "components/ui/Heading";
-import AuthFrame from "../AuthFrame";
-import Span from "components/ui/Span";
 import List from "components/ui/List";
 import Li from "components/ui/Li";
-import I from "components/ui/I";
+import AuthFrame from "./AuthFrame";
+import AuthValidationIndicator from "./AuthValidationIndicator";
 
-export default function RegistrationFormPasswordValidator({
-  password,
-  setPasswordValid,
-}) {
+export default function AuthPasswordValidator({ password, setPasswordValid }) {
   const results = criteria.map((c) => c.test(password));
 
   useEffect(() => {
@@ -20,7 +16,10 @@ export default function RegistrationFormPasswordValidator({
 
   return (
     <AuthFrame type="flex" isFull={false} className="align-items-start">
-      <Heading type="h4" className="mb-1r fw-600 text-base text-black-firm ta-center">
+      <Heading
+        type="h4"
+        className="mb-1r fw-600 text-base text-black-firm ta-center"
+      >
         Password must have:
       </Heading>
       <List className="no-list-style m-0 pl-0 no-left-padding">
@@ -29,14 +28,10 @@ export default function RegistrationFormPasswordValidator({
             key={index}
             className={`${results[index] ? "text-green" : "text-red"} flex align-items-center mb-0p5r text-base transition-color`}
           >
-            <Span type="inline-block" className="w-90p">{criterion.label}</Span> 
-            <Span type="inline-block" className="ml-10 text-lg ta-right w-10p">
-              <I
-                className={`fas ${
-                  results[index] ? "fa-check-circle" : "fa-times-circle"
-                } icon`}
-              ></I>
-            </Span>
+            <AuthValidationIndicator
+              label={criterion.label}
+              isValid={results[index]}
+            />
           </Li>
         ))}
       </List>
