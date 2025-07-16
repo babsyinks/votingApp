@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 
 /**
- * Generates random code of a specific length.
+ * Generates random digits code of a specific length.
  *
  * @param {number} codeLength The length of the code to generate. It defaults to 6.
  * @returns {string}
