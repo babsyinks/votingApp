@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
  * @param {number} codeLength The length of the code to generate. It defaults to 6.
  * @returns {string}
  */
-const generateRandomCode = (codeLength = 6) => {
+const generateRandomDigitsCode = (codeLength = 6) => {
   const adder = "1".padEnd(codeLength, 0);
   const multiplier = "9".padEnd(codeLength, 0);
   return Math.floor(+adder + Math.random() * +multiplier).toString();
@@ -20,8 +20,8 @@ const generateRandomCode = (codeLength = 6) => {
  * @param {number} codeLength The length of the desired hash code.
  * @returns {string}
  */
-const getHashedCode = async (randCode, codeLength) => {
-  const code = randCode || generateRandomCode(codeLength);
+const getHashedDigitCode = async (randCode, codeLength) => {
+  const code = randCode || generateRandomDigitsCode(codeLength);
   const randomHashedCode = await bcrypt.hash(code, 12);
   return randomHashedCode;
 };
