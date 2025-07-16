@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "components/ui/Button";
 import Paragraph from "components/ui/Paragraph";
 
-export default function AlternativeAccessMeans({
+export default function AuthAlternativeAccessMeans({
   question = "",
   btnLabel,
   route,
