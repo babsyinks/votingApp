@@ -12,9 +12,9 @@ import AuthFieldUser from "../AuthFieldUser";
 import AuthFieldPassword from "../AuthFieldPassword";
 import AuthButton from "../AuthButton";
 import ToastMessage from "components/ui/ToastMessage";
-import RegistrationFormPasswordValidator from "./RegistrationFormPasswordValidator";
+import AuthPasswordValidator from "../AuthPasswordValidator";
 
-export default function RegistrationForm({ email }) {
+export default function SignUpRegistrationForm({ email }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -71,13 +71,10 @@ export default function RegistrationForm({ email }) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <AuthButton
-        onClick={register}
-        disabled={!passwordValid}
-      >
+      <AuthButton onClick={register} disabled={!passwordValid}>
         Register
       </AuthButton>
-      <RegistrationFormPasswordValidator
+      <AuthPasswordValidator
         password={password}
         setPasswordValid={setPasswordValid}
       />
