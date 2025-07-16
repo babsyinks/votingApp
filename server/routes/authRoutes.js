@@ -13,14 +13,16 @@ const {
 } = require("../helpers/authRouteHelpers");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { checkAuthenticationStatus } = require("../middleware/auth");
-const { User, SignupToken } = require("../models");
+const { User, Code } = require("../models");
 const {
   sessionOff,
   handleOauthCallback,
 } = require("../strategies/common/oAuthCallbackHandler");
 const {
-  getHashedCode,
-  generateRandomCode,
+  getHashedDigitCode,
+  generateRandomDigitsCode,
+  generateRandomHexCode,
+  getHashedHexCode,
 } = require("../utils/randomCodeGenerator");
 
 const router = express.Router();
@@ -32,10 +34,11 @@ router.post("/request-signup-code", async (req, res, next) => {
     failIfEmpty({ email });
     const user = await User.findOne({ where: { email } });
     failIfUserExists(user);
-    const code = generateRandomCode();
-    await SignupToken.create({
+    const code = generateRandomDigitsCode();
+    await Code.create({
       email,
-      codeHash: await getHashedCode(code),
+      codeHash: await getHashedDigitCode(code),
+      type: "signup",
       expiresAt: Date.now() + 10 * 60 * 1000,
     });
     await sendSignupCode({ toEmail: email, otpCode: code }); //
@@ -49,9 +52,10 @@ router.post("/verify-signup-code", async (req, res, next) => {
   try {
     const { email, code } = req.body;
 
-    const row = await SignupToken.findOne({
+    const row = await Code.findOne({
       where: {
         email,
+        type: "signup",
         expiresAt: { [Op.gte]: new Date() },
       },
       order: [["createdAt", "DESC"]],
