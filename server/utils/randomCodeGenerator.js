@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 const bcrypt = require("bcryptjs");
 
 /**
@@ -26,4 +28,29 @@ const getHashedDigitCode = async (randCode, codeLength) => {
   return randomHashedCode;
 };
 
-module.exports = { generateRandomCode, getHashedCode };
+/**
+ * Generates random hex code of a specific length.
+ *
+ * @param {number} codeLength The length of the code to generate. It defaults to 6.
+ * @returns {string}
+ */
+const generateRandomHexCode = (byteLength = 32) => {
+  return crypto.randomBytes(byteLength).toString("hex");
+};
+
+/**
+ * Helps to get the hash of a given code in hex form
+ *
+ * @param {string} code The code to run the hash function on.
+ * @returns {string}
+ */
+const getHashedHexCode = (code) => {
+  return crypto.createHash("sha256").update(code).digest("hex");
+};
+
+module.exports = {
+  generateRandomDigitsCode,
+  getHashedDigitCode,
+  generateRandomHexCode,
+  getHashedHexCode,
+};
