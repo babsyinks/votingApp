@@ -1,7 +1,7 @@
 const { generateTokensAndRedirect } = require("../../helpers/authRouteHelpers");
 
-const FAILURE_REDIRECT = "http://localhost:3000/signin";
-const SUCCESS_REDIRECT = "http://localhost:3000/oauth-success";
+const FAILURE_REDIRECT = `${process.env.CLIENT_URL}/signin`;
+const SUCCESS_REDIRECT = `${process.env.CLIENT_URL}/oauth-success`;
 
 const sessionOff = { session: false };
 
