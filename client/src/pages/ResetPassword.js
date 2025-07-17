@@ -1,12 +1,16 @@
+import { useState } from "react";
 import AuthFrame from "features/auth/components/AuthFrame";
 import AuthHeading from "features/auth/components/AuthHeading";
 import ForgotPasswordResetPassword from "features/auth/components/forgotPassword/ForgotPasswordResetPassword";
 
 export default function ForgotPassword() {
+  const [bottomSpacingClass, setBottomSpacingClass] = useState("");
   return (
-    <AuthFrame>
+    <AuthFrame className={bottomSpacingClass}>
       <AuthHeading>Reset Password</AuthHeading>
-      <ForgotPasswordResetPassword />
+      <ForgotPasswordResetPassword
+        setBottomSpacingClass={setBottomSpacingClass}
+      />
     </AuthFrame>
   );
 }

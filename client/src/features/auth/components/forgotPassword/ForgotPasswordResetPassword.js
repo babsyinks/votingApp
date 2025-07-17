@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import useWindowSize from "hooks/useWindowSize";
 import ForgotPasswordCommonForm from "./ForgotPasswordCommonForm";
 import Block from "components/ui/Block";
 import AuthFrame from "../AuthFrame";
@@ -7,12 +8,22 @@ import AuthFieldPassword from "../AuthFieldPassword";
 import AuthPasswordValidator from "../AuthPasswordValidator";
 import AuthValidationIndicator from "../AuthValidationIndicator";
 
-export default function ForgotPasswordResetPassword() {
+export default function ForgotPasswordResetPassword({ setBottomSpacingClass }) {
   const [password, setPassword] = useState("");
   const [passwordDup, setPasswordDup] = useState("");
   const [passwordValid, setPasswordValid] = useState(false);
+  const { height } = useWindowSize();
   const { resetCode } = useParams();
   const passwordMatch = password === passwordDup;
+  const showAuthPasswordValidator =
+    password.length > 0 && passwordDup.length === 0;
+
+  useEffect(() => {
+    if (height < 650) {
+      if (showAuthPasswordValidator) setBottomSpacingClass("mb-1p5r");
+      else setBottomSpacingClass("");
+    }
+  });
 
   return (
     <>
@@ -48,7 +59,7 @@ export default function ForgotPasswordResetPassword() {
           </Block>
         </AuthFrame>
       )}
-      {password.length > 0 && passwordDup.length === 0 && (
+      {showAuthPasswordValidator && (
         <AuthPasswordValidator
           password={password}
           setPasswordValid={setPasswordValid}
