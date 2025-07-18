@@ -45,7 +45,7 @@ export default function VerifyCode() {
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/auth/verify-signup-code",
+        url: "/api/v1/auth/verify-signup-code",
         data: { email, code },
       },
     });
@@ -55,14 +55,9 @@ export default function VerifyCode() {
     <AuthFrame>
       {toastDetailsSet() && <ToastMessage toast={toast} />}
       <AuthHeading>Enter the 6-digit code sent to</AuthHeading>
-      <Paragraph className="text-2xl fw-600 fs-italic">
-        {email}
-      </Paragraph>
+      <Paragraph className="text-2xl fw-600 fs-italic">{email}</Paragraph>
       <AuthFieldCode value={code} onChange={(e) => setCode(e.target.value)} />
-      <AuthButton
-        onClick={verify}
-        disabled={code.length !== 6}
-      >
+      <AuthButton onClick={verify} disabled={code.length !== 6}>
         Verify
       </AuthButton>
     </AuthFrame>

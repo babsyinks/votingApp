@@ -27,11 +27,11 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
     }
   };
 
-  const logOut = async () => {
+  const signOut = async () => {
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/auth//logout",
+        url: "/api/v1/auth/signout",
       },
     });
     // setRemoveToken(true);
@@ -51,7 +51,7 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
           className={styleToApply.class}
         />
       )}
-      <ElectionDetailsHeaderButton btnLabel="Sign Out" onClick={logOut} />
+      <ElectionDetailsHeaderButton btnLabel="Sign Out" onClick={signOut} />
     </Block>
   );
 };

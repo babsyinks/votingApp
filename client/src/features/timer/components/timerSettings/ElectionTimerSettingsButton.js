@@ -40,7 +40,7 @@ function ElectionTimerSettingsButton({
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/timer/set",
+        url: "/api/v1/timer/set",
         data: electionSchedule,
       },
     });
@@ -50,7 +50,7 @@ function ElectionTimerSettingsButton({
     await triggerRequest({
       params: {
         method: "GET",
-        url: "/timer/cancel",
+        url: "/api/v1/timer/cancel",
       },
     });
   };

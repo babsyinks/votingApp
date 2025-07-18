@@ -33,7 +33,7 @@ const Admin = () => {
         await triggerRequest({
           params: {
             method: "POST",
-            url: "/election/contestants",
+            url: "/api/v1/election/contestants",
             data: formData,
             headers: { "Content-Type": "multipart/form-data" },
           },

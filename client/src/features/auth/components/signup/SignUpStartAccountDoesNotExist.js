@@ -29,7 +29,7 @@ export default function SignUpStartAccountDoesNotExist() {
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/auth/request-signup-code",
+        url: "/api/v1/auth/request-signup-code",
         data: { email },
       },
     });

@@ -34,7 +34,7 @@ const ElectionDetails = () => {
       await triggerRequest({
         params: {
           method: "GET",
-          url: "/election/details",
+          url: "/api/v1/election/details",
         },
       });
     };

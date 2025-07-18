@@ -43,7 +43,7 @@ export default function SignUpRegistrationForm({ email }) {
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/auth/register",
+        url: "/api/v1/auth/register",
         data: { username, password, email, firstname, lastname },
       },
     });

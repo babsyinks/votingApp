@@ -37,7 +37,7 @@ function AdminElectionDelete() {
     await triggerRequest({
       params: {
         method: "DELETE",
-        url: "/election/delete",
+        url: "/api/v1/election/delete",
       },
     });
   };

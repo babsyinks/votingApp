@@ -13,7 +13,7 @@ module.exports = () =>
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "/auth/facebook/callback",
+      callbackURL: "/api/v1/oauth/facebook/callback",
       profileFields: ["id", "emails", "name", "displayName"],
     },
     async (_accessToken, _refreshToken, profile, done) => {

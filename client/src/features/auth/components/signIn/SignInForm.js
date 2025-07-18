@@ -55,7 +55,7 @@ export default function SignInForm() {
     await triggerRequest({
       params: {
         method: "POST",
-        url: "/auth/signin",
+        url: "/api/v1/auth/signin",
         data,
       },
     });

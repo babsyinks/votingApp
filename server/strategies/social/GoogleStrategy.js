@@ -13,7 +13,7 @@ module.exports = () =>
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "/api/v1/oauth/google/callback",
     },
     async (_accessToken, _refreshToken, profile, done) => {
       const strategy = new GoogleSocial(profile);

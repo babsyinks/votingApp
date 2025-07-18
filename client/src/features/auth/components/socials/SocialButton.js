@@ -11,7 +11,7 @@ const icons = {
 
 export default function SocialButton({ type }) {
   const socialLogin = () => {
-    window.location.href = `http://localhost:3001/auth/${type.toLowerCase()}`;
+    window.location.href = `http://localhost:3001/api/v1/oauth/${type.toLowerCase()}`;
   };
   const { width } = useWindowSize();
   let contentWidth = "w-60p";

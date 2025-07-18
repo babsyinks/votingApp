@@ -27,10 +27,10 @@ export default function OAuthSuccess() {
       await triggerRequest({
         params: {
           method: "GET",
-          url: "http://localhost:3001/auth/me",
+          url: "http://localhost:3001/api/v1/oauth/me",
         },
       });
-      // "https://votingapp-pmev.onrender.com/me",
+      // "https://votingapp-pmev.onrender.com/api/v1/oauth/me",
     };
     resultStatus();
   }, [triggerRequest]);

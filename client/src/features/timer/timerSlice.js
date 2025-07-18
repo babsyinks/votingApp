@@ -7,8 +7,8 @@ const fetchThenSetCurrentTimerStatus = createAsyncThunk(
   "timer/fetchThenSetCurrentTimerStatus",
   async () => {
     const { data: timerStatus } = await axios.get(
-      // "https://votingapp-pmev.onrender.com/timer/status",
-      "/timer/status",
+      // "https://votingapp-pmev.onrender.com/api/v1/timer/status",
+      "/api/v1/timer/status",
     );
     return timerStatus;
   },

@@ -36,10 +36,10 @@ function Results() {
       await triggerRequest({
         params: {
           method: "GET",
-          url: "/election/details",
+          url: "/api/v1/election/details",
         },
       });
-      // "https://votingapp-pmev.onrender.com/election/details",
+      // "https://votingapp-pmev.onrender.com/api/v1/election/details",
     };
     resultStatus();
   }, [triggerRequest]);

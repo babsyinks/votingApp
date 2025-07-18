@@ -13,7 +13,7 @@ module.exports = () =>
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "/auth/github/callback",
+      callbackURL: "/api/v1/oauth/github/callback",
       scope: ["user:email"], // To access verified email and profile info
     },
     async (_accessToken, _refreshToken, profile, done) => {

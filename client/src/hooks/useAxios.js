@@ -25,7 +25,7 @@ export const useAxios = () => {
         const originalRequest = err.config;
 
         // Don't retry if it's a login request or already retried or a refresh attempt
-        const dontRetryList = ["/auth/signin", "/token/refresh"];
+        const dontRetryList = ["/api/v1/auth/signin", "/api/v1/token/refresh"];
         if (
           err.response?.status === 401 &&
           !originalRequest._retry &&
@@ -33,7 +33,7 @@ export const useAxios = () => {
         ) {
           originalRequest._retry = true;
           try {
-            await axios.post("/token/refresh");
+            await axios.post("/api/v1/token/refresh");
             return axios(originalRequest); // retry once. We only want to retry once to prevent infinite retries.
           } catch (refreshError) {
             return Promise.reject(refreshError);
