@@ -1,4 +1,6 @@
-const { generateTokensAndRedirect } = require("../../helpers/authRouteHelpers");
+const {
+  generateTokensAndRedirect,
+} = require("../../helpers/authControllerHelpers");
 
 const FAILURE_REDIRECT = `${process.env.CLIENT_URL}/signin`;
 const SUCCESS_REDIRECT = `${process.env.CLIENT_URL}/oauth-success`;
