@@ -120,7 +120,7 @@ const forgotPassword = async (req, res, next) => {
     await sendPasswordResetLink({ toEmail: email, resetCode });
     res.json({
       success: true,
-      message: `Reset link has been sent to ${email}.`,
+      message,
     });
   } catch (e) {
     next(e);
