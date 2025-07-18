@@ -49,6 +49,12 @@ const validateCredentials = async (user, password) => {
   }
 };
 
+const hashPassWord = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+};
+
 const generateTokensAndSendResponse = ({ res, user }) => {
   const { accessToken, refreshToken } = generateTokens(user);
   sendResponseForAuthenticatedUser({ res, accessToken, refreshToken, user });
@@ -94,6 +100,17 @@ const passwordStrengthStatus = (password) => {
   }
 };
 
+const failIfPasswordWeak = (password) => {
+  const passwordStrengthStatusMessage = passwordStrengthStatus(password);
+  if (passwordStrengthStatusMessage) {
+    const error = new Error(
+      `Password must have ${passwordStrengthStatusMessage.toLowerCase()}`,
+    );
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   failIfEmpty,
   failIfUserExists,
@@ -101,5 +118,6 @@ module.exports = {
   generateTokensAndSendResponse,
   generateTokensAndRedirect,
   failIfVerificationCodeIsNotValid,
-  passwordStrengthStatus,
+  failIfPasswordWeak,
+  hashPassWord,
 };
