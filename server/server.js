@@ -10,11 +10,7 @@ require("./config/passport");
 const helmetConfig = require("./config/helmet");
 const errorHandler = require("./middleware/errorHandler");
 const { sequelize } = require("./models");
-const authRoutes = require("./routes/authRoutes");
-const electionRoutes = require("./routes/electionRoutes");
-const oAuthRoutes = require("./routes/oauthRoute");
-const refreshRoute = require("./routes/refreshTokenRoute");
-const timerRoutes = require("./routes/timerRoutes");
+const routes = require("./routes");
 const logger = require("./utils/logger");
 
 const port = process.env.PORT || 3001;
@@ -31,11 +27,7 @@ app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurityPolicy));
 app.use(xss());
 app.use(cookieParser());
 
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/oauth", oAuthRoutes);
-app.use("/api/v1/election", electionRoutes);
-app.use("/api/v1/timer", timerRoutes);
-app.use("/api/v1/token", refreshRoute);
+app.use("/api/v1", routes);
 app.use(errorHandler);
 
 process.on("unhandledRejection", (err) => {
