@@ -24,9 +24,9 @@ const ContestantButtonVote = ({ contestantId, position }) => {
 
   useEffect(() => {
     if (response) {
-      const { allVotes, contestantVotes } = response;
+      const { positionVotes, contestantVotes } = response;
       dispatch(
-        updateVotes({ allVotes, contestantVotes, contestantId, position }),
+        updateVotes({ positionVotes, contestantVotes, contestantId, position }),
       );
       setDisableVote(false);
     }

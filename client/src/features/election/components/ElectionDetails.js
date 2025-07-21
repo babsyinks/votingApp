@@ -2,16 +2,9 @@ import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "hooks/useAxios";
-import {
-  userAuth,
-  userAuthenticated,
-  userNotAuthenticated,
-} from "features/auth/userAuthSlice";
+import { userAuth, userAuthenticated, userNotAuthenticated } from "features/auth/userAuthSlice";
 import { setUserInfo } from "features/user/userSlice";
-import {
-  allElectionData,
-  setAllElectionData,
-} from "features/election/electionSlice";
+import { allElectionData, setAllElectionData } from "features/election/electionSlice";
 import ElectionDetailsAllData from "features/election/components/ElectionDetailsAllData";
 import ElectionDetailsNoData from "features/election/components/ElectionDetailsNoData";
 

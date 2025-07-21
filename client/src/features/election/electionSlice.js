@@ -20,9 +20,9 @@ const electionSlice = createSlice({
       state.contestantsData = action.payload;
     },
     updateVotes(state, action) {
-      const { allVotes, contestantVotes, contestantId, position } = action.payload;
+      const { positionVotes, contestantVotes, contestantId, position } = action.payload;
       const category = getByPosition(state.contestantsData, position);
-      updateTotalCategoryVotes(category, allVotes);
+      updateTotalCategoryVotes(category, positionVotes);
       if (contestantId) {
         updateContestantVote(category, contestantId, contestantVotes);
       }
@@ -38,8 +38,8 @@ const electionSlice = createSlice({
   },
 });
 
-const updateTotalCategoryVotes = (categoryObj, allVotes) => {
-  categoryObj.allVotes = allVotes;
+const updateTotalCategoryVotes = (categoryObj, positionVotes) => {
+  categoryObj.positionVotes = positionVotes;
 };
 
 const findContestant = (categoryObj, contestantId) =>
@@ -65,7 +65,7 @@ export const allElectionData = (state) => state.election.contestantsData;
 export const electionStatus = (state) => state.election.electionStatus;
 
 export const getAllVotesInACategory = (targetPosition) => (state) =>
-  getByPosition(state.election.contestantsData, targetPosition)?.allVotes;
+  getByPosition(state.election.contestantsData, targetPosition)?.positionVotes;
 
 export const getAllContestantsInCategory = (targetPosition) => (state) =>
   getByPosition(state.election.contestantsData, targetPosition)?.contestants;
