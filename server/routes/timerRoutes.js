@@ -35,12 +35,8 @@ router.get("/status", async (req, res) => {
     electionObj = {};
   } else {
     electionObj = {
-      startDate: timer.startDate
-        ? new Date(timer.startDate).getTime()
-        : timer.startDate,
-      endDate: timer.endDate
-        ? new Date(timer.endDate).getTime()
-        : timer.endDate,
+      startDate: timer.startDate ? new Date(timer.startDate).getTime() : timer.startDate,
+      endDate: timer.endDate ? new Date(timer.endDate).getTime() : timer.endDate,
     };
   }
   res.json(electionObj);
