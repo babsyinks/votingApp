@@ -30,17 +30,17 @@ router.get("/cancel", checkAuthorizationStatus, async (req, res) => {
 router.get("/status", async (req, res) => {
   const electionTimer = await Timer.findAll();
   let electionObj;
-  const electionDataValues = electionTimer[0]?.dataValues;
+  const timer = electionTimer[0];
   if (electionTimer.length === 0) {
     electionObj = {};
   } else {
     electionObj = {
-      startDate: electionDataValues.startDate
-        ? new Date(electionDataValues.startDate).getTime()
-        : electionDataValues.startDate,
-      endDate: electionDataValues.endDate
-        ? new Date(electionDataValues.endDate).getTime()
-        : electionDataValues.endDate,
+      startDate: timer.startDate
+        ? new Date(timer.startDate).getTime()
+        : timer.startDate,
+      endDate: timer.endDate
+        ? new Date(timer.endDate).getTime()
+        : timer.endDate,
     };
   }
   res.json(electionObj);
