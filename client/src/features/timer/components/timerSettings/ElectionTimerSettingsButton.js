@@ -49,7 +49,7 @@ function ElectionTimerSettingsButton({
   const cancelTimer = async () => {
     await triggerRequest({
       params: {
-        method: "GET",
+        method: "DELETE",
         url: "/api/v1/timer/cancel",
       },
     });
