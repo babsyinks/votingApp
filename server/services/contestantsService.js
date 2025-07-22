@@ -24,7 +24,7 @@ module.exports = (Contestants) => {
     /**
      * Find contestant by ID.
      *
-     * @param {Contestant} contestant_id id of the contestant to find
+     * @param {string} contestant_id id of the contestant to find
      * @returns {Promise<Contestant>}
      */
     async findContestantById(contestant_id) {
