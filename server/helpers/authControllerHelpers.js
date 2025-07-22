@@ -1,14 +1,9 @@
 const bcrypt = require("bcryptjs");
 
 const strongPasswordCriteria = require("../config/strongPasswordConf");
-const {
-  setAccessTokenOnCookie,
-  setRefreshTokenOnCookie,
-} = require("../utils/setCookies");
-const {
-  generateAccessToken,
-  generateRefreshToken,
-} = require("../utils/tokenGenerators");
+const generateCustomError = require("../utils/generateCustomError");
+const { setAccessTokenOnCookie, setRefreshTokenOnCookie } = require("../utils/setCookies");
+const { generateAccessToken, generateRefreshToken } = require("../utils/tokenGenerators");
 
 const failIfEmpty = (fieldsObj) => {
   const keys = Object.keys(fieldsObj);
@@ -19,21 +14,19 @@ const failIfEmpty = (fieldsObj) => {
       return !fieldsObj[key];
     })
   ) {
-    throw new Error(`${emptyField[0].toLowerCase()} field must be filled!`);
+    generateCustomError(`${emptyField[0].toLowerCase()} field must be filled!`, 400);
   }
 };
 
 const failIfUserExists = (user) => {
   if (user) {
-    const error = new Error("This User Exists Already!");
-    error.statusCode = 403;
-    throw error;
+    generateCustomError("This User Exists Already!", 403);
   }
 };
 
 const failIfVerificationCodeIsNotValid = async (code, row) => {
   if (!row || !(await bcrypt.compare(code, row.codeHash))) {
-    throw new Error("Invalid or expired code");
+    generateCustomError("Invalid or expired code", 403);
   }
 };
 
@@ -43,9 +36,7 @@ const validateCredentials = async (user, password) => {
     checkPassword = await bcrypt.compare(password, user.password);
   }
   if (!user || !checkPassword) {
-    const error = new Error("Wrong Username, Email or Password");
-    error.statusCode = 401;
-    throw error;
+    generateCustomError("Wrong Username, Email or Password", 401);
   }
 };
 
@@ -75,12 +66,7 @@ const generateTokens = (user) => {
   };
 };
 
-const sendResponseForAuthenticatedUser = ({
-  res,
-  accessToken,
-  refreshToken,
-  user,
-}) => {
+const sendResponseForAuthenticatedUser = ({ res, accessToken, refreshToken, user }) => {
   setRefreshTokenOnCookie({
     res: setAccessTokenOnCookie({ res: res.status(200), accessToken }),
     refreshToken,
@@ -103,11 +89,7 @@ const passwordStrengthStatus = (password) => {
 const failIfPasswordWeak = (password) => {
   const passwordStrengthStatusMessage = passwordStrengthStatus(password);
   if (passwordStrengthStatusMessage) {
-    const error = new Error(
-      `Password must have ${passwordStrengthStatusMessage.toLowerCase()}`,
-    );
-    error.statusCode = 400;
-    throw error;
+    generateCustomError(`Password must have ${passwordStrengthStatusMessage.toLowerCase()}`, 400);
   }
 };
 
