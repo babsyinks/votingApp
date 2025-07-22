@@ -1,15 +1,14 @@
-const {
-  failIfEmpty,
-  failIfUserExists,
-  failIfVerificationCodeIsNotValid,
-  validateCredentials,
-  generateTokensAndSendResponse,
-  failIfPasswordWeak,
-  hashPassWord,
-} = require("../helpers/authControllerHelpers");
+const { generateTokensAndSendResponse, hashPassWord } = require("../helpers/authControllerHelpers");
 const sendPasswordResetLink = require("../helpers/sendPasswordResetLink");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { authService } = require("../services");
+const {
+  failIfEmpty,
+  failIfUserExists,
+  validateCredentials,
+  failIfVerificationCodeIsNotValid,
+  failIfPasswordWeak,
+} = require("../validators/authValidators");
 
 const requestSignUpCode = async (req, res, next) => {
   try {
