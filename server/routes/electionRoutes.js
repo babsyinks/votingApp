@@ -132,7 +132,7 @@ router.get("/details", checkAuthenticationStatus, async (req, res) => {
   }
 });
 
-router.patch("/vote", checkAuthenticationStatus, async (req, res) => {
+router.post("/vote", checkAuthenticationStatus, async (req, res) => {
   const { userId, contestantId, position } = req.body;
 
   await Votes.create({

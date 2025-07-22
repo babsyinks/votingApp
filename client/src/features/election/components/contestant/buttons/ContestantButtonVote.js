@@ -43,7 +43,7 @@ const ContestantButtonVote = ({ contestantId, position }) => {
 
     await triggerRequest({
       params: {
-        method: "PATCH",
+        method: "POST",
         url: "/api/v1/election/vote",
         // "https://votingapp-pmev.onrender.com/api/v1/election/vote",
         data: { userId, contestantId, position },
