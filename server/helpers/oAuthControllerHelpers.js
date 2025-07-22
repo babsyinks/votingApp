@@ -1,20 +1,10 @@
 const passport = require("passport");
 
-const {
-  sessionOff,
-  handleOauthCallback,
-} = require("../strategies/common/oAuthCallbackHandler");
+const { sessionOff, handleOauthCallback } = require("../strategies/common/oAuthCallbackHandler");
 
-const passportCallbackWrapper = (
-  strategy,
-  callbackFactory = handleOauthCallback,
-) => {
+const passportCallbackWrapper = (strategy, callbackFactory = handleOauthCallback) => {
   return (req, res, next) => {
-    passport.authenticate(
-      strategy,
-      sessionOff,
-      callbackFactory()(req, res, next),
-    )(req, res, next);
+    passport.authenticate(strategy, sessionOff, callbackFactory()(req, res, next))(req, res, next);
   };
 };
 
