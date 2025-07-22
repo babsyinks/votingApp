@@ -42,7 +42,7 @@ export default function ForgotPasswordCommonForm({
     await triggerRequest({
       params: {
         method: "POST",
-        url: `/auth${path}`,
+        url: `/api/v1/auth${path}`,
         data,
       },
     });
