@@ -1,11 +1,10 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect } from "react";
 import Heading from "../../../components/ui/Heading";
-import Input from "../../../components/ui/Input";
 import Block from "../../../components/ui/Block";
-import Label from "../../../components/ui/Label";
-import Select from "../../../components/ui/Select";
-import TextArea from "../../../components/ui/TextArea";
-import getOptions from "../helpers/options";
+import AdminFormFieldText from "./AdminFormFieldText";
+import AdminFormFieldSelect from "./AdminFormFieldSelect";
+import AdminFormFieldTextArea from "./AdminFormFieldTextArea";
+import AdminFormFieldFile from "./AdminFormFieldFile";
 
 const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
   const [surname, setSurname] = useState("");
@@ -28,15 +27,7 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
     } else {
       setIsDisabled(true);
     }
-  }, [
-    surname,
-    firstName,
-    post,
-    manifesto,
-    picture,
-    setIsDisabled,
-    setFormData,
-  ]);
+  }, [surname, firstName, post, manifesto, picture, setIsDisabled, setFormData]);
 
   useEffect(() => {
     if (dataSubmitted) {
@@ -49,79 +40,53 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
     }
   }, [dataSubmitted, resetFile]);
 
-  const labelClassName = "wd-md bld";
-  const horzBlockProps = { type: "flex-horz-fs", className: "mb-2p" };
   return (
     <>
       <Heading className="ta-center">Add A Contestant</Heading>
       <Block type="flex-vert-fs">
-        <Block {...horzBlockProps}>
-          <Label name="surname" className={labelClassName}>
-            Surname:
-          </Label>
-          <Input
-            type="text"
-            name="surname"
-            value={surname}
-            onChange={(e) => {
-              setSurname(e.target.value);
-            }}
-          />
-        </Block>
-        <Block {...horzBlockProps}>
-          <Label name="firstName" className={labelClassName}>
-            First Name:
-          </Label>
-          <Input
-            type="text"
-            name="firstName"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-          />
-        </Block>
-        <Block {...horzBlockProps}>
-          <Label name="post" className={labelClassName}>
-            Post:
-          </Label>
-          <Select
-            name="post"
-            value={post}
-            onChange={(e) => {
-              setPost(e.target.value);
-            }}
-            selectOptions={getOptions()}
-          />
-        </Block>
-        <Block {...horzBlockProps}>
-          <Label name="manifesto" className={labelClassName}>
-            Manifesto:
-          </Label>
-          <TextArea
-            name="manifesto"
-            value={manifesto}
-            onChange={(e) => {
-              setManifesto(e.target.value);
-            }}
-          />
-        </Block>
-        <Block {...horzBlockProps}>
-          <Label name="picture" className={labelClassName}>
-            Upload Picture:
-          </Label>
-          <Input
-            type="file"
-            name="picture"
-            resetKey={resetFile}
-            onChange={(e) => {
-              setPicture(e.target.files[0]);
-            }}
-          />
-        </Block>
+        <AdminFormFieldText
+          label="Surname"
+          name="surname"
+          value={surname}
+          onChange={(e) => {
+            setSurname(e.target.value);
+          }}
+        />
+        <AdminFormFieldText
+          label="First Name"
+          name="firstName"
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
+        />
+        <AdminFormFieldSelect
+          label="Post"
+          name="post"
+          value={post}
+          onChange={(e) => {
+            setPost(e.target.value);
+          }}
+        />
+        <AdminFormFieldTextArea
+          label="Manifesto"
+          name="manifesto"
+          value={manifesto}
+          onChange={(e) => {
+            setManifesto(e.target.value);
+          }}
+        />
+        <AdminFormFieldFile
+          label="Upload Picture"
+          name="picture"
+          resetKey={resetFile}
+          onChange={(e) => {
+            setPicture(e.target.files[0]);
+          }}
+        />
       </Block>
     </>
   );
 };
 
-export default memo(AdminFormDetails);
+export default AdminFormDetails;
