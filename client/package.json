@@ -4,9 +4,6 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.1.1",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
@@ -30,6 +27,14 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+"jest": {
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx}",
+    "!src/**/*.test.{js,jsx}",
+    "!src/**/__tests__/**"
+  ],
+  "coverageReporters": ["text", "lcov"]
+},
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -48,5 +53,10 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1"
+  }
 }
