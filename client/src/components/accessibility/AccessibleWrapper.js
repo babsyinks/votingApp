@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
  * @param {string} [props.ariaLabelledBy] - ID of the element that labels the input (maps to `aria-labelledby`).
  * @param {string} [props.ariaDescribedBy] - ID of the element that describes the input (maps to `aria-describedby`).
  * @param {string} [props.title] - Native tooltip text shown on hover and read by screen readers.
- * 
+ *
  * @returns {JSX.Element} An element wrapped with accessibility features.
  */
 export default function AccessibleWrapper({
@@ -33,7 +33,7 @@ export default function AccessibleWrapper({
 }
 
 AccessibleWrapper.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
   role: PropTypes.string,
   ariaLabel: PropTypes.string,
   ariaLabelledBy: PropTypes.string,
