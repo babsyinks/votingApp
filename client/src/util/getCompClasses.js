@@ -9,18 +9,14 @@
  * classes in the ui component or the classNames added by a parent component rendering the ui component.
  * @returns {String}
  */
-const getCompClasses = (defaulComptStyle, classes) => {
-  if (classes.length === 0) return classes;
-  const compClasses = classes.split(" ").reduce((acc, cls) => {
-    /* defaulComptStyle[cls.trim()] represents styles from the css class that is integrated 
-     into the current ui component e.g a class in Block.module.css file. If undefined is
-     returned, just return the class itself, meaning it is a class from a component other
-     than the ui component. */
-    const currentClass = defaulComptStyle[cls.trim()] || cls;
-    if (acc === "") return currentClass;
-    return `${acc} ${currentClass}`;
-  }, "");
-  return compClasses;
+const getCompClasses = (defaulComptStyle = {}, classes = "") => {
+  if (typeof classes !== "string" || classes.trim().length === 0) return "";
+
+  return classes
+    .trim()
+    .split(/\s+/)
+    .map((cls) => defaulComptStyle?.[cls] || cls)
+    .join(" ");
 };
 
 export default getCompClasses;
