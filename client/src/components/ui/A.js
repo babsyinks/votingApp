@@ -1,4 +1,3 @@
-// components/ui/A.js
 import React from "react";
 import PropTypes from "prop-types";
 import defaultStyle from "./A.module.css";
