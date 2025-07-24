@@ -12,11 +12,7 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {Object} [props.style] - Inline styles.
  * @returns {JSX.Element}
  */
-export default function Tab({
-  labels,
-  className = "",
-  style = {},
-}) {
+export default function Tab({ labels, className = "", style = {} }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const width = `${Math.floor(100 / labels.length) - 1}%`;
 
@@ -33,7 +29,7 @@ export default function Tab({
             aria-controls={`panel-${index}`}
             id={`tab-${index}`}
             tabIndex={isSelected ? 0 : -1}
-            className={getCompClasses(defaultStyle.tb, className)}
+            className={`${defaultStyle.tb} ${getCompClasses(defaultStyle, className)}`}
             onClick={() => setSelectedIndex(index)}
             style={{ ...style, width }}
           >
