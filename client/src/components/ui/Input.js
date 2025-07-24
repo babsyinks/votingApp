@@ -4,11 +4,13 @@ import InputFile from "./InputFile";
 import InputText from "./InputText";
 import InputDate from "./InputDate";
 import InputTime from "./InputTime";
+import InputNumber from "./InputNumber";
 
 const componentMap = {
   file: InputFile,
   date: InputDate,
   time: InputTime,
+  number: InputNumber,
 };
 
 ["text", "password", "email"].forEach((type) => {
@@ -30,15 +32,7 @@ function Input(props) {
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf([
-    "text",
-    "password",
-    "email",
-    "file",
-    "date",
-    "time",
-    "number",
-  ]),
+  type: PropTypes.oneOf(["text", "password", "email", "file", "date", "time", "number"]),
   name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,

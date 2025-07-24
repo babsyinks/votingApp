@@ -14,6 +14,8 @@ import PropTypes from "prop-types";
  * @param {Object} props - The props used to configure the input.
  * @param {string} [props.type] - The input type (e.g., "text", "file", "date", "time").
  * @param {string} [props.name] - The name attribute for the input element.
+ * @param {number} [props.max] - The maximum number accepted by this component.
+ * @param {function} [props.onInput] The function to call when input is received.
  * @param {string} [props.value] - The value of the input (not used for file inputs).
  * @param {function} props.onChange - The function to call on input change.
  * @param {string} [props.placeholder] - Placeholder text for the input (if applicable).
@@ -34,6 +36,8 @@ export default function BaseInput({
   type,
   name,
   value,
+  max,
+  onInput,
   onChange,
   placeholder,
   disabled = false,
@@ -53,6 +57,8 @@ export default function BaseInput({
       type={type}
       name={name}
       value={value}
+      max={max}
+      onInput={onInput}
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
@@ -72,6 +78,8 @@ BaseInput.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
+  max: PropTypes.number,
+  onInput: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
