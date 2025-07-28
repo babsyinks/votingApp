@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
 
 const useWindowSize = () => {
-  const getInitialDimension = () => {
-    const windowState = typeof window !== "undefined";
-    const defaultVal = 0;
-    return {
-      width: windowState ? window.innerWidth : defaultVal,
-      height: windowState ? window.innerHeight : defaultVal,
-    };
-  };
-  const [size, setSize] = useState(getInitialDimension());
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
     const handleResize = () => {
