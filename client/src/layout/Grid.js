@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import defaultStyle from "./Grid.module.css";
-import getCompClasses from "../util/getCompClasses";
+import getCompClasses from "util/getCompClasses";
 /**
  * A Grid component that lists items in a grid, auto-filling the screen with the items based on
  * available screen space.

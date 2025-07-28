@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useOrientation from "../hooks/useOrientation";
+import useOrientation from "hooks/useOrientation";
 
 /**
  * This component wraps its children components, dictating how they should be laid out. It is the
