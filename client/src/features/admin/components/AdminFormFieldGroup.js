@@ -1,6 +1,6 @@
 import React from "react";
-import Block from "../../../components/ui/Block";
-import Label from "../../../components/ui/Label";
+import Block from "components/ui/Block";
+import Label from "components/ui/Label";
 
 const AdminFormFieldGroup = ({ label, name, children }) => {
   return (

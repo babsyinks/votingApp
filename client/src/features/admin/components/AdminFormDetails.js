@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Heading from "../../../components/ui/Heading";
-import Block from "../../../components/ui/Block";
+import Heading from "components/ui/Heading";
+import Block from "components/ui/Block";
 import AdminFormFieldText from "./AdminFormFieldText";
 import AdminFormFieldSelect from "./AdminFormFieldSelect";
 import AdminFormFieldTextArea from "./AdminFormFieldTextArea";

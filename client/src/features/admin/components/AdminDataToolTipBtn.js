@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import DataToolTip from "../../../components/ui/DataToolTip";
-import Button from "../../../components/ui/Button";
+import DataToolTip from "components/ui/DataToolTip";
+import Button from "components/ui/Button";
 
 const AdminDataToolTipBtn = ({
   data,
