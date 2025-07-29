@@ -55,7 +55,7 @@ export default function VerifyCode() {
     <AuthFrame>
       {toastDetailsSet() && <ToastMessage toast={toast} />}
       <AuthHeading>Enter the 6-digit code sent to</AuthHeading>
-      <Paragraph className="text-2xl fw-600 fs-italic">{email}</Paragraph>
+      {email && <Paragraph className="text-2xl fw-600 fs-italic">{email}</Paragraph>}
       <AuthFieldCode value={code} onChange={(e) => setCode(e.target.value)} />
       <AuthButton onClick={verify} disabled={code.length !== 6}>
         Verify
