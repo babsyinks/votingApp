@@ -15,8 +15,7 @@ export default function ForgotPasswordResetPassword({ setBottomSpacingClass }) {
   const { height } = useWindowSize();
   const { resetCode } = useParams();
   const passwordMatch = password === passwordDup;
-  const showAuthPasswordValidator =
-    password.length > 0 && passwordDup.length === 0;
+  const showAuthPasswordValidator = password.length > 0 && passwordDup.length === 0;
 
   useEffect(() => {
     if (height < 650) {
@@ -31,7 +30,10 @@ export default function ForgotPasswordResetPassword({ setBottomSpacingClass }) {
         path="/reset-password"
         data={{ resetCode, password }}
         buttonLabel="Update Password"
-        clearField={() => setPassword("")}
+        clearField={() => {
+          setPassword("");
+          setPasswordDup("");
+        }}
         buttonDisabled={!passwordValid}
       >
         <AuthFieldPassword
@@ -60,10 +62,7 @@ export default function ForgotPasswordResetPassword({ setBottomSpacingClass }) {
         </AuthFrame>
       )}
       {showAuthPasswordValidator && (
-        <AuthPasswordValidator
-          password={password}
-          setPasswordValid={setPasswordValid}
-        />
+        <AuthPasswordValidator password={password} setPasswordValid={setPasswordValid} />
       )}
     </>
   );
