@@ -22,6 +22,12 @@ const failIfUserExists = (user) => {
   }
 };
 
+const failIfUserDoesNotExist = (user) => {
+  if (!user) {
+    generateCustomError("User not found", 400);
+  }
+};
+
 const failIfVerificationCodeIsNotValid = async (code, row) => {
   if (!row || !(await bcrypt.compare(code, row.codeHash))) {
     generateCustomError("Invalid or expired code", 403);
@@ -54,6 +60,7 @@ const failIfPasswordWeak = (password) => {
 module.exports = {
   failIfEmpty,
   failIfUserExists,
+  failIfUserDoesNotExist,
   validateCredentials,
   failIfVerificationCodeIsNotValid,
   failIfPasswordWeak,
