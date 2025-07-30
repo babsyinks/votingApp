@@ -35,6 +35,7 @@ import PropTypes from "prop-types";
 export default function BaseInput({
   type,
   name,
+  id = name,
   value,
   max,
   onInput,
@@ -55,6 +56,7 @@ export default function BaseInput({
     <input
       key={resetKey}
       type={type}
+      id={id}
       name={name}
       value={value}
       max={max}

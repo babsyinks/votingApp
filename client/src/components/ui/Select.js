@@ -21,6 +21,7 @@ import getCompClasses from "../../util/getCompClasses";
  */
 export default function Select({
   name,
+  id = name,
   value,
   onChange,
   selectOptions,
@@ -33,6 +34,7 @@ export default function Select({
 }) {
   return (
     <select
+      id={id}
       name={name}
       value={value}
       onChange={onChange}
@@ -60,7 +62,7 @@ Select.propTypes = {
     PropTypes.shape({
       optionLabel: PropTypes.string.isRequired,
       optionValue: PropTypes.string,
-    }).isRequired
+    }).isRequired,
   ).isRequired,
   disabled: PropTypes.bool,
   className: PropTypes.string,

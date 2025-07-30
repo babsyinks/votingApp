@@ -23,6 +23,7 @@ import useOrientation from "../../hooks/useOrientation";
  */
 export default function TextArea({
   name,
+  id = name,
   value,
   dimension: { rows = 10, cols = 40 } = {},
   onChange,
@@ -41,6 +42,7 @@ export default function TextArea({
 
   return (
     <textarea
+      id={id}
       name={name}
       value={value}
       rows={rows}
