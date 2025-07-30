@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import AdminFormDetails from "../components/AdminFormDetails";
+import AdminFormDetails from "features/admin/components/AdminFormDetails";
 
 jest.mock("components/ui/Heading", () => ({ children, className }) => (
   <h1 data-testid="heading" className={className}>
@@ -14,14 +14,14 @@ jest.mock("components/ui/Block", () => ({ children, type }) => (
   </div>
 ));
 
-jest.mock("../components/AdminFormFieldText", () => ({ label, name, value, onChange }) => (
+jest.mock("features/admin/components/AdminFormFieldText", () => ({ label, name, value, onChange }) => (
   <div data-testid={`text-${name}`}>
     <label htmlFor={name}>{label}</label>
     <input type="text" id={name} name={name} value={value} onChange={onChange} />
   </div>
 ));
 
-jest.mock("../components/AdminFormFieldSelect", () => ({ label, name, value, onChange }) => (
+jest.mock("features/admin/components/AdminFormFieldSelect", () => ({ label, name, value, onChange }) => (
   <div data-testid={`select-${name}`}>
     <label htmlFor={name}>{label}</label>
     <select id={name} name={name} value={value} onChange={onChange}>
@@ -31,14 +31,14 @@ jest.mock("../components/AdminFormFieldSelect", () => ({ label, name, value, onC
   </div>
 ));
 
-jest.mock("../components/AdminFormFieldTextArea", () => ({ label, name, value, onChange }) => (
+jest.mock("features/admin/components/AdminFormFieldTextArea", () => ({ label, name, value, onChange }) => (
   <div data-testid={`textarea-${name}`}>
     <label htmlFor={name}>{label}</label>
     <textarea id={name} name={name} value={value} onChange={onChange} />
   </div>
 ));
 
-jest.mock("../components/AdminFormFieldFile", () => ({ label, name, resetKey, onChange }) => (
+jest.mock("features/admin/components/AdminFormFieldFile", () => ({ label, name, resetKey, onChange }) => (
   <div data-testid={`file-${name}`}>
     <label htmlFor={name}>{label}</label>
     <input type="file" id={name} name={name} onChange={onChange} />

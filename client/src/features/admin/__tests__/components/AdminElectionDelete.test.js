@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import AdminElectionDelete from "../components/AdminElectionDelete";
+import AdminElectionDelete from "features/admin/components/AdminElectionDelete";
 import { useSelector, useDispatch } from "react-redux";
 import { useAxios } from "hooks/useAxios";
 import { useToastMessage } from "hooks/useToastMessage";
@@ -25,7 +25,7 @@ jest.mock("components/ui/ToastMessage", () => ({ toast }) => (
 ));
 
 jest.mock(
-  "../components/AdminElectionDeleteWarningModal",
+  "features/admin/components/AdminElectionDeleteWarningModal",
   () =>
     ({ openModal, setOpenModal, deleteElection }) =>
       openModal ? (
@@ -38,7 +38,7 @@ jest.mock(
       ) : null,
 );
 
-jest.mock("../components/AdminElectionDeleteButton", () => ({ setOpenModal }) => (
+jest.mock("features/admin/components/AdminElectionDeleteButton", () => ({ setOpenModal }) => (
   <button onClick={() => setOpenModal(true)} data-testid="open-modal">
     Open Modal
   </button>

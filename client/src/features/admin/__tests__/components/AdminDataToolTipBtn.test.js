@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import AdminDataToolTipBtn from '../components/AdminDataToolTipBtn';
+import AdminDataToolTipBtn from 'features/admin/components/AdminDataToolTipBtn';
 
 jest.mock('components/ui/DataToolTip', () => ({ children, data, ariaLabel }) => (
   <div data-testid="tooltip" aria-label={ariaLabel}>

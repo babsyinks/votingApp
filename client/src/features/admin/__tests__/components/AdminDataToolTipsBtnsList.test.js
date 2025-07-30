@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import AdminDataToolTipsBtnsList from "../components/AdminDataToolTipsBtnsList";
+import AdminDataToolTipsBtnsList from "features/admin/components/AdminDataToolTipsBtnsList";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 jest.mock(
-  "../components/AdminDataToolTipBtn",
+  "features/admin/components/AdminDataToolTipBtn",
   () =>
     ({ data, disabled, className, onClick, children }) => (
       <button
@@ -32,7 +32,7 @@ jest.mock("components/ui/I", () => ({ className }) => (
   <i data-testid="icon" className={className}></i>
 ));
 
-jest.mock("../helpers/tooltipBtnDetails", () => () => [
+jest.mock("features/admin/helpers/tooltipBtnDetails", () => () => [
   {
     data: "Add A New Contestant",
     compClass: "shd-grn",
