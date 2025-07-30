@@ -17,8 +17,7 @@ export default function ForgotPasswordCommonForm({
 }) {
   const [message, setMessage] = useState("");
   const { response, triggerRequest, error } = useAxios();
-  const { toast, triggerSuccessToast, triggerFailureToast, toastDetailsSet } =
-    useToastMessage();
+  const { toast, triggerSuccessToast, triggerFailureToast, toastDetailsSet } = useToastMessage();
 
   useEffect(() => {
     if (response?.message) {
@@ -57,7 +56,7 @@ export default function ForgotPasswordCommonForm({
       </AuthButton>
       {message &&
         (path === "/forgot-password" ? (
-          <Paragraph>{message}</Paragraph>
+          <Paragraph className="ta-center">{message}</Paragraph>
         ) : (
           <AuthAlternativeAccessMeans btnLabel={message} route="/signin" />
         ))}
