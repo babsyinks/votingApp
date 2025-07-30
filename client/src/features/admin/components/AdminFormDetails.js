@@ -36,9 +36,9 @@ const AdminFormDetails = ({ setIsDisabled, setFormData, dataSubmitted }) => {
       setPost("President");
       setManifesto("");
       setPicture("");
-      setResetFile(++resetFile);
+      setResetFile((prev) => prev + 1);
     }
-  }, [dataSubmitted, resetFile]);
+  }, [dataSubmitted]);
 
   return (
     <>
