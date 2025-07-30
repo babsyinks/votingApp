@@ -29,7 +29,7 @@ module.exports = (Contestants) => {
      */
     async findContestantById(contestant_id) {
       const contestant = await Contestants.findOne({ where: { contestant_id } });
-      return contestant.toJSON();
+      return contestant?.toJSON();
     },
 
     /**
@@ -39,7 +39,7 @@ module.exports = (Contestants) => {
      */
     async getAllContestants() {
       const contestants = await Contestants.findAll();
-      return contestants.map((contestant) => contestant.toJSON());
+      return contestants.map((contestant) => contestant?.toJSON());
     },
   };
 };

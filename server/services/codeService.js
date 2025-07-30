@@ -50,7 +50,7 @@ module.exports = (Code) => {
         },
         order: [["createdAt", "DESC"]],
       });
-      return signupCode.toJSON();
+      return signupCode?.toJSON();
     },
 
     /**
@@ -77,13 +77,13 @@ module.exports = (Code) => {
      * @returns {Promise<Code>} the code model having the reset code
      */
     async findValidResetCodeRecord(resetCode) {
-      const resetCodeRecord = Code.findOne({
+      const resetCodeRecord = await Code.findOne({
         where: {
           codeHash: getHashedHexCode(resetCode),
           expiresAt: { [Op.gt]: new Date() },
         },
       });
-      return resetCodeRecord.toJSON();
+      return resetCodeRecord;
     },
   };
 };

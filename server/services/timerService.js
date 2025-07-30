@@ -10,11 +10,12 @@ module.exports = (Timer) => {
     /**
      * Fetch all timers.
      *
+     * @param {boolean} raw Indicates if the timer model should be returned in raw form
      * @returns {Promise<Array>}
      */
-    async getAllTimers() {
+    async getAllTimers({ raw = false } = {}) {
       const timers = await Timer.findAll();
-      return timers.map((timer) => timer.toJSON());
+      return timers.map((timer) => (raw ? timer : timer?.toJSON()));
     },
 
     /**
@@ -25,7 +26,7 @@ module.exports = (Timer) => {
      */
     async findTimerById(id) {
       const timer = await Timer.findOne({ where: { id } });
-      return timer.toJSON();
+      return timer?.toJSON();
     },
 
     /**

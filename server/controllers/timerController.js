@@ -6,7 +6,7 @@ const setTimer = async (req, res) => {
   if (!startDate || !endDate) {
     generateCustomError("Start and end dates must be set!", 400);
   }
-  const timers = await timerService.getAllTimers();
+  const timers = await timerService.getAllTimers({ raw: true });
   if (timers.length === 0) {
     await timerService.createTimer(req.body);
   } else {
