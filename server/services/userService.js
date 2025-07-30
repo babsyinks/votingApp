@@ -32,13 +32,15 @@ module.exports = (User) => {
      * @param {Object} param0
      * @param {string} [param0.email] the email of the user
      * @param {string} [param0.username] the username of the user
+     * @param {boolean} [param0.raw] if raw is true, it retrieves the user in its raw model form.
+     * If false, it retrieves the user in its refined JSON() form.
      * @returns {Promise<User>}
      */
-    async getUserByIdentity({ email, username }) {
+    async getUserByIdentity({ email, username, raw = false }) {
       const identity = username || email;
       const key = username ? "username" : "email";
       const user = await User.findOne({ where: { [key]: identity } });
-      return user.toJSON();
+      return raw ? user : user.toJSON();
     },
 
     /**
