@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 
 const { hashPassWord } = require("../helpers/authControllerHelpers");
+const { failIfUserDoesNotExist, failIfPasswordWeak } = require("../validators/authValidators");
 module.exports = (User) => {
   return {
     /**
@@ -81,13 +82,16 @@ module.exports = (User) => {
     /**
      * Update password for user.
      *
-     * @param {User} user The user whose password is to be update
+     * @param {String} email The user's email
      * @param {string} password The new password for the user
      * @returns {Promise<User>}
      */
-    async updatePassword(user, password) {
+    async updatePassword(email, password) {
+      const user = await this.getUserByIdentity({ email, raw: true });
+      failIfUserDoesNotExist(user);
+      failIfPasswordWeak(password);
       user.password = await hashPassWord(password);
-      return user.save();
+      await user.save();
     },
   };
 };

@@ -1,4 +1,4 @@
-const { generateTokensAndSendResponse, hashPassWord } = require("../helpers/authControllerHelpers");
+const { generateTokensAndSendResponse } = require("../helpers/authControllerHelpers");
 const sendPasswordResetLink = require("../helpers/sendPasswordResetLink");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { authService } = require("../services");
@@ -92,12 +92,7 @@ const resetPassword = async (req, res, next) => {
     if (!resetCodeRecord) {
       return res.status(400).json({ message: "Invalid or expired token" });
     }
-    const user = await authService.getUserByEmail(resetCodeRecord.email);
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-    user.password = await hashPassWord(password);
-    await user.save();
+    await authService.updatePassword(resetCodeRecord.email, password);
     await resetCodeRecord.destroy();
     res.json({ message: "Password successfully updated" });
   } catch (e) {
