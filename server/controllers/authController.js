@@ -1,5 +1,6 @@
 const { generateTokensAndSendResponse } = require("../helpers/authControllerHelpers");
 const sendPasswordResetLink = require("../helpers/sendPasswordResetLink");
+const sendPasswordResetSuccessNotification = require("../helpers/sendPasswordResetSuccessNotification");
 const sendSignupCode = require("../helpers/sendSignupCode");
 const { authService } = require("../services");
 const {
@@ -94,6 +95,7 @@ const resetPassword = async (req, res, next) => {
     }
     await authService.updatePassword(resetCodeRecord.email, password);
     await resetCodeRecord.destroy();
+    await sendPasswordResetSuccessNotification({ toEmail: resetCodeRecord.email });
     res.json({ message: "Password successfully updated" });
   } catch (e) {
     next(e);
