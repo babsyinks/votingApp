@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useToastMessage } from "hooks/useToastMessage";
 import { useAxios } from "hooks/useAxios";
-import useStatusOfElectionRedirect from "../../hooks/useStatusOfElectionRedirect";
+import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElectionRedirect";
 import {
   userAuthenticated,
   userNotAuthenticated,
