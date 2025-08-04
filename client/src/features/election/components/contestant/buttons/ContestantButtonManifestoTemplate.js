@@ -1,6 +1,6 @@
 import React from "react";
-import Block from "../../../../../components/ui/Block";
-import Button from "../../../../../components/ui/Button";
+import Block from "components/ui/Block";
+import Button from "components/ui/Button";
 
 /**
  * This component is a template for manifesto buttons. It renders manifesto button and sets behaviour

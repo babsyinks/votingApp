@@ -1,4 +1,5 @@
 import React from "react";
+import Block from "components/ui/Block";
 import style from "./ContestantTextInfoWrapper.module.css";
 /**
  * Wraps a contestant's textual information details. E.g basic information or voting statistics.
@@ -9,9 +10,9 @@ import style from "./ContestantTextInfoWrapper.module.css";
  */
 const ContestantTextInfoWrapper = ({ children }) => {
   return (
-    <div className={style["info-wrapper"]}>
+    <Block className={style["info-wrapper"]}>
       {children}
-    </div>
+    </Block>
   );
 };
 
