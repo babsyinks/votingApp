@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Block from "components/ui/Block";
+import Img from "components/ui/Img";
 import style from "./ContestantPicture.module.css";
 /**
  * Holds a contestant's picture formating and content.
@@ -11,13 +13,13 @@ import style from "./ContestantPicture.module.css";
  */
 const ContestantPicture = ({ picture, showFullPicture }) => {
   return (
-    <div className={style["contestant-picture-wrapper"]}>
-      <img
+    <Block className={style["contestant-picture-wrapper"]}>
+      <Img
         className={`${style["contestant-picture"]} ${showFullPicture ? style["contestant-picture-full"] : ""}`}
         src={picture}
         alt="contestant"
       />
-    </div>
+    </Block>
   );
 };
 
