@@ -1,10 +1,10 @@
-import { useAxios } from "../../../../../hooks/useAxios";
-import { useToastMessage } from "../../../../../hooks/useToastMessage";
+import { useAxios } from "hooks/useAxios";
+import { useToastMessage } from "hooks/useToastMessage";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Button from "../../../../../components/ui/Button";
-import { updateVotes } from "../../../electionSlice";
-import { userInfo } from "../../../../user/userSlice";
+import Button from "components/ui/Button";
+import { updateVotes } from "features/election/electionSlice";
+import { userInfo } from "features/user/userSlice";
 
 /**
  * This component represents a single vote button. Each contestant has their own vote button that
@@ -25,9 +25,7 @@ const ContestantButtonVote = ({ contestantId, position }) => {
   useEffect(() => {
     if (response) {
       const { positionVotes, contestantVotes } = response;
-      dispatch(
-        updateVotes({ positionVotes, contestantVotes, contestantId, position }),
-      );
+      dispatch(updateVotes({ positionVotes, contestantVotes, contestantId, position }));
       setDisableVote(false);
     }
   }, [response, dispatch, contestantId, position]);
@@ -53,7 +51,7 @@ const ContestantButtonVote = ({ contestantId, position }) => {
   return (
     <Button
       onClick={voteForContestant}
-      className="rnd-corner-btn rnd-corner-btn-sized swp-col-grn"
+      className="rnd-corner-btn rnd-corner-btn-sized swp-col-lime"
       disabled={disableVote}
     >
       Vote
