@@ -510,6 +510,7 @@ a:hover {
 
 /* cursor values */
 .cs-pointer { cursor: pointer; }
+.cs-not-allowed { cursor: not-allowed; }
 
 /* flex */
 .flex{
