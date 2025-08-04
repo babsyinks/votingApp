@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Span from "components/ui/Span";
 import ContestantTextInfoWrapper from "./ContestantTextInfoWrapper";
-import style from "./ContestantBasicInfo.module.css";
+
 /**
  * Holds a contestant's basic information, and formats it. E.g the name.
  *
@@ -15,7 +15,7 @@ import style from "./ContestantBasicInfo.module.css";
 const ContestantBasicInfo = ({ type, value }) => {
   return (
     <ContestantTextInfoWrapper>
-      {type}: <Span className={style["basic-info"]}>{value}</Span>
+      {type}: <Span className="tt-cap ff-berkshire py-5 text-blue">{value}</Span>
     </ContestantTextInfoWrapper>
   );
 };
