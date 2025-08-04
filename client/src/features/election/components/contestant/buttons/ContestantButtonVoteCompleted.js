@@ -1,7 +1,6 @@
 import React from "react";
-import Button from "../../../../../components/ui/Button";
+import Button from "components/ui/Button";
 import I from "components/ui/I";
-import style from "./ContestantButtonVoteCompleted.module.css";
 
 /**
  * This component shows if the contestant owning this button has already been voted for by the current
@@ -14,13 +13,13 @@ import style from "./ContestantButtonVoteCompleted.module.css";
  */
 const ContestantButtonVoteCompleted = ({ votedFor }) => {
   const iTagDetails = votedFor
-    ? { color: "voted-for", class: "fa-check-circle" }
-    : { color: "voted-against", class: "fa-times-circle" };
+    ? { color: "text-lime", class: "fa-check-circle" }
+    : { color: "text-red", class: "fa-times-circle" };
   return (
     <Button
-      className={`rnd-corner-btn rnd-corner-btn-sized ${style["vote-completed"]} ${style[iTagDetails.color]}`}
+      className={`rnd-corner-btn rnd-corner-btn-sized bg-black cs-not-allowed ${iTagDetails.color}`}
     >
-      <I className={`far ${iTagDetails.class} fa-lg`}></I>
+      <I className={`far ${iTagDetails.class} fa-lg cs-not-allowed`}></I>
     </Button>
   );
 };
