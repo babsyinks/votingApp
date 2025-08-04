@@ -204,9 +204,6 @@ a:hover {
   --color-info-votes-stat: var(--palette-purple-cool);
   --color-info-votes-total-stat: var(--palette-purple-dark);
 
-  --color-vote-percent-bg: var(--palette-black);
-  --color-vote-percent-txt: var(--palette-white);
-
   --color-message-success: var(--palette-lime);
   --color-message-failure: var(--palette-red);
 
@@ -390,6 +387,7 @@ a:hover {
 
 /* % based Borders */
 .border-rounded-50p { border-radius: 50%; }
+.border-rounded-100p { border-radius: 100%; }
 
 /* Background Colors */
 .bg-transparent { background-color: transparent; }
