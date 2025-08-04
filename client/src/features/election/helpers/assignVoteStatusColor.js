@@ -9,11 +9,9 @@
  */
 const assignVoteStatusColor = (contestants) => {
   const colorStatusObj = {};
+  if (!contestants || contestants.length === 0) return colorStatusObj;
   const firstVoteCount = contestants[0].votes.length;
-  if (
-    contestants.length > 1 &&
-    contestants.every((c) => c.votes.length === firstVoteCount)
-  ) {
+  if (contestants.length > 1 && contestants.every((c) => c.votes.length === firstVoteCount)) {
     setColorCodeForATie(contestants, colorStatusObj);
   } else {
     setColorCodesForWinnersAndLosers(contestants, colorStatusObj);
