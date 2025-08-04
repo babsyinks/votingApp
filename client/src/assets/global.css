@@ -439,6 +439,7 @@ a:hover {
 .ff-nanum {font-family: 'Nanum Myeongjo', serif;}
 
 /* Text style utilities */
+.fw-normal { font-weight: normal; }
 .fw-bold { font-weight: bold; }
 .fw-500 { font-weight: 500; }
 .fw-600 { font-weight: 600; }
