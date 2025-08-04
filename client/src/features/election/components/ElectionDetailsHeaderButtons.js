@@ -1,17 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useOrientation from "../../../hooks/useOrientation";
-import { useAxios } from "../../../hooks/useAxios";
-import { userIsAdmin } from "../../auth/userAuthSlice";
-import { userNotAuthenticated } from "../../auth/userAuthSlice";
-import Block from "../../../components/ui/Block";
+import useOrientation from "hooks/useOrientation";
+import { useAxios } from "hooks/useAxios";
+import { userIsAdmin, userNotAuthenticated } from "features/auth/userAuthSlice";
+import Block from "components/ui/Block";
 import ElectionDetailsHeaderButton from "./ElectionDetailsHeaderButton";
 
 const ElectionDetailsHeaderButtons = ({ role }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userAdminAccess = useSelector(userIsAdmin);
-  // const { setRemoveToken } = useRemoveFromLocalStorage("token");
   const { triggerRequest } = useAxios();
   const isPortrait = useOrientation();
 
@@ -34,7 +32,6 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
         url: "/api/v1/auth/signout",
       },
     });
-    // setRemoveToken(true);
     dispatch(userNotAuthenticated());
   };
 

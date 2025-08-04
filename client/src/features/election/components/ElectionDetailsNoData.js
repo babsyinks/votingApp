@@ -1,5 +1,5 @@
-import Block from "../../../components/ui/Block";
-import Heading from "../../../components/ui/Heading";
+import Block from "components/ui/Block";
+import Heading from "components/ui/Heading";
 import ElectionDetailsHeader from "./ElectionDetailsHeader";
 
 const ElectionDetailsNoData = () => {

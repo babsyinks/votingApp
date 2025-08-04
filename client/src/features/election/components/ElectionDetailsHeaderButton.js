@@ -1,4 +1,4 @@
-import Button from "../../../components/ui/Button";
+import Button from "components/ui/Button";
 
 const ElectionDetailsHeaderButton = ({ onClick, btnLabel, className = "" }) => {
   return (

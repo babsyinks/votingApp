@@ -1,6 +1,7 @@
 import React from "react";
-import Block from "../../../components/ui/Block";
-import Heading from "../../../components/ui/Heading";
+import Block from "components/ui/Block";
+import Heading from "components/ui/Heading";
+import Span from "components/ui/Span";
 
 const ElectivePositionDetailsSummaryPart = ({ label, value }) => {
   const headingType = label === "Position" ? "h2" : "h3";
@@ -11,7 +12,7 @@ const ElectivePositionDetailsSummaryPart = ({ label, value }) => {
         type={headingType}
       >
         {label}:{" "}
-        <span className='text-sky-blue'>{value}</span>
+        <Span className='text-sky-blue'>{value}</Span>
       </Heading>
     </Block>
   );

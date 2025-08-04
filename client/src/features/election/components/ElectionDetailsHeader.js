@@ -1,15 +1,15 @@
 import { useSelector } from "react-redux";
-import { userInfo } from "../../user/userSlice";
-import useOrientation from "../../../hooks/useOrientation";
-import Block from "../../../components/ui/Block";
+import { userInfo } from "features/user/userSlice";
+import useOrientation from "hooks/useOrientation";
+import Block from "components/ui/Block";
 import ElectionDetailsHeaderMessage from "./ElectionDetailsHeaderMessage";
 import ElectionDetailsHeaderHomeIcon from "./ElectionDetailsHeaderHomeIcon";
 import ElectionDetailsHeaderButtons from "./ElectionDetailsHeaderButtons";
 
 const ElectionDetailsHeader = ({ message }) => {
   const userDetails = useSelector(userInfo);
-const isPortrait = useOrientation();
-const fontSize = isPortrait? 'text-3vh': 'text-2vw'
+  const isPortrait = useOrientation();
+  const fontSize = isPortrait ? "text-3vh" : "text-2vw";
   const { username, role } = userDetails;
   return (
     <Block

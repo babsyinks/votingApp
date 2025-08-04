@@ -1,4 +1,4 @@
-import Block from "../../../components/ui/Block";
+import Block from "components/ui/Block";
 
 const ElectionDetailsHeaderMessage = ({ message, username }) => {
   return (

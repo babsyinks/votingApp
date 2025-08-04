@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ElectivePositionDetailsContestants from "./ElectivePositionDetailsContestants";
 import ElectivePositionDetailsSummary from "./ElectivePositionDetailsSummary";
-import Block from "../../../components/ui/Block";
+import Block from "components/ui/Block";
 import {
   getAllVotesInACategory,
   getAllContestantsInCategory,

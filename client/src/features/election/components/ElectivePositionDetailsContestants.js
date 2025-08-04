@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import Grid from "../../../layout/Grid";
+import Grid from "layout/Grid";
 import Contestant from "./contestant/Contestant";
-import { userInfo } from "../../user/userSlice";
+import { userInfo } from "features/user/userSlice";
 import assignVoteStatusColor from "../helpers/assignVoteStatusColor";
 
 const ElectivePositionDetailsContestants = ({
