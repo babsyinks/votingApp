@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Span from "components/ui/Span";
 import ContestantVotesInfo from "./ContestantVotesInfo";
-import style from "./ContestantVotesInfoStat.module.css";
 
 /**
  *
@@ -35,14 +35,14 @@ const ContestantVotesInfoStat = ({
   };
   return (
     <ContestantVotesInfo type="Vote Percent" showInfo={showInfo}>
-      <span>
-        <span
-          className={style["vote-percent"]}
+      <Span>
+        <Span
+          className="fs-italic fw-bold p-5 bg-black border-rounded-100p"
           style={{ color: contestantElectionStatusColor }}
         >
           {getContestantVotePercent()}
-        </span>
-      </span>
+        </Span>
+      </Span>
     </ContestantVotesInfo>
   );
 };
@@ -51,7 +51,7 @@ ContestantVotesInfoStat.propTypes = {
   showInfo: PropTypes.bool.isRequired,
   contestantVotes: PropTypes.number.isRequired,
   totalVotes: PropTypes.number.isRequired,
-  contestantElectionStatusColor: PropTypes.string,
+  contestantElectionStatusColor: PropTypes.string.isRequired,
 };
 
 export default ContestantVotesInfoStat;
