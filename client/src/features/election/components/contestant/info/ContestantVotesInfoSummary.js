@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Span from "components/ui/Span";
 import ContestantVotesInfo from "./ContestantVotesInfo";
-import style from "./ContestantVotesInfoSummary.module.css";
 
 /**
  *
@@ -25,14 +25,14 @@ const ContestantVotesInfoSummary = ({
 }) => {
   return (
     <ContestantVotesInfo type="Votes" showInfo={showInfo}>
-      <span>
-        <span className={style["contestant-votes"]}>{contestantVotes}</span>{" "}
+      <Span> 
+        <Span className="text-purple-cool fs-italic py-5">{contestantVotes}</Span>{" "}
         {showExpandedStats && (
           <>
-            out of <span className={style["total-votes"]}>{totalVotes}</span>
+            out of <Span className="text-purple-dark fs-italic">{totalVotes}</Span>
           </>
         )}
-      </span>
+      </Span>
     </ContestantVotesInfo>
   );
 };
@@ -40,7 +40,7 @@ const ContestantVotesInfoSummary = ({
 ContestantVotesInfoSummary.propTypes = {
   showInfo: PropTypes.bool.isRequired,
   contestantVotes: PropTypes.number.isRequired,
-  totalVotes: PropTypes.number,
+  totalVotes: PropTypes.number.isRequired,
   showExpandedStats: PropTypes.bool.isRequired,
 };
 
