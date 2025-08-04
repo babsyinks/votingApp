@@ -199,11 +199,6 @@ a:hover {
   --grad-purple: var(--palette-purple-light);
   --grad-pink-end: var(--palette-pink-soft);
 
-  --color-info-data: var(--palette-blue);
-
-  --color-info-votes-stat: var(--palette-purple-cool);
-  --color-info-votes-total-stat: var(--palette-purple-dark);
-
   --color-message-success: var(--palette-lime);
   --color-message-failure: var(--palette-red);
 
@@ -273,6 +268,7 @@ a:hover {
 .p-5 { padding: 5px; }
 .p-10 { padding: 10px; }
 .p-20 { padding: 20px; }
+.py-5 { padding: 5px 0px; }
 .py-10 { padding: 10px 0px; }
 .px-10 { padding: 0px 10px; }
 .pl-0 { padding-left: 0px; }
@@ -348,6 +344,8 @@ a:hover {
 .text-red { color: var(--palette-red); }
 .text-red-cool { color: var(--palette-red-cool); }
 .text-yellow-cool { color: var(--palette-yellow-cool); }
+.text-purple-cool { color: var(--palette-purple-cool); }
+.text-purple-dark { color: var(--palette-purple-dark); }
 .text-grey-dark { color: var(--palette-grey-dark); }
 .text-grey-mute { color: var(--palette-grey-mute); }
 .text-black-cool { color: var(--palette-black-cool); }
@@ -399,18 +397,10 @@ a:hover {
 .bg-black { background-color: var(--palette-black); }
 .bg-white { background-color: var(--palette-white); }
 .bg-white-soft {background-color: var(--palette-white-soft);}
-.bg-grey-mute{
-  background-color: var(--palette-grey-mute);
-}
-.bg-grey-mute:hover{
-  background-color: var(--palette-grey-soft);
-}
-.bg-blueviolet-cool {
-  background: var(--palette-blueviolet-cool);
-}
-.bg-blueviolet-cool:hover {
-  background: var(--palette-blueviolet-firm-lite);
-}
+.bg-grey-mute{ background-color: var(--palette-grey-mute); }
+.bg-grey-mute:hover{ background-color: var(--palette-grey-soft); }
+.bg-blueviolet-cool { background: var(--palette-blueviolet-cool); }
+.bg-blueviolet-cool:hover { background: var(--palette-blueviolet-firm-lite); }
 
 /* Background Linear Gradients */
 .bg-gradient-blueviolet {
@@ -434,7 +424,8 @@ a:hover {
 .ff-cormorant { font-family: 'Cormorant Garamond', serif; }
 .ff-merienda { font-family: 'Merienda', cursive; }
 .ff-patrick { font-family: 'Patrick Hand', cursive; }
-.ff-nanum {font-family: 'Nanum Myeongjo', serif;}
+.ff-nanum { font-family: 'Nanum Myeongjo', serif; }
+.ff-berkshire { font-family: 'Berkshire Swash', sans-serif; }
 
 /* Text style utilities */
 .fw-normal { font-weight: normal; }
