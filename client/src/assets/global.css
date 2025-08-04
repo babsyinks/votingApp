@@ -245,6 +245,7 @@ a:hover {
 .m-10 { margin: 10px; }
 .m-20 { margin: 20px; }
 .ml-0 { margin-left: 0px; }
+.ml-2 { margin-left: 2px; }
 .ml-5 { margin-left: 5px; }
 .ml-10 { margin-left: 10px; }
 .mr-0 { margin-right: 0px; }
@@ -366,6 +367,7 @@ a:hover {
 /* Fixed Borders */
 .border { border: 1px solid var(--color-border-black); }
 .border-1-grey { border: 1px solid var(--palette-grey); }
+.border-2-grey { border: 2px solid var(--palette-grey-light); }
 .border-2-black { border: 2px solid var(--color-border-black); }
 .border-2-white { border: 2px solid var(--color-border-white); }
 .border-1-silver-soft { border: 1px solid var(--color-border-silver-soft); }
