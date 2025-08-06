@@ -1,5 +1,5 @@
-import Paragraph from "../../../components/ui/Paragraph"
-import A from "../../../components/ui/A";
+import Paragraph from "components/ui/Paragraph";
+import A from "components/ui/A";
 
 function HelpMeansEmail() {
   return (

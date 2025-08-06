@@ -1,8 +1,8 @@
 import React from "react";
-import Block from "../../../components/ui/Block";
-import A from "../../../components/ui/A";
-import I from "../../../components/ui/I";
-import Button from "../../../components/ui/Button";
+import Block from "components/ui/Block";
+import A from "components/ui/A";
+import I from "components/ui/I";
+import Button from "components/ui/Button";
 
 function HelpMeansWhatsApp({ phoneNumber, helpDeskSlot }) {
   const animation =

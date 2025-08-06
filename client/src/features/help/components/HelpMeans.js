@@ -1,5 +1,5 @@
-import useBreakpoint from "../../../hooks/useBreakpoint";
-import Block from "../../../components/ui/Block";
+import useBreakpoint from "hooks/useBreakpoint";
+import Block from "components/ui/Block";
 import HelpMeansWhatsApp from "./HelpMeansWhatsApp";
 import HelpMeansEmail from "./HelpMeansEmail";
 import helpNums from "../config/helpNums";
