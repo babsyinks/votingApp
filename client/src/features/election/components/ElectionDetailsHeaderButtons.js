@@ -1,29 +1,16 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useOrientation from "hooks/useOrientation";
 import { useAxios } from "hooks/useAxios";
-import { userIsAdmin, userNotAuthenticated } from "features/auth/userAuthSlice";
+import { userNotAuthenticated } from "features/auth/userAuthSlice";
 import Block from "components/ui/Block";
 import ElectionDetailsHeaderButton from "./ElectionDetailsHeaderButton";
 
 const ElectionDetailsHeaderButtons = ({ role }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userAdminAccess = useSelector(userIsAdmin);
   const { triggerRequest } = useAxios();
   const isPortrait = useOrientation();
-
-  const accessAdmin = async () => {
-    try {
-      if (userAdminAccess) {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      navigate("/");
-    }
-  };
 
   const signOut = async () => {
     await triggerRequest({
@@ -44,7 +31,7 @@ const ElectionDetailsHeaderButtons = ({ role }) => {
       {role === "admin" && (
         <ElectionDetailsHeaderButton
           btnLabel="Admin In"
-          onClick={accessAdmin}
+          onClick={() => navigate("/admin")}
           className={styleToApply.class}
         />
       )}
