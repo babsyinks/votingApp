@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Paragraph from "../../../components/ui/Paragraph";
-import Block from "../../../components/ui/Block";
+import Paragraph from "components/ui/Paragraph";
+import Block from "components/ui/Block";
 export default function HelpSection() {
   return (
     <Block className="mt-3r ta-center text-base">

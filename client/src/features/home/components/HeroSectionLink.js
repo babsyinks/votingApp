@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { electionStatus } from "features/election/electionSlice";
-import Block from "../../../components/ui/Block";
-import Button from "../../../components/ui/Button";
+import Block from "components/ui/Block";
+import Button from "components/ui/Button";
 
 export default function HeroSectionLink({ userIsAuthenticated }) {
   const statusOfElection = useSelector(electionStatus);

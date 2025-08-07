@@ -1,6 +1,6 @@
-import Block from "../../../components/ui/Block";
-import Heading from "../../../components/ui/Heading";
-import List from "../../../components/ui/List";
+import Block from "components/ui/Block";
+import Heading from "components/ui/Heading";
+import List from "components/ui/List";
 export default function FeatureCard({ title, items }) {
   return (
     <Block className="bg-white p-1p5r border-rounded-1r bs-black">

@@ -1,5 +1,5 @@
-import Heading from "../../../components/ui/Heading";
-import Paragraph from "../../../components/ui/Paragraph";
+import Heading from "components/ui/Heading";
+import Paragraph from "components/ui/Paragraph";
 
 export default function HeroSectionMessage() {
   return (

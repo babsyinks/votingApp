@@ -1,4 +1,4 @@
-import Img from "../../../components/ui/Img";
+import Img from "components/ui/Img";
 
 export default function HeroSectionImage() {
   return (

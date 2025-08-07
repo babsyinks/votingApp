@@ -1,5 +1,5 @@
-import Grid from "../../../layout/Grid";
-import Section from "../../../components/ui/Section";
+import Grid from "layout/Grid";
+import Section from "components/ui/Section";
 import FeatureCard from "./FeatureCard";
 import featureCardConfig from "../config/featureCardConfig";
 export default function FeatureSection() {
