@@ -3,11 +3,7 @@ import ResultStatusIndicatorWinner from "./ResultStatusIndicatorWinner";
 import ResultStatusIndicatorTie from "./ResultStatusIndicatorTie";
 import ResultStatusIndicatorLoser from "./ResultStatusIndicatorLoser";
 
-export default function ResultStatusIndicatorChooser({
-  contestantTotalVotes,
-  isTie,
-  index,
-}) {
+export default function ResultStatusIndicatorChooser({ contestantTotalVotes, isTie, index }) {
   return (
     <Span>
       {index === 0 ? (
