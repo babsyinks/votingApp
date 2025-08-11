@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { timerData } from "../../timerSlice";
-import useResponsiveFontSize from "../../hooks/useResponsiveFontSize";
-import Block from "../../../../components/ui/Block";
-import Label from "../../../../components/ui/Label";
-import Input from "../../../../components/ui/Input";
+import { timerData } from "features/timer/timerSlice";
+import useResponsiveFontSize from "features/timer/hooks/useResponsiveFontSize";
+import Block from "components/ui/Block";
+import Label from "components/ui/Label";
+import Input from "components/ui/Input";
 
 function ElectionTimerSettingsFormInput({ label, type, value, onChange }) {
   const fontSize = useResponsiveFontSize();
@@ -14,6 +14,7 @@ function ElectionTimerSettingsFormInput({ label, type, value, onChange }) {
         {label}:
       </Label>{" "}
       <Input
+        name={label}
         className={fontSize}
         type={type}
         onChange={onChange}
