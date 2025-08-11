@@ -1,4 +1,4 @@
-import useOrientation from "../../../hooks/useOrientation";
+import useOrientation from "hooks/useOrientation";
 
 function useResponsiveFontSize(
   portraitClass = "text-1p2vh",
