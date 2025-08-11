@@ -1,15 +1,10 @@
 import { useEffect } from "react";
-import useTimerSchedule from "../../hooks/useTimerSchedule";
-import Block from "../../../../components/ui/Block";
+import useTimerSchedule from "features/timer/hooks/useTimerSchedule";
+import Block from "components/ui/Block";
 import ElectionTimerSettingsFormInput from "./ElectionTimerSettingsFormInput";
 
-function ElectionTimerSettingsForm({
-  setElectionSchedule,
-  setEnableDone,
-  triggerFailureToast,
-}) {
-  const { mergedTimerState, startDate, startTime, endDate, endTime } =
-    useTimerSchedule();
+function ElectionTimerSettingsForm({ setElectionSchedule, setEnableDone, triggerFailureToast }) {
+  const { mergedTimerState, startDate, startTime, endDate, endTime } = useTimerSchedule();
 
   useEffect(() => {
     if (startDate && startTime && endDate && endTime) {
@@ -32,10 +27,7 @@ function ElectionTimerSettingsForm({
       const getTimeStamp = (date, time) => {
         const dateMillisecondsTuned = getDateMillisecondsNumArray(date);
         const timeMillisecondsTuned = getTimeMillisecondsNumArray(time);
-        return new Date(
-          ...dateMillisecondsTuned,
-          ...timeMillisecondsTuned,
-        ).getTime();
+        return new Date(...dateMillisecondsTuned, ...timeMillisecondsTuned).getTime();
       };
 
       const getDateMillisecondsNumArray = (date) => {
@@ -48,8 +40,7 @@ function ElectionTimerSettingsForm({
         });
       };
 
-      const getTimeMillisecondsNumArray = (time) =>
-        time.split(":").map((v) => +v);
+      const getTimeMillisecondsNumArray = (time) => time.split(":").map((v) => +v);
 
       setElectionScheduleStatus();
     }
@@ -60,12 +51,7 @@ function ElectionTimerSettingsForm({
     <Block>
       {" "}
       {mergedTimerState.map(({ value, onChange, ...rest }, i) => (
-        <ElectionTimerSettingsFormInput
-          {...rest}
-          value={value}
-          onChange={onChange}
-          key={i}
-        />
+        <ElectionTimerSettingsFormInput {...rest} value={value} onChange={onChange} key={i} />
       ))}
     </Block>
   );

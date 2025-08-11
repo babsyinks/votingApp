@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { setTimerData } from "../../timerSlice";
-import { useAxios } from "../../../../hooks/useAxios";
-import useResponsiveFontSize from "../../hooks/useResponsiveFontSize";
-import Button from "../../../../components/ui/Button";
+import { setTimerData } from "features/timer/timerSlice";
+import { useAxios } from "hooks/useAxios";
+import useResponsiveFontSize from "features/timer/hooks/useResponsiveFontSize";
+import Button from "components/ui/Button";
 
 function ElectionTimerSettingsButton({
   label,
