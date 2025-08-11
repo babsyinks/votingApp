@@ -30,7 +30,7 @@ jest.mock("hooks/useAxios", () => ({
 
 jest.mock("hooks/useToastMessage", () => ({
   useToastMessage: () => ({
-    toast: { type: "error", message: "Invalid credentials" },
+    toast: { status: "failure", message: "Invalid credentials" },
     triggerFailureToast: mockTriggerFailureToast,
     toastDetailsSet: mockToastDetailsSet,
   }),

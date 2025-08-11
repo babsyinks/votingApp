@@ -6,7 +6,7 @@ const mockTriggerRequest = jest.fn();
 const mockTriggerFailureToast = jest.fn();
 let mockResponse = null;
 let mockError = null;
-let mockToast = { type: "error", message: "Something went wrong" };
+let mockToast = { status: "failure", message: "Something went wrong" };
 let mockToastDetailsSet = () => false;
 
 jest.mock("react-redux", () => ({
@@ -172,7 +172,7 @@ describe("SignUpRegistrationForm", () => {
 
   it("renders ToastMessage when toastDetailsSet returns true", () => {
     mockToastDetailsSet = () => true;
-    mockToast = { type: "error", message: "Registration failed" };
+    mockToast = { status: "failure", message: "Registration failed" };
 
     render(<SignUpRegistrationForm email="test@example.com" />);
     expect(screen.getByText(/registration failed/i)).toBeInTheDocument();

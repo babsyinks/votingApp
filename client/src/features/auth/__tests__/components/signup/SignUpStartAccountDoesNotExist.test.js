@@ -8,7 +8,7 @@ const mockNavigate = jest.fn();
 let mockResponse = null;
 let mockError = null;
 let mockToastDetailsSet = () => false;
-let mockToast = { type: "error", message: "Something went wrong" };
+let mockToast = { status: "failure", message: "Something went wrong" };
 
 jest.mock("hooks/useAxios", () => ({
   useAxios: () => ({
@@ -75,9 +75,7 @@ describe("SignUpStartAccountDoesNotExist", () => {
 
     render(<SignUpStartAccountDoesNotExist />);
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(
-        "/verify-code?email=",
-      );
+      expect(mockNavigate).toHaveBeenCalledWith("/verify-code?email=");
     });
   });
 
@@ -92,7 +90,7 @@ describe("SignUpStartAccountDoesNotExist", () => {
 
   it("renders ToastMessage when toastDetailsSet returns true", () => {
     mockToastDetailsSet = () => true;
-    mockToast = { type: "error", message: "Invalid email" };
+    mockToast = { status: "failure", message: "Invalid email" };
 
     render(<SignUpStartAccountDoesNotExist />);
     expect(screen.getByText(/invalid email/i)).toBeInTheDocument();
