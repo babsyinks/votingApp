@@ -13,16 +13,20 @@ jest.mock("features/auth/components/AuthHeading", () => ({ children }) => (
 
 jest.mock(
   "features/auth/components/forgotPassword/ForgotPasswordResetPassword",
-  () => ({ setBottomSpacingClass }) => {
-    // Call the setter in test to simulate behavior
-    setBottomSpacingClass("mb-1p5r");
-    return <div data-testid="reset-password-form">ResetForm</div>;
-  }
+  () =>
+    ({ setBottomSpacingClass }) => {
+      const { useEffect } = require("react");
+      useEffect(() => {
+        setBottomSpacingClass("mb-1p5r");
+      }, [setBottomSpacingClass]);
+
+      return <div data-testid="reset-password-form">ResetForm</div>;
+    },
 );
 
 describe("ForgotPassword", () => {
   it("renders AuthHeading and ForgotPasswordResetPassword inside AuthFrame", () => {
-    render(<ResetPassword />); 
+    render(<ResetPassword />);
 
     expect(screen.getByTestId("auth-heading")).toHaveTextContent("Reset Password");
 
