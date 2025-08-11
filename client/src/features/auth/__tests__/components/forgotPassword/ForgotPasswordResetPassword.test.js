@@ -23,35 +23,51 @@ jest.mock(
       </div>
     ),
 );
-jest.mock("components/ui/Block", () => ({ children, type, className }) => (
+jest.mock("components/ui/Block", () => ({ children, className }) => (
   <div className={className} data-testid="block">
     {children}
   </div>
 ));
-jest.mock("features/auth/components/AuthFrame", () => ({ children, type, isFull, className }) => (
+jest.mock("features/auth/components/AuthFrame", () => ({ children, className }) => (
   <div className={className} data-testid="auth-frame">
     {children}
   </div>
 ));
-jest.mock("features/auth/components/AuthFieldPassword", () => ({ value, onChange, placeholder }) => (
-  <input
-    type="password"
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    data-testid={placeholder === "Enter New Password" ? "password-input" : "password-dup-input"}
-  />
-));
-jest.mock("features/auth/components/AuthPasswordValidator", () => ({ password, setPasswordValid }) => {
-  // Simulate password validation logic
-  setPasswordValid(password.length >= 8);
-  return <div data-testid="auth-password-validator">Validator</div>;
-});
-jest.mock("features/auth/components/AuthValidationIndicator", () => ({ label, isValid, usePresetWidths }) => (
-  <div data-testid="auth-validation-indicator">
-    {label} (Valid: {isValid.toString()})
-  </div>
-));
+jest.mock(
+  "features/auth/components/AuthFieldPassword",
+  () =>
+    ({ value, onChange, placeholder }) => (
+      <input
+        type="password"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        data-testid={placeholder === "Enter New Password" ? "password-input" : "password-dup-input"}
+      />
+    ),
+);
+jest.mock(
+  "features/auth/components/AuthPasswordValidator",
+  () =>
+    ({ password, setPasswordValid }) => {
+      const { useEffect } = require("react");
+      // Simulate password validation logic
+      useEffect(() => {
+        setPasswordValid(password.length >= 8);
+      }, [setPasswordValid, password]);
+
+      return <div data-testid="auth-password-validator">Validator</div>;
+    },
+);
+jest.mock(
+  "features/auth/components/AuthValidationIndicator",
+  () =>
+    ({ label, isValid }) => (
+      <div data-testid="auth-validation-indicator">
+        {label} (Valid: {isValid.toString()})
+      </div>
+    ),
+);
 
 describe("ForgotPasswordResetPassword", () => {
   const mockSetBottomSpacingClass = jest.fn();
