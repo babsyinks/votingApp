@@ -1,4 +1,4 @@
-const creds = {
+const databaseCredentials = {
   development: {
     username: "postgres",
     password: "postgres",
@@ -25,4 +25,4 @@ const creds = {
     },
   },
 };
-module.exports = creds;
+module.exports = databaseCredentials;
