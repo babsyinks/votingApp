@@ -56,3 +56,4 @@ const logger = createLogger({
 });
 
 module.exports = logger;
+module.exports.devFormat = devFormat;
