@@ -7,38 +7,36 @@ require("dotenv").config({ path: path.join("..", ".env") });
 require("dotenv").config({ debug: process.env.DEBUG });
 
 const checkAuthenticationStatus = async (req, res, next) => {
-  __handleAuth("authentication")(req, res, next);
+  await _handleAuth("authentication")(req, res, next);
 };
 
 const checkAuthorizationStatus = async (req, res, next) => {
-  __handleAuth("authorization")(req, res, next);
+  await _handleAuth("authorization")(req, res, next);
 };
 
-const __handleAuth = (statusType) => {
+const _handleAuth = (statusType) => {
   return async (req, res, next) => {
-    const statusObj = __getAuthStatusObject(statusType);
+    const statusObj = _getAuthStatusObject(statusType);
     try {
       const token = req.cookies.access_token;
-      const user = await __retrieveUser(token);
+      const user = await _retrieveUser(token);
       if (!token || !user) {
         return res
           .status(statusObj.statusCode)
           .json({ [statusObj.type]: false, error: statusObj.message });
       }
       if (statusType === "authorization") {
-        __denyAuthorizationIfNotAdmin({ res, user });
+        _denyAuthorizationIfNotAdmin({ res, user });
       }
       req.user = user;
       next();
     } catch (error) {
-      return res
-        .status(401)
-        .json({ [statusObj.type]: false, error: error.message });
+      return res.status(401).json({ [statusObj.type]: false, error: error.message });
     }
   };
 };
 
-const __denyAuthorizationIfNotAdmin = ({ res, user }) => {
+const _denyAuthorizationIfNotAdmin = ({ res, user }) => {
   if (user.role !== "admin") {
     return res.status(403).json({
       authorized: false,
@@ -47,7 +45,7 @@ const __denyAuthorizationIfNotAdmin = ({ res, user }) => {
   }
 };
 
-const __getAuthStatusObject = (statusType) => {
+const _getAuthStatusObject = (statusType) => {
   const authObj = {
     authentication: {
       statusCode: 401,
@@ -63,7 +61,7 @@ const __getAuthStatusObject = (statusType) => {
   return authObj[statusType];
 };
 
-const __retrieveUser = async (token) => {
+const _retrieveUser = async (token) => {
   let user;
   if (token) {
     const authObj = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);

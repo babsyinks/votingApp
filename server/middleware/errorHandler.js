@@ -9,8 +9,8 @@ function errorHandler(err, req, res, next) {
     message: err.message || "An unexpected error occurred.",
   };
 
-  handleJwtErrors(err, errorDetails);
-  handleValidationErrors(err, errorDetails);
+  _handleJwtErrors(err, errorDetails);
+  _handleValidationErrors(err, errorDetails);
 
   const { statusCode, message } = errorDetails;
 
@@ -22,7 +22,7 @@ function errorHandler(err, req, res, next) {
   });
 }
 
-const handleJwtErrors = (err, errorDetails) => {
+const _handleJwtErrors = (err, errorDetails) => {
   if (err instanceof jwt.TokenExpiredError) {
     errorDetails.statusCode = 401;
     errorDetails.message = "Token has expired.";
@@ -32,7 +32,7 @@ const handleJwtErrors = (err, errorDetails) => {
   }
 };
 
-const handleValidationErrors = (err, errorDetails) => {
+const _handleValidationErrors = (err, errorDetails) => {
   if (err instanceof ValidationError) {
     errorDetails.statusCode = 422;
     errorDetails.message = err.errors.map((e) => e.message).join("; ");
