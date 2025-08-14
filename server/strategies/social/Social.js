@@ -31,7 +31,7 @@ class Social {
       user_id: uuidv4(),
       username: this.profile.username || email,
       email,
-      password: await bcrypt.hash(uuidv4(), 10), // unused placeholder
+      password: await bcrypt.hash(uuidv4(), 10), // unused placeholder (social strategies auth is external). Set for model consistency.
       firstname,
       lastname,
       role: "user",
