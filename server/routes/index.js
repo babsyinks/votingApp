@@ -2,7 +2,7 @@ const express = require("express");
 
 const authRoutes = require("./authRoutes");
 const electionRoutes = require("./electionRoutes");
-const oAuthRoutes = require("./oauthRoute");
+const oAuthRoutes = require("./oauthRoutes");
 const refreshRoute = require("./refreshTokenRoute");
 const timerRoutes = require("./timerRoutes");
 
