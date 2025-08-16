@@ -57,9 +57,7 @@ const Container = ({
   }
 
   if (flipDirectionOnOrientationChange) {
-    containerStyle.flexDirection = isPortrait
-      ? objComplements[flexDirection]
-      : flexDirection;
+    containerStyle.flexDirection = isPortrait ? objComplements[flexDirection] : flexDirection;
   }
 
   return (
@@ -94,12 +92,7 @@ Container.propTypes = {
     "baseline",
     "stretch",
   ]),
-  flexDirection: PropTypes.oneOf([
-    "row",
-    "row-reverse",
-    "column",
-    "column-reverse",
-  ]),
+  flexDirection: PropTypes.oneOf(["row", "row-reverse", "column", "column-reverse"]),
   backgroundImage: PropTypes.string,
   children: PropTypes.node,
   flipDirectionOnOrientationChange: PropTypes.bool,

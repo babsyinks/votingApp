@@ -13,11 +13,7 @@ import getCompClasses from "util/getCompClasses";
  * @param {React.ReactNode} props.children - Child elements to render inside the Grid.
  * @returns {JSX.Element} The rendered Grid component.
  */
-export default function Grid({
-  className = "",
-  style = {},
-  children,
-}) {
+export default function Grid({ className = "", style = {}, children }) {
   return (
     <div
       className={`${defaultStyle.grid} ${getCompClasses(defaultStyle, className)}`}
