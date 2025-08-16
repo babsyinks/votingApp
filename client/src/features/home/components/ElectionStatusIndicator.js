@@ -27,7 +27,7 @@ export default function ElectionStatusIndicator() {
   if (status === "inActive") return null;
 
   return (
-    <Block className="absolute top-1r left-1r z-10">
+    <Block className="absolute top-5p5r left-1r z-10">
       <Block
         className={`bg-red text-white py-0p5-px-1r border-rounded-0p4r fw-600 bs-black-lite ${blinking ? "blink" : ""}`}
       >
