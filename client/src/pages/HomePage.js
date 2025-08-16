@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userAuth } from "features/auth/userAuthSlice";
-import {
-  fetchThenSetCurrentTimerStatus,
-} from "features/timer/timerSlice";
+import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
 import Main from "components/ui/Main";
+import MainHeader from "layout/MainHeader";
+import Footer from "layout/Footer";
 import HeroSection from "features/home/components/HeroSection";
 import FeatureSection from "features/home/components/FeatureSection";
 import HelpSection from "features/home/components/HelpSection";
@@ -20,10 +20,12 @@ export default function HomePage() {
 
   return (
     <Main className="mnh-100vh">
+      <MainHeader />
       <ElectionStatusIndicator />
       <HeroSection userIsAuthenticated={userIsAuthenticated} />
       <FeatureSection />
       <HelpSection />
+      <Footer />
     </Main>
   );
 }
