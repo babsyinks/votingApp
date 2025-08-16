@@ -1,0 +1,7 @@
+.footer {
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 0.9rem;
+  color: var(--color-text-white);
+  background: linear-gradient(135deg, var(--color-background-translucent-blue-dark) 0%, var(--color-background-translucent-blue-lite) 100%);
+}
