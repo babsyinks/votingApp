@@ -1,5 +1,5 @@
 .tb{
-    border: 1px solid black;
+    border: 1px solid var(--color-border-black);
     display: inline-block;
     text-align: center;
     padding: 5px 0px;
@@ -7,6 +7,6 @@
 }
 
 #currentSelected{
-    background-color: rgb(53, 43, 191);
-    color: white;
+    background-color: var(--color-background-blueviolet-soft);
+    color: var(--color-text-white);
 }

@@ -1,7 +1,7 @@
 .inp-txt {
   padding: 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-grey-light);
   font-size: 1rem;
   transition: border 0.3s ease;
 }
@@ -9,7 +9,7 @@
 .input:focus {
   border-color: var(--color-primary-btn);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 0 3px var(--color-bs-blue-carpet-pattern);
 }
 
 .line-input {
