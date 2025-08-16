@@ -99,6 +99,10 @@ a:hover {
   --palette-blue-soft: 	#00aeff;
   --palette-blue-faded: #e6f0ff;
   --palette-blue-faded-mild: #cad9f0;
+  --palette-blue-neo: #3b82f6;
+  --palette-blue-neo-faded: #d1e3f6;
+  --palette-blue-neo-faded-lite: #e3edf7;
+  --palette-blue-carpet-pattern: rgba(59, 130, 246, 0.2);
 
   --palette-blueviolet: #8a2be2;
   --palette-blueviolet-cool: #7ab5fd;
@@ -107,6 +111,9 @@ a:hover {
   --palette-blueviolet-dark: #1e40af;
   --palette-blueviolet-firm: #1877f2;
   --palette-blueviolet-firm-lite: #60a5fa;
+
+  --palette-translucent-blue-dark: rgba(59, 130, 246, 0.9);
+  --palette-translucent-blue-lite: rgba(96, 165, 250, 0.9);
 
   --palette-slateblue: #6a5acd;
 
@@ -126,6 +133,7 @@ a:hover {
   --palette-grey-mute: #6b7280;
   --palette-grey-soft: #4b5563;
   --palette-grey-firm:  #333333;
+  --palette-grey-neo: #9ca3af;
   --palette-grey-light-transparent: rgba(199, 199, 199, 0.7);
 
   --palette-black: 	#000000;
@@ -135,6 +143,7 @@ a:hover {
   --palette-black-firm: #111827;
   --palette-black-carpet-pattern: rgba(0, 0, 0, 0.1);
   --palette-black-carpet-pattern-lite: rgba(0, 0, 0, 0.04);
+  --palette-black-carpet-pattern-neo: rgba(0, 0, 0, 0.05);
 }
 
 /* semantic color variables used for this project */
@@ -179,12 +188,15 @@ a:hover {
 
   --color-text-white: var(--palette-white);
   --color-text-black: var(--palette-black);
+  --color-text-blue-neo: var(--palette-blue-neo);
   --color-text-sky-blue: var(--palette-blue-soft);
   --color-text-blueviolet-firm: var(--palette-blueviolet-firm);
+  --color-text-grey-neo: var(--palette-grey-neo);
   --color-text-grey-mute: var(--palette-grey-mute);
   --color-text-grey-firm: var(--palette-grey-firm);
   --color-text-blueviolet-mute: var(--palette-blueviolet-mute);
   --color-text-red-mute: var(--palette-red-mute);
+  --color-text-yellow-soft: var(--palette-yellow-soft);
 
   --color-input-box-border-bottom: var(--palette-black);
 
@@ -212,16 +224,30 @@ a:hover {
   --color-background-white: var(--palette-white);
   --color-background-white-transparent: var(--palette-white-transparent);
   --color-background-black: var(--palette-black);
+  --color-background-blueviolet-soft: var(--palette-blueviolet-soft);
   --color-background-blueviolet-firm: var(--color-text-blueviolet-firm);
   --color-background-blueviolet-firm-hover: var(--palette-blueviolet-dark);
   --color-background-blueviolet-firm-lite: var(--palette-blueviolet-firm-lite);
   --color-background-blue-faded: var(--palette-blue-faded);
   --color-background-blue-faded-mild: var(--palette-blue-faded-mild);
+  --color-background-blue-neo: var(--palette-blue-neo);
+  --color-background-blue-neo-faded: var(--palette-blue-neo-faded);
+  --color-background-blue-neo-faded-lite: var(--palette-blue-neo-faded-lite);
+  --color-background-translucent-blue-dark: var(--palette-translucent-blue-dark);
+  --color-background-translucent-blue-lite: var(--palette-translucent-blue-lite);
   --color-background-grey-light-transparent: var(--palette-grey-light-transparent);
 
   --color-border-black: var(--palette-black);
   --color-border-white: var(--palette-white);
   --color-border-silver-soft: var(--palette-silver-soft);
+  --color-border-grey-light: var(--palette-grey-light);
+  --color-border-white-carpet-pattern: var(--palette-white-carpet-pattern);
+
+  --color-bs-black-carpet-pattern: var(--palette-black-carpet-pattern);
+  --color-bs-black-carpet-pattern-lite: var(--palette-black-carpet-pattern-lite);
+  --color-bs-blue-carpet-pattern: var(--palette-blue-carpet-pattern);
+  --color-bs-white-transparent: var(--palette-white-transparent);
+  --color-bs-black-carpet-pattern-neo: var(--palette-black-carpet-pattern-neo);
 }
 
 /* common spacing classes */
@@ -297,6 +323,7 @@ a:hover {
 
 .top-0   { top: 0; }
 .top-1r   { top: 1rem; }
+.top-5p5r   { top: 5.5rem; }
 .left-0  { left: 0; }
 .left-1r  { left: 1rem; }
 
@@ -342,6 +369,7 @@ a:hover {
 .text-blueviolet-dark { color: var(--palette-blueviolet-dark); }
 .text-blueviolet-mute { color: var(--palette-blueviolet-mute); }
 .text-sky-blue { color: var(--palette-blue-soft); }
+.text-aqua {color: var(--palette-aqua);}
 .text-red { color: var(--palette-red); }
 .text-red-cool { color: var(--palette-red-cool); }
 .text-yellow-cool { color: var(--palette-yellow-cool); }
