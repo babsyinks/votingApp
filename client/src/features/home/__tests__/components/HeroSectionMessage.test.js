@@ -33,6 +33,6 @@ describe('HeroSectionMessage', () => {
     expect(paragraph).toBeInTheDocument();
     expect(paragraph.textContent).toContain('Your secure and reliable online voting platform');
     expect(paragraph.className).toContain('text-xl');
-    expect(paragraph.className).toContain('text-grey-dark');
+    expect(paragraph.className).toContain('text-xl mb-2p5r paragraph-white paragraph-md');
   });
 });
