@@ -17,19 +17,19 @@ import ResetPassword from "pages/ResetPassword";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route exact path="/" element={<HomePage />} />
-      <Route exact path="/register" element={<Register />} />
-      <Route exact path="/signin" element={<SignIn />} />
-      <Route exact path="/signup-start" element={<SignUpStart />} />
-      <Route exact path="/verify-code" element={<VerifyCode />} />
-      <Route exact path="/oauth-success" element={<OAuthSuccess />} />
-      <Route exact path="/forgot-password" element={<ForgotPassword />} />
-      <Route exact path="/reset-password/:resetCode" element={<ResetPassword />} />
-      <Route exact path="/admin" element={<Admin />} />
-      <Route exact path="/vote" element={<VotingProcess />} />
-      <Route exact path="/time" element={<ElectionTimerSettings />} />
-      <Route exact path="/help" element={<Help />} />
-      <Route exact path="/results" element={<Results />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup-start" element={<SignUpStart />} />
+      <Route path="/verify-code" element={<VerifyCode />} />
+      <Route path="/oauth-success" element={<OAuthSuccess />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:resetCode" element={<ResetPassword />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/vote" element={<VotingProcess />} />
+      <Route path="/time" element={<ElectionTimerSettings />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/results" element={<Results />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
