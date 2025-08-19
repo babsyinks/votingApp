@@ -16,7 +16,7 @@ function MultiLayerWrapper({ children }) {
   return (
     <Block
       type="flex-horz"
-      className={`mnh-100vh bg-gradient-blueviolet ${pad}`}
+      className={`mnh-100vh ${pad}`}
     >
       <Block className="bg-white-transparent border-rounded-16 p-2r mxw-600 w-full ta-center bs-black fadeIn">
         {children}
