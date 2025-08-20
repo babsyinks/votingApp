@@ -3,9 +3,12 @@ import { render, screen } from "@testing-library/react";
 import HomePage from "pages/HomePage";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
+import featureCardConfig from "features/home/config/featureCardConfig";
 
 jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(),
+  fetchThenSetCurrentTimerStatus: jest.fn(() => ({
+    type: "mock/fetchThenSetCurrentTimerStatus",
+  })),
 }));
 
 jest.mock("react-redux", () => ({
@@ -22,6 +25,16 @@ jest.mock("components/ui/Main", () => ({
   ),
 }));
 
+jest.mock("layout/MainHeader", () => ({
+  __esModule: true,
+  default: () => <div data-testid="MainHeader" />,
+}));
+
+jest.mock("layout/MainFooter", () => ({
+  __esModule: true,
+  default: () => <div data-testid="MainFooter" />,
+}));
+
 jest.mock("features/home/components/ElectionStatusIndicator", () => ({
   __esModule: true,
   default: () => <div data-testid="ElectionStatusIndicator" />,
@@ -34,9 +47,16 @@ jest.mock("features/home/components/HeroSection", () => ({
   ),
 }));
 
-jest.mock("features/home/components/FeatureSection", () => ({
+jest.mock("features/home/components/MiniFeatureSection", () => ({
   __esModule: true,
-  default: () => <div data-testid="FeatureSection" />,
+  default: ({ section }) => (
+    <div data-testid={`MiniFeatureSection-${section.title}`} />
+  ),
+}));
+
+jest.mock("features/home/components/TestimonialList", () => ({
+  __esModule: true,
+  default: () => <div data-testid="TestimonialList" />,
 }));
 
 jest.mock("features/home/components/HelpSection", () => ({
@@ -44,18 +64,14 @@ jest.mock("features/home/components/HelpSection", () => ({
   default: () => <div data-testid="HelpSection" />,
 }));
 
-jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(() => ({
-    type: "mock/fetchThenSetCurrentTimerStatus",
-  })),
-}));
-
 describe("HomePage component", () => {
   const mockDispatch = jest.fn();
 
   beforeEach(() => {
     useDispatch.mockReturnValue(mockDispatch);
-    useSelector.mockImplementation((selector) => (selector.name === "userAuth" ? true : null));
+    useSelector.mockImplementation((selector) =>
+      selector.name === "userAuth" ? true : null
+    );
   });
 
   afterEach(() => {
@@ -66,10 +82,20 @@ describe("HomePage component", () => {
     render(<HomePage />);
 
     expect(screen.getByTestId("Main")).toBeInTheDocument();
+    expect(screen.getByTestId("MainHeader")).toBeInTheDocument();
     expect(screen.getByTestId("ElectionStatusIndicator")).toBeInTheDocument();
     expect(screen.getByTestId("HeroSection")).toHaveTextContent("true");
-    expect(screen.getByTestId("FeatureSection")).toBeInTheDocument();
+
+    expect(
+      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.expect.title}`)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.features.title}`)
+    ).toBeInTheDocument();
+
+    expect(screen.getByTestId("TestimonialList")).toBeInTheDocument();
     expect(screen.getByTestId("HelpSection")).toBeInTheDocument();
+    expect(screen.getByTestId("MainFooter")).toBeInTheDocument();
   });
 
   it("dispatches fetchThenSetCurrentTimerStatus on mount", () => {
@@ -77,10 +103,6 @@ describe("HomePage component", () => {
     fetchThenSetCurrentTimerStatus.mockReturnValue(mockAction);
 
     render(<HomePage />);
-    expect(mockDispatch).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: "mock/fetchThenSetCurrentTimerStatus",
-      }),
-    );
+    expect(mockDispatch).toHaveBeenCalledWith(mockAction);
   });
 });

@@ -9,13 +9,19 @@ import getCompClasses from "../../util/getCompClasses";
  * @param {Object} props - Component props.
  * @param {String} [props.className] - Additional class names to style the paragraph.
  * @param {Object} [props.style] - Inline styles.
- * @param {React.ReactNode | String} props.children - Text or elements inside the paragraph.
+ * @param {React.ReactNode | String} [props.children] - Text or elements inside the paragraph.
+ * @param {Boolean} [props.useDefaultStyle] - Indicates if the default paragraph styling should be used.
  * @returns {JSX.Element}
  */
-export default function Paragraph({ className = "", style = {}, children }) {
+export default function Paragraph({
+  className = "",
+  style = {},
+  children,
+  useDefaultStyle = true,
+}) {
   return (
     <p
-      className={`${defaultStyle.paragraph} ${getCompClasses(defaultStyle, className)}`}
+      className={`${useDefaultStyle ? defaultStyle.paragraph : ""} ${getCompClasses(defaultStyle, className)}`}
       style={style}
     >
       {children}
@@ -27,4 +33,5 @@ Paragraph.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   children: PropTypes.node.isRequired,
+  useDefaultStyle: PropTypes.bool,
 };

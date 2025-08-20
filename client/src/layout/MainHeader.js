@@ -3,6 +3,11 @@ import "./MainHeader.css";
 import logo from "assets/images/votenow-logo.png";
 import useBreakpoint from "hooks/useBreakpoint";
 
+/**
+ * A reusable <header> component for displaying site-wide header content.
+ *
+ * @returns {JSX.Element} The rendered <header> element
+ */
 const MainHeader = () => {
   const device = useBreakpoint();
   const isDesktop = device === "desktop";

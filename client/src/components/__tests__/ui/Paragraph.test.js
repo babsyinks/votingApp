@@ -35,6 +35,17 @@ describe("<Paragraph />", () => {
     expect(paragraph.className).toContain("resolved-class");
   });
 
+  it("does not apply the paragraph class when 'useDefaultStyle' is false", () => {
+    render(
+      <Paragraph className="extra-class" useDefaultStyle={false}>
+        Text
+      </Paragraph>,
+    );
+    const paragraph = screen.getByText("Text");
+    expect(paragraph.className).not.toContain("paragraph");
+    expect(paragraph.className).toContain("resolved-class");
+  });
+
   it("applies inline styles", () => {
     render(<Paragraph style={{ color: "red" }}>Styled Text</Paragraph>);
     expect(screen.getByText("Styled Text")).toHaveStyle("color: red");
