@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userAuth } from "features/auth/userAuthSlice";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
+import featureCardConfig from "features/home/config/featureCardConfig";
 import Main from "components/ui/Main";
 import MainHeader from "layout/MainHeader";
-import Footer from "layout/Footer";
+import MainFooter from "layout/MainFooter";
 import HeroSection from "features/home/components/HeroSection";
-import FeatureSection from "features/home/components/FeatureSection";
+import MiniFeatureSection from "features/home/components/MiniFeatureSection";
+import TestimonialList from "features/home/components/TestimonialList";
 import HelpSection from "features/home/components/HelpSection";
 import ElectionStatusIndicator from "features/home/components/ElectionStatusIndicator";
 
@@ -23,9 +25,11 @@ export default function HomePage() {
       <MainHeader />
       <ElectionStatusIndicator />
       <HeroSection userIsAuthenticated={userIsAuthenticated} />
-      <FeatureSection />
+      <MiniFeatureSection section={featureCardConfig.expect} />
+      <TestimonialList />
+      <MiniFeatureSection section={featureCardConfig.features} />
       <HelpSection />
-      <Footer />
+      <MainFooter />
     </Main>
   );
 }
