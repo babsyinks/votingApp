@@ -6,7 +6,7 @@ const ElectionDetailsNoData = () => {
   return (
     <>
       <ElectionDetailsHeader message={"Please come back later."} />
-      <Block className="py-10 w-full">
+      <Block className="px-0-py-10 w-full">
         <Heading type="h2" className="ta-center">
           There Is Currently No Election Or Election Data Could Not Be Fetched.
         </Heading>

@@ -34,7 +34,7 @@ describe("LiveTimerRenderer", () => {
     expect(screen.queryByTestId("election-ongoing")).not.toBeInTheDocument();
 
     const span = screen.getByTestId("mock-span");
-    expect(span).toHaveClass("text-sky-blue fw-bold py-10 text-responsive-1p5");
+    expect(span).toHaveClass("text-sky-blue fw-bold px-0-py-10 text-responsive-1p5");
   });
 
   test("renders LiveTimerElectionOngoing with correct props when completed is false", () => {
@@ -53,6 +53,6 @@ describe("LiveTimerRenderer", () => {
     expect(screen.queryByTestId("election-over")).not.toBeInTheDocument();
 
     const span = screen.getByTestId("mock-span");
-    expect(span).toHaveClass("text-sky-blue fw-bold py-10 text-responsive-1p5");
+    expect(span).toHaveClass("text-sky-blue fw-bold px-0-py-10 text-responsive-1p5");
   });
 });

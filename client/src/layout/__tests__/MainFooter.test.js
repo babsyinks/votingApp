@@ -15,7 +15,7 @@ describe("MainFooter Component", () => {
     render(<MainFooter />);
     const footer = screen.getByText(`© ${currentYear} Corestack Technologies`);
     expect(footer).toHaveClass(
-      "ta-center py-2r-px-1p5r text-base text-white bg-gradient-translucent-blue",
+      "ta-center px-1p5r-py-2r text-base text-white bg-gradient-translucent-blue",
     );
   });
 });

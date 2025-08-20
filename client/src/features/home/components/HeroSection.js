@@ -9,7 +9,7 @@ export default function HeroSection({ userIsAuthenticated }) {
   const { width } = useWindowSize();
   const type = width >= 768 ? "flex-horz-sb" : "flex-vert";
   return (
-    <Section type={type} className="py-4r-px-1p5r bg-gradient-blueviolet text-white">
+    <Section type={type} className="px-1p5r-py-4r bg-gradient-blueviolet text-white">
       <Block className="flex-1 p-1r fadeInLeft">
         <HeroSectionMessage />
         <HeroSectionLink userIsAuthenticated={userIsAuthenticated} />

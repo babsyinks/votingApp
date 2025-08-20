@@ -29,7 +29,7 @@ describe("AuthFrame", () => {
     expect(outerBlock).toHaveClass(
       "bg-blue-faded",
       "mnh-100vh",
-      "p-1xr",
+      "px-1r-py-0r",
       "flex"
     );
   });

@@ -30,7 +30,7 @@ describe("ElectionDetailsHeaderMessage", () => {
       "fs-italic",
       "ff-merienda",
       "tt-cap",
-      "mx-10",
+      "mx-10-my-0",
       "text-blue"
     );
   });
@@ -43,7 +43,7 @@ describe("ElectionDetailsHeaderMessage", () => {
       "fs-italic",
       "ta-center",
       "ff-cormorant",
-      "mx-10"
+      "mx-10-my-0"
     );
   });
 });

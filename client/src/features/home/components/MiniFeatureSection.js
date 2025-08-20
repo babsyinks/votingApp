@@ -5,7 +5,7 @@ import Heading from "components/ui/Heading";
 
 export default function MiniFeatureSection({ section }) {
   return (
-    <Section className="mx-auto py-2r-px-1p5r">
+    <Section className="mx-auto-my-0 px-1p5r-py-2r">
       <Heading type="h2" className="text-3xl fw-700 ta-center mb-3r">
         {section.title}
       </Heading>

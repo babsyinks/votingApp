@@ -10,7 +10,7 @@ export default function MainFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <Footer className="ta-center py-2r-px-1p5r text-base text-white bg-gradient-translucent-blue">
+    <Footer className="ta-center px-1p5r-py-2r text-base text-white bg-gradient-translucent-blue">
       © {year} Corestack Technologies
     </Footer>
   );
