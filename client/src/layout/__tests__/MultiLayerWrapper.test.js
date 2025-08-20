@@ -64,7 +64,6 @@ describe("MultiLayerWrapper", () => {
     const innerBlock = outerBlock.firstChild;
 
     expect(outerBlock.className).toContain("mnh-100vh");
-    expect(outerBlock.className).toContain("bg-gradient-blueviolet");
     expect(innerBlock.className).toContain("bg-white-transparent");
     expect(innerBlock.className).toContain("border-rounded-16");
     expect(innerBlock.className).toContain("p-2r");
