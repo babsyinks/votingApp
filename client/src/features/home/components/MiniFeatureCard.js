@@ -19,7 +19,7 @@ export default function MiniFeatureCard({ icon: Icon, title, description }) {
           {title}
         </Heading>
       </Block>
-      <Paragraph className="text-grey-dark lh-1p6">{description}</Paragraph>
+      <Paragraph useDefaultStyle={false} className="text-grey-soft lh-1p6">{description}</Paragraph>
     </motion.div>
   );
 }
