@@ -66,7 +66,7 @@ describe("AuthFrame", () => {
       "border-rounded-1r",
       "bs-blue-faded",
       "w-full",
-      "mxw-28",
+      "mxw-28r",
       "p-2r",
       "mt-1p5r"
     );
