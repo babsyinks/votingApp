@@ -399,6 +399,7 @@ a:hover {
 .text-grey-dark { color: var(--palette-grey-dark); }
 .text-grey-mute { color: var(--palette-grey-mute); }
 .text-grey-soft {color: var(--palette-grey-soft);}
+.text-black {color: var(--palette-black);}
 .text-black-cool { color: var(--palette-black-cool); }
 .text-black-firm {color: var(--palette-black-firm);}
 
