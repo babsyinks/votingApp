@@ -14,7 +14,7 @@ const ElectionDetailsHeader = ({ message }) => {
   return (
     <Block
       type="flex-horz-sb"
-      className={`border-rounded-5 mx-5 p-10 opacity-70 bg-white-transparent border-2-grey-light-transparent ${fontSize}`}
+      className={`border-rounded-5 mx-5-my-0 p-10 opacity-70 bg-white-transparent border-2-grey-light-transparent ${fontSize}`}
     >
       <ElectionDetailsHeaderHomeIcon />
       <ElectionDetailsHeaderMessage message={message} username={username} />

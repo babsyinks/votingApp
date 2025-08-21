@@ -45,7 +45,7 @@ describe("ElectivePositionDetailsSummary", () => {
     expect(wrapper).toHaveClass("bg-black");
     expect(wrapper).toHaveClass("text-white");
     expect(wrapper).toHaveClass("ff-patrick");
-    expect(wrapper).toHaveClass("my-10-mx-5");
+    expect(wrapper).toHaveClass("mx-5-my-10");
     expect(wrapper).toHaveClass("tt-cap");
   });
 });

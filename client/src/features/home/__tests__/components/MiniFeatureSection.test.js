@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import MiniFeatureSection from "features/home/components/MiniFeatureSection";
 
 jest.mock("features/home/components/MiniFeatureCard", () => ({ title, description, icon: Icon }) => (
-  <div data-testid="mini-feature-card">
+  <div data-testid="framer-id">
     {Icon && <span data-testid="icon">{Icon.name}</span>}
     <h3>{title}</h3>
     <p>{description}</p>
@@ -38,7 +38,7 @@ describe("MiniFeatureSection Component", () => {
 
   it("renders all MiniFeatureCards from section.contents", () => {
     render(<MiniFeatureSection section={mockSection} />);
-    const cards = screen.getAllByTestId("mini-feature-card");
+    const cards = screen.getAllByTestId("framer-id");
     expect(cards).toHaveLength(2);
   });
 

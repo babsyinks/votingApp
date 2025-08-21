@@ -9,6 +9,7 @@ import MainFooter from "layout/MainFooter";
 import HeroSection from "features/home/components/HeroSection";
 import MiniFeatureSection from "features/home/components/MiniFeatureSection";
 import TestimonialList from "features/home/components/TestimonialList";
+import IndustriesServedDetails from "features/home/components/IndustriesServed";
 import HelpSection from "features/home/components/HelpSection";
 import ElectionStatusIndicator from "features/home/components/ElectionStatusIndicator";
 
@@ -28,6 +29,7 @@ export default function HomePage() {
       <MiniFeatureSection section={featureCardConfig.expect} />
       <TestimonialList />
       <MiniFeatureSection section={featureCardConfig.features} />
+      <IndustriesServedDetails />
       <HelpSection />
       <MainFooter />
     </Main>

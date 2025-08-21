@@ -29,7 +29,7 @@ describe("AuthFrame", () => {
     expect(outerBlock).toHaveClass(
       "bg-blue-faded",
       "mnh-100vh",
-      "p-1xr",
+      "px-1r-py-0r",
       "flex"
     );
   });
@@ -66,7 +66,7 @@ describe("AuthFrame", () => {
       "border-rounded-1r",
       "bs-blue-faded",
       "w-full",
-      "mxw-28",
+      "mxw-28r",
       "p-2r",
       "mt-1p5r"
     );

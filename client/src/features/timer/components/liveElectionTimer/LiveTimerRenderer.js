@@ -18,7 +18,7 @@ export default function LiveTimerRenderer({
     props = { days, hours, minutes, seconds };
   }
   return (
-    <Span className="text-sky-blue fw-bold py-10 text-responsive-1p5">
+    <Span className="text-sky-blue fw-bold px-0-py-10 text-responsive-1p5">
       <Component {...props} />
     </Span>
   );

@@ -14,7 +14,7 @@ const ElectionDetailsAllData = ({ listOfElectionData }) => {
   const { particlesInit, particlesLoaded } = useParticles();
 
   return (
-    <Block className="bg-blue-mute py-10 w-full">
+    <Block className="bg-blue-mute px-0-py-10 w-full">
       <Particles
         id="tsparticles"
         init={particlesInit}

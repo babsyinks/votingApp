@@ -34,7 +34,7 @@ describe("HeroSection", () => {
 
     const section = screen.getByTestId("hero-section");
     expect(section).toHaveAttribute("data-type", "flex-vert");
-    expect(section).toHaveClass("py-4r-px-1p5r bg-gradient-blueviolet text-white");
+    expect(section).toHaveClass("px-1p5r-py-4r bg-gradient-blueviolet text-white");
 
     expect(screen.getByTestId("hero-message")).toBeInTheDocument();
     expect(screen.getByTestId("hero-link")).toHaveTextContent("Guest");

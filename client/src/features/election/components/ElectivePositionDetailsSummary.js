@@ -14,7 +14,7 @@ const ElectivePositionDetailsSummary = ({
   return (
     <Block
       type="flex-vert"
-      className="border-rounded-5 border-2-white bg-black text-white my-10-mx-5 tt-cap ff-patrick"
+      className="border-rounded-5 border-2-white bg-black text-white mx-5-my-10 tt-cap ff-patrick"
     >
       {summaryParts.map((partDetails, i) => (
         <ElectivePositionDetailsSummaryPart {...partDetails} key={i} />

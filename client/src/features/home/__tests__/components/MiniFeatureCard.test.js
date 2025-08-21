@@ -45,12 +45,12 @@ describe("MiniFeatureCard Component", () => {
   it("renders description inside a paragraph", () => {
     render(<MiniFeatureCard {...defaultProps} />);
     const description = screen.getByText(/this is the feature description./i);
-    expect(description).toHaveClass("text-grey-dark lh-1p6");
+    expect(description).toHaveClass("text-grey-soft lh-1p6");
   });
 
   it("applies expected wrapper classes", () => {
     render(<MiniFeatureCard {...defaultProps} />);
-    const wrapper = screen.getByTestId("mini-feature-card");
+    const wrapper = screen.getByTestId("framer-id");
     expect(wrapper).toHaveClass(
       "p-2r bg-white transition-bg transition-color bs-black-mixed-mild border-rounded-10"
     );

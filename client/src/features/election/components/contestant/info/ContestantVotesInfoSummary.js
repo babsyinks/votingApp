@@ -26,7 +26,7 @@ const ContestantVotesInfoSummary = ({
   return (
     <ContestantVotesInfo type="Votes" showInfo={showInfo}>
       <Span> 
-        <Span className="text-purple-cool fs-italic py-5">{contestantVotes}</Span>{" "}
+        <Span className="text-purple-cool fs-italic px-0-py-5">{contestantVotes}</Span>{" "}
         {showExpandedStats && (
           <>
             out of <Span className="text-purple-dark fs-italic">{totalVotes}</Span>

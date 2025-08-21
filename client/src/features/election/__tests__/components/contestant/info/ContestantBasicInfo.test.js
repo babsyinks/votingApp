@@ -16,7 +16,7 @@ describe("ContestantBasicInfo", () => {
   it("applies correct classes to the value span", () => {
     render(<ContestantBasicInfo type="Age" value="35" />);
     const valueSpan = screen.getByText("35");
-    expect(valueSpan).toHaveClass("tt-cap", "ff-berkshire", "py-5", "text-blue");
+    expect(valueSpan).toHaveClass("tt-cap", "ff-berkshire", "px-0-py-5", "text-blue");
   });
 
   it("renders children inside ContestantTextInfoWrapper", () => {

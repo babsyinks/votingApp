@@ -74,6 +74,7 @@ Block.propTypes = {
     "inline",
     "inline-block",
     "flex",
+    "grid",
   ]),
   className: PropTypes.string,
   style: PropTypes.object,

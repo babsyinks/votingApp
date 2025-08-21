@@ -59,6 +59,11 @@ jest.mock("features/home/components/TestimonialList", () => ({
   default: () => <div data-testid="TestimonialList" />,
 }));
 
+jest.mock("features/home/components/IndustriesServed", () => ({
+  __esModule: true,
+  default: () => <div data-testid="IndustriesServed" />,
+}));
+
 jest.mock("features/home/components/HelpSection", () => ({
   __esModule: true,
   default: () => <div data-testid="HelpSection" />,
@@ -94,6 +99,7 @@ describe("HomePage component", () => {
     ).toBeInTheDocument();
 
     expect(screen.getByTestId("TestimonialList")).toBeInTheDocument();
+    expect(screen.getByTestId("IndustriesServed")).toBeInTheDocument();
     expect(screen.getByTestId("HelpSection")).toBeInTheDocument();
     expect(screen.getByTestId("MainFooter")).toBeInTheDocument();
   });
