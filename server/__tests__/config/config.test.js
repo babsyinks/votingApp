@@ -1,4 +1,4 @@
-const databaseCredentials = require("../../config/dbConfig");
+const databaseCredentials = require("../../config/config");
 
 describe("Database config", () => {
   it("should export an object with development, test, and production keys", () => {
