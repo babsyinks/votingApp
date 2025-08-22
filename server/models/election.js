@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const electionHooks = require("../hooks/electionHooks");
 
 module.exports = (sequelize, DataTypes) => {
   class Election extends Model {
@@ -26,9 +27,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      name: { 
-        type: DataTypes.STRING, 
-        allowNull: false 
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      slug: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      short_link: {
+        type: DataTypes.STRING,
       },
     },
     {
@@ -36,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Election",
       tableName: "elections",
       indexes: [{ fields: ["organization_id"] }],
+      hooks: {
+        beforeCreate: electionHooks.beforeCreate,
+        afterCreate: electionHooks.afterCreate,
+      },
     }
   );
 
