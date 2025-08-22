@@ -4,11 +4,13 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.Votes, {
+      User.belongsToMany(models.Organization, {
+        through: models.UserOrganization,
         foreignKey: "user_id",
+        otherKey: "organization_id",
       });
+      User.hasMany(models.Votes, { foreignKey: "user_id" });
     }
-
     toJSON() {
       return { ...this.get(), id: undefined };
     }
@@ -19,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       user_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
       },
       username: {
         type: DataTypes.STRING,
@@ -42,15 +45,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.ENUM("user", "admin"),
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
     },
     {
       sequelize,
       modelName: "User",
       tableName: "users",
+      indexes: [{ fields: ["username"] }, { fields: ["email"] }],
     },
   );
 

@@ -9,8 +9,11 @@ jest.mock("sequelize", () => {
       this.options = options;
       return this;
     }
-    static hasOne(model, options) {
-      this.hasOneCall = { model, options };
+    static hasMany(model, options) {
+      this.hasManyCall = { model, options };
+    }
+    static belongsTo(model, options) {
+      this.belongsToCall = { model, options };
     }
     get() {
       return this.dataValues || {};
@@ -49,6 +52,10 @@ describe("Contestants Model (unit)", () => {
 
     expect(attrs.contestant_id.type.key).toBe("UUID");
     expect(attrs.contestant_id.defaultValue.key).toBe("UUIDV4");
+    expect(attrs.contestant_id.primaryKey).toBe(true);
+
+    expect(attrs.election_id.type.key).toBe("UUID");
+    expect(attrs.election_id.allowNull).toBe(false);
 
     expect(attrs.surname.type.key).toBe("STRING");
     expect(attrs.surname.allowNull).toBe(false);
@@ -79,13 +86,31 @@ describe("Contestants Model (unit)", () => {
     expect(json.surname).toBe("Doe");
   });
 
-  test("associate should define a hasOne relationship with Votes", () => {
+  test("associate should define relationships", () => {
     const mockVotesModel = {};
-    Contestants.associate({ Votes: mockVotesModel });
-    expect(Contestants.hasOneCall).toEqual({
+    const mockElectionModel = {};
+
+    Contestants.associate({ Votes: mockVotesModel, Election: mockElectionModel });
+
+    expect(Contestants.hasManyCall).toEqual({
       model: mockVotesModel,
       options: { foreignKey: "contestant_id" },
     });
+
+    expect(Contestants.belongsToCall).toEqual({
+      model: mockElectionModel,
+      options: { foreignKey: "election_id" },
+    });
+  });
+
+  test("should include indexes on election_id and position", () => {
+    const indexes = Contestants.options.indexes;
+    expect(indexes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fields: ["election_id"] }),
+        expect.objectContaining({ fields: ["position"] }),
+      ])
+    );
   });
 
   test("should allow mocked CRUD calls", async () => {
