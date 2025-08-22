@@ -1,0 +1,12 @@
+.link {
+  color: var(--color-text-blueviolet-firm);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.link:hover,
+.link:focus {
+  color: var(--color-background-blueviolet-firm-hover);
+  text-decoration: underline;
+}

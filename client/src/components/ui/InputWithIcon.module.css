@@ -1,0 +1,35 @@
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  top: 28%;
+  left: 1.1rem;
+  transform: translateY(-50%);
+  color: var(--color-text-grey-neo);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.input-with-icon {
+  padding-left: 2.5rem !important;
+  padding-right: 2.5rem !important;
+}
+
+.input-icon-right {
+  position: absolute;
+  top: 18%;
+  right: 1rem;
+  cursor: pointer;
+  color: var(--color-text-blue-neo);
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+
+.input-icon-right:hover {
+  opacity: 0.7;
+}

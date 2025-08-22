@@ -1,0 +1,33 @@
+.info-wrapper{
+  margin-bottom: 10px;
+  font-size: 1.25vw;
+}
+
+@media only screen and (orientation:portrait){
+  .info-wrapper{
+      font-size: 1.25vh;
+  }
+}
+
+
+@media screen and (max-width:1024px) and (orientation:landscape){
+  .info-wrapper{
+    font-size: 1.65vw;
+}
+}
+@media screen and (max-height:1024px) and (orientation:portrait){
+  .info-wrapper{
+    font-size: 1.7vh
+}
+}
+
+@media screen and (max-width:768px) and (orientation:landscape){
+  .info-wrapper{
+    font-size: 2.35vw;
+}
+}
+@media screen and (max-height:768px) and (orientation:portrait){
+  .info-wrapper{
+    font-size: 2.35vh;
+}
+}

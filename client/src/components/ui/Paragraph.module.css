@@ -1,0 +1,15 @@
+.paragraph {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-grey-firm);
+  margin: 0.5rem 0;
+}
+
+.paragraph-white{
+  color: var(--color-text-white);
+}
+
+.paragraph-md{
+  font-size: 1.2rem;
+  line-height: 1.8;
+}

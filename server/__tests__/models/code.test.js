@@ -1,0 +1,89 @@
+"use strict";
+
+describe("Code Model (unit)", () => {
+  let Model;
+  let DataTypes;
+  let initSpy;
+  let Code;
+
+  beforeEach(() => {
+    jest.resetModules();
+
+    const sequelize = require("sequelize");
+    Model = sequelize.Model;
+    DataTypes = sequelize.DataTypes;
+
+    // Spy on Model.init to capture attributes/options
+    initSpy = jest.spyOn(Model, "init").mockImplementation(function (attributes, options) {
+      this.rawAttributes = attributes;
+      this.options = options;
+      return this;
+    });
+
+    Code = require("../../models/code")({}, DataTypes);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("calls Model.init once with attributes and options", () => {
+    expect(initSpy).toHaveBeenCalledTimes(1);
+
+    const [attrs, options] = initSpy.mock.calls[0];
+
+    // ✅ new primary key field
+    expect(attrs).toHaveProperty("code_id");
+    expect(attrs.code_id.primaryKey).toBe(true);
+    expect(attrs.code_id.type.key).toBe("UUID");
+
+    // old fields
+    expect(attrs).toHaveProperty("codeHash");
+    expect(attrs).toHaveProperty("email");
+    expect(attrs).toHaveProperty("type");
+    expect(attrs).toHaveProperty("expiresAt");
+
+    expect(options).toHaveProperty("modelName", "Code");
+    expect(options).toHaveProperty("tableName", "codes");
+  });
+
+  test("enum values include signup, password_reset, email_change", () => {
+    const typeAttr = Code.rawAttributes.type;
+    expect(typeAttr).toBeDefined();
+    expect(typeAttr.type).toBeDefined();
+
+    const enumValues = typeAttr.type.options?.values || typeAttr.type.values;
+    expect(enumValues).toEqual(["signup", "password_reset", "email_change"]);
+  });
+
+  test("toJSON should omit id and preserve other fields", () => {
+    const instance = Object.create(Code.prototype);
+    const now = new Date();
+
+    instance.get = () => ({
+      id: 123,
+      code_id: "uuid-123",
+      codeHash: "hashed-value",
+      email: "test@example.com",
+      type: "signup",
+      expiresAt: now,
+    });
+
+    const json = instance.toJSON();
+
+    // ✅ id should be stripped
+    expect(json.id).toBeUndefined();
+
+    // ✅ but code_id remains
+    expect(json.code_id).toBe("uuid-123");
+    expect(json.codeHash).toBe("hashed-value");
+    expect(json.email).toBe("test@example.com");
+    expect(json.type).toBe("signup");
+    expect(json.expiresAt).toBe(now);
+  });
+
+  test("associate exists and is callable", () => {
+    expect(typeof Code.associate).toBe("function");
+    expect(() => Code.associate({})).not.toThrow();
+  });
+});

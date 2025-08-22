@@ -1,0 +1,10 @@
+.sel{
+    border: 0px;
+    padding: 5px;
+}
+
+@media screen and (orientation:portrait) {
+    .sel{
+        width: 180px;
+    }
+}

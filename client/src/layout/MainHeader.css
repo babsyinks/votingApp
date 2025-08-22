@@ -1,0 +1,47 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--color-background-translucent-blue-dark);
+  background: linear-gradient(135deg, var(--color-background-translucent-blue-dark) 0%, var(--color-background-translucent-blue-lite) 100%);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px var(--color-bs-black-carpet-pattern);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  height: 55px;
+}
+
+.contact-info {
+  display: flex;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-white);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  color: var(--color-text-yellow-soft);
+  text-decoration: underline;
+}
+
+.icon {
+  margin-right: 6px;
+  font-size: 1rem;
+}
