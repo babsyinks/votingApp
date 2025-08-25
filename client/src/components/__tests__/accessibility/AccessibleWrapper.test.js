@@ -10,6 +10,7 @@ describe('AccessibleWrapper', () => {
         ariaLabel="Click me"
         ariaLabelledBy="label-id"
         ariaDescribedBy="desc-id"
+        ariaDisabled="false"
         title="Tooltip text"
       >
         <div>Test Element</div>
@@ -21,6 +22,7 @@ describe('AccessibleWrapper', () => {
     expect(element).toHaveAttribute('aria-label', 'Click me');
     expect(element).toHaveAttribute('aria-labelledby', 'label-id');
     expect(element).toHaveAttribute('aria-describedby', 'desc-id');
+    expect(element).toHaveAttribute('aria-disabled', 'false');
     expect(element).toHaveAttribute('title', 'Tooltip text');
   });
 
