@@ -22,20 +22,18 @@ export default function I({
   className = "",
   style = {},
   onClick,
-  withAccessibility = false,
+  withAccessibility = true,
   role,
   ariaLabel,
   ariaLabelledBy,
   ariaDescribedBy,
+  ariaDisabled,
   title,
   children,
+  ...rest
 }) {
   const content = (
-    <i
-      className={className}
-      style={style}
-      onClick={onClick}
-    >
+    <i className={className} style={style} onClick={onClick} {...rest}>
       {children}
     </i>
   );
@@ -46,11 +44,14 @@ export default function I({
       ariaLabel={ariaLabel}
       ariaLabelledBy={ariaLabelledBy}
       ariaDescribedBy={ariaDescribedBy}
+      ariaDisabled={ariaDisabled}
       title={title}
     >
       {content}
     </AccessibleWrapper>
-  ) : content;
+  ) : (
+    content
+  );
 }
 
 I.propTypes = {

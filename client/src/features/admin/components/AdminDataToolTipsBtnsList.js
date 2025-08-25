@@ -6,10 +6,7 @@ import AdminDataToolTipBtn from "./AdminDataToolTipBtn";
 import tooltipBtnDetails from "../helpers/tooltipBtnDetails";
 import I from "components/ui/I";
 
-const AdminDataToolTipsBtnsList = ({
-  isSubmitBtnDisabled,
-  handleSubmitVals,
-}) => {
+const AdminDataToolTipsBtnsList = ({ isSubmitBtnDisabled, handleSubmitVals }) => {
   const navigate = useNavigate();
   const isLoading = useSelector(selectLoadingState);
 
@@ -25,9 +22,7 @@ const AdminDataToolTipsBtnsList = ({
     <>
       {listDetails.map(({ data, compClass, route, iClasses }, i) => {
         if (data === "Add A New Contestant") {
-          const classes = isLoading
-            ? "fa-circle-notch fa-spin fa-xs"
-            : iClasses;
+          const classes = isLoading ? "fa-circle-notch fa-spin fa-xs" : iClasses;
           return (
             <AdminDataToolTipBtn
               data={data}
@@ -36,7 +31,7 @@ const AdminDataToolTipsBtnsList = ({
               onClick={handleSubmitVals}
               key={i}
             >
-              <I className={`fas ${classes}`}></I>
+              <I className={`fas ${classes}`} ariaDisabled={isSubmitBtnDisabled}></I>
             </AdminDataToolTipBtn>
           );
         }
