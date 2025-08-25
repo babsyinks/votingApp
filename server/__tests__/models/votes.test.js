@@ -54,6 +54,10 @@ describe("Votes Model (unit)", () => {
 
     expect(resolveTypeKey(attrs.vote_id)).toBe("UUID");
     expect(attrs.vote_id.defaultValue).toBe("UUIDV4");
+    expect(attrs.vote_id.primaryKey).toBe(true);
+
+    expect(resolveTypeKey(attrs.election_id)).toBe("UUID");
+    expect(attrs.election_id.allowNull).toBe(false);
 
     expect(resolveTypeKey(attrs.user_id)).toBe("UUID");
     expect(attrs.user_id.allowNull).toBe(false);
@@ -67,12 +71,30 @@ describe("Votes Model (unit)", () => {
 
   test("associate should define belongsTo relationships", () => {
     const belongsToSpy = jest.spyOn(Votes, "belongsTo").mockImplementation(() => {});
-    const mockModels = { User: {}, Contestants: {} };
+    const mockModels = { User: {}, Contestants: {}, Election: {} };
 
     Votes.associate(mockModels);
 
     expect(belongsToSpy).toHaveBeenCalledWith(mockModels.User, { foreignKey: "user_id" });
     expect(belongsToSpy).toHaveBeenCalledWith(mockModels.Contestants, { foreignKey: "contestant_id" });
+    expect(belongsToSpy).toHaveBeenCalledWith(mockModels.Election, { foreignKey: "election_id" });
+  });
+
+  test("should define indexes including unique composite index", () => {
+    const indexes = Votes.options.indexes;
+
+    expect(indexes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fields: ["election_id"] }),
+        expect.objectContaining({ fields: ["user_id"] }),
+        expect.objectContaining({ fields: ["contestant_id"] }),
+        expect.objectContaining({
+          unique: true,
+          fields: ["election_id", "user_id", "position"],
+          name: "uq_vote_once_per_position_per_election",
+        }),
+      ])
+    );
   });
 
   test("toJSON should remove id field", () => {
@@ -81,12 +103,14 @@ describe("Votes Model (unit)", () => {
       id: 1,
       vote_id: "uuid-123",
       user_id: "uuid-456",
+      election_id: "uuid-789",
     }));
     const json = instance.toJSON();
 
     expect(json).toEqual({
       vote_id: "uuid-123",
       user_id: "uuid-456",
+      election_id: "uuid-789",
     });
     expect(json.id).toBeUndefined();
   });

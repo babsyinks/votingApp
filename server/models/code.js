@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Code.init(
     {
+      code_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
       codeHash: {
         type: DataTypes.STRING,
         allowNull: false,

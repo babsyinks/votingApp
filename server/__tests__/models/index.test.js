@@ -69,7 +69,7 @@ describe("models/index.js", () => {
 
     process.env.DB_URL = "postgres://user:pass@localhost:5432/dbname";
 
-    jest.doMock("../../config/dbConfig.js", () => ({
+    jest.doMock("../../config/config.js", () => ({
       test: {
         use_env_variable: "DB_URL",
         dialect: "postgres",
@@ -94,7 +94,7 @@ describe("models/index.js", () => {
     jest.resetModules();
     delete process.env.NODE_ENV;
 
-    jest.doMock("../../config/dbConfig.js", () => ({
+    jest.doMock("../../config/config.js", () => ({
       development: {
         database: "db_dev",
         username: "dev",

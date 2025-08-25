@@ -11,6 +11,7 @@ jest.mock("sequelize", () => {
     }
     static associate() {}
     static hasMany() {}
+    static belongsToMany() {}
     get() {
       return this.dataValues || {};
     }
@@ -23,7 +24,7 @@ jest.mock("sequelize", () => {
       ...actual.DataTypes,
       UUID: { key: "UUID" },
       STRING: { key: "STRING" },
-      ENUM: (...values) => ({ key: "ENUM", values }),
+      BOOLEAN: { key: "BOOLEAN" },
       UUIDV4: "UUIDV4",
     },
   };
@@ -55,6 +56,7 @@ describe("User Model (unit)", () => {
 
     expect(resolveTypeKey(attrs.user_id)).toBe("UUID");
     expect(attrs.user_id.defaultValue).toBe("UUIDV4");
+    expect(attrs.user_id.primaryKey).toBe(true);
 
     expect(resolveTypeKey(attrs.username)).toBe("STRING");
     expect(attrs.username.allowNull).toBe(false);
@@ -73,16 +75,29 @@ describe("User Model (unit)", () => {
     expect(resolveTypeKey(attrs.lastname)).toBe("STRING");
     expect(attrs.lastname.allowNull).toBe(false);
 
-    expect(resolveTypeKey(attrs.role)).toBe("ENUM");
-    expect(attrs.role.allowNull).toBe(false);
-    expect(attrs.role.type.values).toEqual(["user", "admin"]);
+    expect(resolveTypeKey(attrs.isAdmin)).toBe("BOOLEAN");
+    expect(attrs.isAdmin.allowNull).toBe(false);
+    expect(attrs.isAdmin.defaultValue).toBe(false);
   });
 
-  test("associate should define hasMany relationship to Votes", () => {
+  test("associate should define belongsToMany relationship to Organization and hasMany to Votes", () => {
+    const belongsToManySpy = jest
+      .spyOn(User, "belongsToMany")
+      .mockImplementation(() => {});
     const hasManySpy = jest.spyOn(User, "hasMany").mockImplementation(() => {});
-    const mockModels = { Votes: {} };
+
+    const mockModels = { Organization: {}, UserOrganization: {}, Votes: {} };
     User.associate(mockModels);
-    expect(hasManySpy).toHaveBeenCalledWith(mockModels.Votes, { foreignKey: "user_id" });
+
+    expect(belongsToManySpy).toHaveBeenCalledWith(mockModels.Organization, {
+      through: mockModels.UserOrganization,
+      foreignKey: "user_id",
+      otherKey: "organization_id",
+    });
+
+    expect(hasManySpy).toHaveBeenCalledWith(mockModels.Votes, {
+      foreignKey: "user_id",
+    });
   });
 
   test("toJSON should remove id field", () => {
@@ -98,6 +113,13 @@ describe("User Model (unit)", () => {
       username: "testuser",
     });
     expect(json.id).toBeUndefined();
+  });
+
+  test("should have indexes on username and email", () => {
+    const indexes = User.options.indexes;
+    const fields = indexes.flatMap((i) => i.fields);
+    expect(fields).toContain("username");
+    expect(fields).toContain("email");
   });
 
   test("should allow mocked CRUD calls", async () => {

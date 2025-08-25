@@ -3,7 +3,10 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Contestants extends Model {
     static associate(models) {
-      Contestants.hasOne(models.Votes, {
+      Contestants.belongsTo(models.Election, {
+        foreignKey: "election_id",
+      });
+      Contestants.hasMany(models.Votes, {
         foreignKey: "contestant_id",
       });
     }
@@ -17,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       contestant_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      election_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
       surname: {
         type: DataTypes.STRING,
@@ -43,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Contestants",
       tableName: "contestants",
+      indexes: [{ fields: ["election_id"] }, { fields: ["position"] }],
     },
   );
   return Contestants;

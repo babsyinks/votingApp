@@ -9,7 +9,9 @@ jest.mock("sequelize", () => {
       this.options = options;
       return this;
     }
-    static associate() {}
+    static belongsTo(model, options) {
+      this.belongsToCall = { model, options };
+    }
     get() {
       return this.dataValues || {};
     }
@@ -20,6 +22,8 @@ jest.mock("sequelize", () => {
     Model: MockModel,
     DataTypes: {
       ...actual.DataTypes,
+      UUID: { key: "UUID" },
+      UUIDV4: { key: "UUIDV4" },
       DATE: { key: "DATE" },
     },
   };
@@ -36,26 +40,45 @@ describe("Timer Model (unit)", () => {
 
   test("should have correct model name and table name", () => {
     expect(Timer.options.modelName).toBe("Timer");
-    expect(Timer.options.tableName).toBe("timer");
+    expect(Timer.options.tableName).toBe("timers");
   });
 
   test("should define correct attributes", () => {
     const attrs = Timer.rawAttributes;
 
-    const resolveTypeKey = (attr) => {
-      if (!attr) return undefined;
-      if (attr.type && attr.type.key) return attr.type.key;
-      if (attr.key) return attr.key;
-      if (attr.constructor && attr.constructor.name) return attr.constructor.name;
-      return undefined;
-    };
+    expect(attrs.timer_id.type.key).toBe("UUID");
+    expect(attrs.timer_id.defaultValue.key).toBe("UUIDV4");
+    expect(attrs.timer_id.primaryKey).toBe(true);
 
-    expect(resolveTypeKey(attrs.startDate)).toBe("DATE");
-    expect(resolveTypeKey(attrs.endDate)).toBe("DATE");
+    expect(attrs.election_id.type.key).toBe("UUID");
+    expect(attrs.election_id.allowNull).toBe(false);
+    expect(attrs.election_id.unique).toBe(true);
+
+    expect(attrs.startDate.key).toBe("DATE");
+    expect(attrs.endDate.key).toBe("DATE");
   });
 
-  test("associate should not throw", () => {
-    expect(() => Timer.associate({})).not.toThrow();
+  test("associate should define relationship with Election", () => {
+    const mockElectionModel = {};
+    Timer.associate({ Election: mockElectionModel });
+
+    expect(Timer.belongsToCall).toEqual({
+      model: mockElectionModel,
+      options: { foreignKey: "election_id" },
+    });
+  });
+
+  test("should include unique index on election_id", () => {
+    const indexes = Timer.options.indexes;
+    expect(indexes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          unique: true,
+          fields: ["election_id"],
+          name: "uq_timer_per_election",
+        }),
+      ])
+    );
   });
 
   test("should allow mocked CRUD calls", async () => {
