@@ -35,7 +35,6 @@
 }
 
 .shd-grn:not(:disabled):hover{
-    font-size: 1em;
     background-color: var(--color-button-grn-rnd-hover);
     color: var(--color-text-white);
 }
@@ -46,7 +45,6 @@
 }
 
 .shd-vlt:not(:disabled):hover{
-    font-size: 1em;
     background-color: var(--color-button-vlt-rnd-hover);
     color: var(--color-text-white);
 }
@@ -57,7 +55,6 @@
 }
 
 .shd-blu:not(:disabled):hover{
-    font-size: 1em;
     background-color: var(--color-button-blu-rnd-hover);
     color: var(--color-text-white);
 }
@@ -68,7 +65,6 @@
 }
 
 .shd-red:not(:disabled):hover{
-    font-size: 1em;
     background-color: var(--color-button-red-rnd-hover);
     color: var(--color-text-white);
 }
