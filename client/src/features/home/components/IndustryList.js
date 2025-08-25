@@ -1,5 +1,5 @@
 import IndustryCard from "./IndustryCard";
-import industriesServed from "../config/industriesServed";
+import industriesServed from "../data/industriesServed";
 import Grid from "layout/Grid";
 
 export default function IndustryList() {

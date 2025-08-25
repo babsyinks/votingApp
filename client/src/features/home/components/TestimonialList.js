@@ -1,5 +1,5 @@
 import React from "react";
-import testimonials from "../config/testimonials";
+import testimonials from "../data/testimonials";
 import TestimonialCard from "./TestimonialCard";
 import Section from "components/ui/Section";
 import Heading from "components/ui/Heading";

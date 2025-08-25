@@ -1,4 +1,4 @@
-import industriesServed from "features/home/config/industriesServed";
+import industriesServed from "features/home/data/industriesServed";
 
 describe("industriesServed config", () => {
   it("should export an array", () => {
@@ -28,7 +28,7 @@ describe("industriesServed config", () => {
       "Companies",
       "Clubs",
       "Sport Groups",
-      "Many More"
+      "Many More",
     ];
 
     expect(industriesServed).toEqual(expectedIndustries);
@@ -40,7 +40,7 @@ describe("industriesServed config", () => {
   });
 
   it("should only contain strings", () => {
-    industriesServed.forEach(industry => {
+    industriesServed.forEach((industry) => {
       expect(typeof industry).toBe("string");
     });
   });

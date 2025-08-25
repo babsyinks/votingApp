@@ -1,4 +1,4 @@
-const timerConf = [
+const timerLabelsWithTypes = [
   {
     label: "Election Start Day",
     type: "date",
@@ -17,4 +17,4 @@ const timerConf = [
   },
 ];
 
-export default timerConf;
+export default timerLabelsWithTypes;

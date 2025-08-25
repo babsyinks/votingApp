@@ -4,7 +4,7 @@ import HelpMeans from "features/help/components/HelpMeans";
 
 import useBreakpoint from "hooks/useBreakpoint";
 
-jest.mock("features/help/config/helpNums", () => ["2348051750010", "2349154549010"]);
+jest.mock("features/help/data/helpNums", () => ["2348051750010", "2349154549010"]);
 
 jest.mock("hooks/useBreakpoint", () => jest.fn());
 
