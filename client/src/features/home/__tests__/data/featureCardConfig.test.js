@@ -1,5 +1,5 @@
 import React from "react";
-import items from "features/home/config/featureCardConfig";
+import items from "features/home/data/featureCardConfig";
 
 describe("featureCardConfig", () => {
   it("should export an object with 'expect' and 'features'", () => {

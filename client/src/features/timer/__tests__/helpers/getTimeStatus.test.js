@@ -1,5 +1,5 @@
 import getTimeStatus from "../../helpers/getTimeStatus";
-import { daySeconds } from "../../config/timePartsInSeconds";
+import { daySeconds } from "../../data/timePartsInSeconds";
 
 describe("getTimeStatus", () => {
   const now = Date.now();

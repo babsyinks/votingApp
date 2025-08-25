@@ -1,9 +1,5 @@
 import getTimePart from "../../helpers/getTimePart";
-import {
-  minuteSeconds,
-  hourSeconds,
-  daySeconds,
-} from "../../config/timePartsInSeconds";
+import { minuteSeconds, hourSeconds, daySeconds } from "../../data/timePartsInSeconds";
 
 describe("getTimePart", () => {
   test("should return correct number of days", () => {
@@ -31,14 +27,14 @@ describe("getTimePart", () => {
   });
 
   test("should throw an error for invalid type", () => {
-    expect(() =>
-      getTimePart({ type: "weeks", time: 1000 })
-    ).toThrowError("weeks is invalid. It should be any of days, hours, minutes, seconds");
+    expect(() => getTimePart({ type: "weeks", time: 1000 })).toThrowError(
+      "weeks is invalid. It should be any of days, hours, minutes, seconds",
+    );
   });
 
   test("should throw an error if type is missing", () => {
-    expect(() =>
-      getTimePart({ time: 1000 })
-    ).toThrowError("undefined is invalid. It should be any of days, hours, minutes, seconds");
+    expect(() => getTimePart({ time: 1000 })).toThrowError(
+      "undefined is invalid. It should be any of days, hours, minutes, seconds",
+    );
   });
 });

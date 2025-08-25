@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userAuth } from "features/auth/userAuthSlice";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
-import featureCardConfig from "features/home/config/featureCardConfig";
+import featureCardConfig from "features/home/data/featureCardConfig";
 import Main from "components/ui/Main";
 import MainHeader from "layout/MainHeader";
 import MainFooter from "layout/MainFooter";

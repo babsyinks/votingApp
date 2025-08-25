@@ -1,5 +1,5 @@
 import { minuteSeconds, hourSeconds, daySeconds } from "./timePartsInSeconds";
-const getPreElectionTimerConfig = (daysDuration) => {
+const getPreElectionTimerSettings = (daysDuration) => {
   return [
     { color: "#7E2E84", duration: daysDuration, type: "days" },
     { color: "#D14081", duration: daySeconds, type: "hours" },
@@ -8,4 +8,4 @@ const getPreElectionTimerConfig = (daysDuration) => {
   ];
 };
 
-export default getPreElectionTimerConfig;
+export default getPreElectionTimerSettings;

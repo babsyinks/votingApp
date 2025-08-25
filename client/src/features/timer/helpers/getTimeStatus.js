@@ -1,4 +1,4 @@
-import { daySeconds } from "../config/timePartsInSeconds";
+import { daySeconds } from "../data/timePartsInSeconds";
 
 const getTimeStatus = (endTime) => {
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds

@@ -1,8 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import useTimerSchedule from "../../hooks/useTimerSchedule";
-import timerConf from "../../config/timerConf";
+import timerLabelsWithTypes from "../../data/timerLabelsWithTypes";
 
-jest.mock("../../config/timerConf", () => [
+jest.mock("../../data/timerLabelsWithTypes", () => [
   { label: "Election Start Day", type: "date" },
   { label: "Election Start Time", type: "time" },
   { label: "Election End Day", type: "date" },
@@ -13,13 +13,7 @@ describe("useTimerSchedule", () => {
   test("should initialize all values as empty strings", () => {
     const { result } = renderHook(() => useTimerSchedule());
 
-    const {
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      mergedTimerState,
-    } = result.current;
+    const { startDate, startTime, endDate, endTime, mergedTimerState } = result.current;
 
     expect(startDate).toBe("");
     expect(startTime).toBe("");
@@ -29,8 +23,8 @@ describe("useTimerSchedule", () => {
     expect(mergedTimerState).toHaveLength(4);
 
     mergedTimerState.forEach((entry, index) => {
-      expect(entry.label).toBe(timerConf[index].label);
-      expect(entry.type).toBe(timerConf[index].type);
+      expect(entry.label).toBe(timerLabelsWithTypes[index].label);
+      expect(entry.type).toBe(timerLabelsWithTypes[index].type);
       expect(typeof entry.onChange).toBe("function");
       expect(entry.value).toBe("");
     });
@@ -43,17 +37,12 @@ describe("useTimerSchedule", () => {
 
     act(() => {
       mergedTimerState[0].onChange({ target: { value: "2025-08-10" } }); // startDate
-      mergedTimerState[1].onChange({ target: { value: "08:00" } });       // startTime
+      mergedTimerState[1].onChange({ target: { value: "08:00" } }); // startTime
       mergedTimerState[2].onChange({ target: { value: "2025-08-11" } }); // endDate
-      mergedTimerState[3].onChange({ target: { value: "17:00" } });       // endTime
+      mergedTimerState[3].onChange({ target: { value: "17:00" } }); // endTime
     });
 
-    const {
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-    } = result.current;
+    const { startDate, startTime, endDate, endTime } = result.current;
 
     expect(startDate).toBe("2025-08-10");
     expect(startTime).toBe("08:00");

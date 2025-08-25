@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import HomePage from "pages/HomePage";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
-import featureCardConfig from "features/home/config/featureCardConfig";
+import featureCardConfig from "features/home/data/featureCardConfig";
 
 jest.mock("features/timer/timerSlice", () => ({
   fetchThenSetCurrentTimerStatus: jest.fn(() => ({
@@ -49,9 +49,7 @@ jest.mock("features/home/components/HeroSection", () => ({
 
 jest.mock("features/home/components/MiniFeatureSection", () => ({
   __esModule: true,
-  default: ({ section }) => (
-    <div data-testid={`MiniFeatureSection-${section.title}`} />
-  ),
+  default: ({ section }) => <div data-testid={`MiniFeatureSection-${section.title}`} />,
 }));
 
 jest.mock("features/home/components/TestimonialList", () => ({
@@ -74,9 +72,7 @@ describe("HomePage component", () => {
 
   beforeEach(() => {
     useDispatch.mockReturnValue(mockDispatch);
-    useSelector.mockImplementation((selector) =>
-      selector.name === "userAuth" ? true : null
-    );
+    useSelector.mockImplementation((selector) => (selector.name === "userAuth" ? true : null));
   });
 
   afterEach(() => {
@@ -92,10 +88,10 @@ describe("HomePage component", () => {
     expect(screen.getByTestId("HeroSection")).toHaveTextContent("true");
 
     expect(
-      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.expect.title}`)
+      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.expect.title}`),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.features.title}`)
+      screen.getByTestId(`MiniFeatureSection-${featureCardConfig.features.title}`),
     ).toBeInTheDocument();
 
     expect(screen.getByTestId("TestimonialList")).toBeInTheDocument();

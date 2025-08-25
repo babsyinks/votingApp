@@ -1,14 +1,10 @@
-import {
-  minuteSeconds,
-  hourSeconds,
-  daySeconds,
-} from "../config/timePartsInSeconds";
+import { minuteSeconds, hourSeconds, daySeconds } from "../data/timePartsInSeconds";
 
 const timeFunctionMapper = {
-  days: (time) => time / daySeconds | 0,
-  hours: (time) => (time % daySeconds) / hourSeconds | 0,
-  minutes: (time) => (time % hourSeconds) / minuteSeconds | 0,
-  seconds: (time) => minuteSeconds - time | 0,
+  days: (time) => (time / daySeconds) | 0,
+  hours: (time) => ((time % daySeconds) / hourSeconds) | 0,
+  minutes: (time) => ((time % hourSeconds) / minuteSeconds) | 0,
+  seconds: (time) => (minuteSeconds - time) | 0,
 };
 
 /**
@@ -23,9 +19,7 @@ const timeFunctionMapper = {
 const getTimePart = ({ type, time }) => {
   const validTypes = ["days", "hours", "minutes", "seconds"];
   if (!validTypes.includes(type)) {
-    throw new Error(
-      `${type} is invalid. It should be any of ${validTypes.join(", ")}`,
-    );
+    throw new Error(`${type} is invalid. It should be any of ${validTypes.join(", ")}`);
   }
   return timeFunctionMapper[type](time);
 };
