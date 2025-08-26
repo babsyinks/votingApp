@@ -75,7 +75,10 @@ describe("userService", () => {
       const mockJson = { id: 2, username: "alice" };
       User.findOne.mockResolvedValue({ toJSON: jest.fn().mockReturnValue(mockJson) });
 
-      const result = await userService.findExistingUser({ email: "a@example.com", username: "alice" });
+      const result = await userService.findExistingUser({
+        email: "a@example.com",
+        username: "alice",
+      });
 
       expect(User.findOne).toHaveBeenCalledWith({
         where: { [Op.or]: [{ email: "a@example.com" }, { username: "alice" }] },
@@ -85,7 +88,7 @@ describe("userService", () => {
   });
 
   describe("createUser", () => {
-    it("hashes password and creates user with role=user", async () => {
+    it("hashes password and creates non-admin user", async () => {
       hashPassWord.mockResolvedValue("hashed-pass");
       const userData = {
         email: "a@example.com",
@@ -93,8 +96,12 @@ describe("userService", () => {
         firstname: "User",
         lastname: "A",
         password: "plain-pass",
+        isAdmin: false,
       };
-      const mockCreatedUser = { id: 99, ...userData, password: "hashed-pass" };
+      const mockCreatedUser = {
+        ...userData,
+        password: "hashed-pass",
+      };
       User.create.mockResolvedValue(mockCreatedUser);
 
       const result = await userService.createUser(userData);
@@ -106,7 +113,38 @@ describe("userService", () => {
         firstname: "User",
         lastname: "A",
         password: "hashed-pass",
-        role: "user",
+        isAdmin: false,
+      });
+      expect(result).toBe(mockCreatedUser);
+    });
+
+    it("hashes password and creates non-admin user even when a request is made to create user as admin", async () => {
+      hashPassWord.mockResolvedValue("hashed-pass");
+      const userData = {
+        email: "a@example.com",
+        username: "userA",
+        firstname: "User",
+        lastname: "A",
+        password: "plain-pass",
+        isAdmin: true,
+      };
+      const mockCreatedUser = {
+        ...userData,
+        password: "hashed-pass",
+      };
+
+      User.create.mockResolvedValue(mockCreatedUser);
+
+      const result = await userService.createUser(userData);
+
+      expect(hashPassWord).toHaveBeenCalledWith("plain-pass");
+      expect(User.create).toHaveBeenCalledWith({
+        email: "a@example.com",
+        username: "userA",
+        firstname: "User",
+        lastname: "A",
+        password: "hashed-pass",
+        isAdmin: false,
       });
       expect(result).toBe(mockCreatedUser);
     });

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       Votes.belongsTo(models.Election, { foreignKey: "election_id" });
     }
     toJSON() {
-      return { ...this.get(), id: undefined };
+      return this.get();
     }
   }
 

@@ -2,13 +2,14 @@ module.exports = (Contestants) => {
   return {
     /**
      * @typedef {Object} Contestant
-     * @property {number} id
+     * 
      * @property {string} contestant_id
      * @property {string} surname
      * @property {string} firstname
      * @property {string} position
      * @property {string} manifesto
      * @property {string} picture
+     * @property {string} election_id
      */
 
     /**

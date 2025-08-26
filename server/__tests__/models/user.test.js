@@ -81,9 +81,7 @@ describe("User Model (unit)", () => {
   });
 
   test("associate should define belongsToMany relationship to Organization and hasMany to Votes", () => {
-    const belongsToManySpy = jest
-      .spyOn(User, "belongsToMany")
-      .mockImplementation(() => {});
+    const belongsToManySpy = jest.spyOn(User, "belongsToMany").mockImplementation(() => {});
     const hasManySpy = jest.spyOn(User, "hasMany").mockImplementation(() => {});
 
     const mockModels = { Organization: {}, UserOrganization: {}, Votes: {} };
@@ -100,17 +98,34 @@ describe("User Model (unit)", () => {
     });
   });
 
-  test("toJSON should remove id field", () => {
+  test("toJSON should return model json form", () => {
     const instance = new User();
     instance.get = jest.fn(() => ({
-      id: 1,
       user_id: "uuid-123",
       username: "testuser",
     }));
     const json = instance.toJSON();
     expect(json).toEqual({
+      role: "user",
       user_id: "uuid-123",
       username: "testuser",
+    });
+    expect(json.id).toBeUndefined();
+  });
+
+  test("toJSON should return model json form and set role to admin if user is admin", () => {
+    const instance = new User();
+    instance.get = jest.fn(() => ({
+      user_id: "uuid-123",
+      username: "testuser",
+      isAdmin: true,
+    }));
+    const json = instance.toJSON();
+    expect(json).toEqual({
+      role: "admin",
+      user_id: "uuid-123",
+      username: "testuser",
+      isAdmin: true,
     });
     expect(json.id).toBeUndefined();
   });

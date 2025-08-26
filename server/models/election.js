@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined };
+      return this.get();
     }
   }
 
@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      mode: {
+        type: DataTypes.ENUM("demo", "live"),
+        allowNull: false,
+        defaultValue: "demo",
+      },
       slug: {
         type: DataTypes.STRING,
         unique: true,
@@ -48,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: electionHooks.beforeCreate,
         afterCreate: electionHooks.afterCreate,
       },
-    }
+    },
   );
 
   return Election;

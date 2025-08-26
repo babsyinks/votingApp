@@ -38,7 +38,7 @@ module.exports = ({ votesService, contestantsService, timerService }) => {
       const votes = await votesService.getAllVotes();
 
       if (contestants.length === 0) {
-        generateCustomError("There Is Currently No Election", 404);
+        return contestants;
       }
 
       return getAllContestantsElectionDetails({ contestants, votes });

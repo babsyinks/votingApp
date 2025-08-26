@@ -97,10 +97,9 @@ describe("Votes Model (unit)", () => {
     );
   });
 
-  test("toJSON should remove id field", () => {
+  test("toJSON should return model json form", () => {
     const instance = new Votes();
     instance.get = jest.fn(() => ({
-      id: 1,
       vote_id: "uuid-123",
       user_id: "uuid-456",
       election_id: "uuid-789",
@@ -112,7 +111,6 @@ describe("Votes Model (unit)", () => {
       user_id: "uuid-456",
       election_id: "uuid-789",
     });
-    expect(json.id).toBeUndefined();
   });
 
   test("should allow mocked CRUD calls", async () => {

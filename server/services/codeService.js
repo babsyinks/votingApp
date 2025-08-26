@@ -11,7 +11,8 @@ module.exports = (Code) => {
   return {
     /**
      * @typedef {Object} Code
-     * @property {number} id
+     * 
+     * @property {string} code_id
      * @property {string} codeHash
      * @property {string} email
      * @property {string} type

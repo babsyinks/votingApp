@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasMany(models.Votes, { foreignKey: "user_id" });
     }
+
     toJSON() {
-      return { ...this.get(), id: undefined };
+      const attributes = { ...this.get() };
+      delete attributes.password; // exclude sensitive field
+      attributes.role = attributes.isAdmin ? "admin" : "user";
+      return attributes;
     }
   }
 

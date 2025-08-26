@@ -37,7 +37,7 @@ const _handleAuth = (statusType) => {
 };
 
 const _denyAuthorizationIfNotAdmin = ({ res, user }) => {
-  if (user.role !== "admin") {
+  if (!user.isAdmin) {
     return res.status(403).json({
       authorized: false,
       error: `${user.username} is unauthorized to access this resource.`,
