@@ -10,14 +10,20 @@ describe("services index.js", () => {
       Timer: jest.fn(),
       Code: jest.fn(),
       User: jest.fn(),
+      Organization: jest.fn(),
+      UserOrganization: jest.fn(),
+      Election: jest.fn(),
     }));
 
     jest.mock("../../services/votesService", () => jest.fn(() => ({ votesService: true })));
-    jest.mock("../../services/contestantsService", () => jest.fn(() => ({ contestantsService: true })));
+    jest.mock("../../services/contestantsService", () =>
+      jest.fn(() => ({ contestantsService: true })),
+    );
     jest.mock("../../services/timerService", () => jest.fn(() => ({ timerService: true })));
     jest.mock("../../services/codeService", () => jest.fn(() => ({ codeService: true })));
     jest.mock("../../services/userService", () => jest.fn(() => ({ userService: true })));
     jest.mock("../../services/electionService", () => jest.fn(() => ({ electionService: true })));
+    jest.mock("../../services/organizationService", () => jest.fn(() => ({ organizationService: true })));
 
     services = require("../../services");
   });
@@ -44,6 +50,10 @@ describe("services index.js", () => {
 
   it("should export electionService", () => {
     expect(services.electionService).toEqual({ electionService: true });
+  });
+
+    it("should export organizationService", () => {
+    expect(services.organizationService).toEqual({ organizationService: true });
   });
 
   it("should export authService merging userService and codeService", () => {
