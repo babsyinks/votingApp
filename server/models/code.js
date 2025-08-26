@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {}
 
     toJSON() {
-      return { ...this.get(), id: undefined };
+      return this.get();
     }
   }
 

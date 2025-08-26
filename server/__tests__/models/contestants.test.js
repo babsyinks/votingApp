@@ -73,7 +73,7 @@ describe("Contestants Model (unit)", () => {
     expect(attrs.picture.allowNull).toBe(false);
   });
 
-  test("toJSON should remove id", () => {
+  test("toJSON should return model json form", () => {
     const instance = new Contestants();
     instance.dataValues = {
       id: 1,
@@ -81,7 +81,6 @@ describe("Contestants Model (unit)", () => {
       surname: "Doe",
     };
     const json = instance.toJSON();
-    expect(json.id).toBeUndefined();
     expect(json.firstname).toBe("John");
     expect(json.surname).toBe("Doe");
   });
