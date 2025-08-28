@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
 
     toJSON() {
       const attributes = { ...this.get() };
-      delete attributes.password; // exclude sensitive field
       attributes.role = attributes.isAdmin ? "admin" : "user";
       return attributes;
     }
