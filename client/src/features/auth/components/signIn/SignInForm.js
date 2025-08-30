@@ -4,10 +4,7 @@ import { useDispatch } from "react-redux";
 import { useToastMessage } from "hooks/useToastMessage";
 import { useAxios } from "hooks/useAxios";
 import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElectionRedirect";
-import {
-  userAuthenticated,
-  userNotAuthenticated,
-} from "features/auth/userAuthSlice";
+import { userAuthenticated, userNotAuthenticated } from "features/auth/userAuthSlice";
 import { setUserInfo } from "features/user/userSlice";
 import isEmail from "validator/lib/isEmail";
 import AuthFieldUser from "../AuthFieldUser";
@@ -69,20 +66,11 @@ export default function SignInForm() {
         onChange={(e) => setUsernameOrEmail(e.target.value)}
         placeholder="Username or Email"
       />
-      <AuthFieldPassword
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <AuthButton
-        onClick={signIn}
-        disabled={!(usernameOrEmail.length > 0 && password.length > 0)}
-      >
+      <AuthFieldPassword value={password} onChange={(e) => setPassword(e.target.value)} />
+      <AuthButton onClick={signIn} disabled={!(usernameOrEmail.length > 0 && password.length > 0)}>
         Sign In
       </AuthButton>
-      <AuthAlternativeAccessMeans
-        btnLabel="Forgot password?"
-        route="/forgot-password"
-      />
+      <AuthAlternativeAccessMeans btnLabel="Forgot password?" route="/forgot-password" />
     </>
   );
 }

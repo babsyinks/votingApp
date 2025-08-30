@@ -2,9 +2,11 @@ module.exports = (Timer) => {
   return {
     /**
      * @typedef {Object} Timer
-     * @property {number} id
-     * @property {string} startDate
-     * @property {string} endDate
+     * 
+     * @property {string} timer_id
+     * @property {number} startDate
+     * @property {number} endDate
+     * @property {string} election_id
      */
 
     /**

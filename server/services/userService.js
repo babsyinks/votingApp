@@ -6,13 +6,13 @@ module.exports = (User) => {
   return {
     /**
      * @typedef {Object} User
-     * @property {number} id
+     * 
      * @property {string} user_id
      * @property {string} username
      * @property {string} password
      * @property {string} firstname
      * @property {string} lastname
-     * @property {string} role
+     * @property {boolean} isAdmin
      * @property {string} email
      */
 
@@ -75,7 +75,7 @@ module.exports = (User) => {
         firstname,
         lastname,
         password: hashedPassword,
-        role: "user",
+        isAdmin: false,
       });
     },
 

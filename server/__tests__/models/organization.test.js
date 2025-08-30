@@ -47,10 +47,9 @@ describe("Organization Model (unit)", () => {
     expect(options).toHaveProperty("tableName", "organizations");
   });
 
-  test("toJSON should omit id but preserve organization_id and other fields", () => {
+  test("toJSON should return model json form", () => {
     const instance = Object.create(Organization.prototype);
     instance.get = () => ({
-      id: 123,
       organization_id: "uuid-org",
       name: "My Org",
       description: "Test description",
@@ -58,7 +57,6 @@ describe("Organization Model (unit)", () => {
 
     const json = instance.toJSON();
 
-    expect(json.id).toBeUndefined();
     expect(json.organization_id).toBe("uuid-org");
     expect(json.name).toBe("My Org");
     expect(json.description).toBe("Test description");

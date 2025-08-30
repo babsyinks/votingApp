@@ -1,4 +1,4 @@
-import helpNums from "features/help/config/helpNums";
+import helpNums from "features/help/data/helpNums";
 
 describe("helpNums config", () => {
   it("should export an array of help numbers", () => {

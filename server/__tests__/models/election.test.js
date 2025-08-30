@@ -5,6 +5,7 @@ describe("Election Model (unit)", () => {
   let DataTypes;
   let initSpy;
   let Election;
+  let electionHooks;
 
   beforeEach(() => {
     jest.resetModules();
@@ -18,6 +19,8 @@ describe("Election Model (unit)", () => {
       this.options = options;
       return this;
     });
+
+    electionHooks = require("../../hooks/electionHooks");
 
     Election = require("../../models/election")({}, DataTypes);
   });
@@ -42,27 +45,40 @@ describe("Election Model (unit)", () => {
     expect(attrs.name.allowNull).toBe(false);
     expect(attrs.name.type.key).toBe("STRING");
 
+    expect(attrs).toHaveProperty("slug");
+    expect(attrs.slug.type.key).toBe("STRING");
+    expect(attrs.slug.unique).toBe(true);
+
+    expect(attrs).toHaveProperty("short_link");
+    expect(attrs.short_link.type.key).toBe("STRING");
+
     expect(options).toHaveProperty("modelName", "Election");
     expect(options).toHaveProperty("tableName", "elections");
     expect(options).toHaveProperty("indexes");
     expect(options.indexes).toEqual([{ fields: ["organization_id"] }]);
+
+    expect(options).toHaveProperty("hooks");
+    expect(options.hooks.beforeCreate).toBe(electionHooks.beforeCreate);
+    expect(options.hooks.afterCreate).toBe(electionHooks.afterCreate);
   });
 
-  test("toJSON should omit id but preserve election_id and other fields", () => {
+  test("toJSON should return model json form", () => {
     const instance = Object.create(Election.prototype);
     instance.get = () => ({
-      id: 123,
       election_id: "uuid-123",
       organization_id: "uuid-org",
       name: "Test Election",
+      slug: "test-election",
+      short_link: "http://sho.rt/abc",
     });
 
     const json = instance.toJSON();
 
-    expect(json.id).toBeUndefined();
     expect(json.election_id).toBe("uuid-123");
     expect(json.organization_id).toBe("uuid-org");
     expect(json.name).toBe("Test Election");
+    expect(json.slug).toBe("test-election");
+    expect(json.short_link).toBe("http://sho.rt/abc");
   });
 
   test("associate sets up correct relationships", () => {

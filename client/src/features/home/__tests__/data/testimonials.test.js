@@ -1,4 +1,4 @@
-import testimonials from "features/home/config/testimonials";
+import testimonials from "features/home/data/testimonials";
 
 describe("testimonials config", () => {
   it("should export an array of testimonials", () => {

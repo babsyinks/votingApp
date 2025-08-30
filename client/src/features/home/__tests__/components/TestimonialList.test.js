@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import TestimonialList from "features/home/components/TestimonialList";
-import testimonials from "features/home/config/testimonials";
+import testimonials from "features/home/data/testimonials";
 
 jest.mock("components/ui/Section", () => ({ children, ...props }) => (
   <section data-testid="section" {...props}>

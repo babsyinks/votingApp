@@ -1,5 +1,5 @@
 import { useState } from "react";
-import timerConf from "../config/timerConf";
+import timerLabelsWithTypes from "../data/timerLabelsWithTypes";
 
 function useTimerSchedule() {
   const [startDate, setStartDate] = useState("");
@@ -26,7 +26,7 @@ function useTimerSchedule() {
     },
   ];
 
-  const mergedTimerState = timerConf.map((obj, i) => ({
+  const mergedTimerState = timerLabelsWithTypes.map((obj, i) => ({
     ...obj,
     value: stateMap[i].value,
     onChange: stateMap[i].onChange,

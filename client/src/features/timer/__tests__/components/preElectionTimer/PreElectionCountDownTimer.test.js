@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import PreElectionCountDownTimer from "features/timer/components/preElectionTimer/PreElectionCountDownTimer";
 import * as useOrientationHook from "hooks/useOrientation";
 import * as getTimeStatusHelper from "features/timer/helpers/getTimeStatus";
-import * as getTimerConfig from "features/timer/config/getPreElectionTimerConfig";
+import * as getTimerConfig from "features/timer/data/getPreElectionTimerSettings";
 
 jest.mock(
   "features/timer/components/preElectionTimer/PreElectionCountDownTimerPart",

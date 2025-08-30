@@ -2,11 +2,12 @@ module.exports = (Votes) => {
   return {
     /**
      * @typedef {Object} Vote
-     * @property {number} id
+     * 
      * @property {string} vote_id
      * @property {string} user_id
      * @property {string} contestant_id
      * @property {string} position
+     * @property {string} election_id
      */
 
     /**

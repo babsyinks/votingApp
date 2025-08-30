@@ -42,6 +42,10 @@ a:hover {
   text-decoration: underline;
 }
 
+i[aria-disabled="true"], button:disabled {
+  cursor: not-allowed;
+}
+
 /* color palette */
 :root {
   --palette-white: #ffffff;

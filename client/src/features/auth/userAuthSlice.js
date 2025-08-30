@@ -9,9 +9,8 @@ const initialState = {
  * userAuthSlice
  *
  * It handles setting the authentication status of users, indicating if they are logged in or not.
- * Additionally, if the user role is 'admin' it grants access to admin only accessable parts of the 
- * app, for example, setting timers, adding election contestants, setting election schedule and 
- * terminating same.
+ * Additionally, if the user is an admin, it grants access to admin only accessable parts of the 
+ * app.
  */
 const userAuthSlice = createSlice({
   name: "user_auth",

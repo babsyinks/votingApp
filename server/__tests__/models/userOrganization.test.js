@@ -58,10 +58,9 @@ describe("UserOrganization Model (unit)", () => {
     );
   });
 
-  test("toJSON should omit id but preserve other fields", () => {
+  test("toJSON should return model json form", () => {
     const instance = Object.create(UserOrganization.prototype);
     instance.get = () => ({
-      id: 123,
       user_id: "uuid-user",
       organization_id: "uuid-org",
       role: "election-manager",
@@ -69,7 +68,6 @@ describe("UserOrganization Model (unit)", () => {
 
     const json = instance.toJSON();
 
-    expect(json.id).toBeUndefined();
     expect(json.user_id).toBe("uuid-user");
     expect(json.organization_id).toBe("uuid-org");
     expect(json.role).toBe("election-manager");

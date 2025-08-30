@@ -1,5 +1,5 @@
-import getPreElectionTimerConfig from "../../config/getPreElectionTimerConfig";
-import { minuteSeconds, hourSeconds, daySeconds } from "../../config/timePartsInSeconds";
+import getPreElectionTimerConfig from "../../data/getPreElectionTimerSettings";
+import { minuteSeconds, hourSeconds, daySeconds } from "../../data/timePartsInSeconds";
 
 describe("getPreElectionTimerConfig", () => {
   it("should return 4 timer segments with correct types and colors", () => {

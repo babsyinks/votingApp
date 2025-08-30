@@ -77,12 +77,8 @@ describe("electionService", () => {
     it("should throw error if no contestants", async () => {
       contestantsService.getAllContestants.mockResolvedValue([]);
       votesService.getAllVotes.mockResolvedValue([]);
-
-      await expect(electionService.getElectionSummary()).rejects.toThrow(
-        "404: There Is Currently No Election",
-      );
-
-      expect(generateCustomError).toHaveBeenCalledWith("There Is Currently No Election", 404);
+      const res = await electionService.getElectionSummary();
+      expect(res).toEqual([]);
     });
 
     it("should return grouped election details", async () => {

@@ -32,12 +32,10 @@ describe("Code Model (unit)", () => {
 
     const [attrs, options] = initSpy.mock.calls[0];
 
-    // ✅ new primary key field
     expect(attrs).toHaveProperty("code_id");
     expect(attrs.code_id.primaryKey).toBe(true);
     expect(attrs.code_id.type.key).toBe("UUID");
 
-    // old fields
     expect(attrs).toHaveProperty("codeHash");
     expect(attrs).toHaveProperty("email");
     expect(attrs).toHaveProperty("type");
@@ -56,12 +54,11 @@ describe("Code Model (unit)", () => {
     expect(enumValues).toEqual(["signup", "password_reset", "email_change"]);
   });
 
-  test("toJSON should omit id and preserve other fields", () => {
+  test("toJSON should return model json form", () => {
     const instance = Object.create(Code.prototype);
     const now = new Date();
 
     instance.get = () => ({
-      id: 123,
       code_id: "uuid-123",
       codeHash: "hashed-value",
       email: "test@example.com",
@@ -71,10 +68,6 @@ describe("Code Model (unit)", () => {
 
     const json = instance.toJSON();
 
-    // ✅ id should be stripped
-    expect(json.id).toBeUndefined();
-
-    // ✅ but code_id remains
     expect(json.code_id).toBe("uuid-123");
     expect(json.codeHash).toBe("hashed-value");
     expect(json.email).toBe("test@example.com");

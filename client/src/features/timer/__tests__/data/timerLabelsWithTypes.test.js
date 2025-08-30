@@ -1,12 +1,12 @@
-import timerConf from "../../config/timerConf";
+import timerLabelsWithTypes from "../../data/timerLabelsWithTypes";
 
-describe("timerConf", () => {
+describe("timerLabelsWithTypes", () => {
   test("should contain 4 configuration items", () => {
-    expect(timerConf).toHaveLength(4);
+    expect(timerLabelsWithTypes).toHaveLength(4);
   });
 
   test("should contain correct labels and types", () => {
-    expect(timerConf).toEqual([
+    expect(timerLabelsWithTypes).toEqual([
       { label: "Election Start Day", type: "date" },
       { label: "Election Start Time", type: "time" },
       { label: "Election End Day", type: "date" },
@@ -15,7 +15,7 @@ describe("timerConf", () => {
   });
 
   test("all config items should have a label and type", () => {
-    timerConf.forEach((item) => {
+    timerLabelsWithTypes.forEach((item) => {
       expect(item).toHaveProperty("label");
       expect(typeof item.label).toBe("string");
 

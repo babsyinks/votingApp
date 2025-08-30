@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import IndustryList from "features/home/components/IndustryList";
-import industriesServed from "features/home/config/industriesServed";
+import industriesServed from "features/home/data/industriesServed";
 
 jest.mock("features/home/components/IndustryCard", () => ({ name }) => (
   <div data-testid="industry-card">{name}</div>
