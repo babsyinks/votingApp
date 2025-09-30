@@ -146,7 +146,9 @@ const _buildElectionDetailsObj = ({ votes, contestant }) => {
  * @returns {Contestant | undefined}
  */
 const _findContestant = (contestants, contestant) => {
-  return contestants.find(({ contestant_id }) => contestant_id === contestant.contestant_id);
+  return contestants.find(
+    ({ contestant_id }) => contestant_id === contestant.contestant_id,
+  );
 };
 
 /**

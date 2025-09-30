@@ -12,7 +12,10 @@ const failIfEmpty = (fieldsObj) => {
       return !fieldsObj[key];
     })
   ) {
-    generateCustomError(`${emptyField[0].toLowerCase()} field must be filled!`, 400);
+    generateCustomError(
+      `${emptyField[0].toLowerCase()} field must be filled!`,
+      400,
+    );
   }
 };
 
@@ -53,7 +56,10 @@ const _passwordStrengthStatus = (password) => {
 const failIfPasswordWeak = (password) => {
   const passwordStrengthStatusMessage = _passwordStrengthStatus(password);
   if (passwordStrengthStatusMessage) {
-    generateCustomError(`Password must have ${passwordStrengthStatusMessage.toLowerCase()}`, 400);
+    generateCustomError(
+      `Password must have ${passwordStrengthStatusMessage.toLowerCase()}`,
+      400,
+    );
   }
 };
 

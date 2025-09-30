@@ -8,8 +8,13 @@ async function sendPasswordResetLink({ toEmail, resetCode }) {
     heading: "Reset Your Password",
     content: [
       {
-        message: "We received a request to reset your password. Click the button below to proceed:",
-        linkDetails: { url: resetUrl, btnValue: "Reset Password", isMainBtn: true },
+        message:
+          "We received a request to reset your password. Click the button below to proceed:",
+        linkDetails: {
+          url: resetUrl,
+          btnValue: "Reset Password",
+          isMainBtn: true,
+        },
       },
     ],
     footNote: "If you didn't request this, you can safely ignore this email.",
