@@ -1,0 +1,37 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "app/rootReducer";
+
+const initialState = {
+  userIsAuthenticated: false,
+  userIsAdmin: false,
+};
+
+/**
+ * userAuthSlice
+ *
+ * It handles setting the authentication status of users, indicating if they are logged in or not.
+ * Additionally, if the user is an admin, it grants access to admin only accessable parts of the 
+ * app.
+ */
+const userAuthSlice = createSlice({
+  name: "user_auth",
+  initialState,
+  reducers: {
+    userAuthenticated(state, action) {
+      state.userIsAuthenticated = true;
+      state.userIsAdmin = action.payload.role === "admin";
+    },
+    userNotAuthenticated(state) {
+      state.userIsAuthenticated = false;
+      state.userIsAdmin = false;
+    },
+  },
+});
+
+export const { userAuthenticated, userNotAuthenticated } =
+  userAuthSlice.actions;
+
+export const userAuth = (state: Pick<RootState, 'userAuth'>) => state.userAuth.userIsAuthenticated;
+export const userIsAdmin = (state: Pick<RootState, 'userAuth'>) => state.userAuth.userIsAdmin;
+
+export default userAuthSlice.reducer;

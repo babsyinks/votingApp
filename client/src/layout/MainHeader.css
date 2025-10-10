@@ -45,3 +45,43 @@
   margin-right: 6px;
   font-size: 1rem;
 }
+
+/* Accessibility helper: visually hidden but still accessible */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* prevent line breaks */
+  border: 0;
+}
+
+/* By default, hide the contact text visually but keep it accessible */
+.contact-text {
+  /* Copy the visually-hidden properties directly here */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* On desktop, make the text visible */
+@media (min-width: 1024px) {
+  .contact-text {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
