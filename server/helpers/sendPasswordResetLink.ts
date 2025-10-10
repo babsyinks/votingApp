@@ -1,7 +1,15 @@
-const emailTemplateBuilder = require("./emailTemplateBuilder");
-const sendEmail = require("./sendEmail");
+import emailTemplateBuilder from "./emailTemplateBuilder";
+import sendEmail from "./sendEmail";
 
-async function sendPasswordResetLink({ toEmail, resetCode }) {
+interface SendPasswordResetLinkParams {
+  toEmail: string;
+  resetCode: string;
+}
+
+async function sendPasswordResetLink({
+  toEmail,
+  resetCode,
+}: SendPasswordResetLinkParams): Promise<void> {
   const subject = "Reset your password";
   const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetCode}`;
   const htmlContent = emailTemplateBuilder({
@@ -23,4 +31,4 @@ async function sendPasswordResetLink({ toEmail, resetCode }) {
   await sendEmail({ toEmail, subject, htmlContent });
 }
 
-module.exports = sendPasswordResetLink;
+export default sendPasswordResetLink;

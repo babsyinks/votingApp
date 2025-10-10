@@ -1,6 +1,8 @@
+import { createTimerService } from "../../services/timerService";
+
 describe("timerService", () => {
-  let Timer;
-  let timerService;
+  let Timer: any;
+  let timerService: ReturnType<typeof createTimerService>;
 
   beforeEach(() => {
     Timer = {
@@ -10,15 +12,23 @@ describe("timerService", () => {
       destroy: jest.fn(),
     };
 
-    timerService = require("../../services/timerService")(Timer);
+    timerService = createTimerService(Timer);
     jest.clearAllMocks();
   });
 
   describe("getAllTimers", () => {
     it("should return timers as JSON when raw=false", async () => {
       const mockTimers = [
-        { toJSON: jest.fn().mockReturnValue({ id: 1, startDate: "2025-01-01" }) },
-        { toJSON: jest.fn().mockReturnValue({ id: 2, startDate: "2025-01-02" }) },
+        {
+          toJSON: jest
+            .fn()
+            .mockReturnValue({ timer_id: "1", startDate: "2025-01-01" }),
+        },
+        {
+          toJSON: jest
+            .fn()
+            .mockReturnValue({ timer_id: "2", startDate: "2025-01-02" }),
+        },
       ];
       Timer.findAll.mockResolvedValue(mockTimers);
 
@@ -26,21 +36,22 @@ describe("timerService", () => {
 
       expect(Timer.findAll).toHaveBeenCalledTimes(1);
       expect(result).toEqual([
-        { id: 1, startDate: "2025-01-01" },
-        { id: 2, startDate: "2025-01-02" },
+        { timer_id: "1", startDate: "2025-01-01" },
+        { timer_id: "2", startDate: "2025-01-02" },
       ]);
     });
 
     it("should return raw timers when raw=true", async () => {
       const mockTimers = [
-        { id: 1, startDate: "2025-01-01" },
-        { id: 2, startDate: "2025-01-02" },
+        { get: jest.fn().mockReturnValue({ timer_id: "1" }) },
+        { get: jest.fn().mockReturnValue({ timer_id: "2" }) },
       ];
       Timer.findAll.mockResolvedValue(mockTimers);
 
       const result = await timerService.getAllTimers({ raw: true });
 
-      expect(result).toEqual(mockTimers);
+      expect(Timer.findAll).toHaveBeenCalledTimes(1);
+      expect(result).toEqual([{ timer_id: "1" }, { timer_id: "2" }]);
     });
 
     it("should handle empty timers array", async () => {
@@ -48,34 +59,44 @@ describe("timerService", () => {
 
       const result = await timerService.getAllTimers();
 
+      expect(Timer.findAll).toHaveBeenCalledTimes(1);
       expect(result).toEqual([]);
     });
   });
 
   describe("findTimerById", () => {
     it("should return timer as JSON when found", async () => {
-      const mockData = { id: 5, startDate: "2025-01-10" };
-      Timer.findOne.mockResolvedValue({ toJSON: jest.fn().mockReturnValue(mockData) });
+      const mockData = { timer_id: "t1", startDate: "2025-01-10" };
+      const mockRecord = { toJSON: jest.fn().mockReturnValue(mockData) };
+      Timer.findOne.mockResolvedValue(mockRecord);
 
-      const result = await timerService.findTimerById(5);
+      const result = await timerService.findTimerById("t1");
 
-      expect(Timer.findOne).toHaveBeenCalledWith({ where: { id: 5 } });
+      expect(Timer.findOne).toHaveBeenCalledWith({ where: { timer_id: "t1" } });
+      expect(mockRecord.toJSON).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockData);
     });
 
     it("should return undefined when timer not found", async () => {
       Timer.findOne.mockResolvedValue(null);
 
-      const result = await timerService.findTimerById(123);
+      const result = await timerService.findTimerById("unknown");
 
+      expect(Timer.findOne).toHaveBeenCalledWith({
+        where: { timer_id: "unknown" },
+      });
       expect(result).toBeUndefined();
     });
   });
 
   describe("createTimer", () => {
     it("should create a timer and return it", async () => {
-      const newTimer = { startDate: "2025-02-01", endDate: "2025-02-05" };
-      const mockCreated = { id: 1, ...newTimer };
+      const newTimer = {
+        election_id: "e1",
+        startDate: new Date("2025-02-01"),
+        endDate: new Date("2025-02-05"),
+      };
+      const mockCreated = { timer_id: "t1", ...newTimer };
       Timer.create.mockResolvedValue(mockCreated);
 
       const result = await timerService.createTimer(newTimer);
@@ -88,9 +109,9 @@ describe("timerService", () => {
   describe("updateExistingTimer", () => {
     it("should set update fields and save the timer", async () => {
       const mockTimer = { set: jest.fn(), save: jest.fn() };
-      const update = { endDate: "2025-03-01" };
+      const update = { endDate: new Date("2025-03-01") };
 
-      await timerService.updateExistingTimer(mockTimer, update);
+      await timerService.updateExistingTimer(mockTimer as any, update);
 
       expect(mockTimer.set).toHaveBeenCalledWith(update);
       expect(mockTimer.save).toHaveBeenCalledTimes(1);
@@ -99,11 +120,12 @@ describe("timerService", () => {
 
   describe("clearTimer", () => {
     it("should destroy timers with truncate option", async () => {
-      Timer.destroy.mockResolvedValue();
+      Timer.destroy.mockResolvedValue(1);
 
-      await timerService.clearTimer();
+      const result = await timerService.clearTimer();
 
       expect(Timer.destroy).toHaveBeenCalledWith({ truncate: true });
+      expect(result).toBe(1);
     });
   });
 });

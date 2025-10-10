@@ -1,56 +1,53 @@
-const crypto = require("crypto");
+import crypto from "crypto";
 
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
 /**
  * Generates random digits code of a specific length.
  *
- * @param {number} codeLength The length of the code to generate. It defaults to 6.
- * @returns {string}
+ * @param codeLength - The length of the code to generate. Defaults to 6.
+ * @returns A string of random digits of the given length.
  */
-const generateRandomDigitsCode = (codeLength = 6) => {
-  const adder = "1".padEnd(codeLength, 0);
-  const multiplier = "9".padEnd(codeLength, 0);
-  return Math.floor(+adder + Math.random() * +multiplier).toString();
+export const generateRandomDigitsCode = (codeLength: number = 6): string => {
+  const adder = "1".padEnd(codeLength, "0");
+  const multiplier = "9".padEnd(codeLength, "0");
+  return Math.floor(
+    Number(adder) + Math.random() * Number(multiplier),
+  ).toString();
 };
 
 /**
- * Helps to get the hash of a given code. If the code is not provided, it generates and hashes the code
- * of the provided codeLength or a 6 digit code which is the default code length.
+ * Hashes a given code using bcrypt. If no code is provided,
+ * generates one of the given length (defaults to 6).
  *
- * @param {string} randCode The code provided for this function to hash.
- * @param {number} codeLength The length of the desired hash code.
- * @returns {string}
+ * @param randCode - The code to hash. If omitted, one will be generated.
+ * @param codeLength - The length of the code to generate if randCode is omitted.
+ * @returns A bcrypt hash of the code.
  */
-const getHashedDigitCode = async (randCode, codeLength) => {
+export const getHashedDigitCode = async (
+  randCode?: string,
+  codeLength: number = 6,
+): Promise<string> => {
   const code = randCode || generateRandomDigitsCode(codeLength);
-  const randomHashedCode = await bcrypt.hash(code, 12);
-  return randomHashedCode;
+  return bcrypt.hash(code, 12);
 };
 
 /**
- * Generates random hex code of a specific length.
+ * Generates random hex code of a specific byte length.
  *
- * @param {number} codeLength The length of the code to generate. It defaults to 6.
- * @returns {string}
+ * @param byteLength - The number of bytes to generate. Defaults to 32.
+ * @returns A hex string of length `byteLength * 2`.
  */
-const generateRandomHexCode = (byteLength = 32) => {
+export const generateRandomHexCode = (byteLength: number = 32): string => {
   return crypto.randomBytes(byteLength).toString("hex");
 };
 
 /**
- * Helps to get the hash of a given code in hex form
+ * Generates a SHA-256 hash of a given hex code.
  *
- * @param {string} code The code to run the hash function on.
- * @returns {string}
+ * @param code - The string to hash.
+ * @returns The SHA-256 hash as a hex string.
  */
-const getHashedHexCode = (code) => {
+export const getHashedHexCode = (code: string): string => {
   return crypto.createHash("sha256").update(code).digest("hex");
-};
-
-module.exports = {
-  generateRandomDigitsCode,
-  getHashedDigitCode,
-  generateRandomHexCode,
-  getHashedHexCode,
 };

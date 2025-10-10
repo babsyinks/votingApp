@@ -1,62 +1,68 @@
-module.exports = (Timer) => {
-  return {
-    /**
-     * @typedef {Object} Timer
-     * 
-     * @property {string} timer_id
-     * @property {number} startDate
-     * @property {number} endDate
-     * @property {string} election_id
-     */
+import type { TimerAttributes, TimerCreationAttributes } from "../models/timer";
+import { Timer } from "../models/timer";
 
+export const createTimerService = (TimerModel: typeof Timer) => {
+  return {
     /**
      * Fetch all timers.
      *
-     * @param {boolean} raw Indicates if the timer model should be returned in raw form
-     * @returns {Promise<Array>}
+     * @param options.raw Indicates if the timer model should be returned in raw form
+     * @returns Promise<TimerAttributes[]>
      */
-    async getAllTimers({ raw = false } = {}) {
-      const timers = await Timer.findAll();
-      return timers.map((timer) => (raw ? timer : timer?.toJSON()));
+    async getAllTimers({ raw = false }: { raw?: boolean } = {}): Promise<
+      TimerAttributes[] | Timer[]
+    > {
+      const timers = await TimerModel.findAll();
+      return timers.map((timer) => (raw ? timer.get() : timer.toJSON()));
     },
 
     /**
      * Find timer by ID.
      *
-     * @param {number} id id of the Timer to find
-     * @returns {Promise<Timer>}
+     * @param timer_id ID of the timer to find
+     * @returns Promise<TimerAttributes | undefined>
      */
-    async findTimerById(id) {
-      const timer = await Timer.findOne({ where: { id } });
+    async findTimerById(
+      timer_id: string,
+    ): Promise<TimerAttributes | undefined> {
+      const timer = await TimerModel.findOne({ where: { timer_id } });
       return timer?.toJSON();
     },
 
     /**
-     * Create a new timer
+     * Create a new timer.
      *
-     * @param {Timer} timer timer configuration object
-     * @returns {Promise<Timer>}
+     * @param timer Timer configuration object
+     * @returns Promise<Timer>
      */
-    async createTimer(timer) {
-      return Timer.create(timer);
+    async createTimer(timer: TimerCreationAttributes): Promise<Timer> {
+      return TimerModel.create(timer);
     },
 
     /**
-     * Update existing timer
+     * Update existing timer.
      *
-     * @param {Timer} timer The existing timer
-     * @param {Object} update The object containing the update information
+     * @param timer Existing timer instance
+     * @param update Partial update object
+     * @returns Promise<void>
      */
-    async updateExistingTimer(timer, update) {
+    async updateExistingTimer(
+      timer: Timer,
+      update: Partial<TimerAttributes>,
+    ): Promise<void> {
       timer.set(update);
       await timer.save();
     },
 
     /**
-     * Delete/reset the election timer.
+     * Delete/reset all timers.
+     *
+     * @returns Promise<number> number of destroyed rows
      */
-    async clearTimer() {
-      return Timer.destroy({ truncate: true });
+    async clearTimer(): Promise<number> {
+      return TimerModel.destroy({ truncate: true });
     },
   };
 };
+export type TimerService = ReturnType<typeof createTimerService>;
+export default createTimerService;

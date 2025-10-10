@@ -1,4 +1,4 @@
-const databaseCredentials = require("../../config/config");
+import databaseCredentials from "../../config/config";
 
 describe("Database config", () => {
   it("should export an object with development, test, and production keys", () => {
@@ -20,7 +20,7 @@ describe("Database config", () => {
   it("should have correct test config", () => {
     expect(databaseCredentials.test).toEqual({
       username: "root",
-      password: null,
+      password: "test",
       database: "database_test",
       host: "127.0.0.1",
       dialect: "postgres",

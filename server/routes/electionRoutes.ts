@@ -1,18 +1,33 @@
-const express = require("express");
+import express, { Router } from "express";
 
-const electionController = require("../controllers/electionController");
-const { checkAuthenticationStatus, checkAuthorizationStatus } = require("../middleware/auth");
-const { upload } = require("../middleware/uploadMedia");
+import * as electionController from "../controllers/electionController";
+import {
+  checkAuthenticationStatus,
+  checkAuthorizationStatus,
+} from "../middleware/auth";
+import { upload } from "../middleware/uploadMedia";
 
-const router = express.Router();
+const router: Router = express.Router();
 router.use(express.json());
 
-router.post("/contestants", upload.single("picture"), electionController.addNewContestant);
+router.post(
+  "/contestants",
+  upload.single("picture"),
+  electionController.addNewContestant,
+);
 
-router.get("/details", checkAuthenticationStatus, electionController.getElectionDetails);
+router.get(
+  "/details",
+  checkAuthenticationStatus,
+  electionController.getElectionDetails,
+);
 
 router.post("/vote", checkAuthenticationStatus, electionController.castVote);
 
-router.delete("/delete", checkAuthorizationStatus, electionController.deleteElection);
+router.delete(
+  "/delete",
+  checkAuthorizationStatus,
+  electionController.deleteElection,
+);
 
-module.exports = router;
+export default router;

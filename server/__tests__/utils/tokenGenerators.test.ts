@@ -1,62 +1,78 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../utils/tokenGenerators";
+import type { User } from "../../models";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(),
 }));
 
 describe("tokenGenerators", () => {
-  let tokenGenerators;
-
   beforeEach(() => {
     jest.clearAllMocks();
     process.env.ACCESS_TOKEN_SECRET = "access-secret";
     process.env.REFRESH_TOKEN_SECRET = "refresh-secret";
-
-    // Fresh import after resetting mocks
-    tokenGenerators = require("../../utils/tokenGenerators");
   });
 
   describe("generateAccessToken", () => {
     test("should call jwt.sign with correct args", () => {
-      jwt.sign.mockReturnValue("mockAccessToken");
+      (jwt.sign as jest.Mock).mockReturnValue("mockAccessToken");
 
-      const user = { user_id: 123, name: "John" };
-      const token = tokenGenerators.generateAccessToken(user);
+      const user = { user_id: '123', name: "John" } as unknown as User;
+      const token = generateAccessToken(user);
 
-      expect(jwt.sign).toHaveBeenCalledWith({ user: { user_id: 123 } }, "access-secret", {
-        expiresIn: "1d",
-      });
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { user: { user_id: '123' } },
+        "access-secret",
+        {
+          expiresIn: "1d",
+        },
+      );
       expect(token).toBe("mockAccessToken");
     });
   });
 
   describe("generateRefreshToken", () => {
     test("should call jwt.sign with correct args", () => {
-      jwt.sign.mockReturnValue("mockRefreshToken");
+      (jwt.sign as jest.Mock).mockReturnValue("mockRefreshToken");
 
-      const user = { user_id: 456, name: "Jane" };
-      const token = tokenGenerators.generateRefreshToken(user);
+      const user = { user_id: '456', firstname: "Jane" } as unknown as User;
+      const token = generateRefreshToken(user);
 
-      expect(jwt.sign).toHaveBeenCalledWith({ user: { user_id: 456 } }, "refresh-secret", {
-        expiresIn: "7d",
-      });
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { user: { user_id: '456' } },
+        "refresh-secret",
+        {
+          expiresIn: "7d",
+        },
+      );
       expect(token).toBe("mockRefreshToken");
     });
   });
 
   describe("integration between helpers", () => {
     test("generateAccessToken and generateRefreshToken should use generateToken internally", () => {
-      const user = { user_id: 789 };
+      const user = { user_id: '789' } as unknown as User;
 
-      tokenGenerators.generateAccessToken(user);
-      expect(jwt.sign).toHaveBeenCalledWith({ user: { user_id: 789 } }, "access-secret", {
-        expiresIn: "1d",
-      });
+      generateAccessToken(user);
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { user: { user_id: '789' } },
+        "access-secret",
+        {
+          expiresIn: "1d",
+        },
+      );
 
-      tokenGenerators.generateRefreshToken(user);
-      expect(jwt.sign).toHaveBeenCalledWith({ user: { user_id: 789 } }, "refresh-secret", {
-        expiresIn: "7d",
-      });
+      generateRefreshToken(user);
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { user: { user_id: '789' } },
+        "refresh-secret",
+        {
+          expiresIn: "7d",
+        },
+      );
     });
   });
 });

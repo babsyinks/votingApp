@@ -1,30 +1,34 @@
-'use strict';
+"use strict";
+import { QueryInterface } from "sequelize";
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('timer', {
+  async up(
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) {
+    await queryInterface.createTable("timer", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       startDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       endDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Timers');
-  }
+  async down(queryInterface: QueryInterface) {
+    await queryInterface.dropTable("Timers");
+  },
 };

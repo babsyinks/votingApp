@@ -1,7 +1,8 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
+type SequelizeType = typeof import("sequelize");
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     // await queryInterface.removeColumn("users", "id");
 
     await queryInterface.changeColumn("users", "user_id", {
@@ -17,7 +18,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     await queryInterface.removeConstraint("users", "users_pkey");
 
     await queryInterface.addColumn("users", "id", {

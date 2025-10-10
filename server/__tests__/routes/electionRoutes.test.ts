@@ -1,48 +1,61 @@
-const request = require("supertest");
-const express = require("express");
+import express, { Express, RequestHandler } from "express";
+import request from "supertest";
+import type * as ElectionControllerType from "../../controllers/electionController";
+import electionRoutes from "../../routes/electionRoutes";
 
-const stack = [];
+const stack: string[] = [];
 
-jest.mock("../../middleware/uploadMedia", () => {
-  return {
-    upload: {
-      single: (pic) => {
-        stack.push(pic);
-        return (req, res, next) => next();
-      },
+jest.mock("../../middleware/uploadMedia", () => ({
+  upload: {
+    single: (pic: string): RequestHandler => {
+      stack.push(pic);
+      return (_req, _res, next) => next();
     },
-  };
-});
+  },
+}));
 
 jest.mock("../../controllers/electionController", () => ({
-  addNewContestant: jest.fn((req, res) => res.status(201).json({ success: true })),
-  getElectionDetails: jest.fn((req, res) => res.status(200).json({ details: true })),
-  castVote: jest.fn((req, res) => res.status(200).json({ vote: true })),
-  deleteElection: jest.fn((req, res) => res.status(204).send()),
+  addNewContestant: jest.fn((_req, res) =>
+    res.status(201).json({ success: true }),
+  ),
+  getElectionDetails: jest.fn((_req, res) =>
+    res.status(200).json({ details: true }),
+  ),
+  castVote: jest.fn((_req, res) => res.status(200).json({ vote: true })),
+  deleteElection: jest.fn((_req, res) => res.status(204).send()),
 }));
 
 jest.mock("../../middleware/auth", () => ({
-  checkAuthenticationStatus: (req, res, next) => next(),
-  checkAuthorizationStatus: (req, res, next) => next(),
+  checkAuthenticationStatus: (_req: any, _res: any, next: any) => next(),
+  checkAuthorizationStatus: (_req: any, _res: any, next: any) => next(),
 }));
 
-const electionController = require("../../controllers/electionController");
-const electionRoutes = require("../../routes/electionRoutes");
+const electionController = jest.requireMock(
+  "../../controllers/electionController",
+) as jest.Mocked<typeof ElectionControllerType>;
 
-const app = express();
-app.use(electionRoutes);
+let app: Express;
+
+beforeAll(() => {
+  app = express();
+  app.use(express.json());
+  app.use(electionRoutes);
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe("electionRoutes", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe("POST /contestants", () => {
     it("should register upload.single middleware with 'picture' and call addNewContestant", async () => {
       expect(stack).toEqual(["picture"]);
-      const res = await request(app).post("/contestants").field("name", "John Doe");
 
-      expect(electionController.addNewContestant).toHaveBeenCalled();
+      const res = await request(app)
+        .post("/contestants")
+        .field("name", "John Doe");
+
+      expect(electionController.addNewContestant).toHaveBeenCalledTimes(1);
       expect(res.status).toBe(201);
       expect(res.body).toEqual({ success: true });
     });
@@ -52,7 +65,7 @@ describe("electionRoutes", () => {
     it("should call getElectionDetails controller", async () => {
       const res = await request(app).get("/details");
 
-      expect(electionController.getElectionDetails).toHaveBeenCalled();
+      expect(electionController.getElectionDetails).toHaveBeenCalledTimes(1);
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ details: true });
     });
@@ -62,7 +75,7 @@ describe("electionRoutes", () => {
     it("should call castVote controller", async () => {
       const res = await request(app).post("/vote").send({ contestantId: 1 });
 
-      expect(electionController.castVote).toHaveBeenCalled();
+      expect(electionController.castVote).toHaveBeenCalledTimes(1);
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ vote: true });
     });
@@ -72,7 +85,7 @@ describe("electionRoutes", () => {
     it("should call deleteElection controller", async () => {
       const res = await request(app).delete("/delete");
 
-      expect(electionController.deleteElection).toHaveBeenCalled();
+      expect(electionController.deleteElection).toHaveBeenCalledTimes(1);
       expect(res.status).toBe(204);
       expect(res.text).toBe("");
     });

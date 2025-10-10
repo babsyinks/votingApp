@@ -1,11 +1,20 @@
-const crypto = require("crypto");
+/* const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const {
   generateRandomDigitsCode,
   getHashedDigitCode,
   generateRandomHexCode,
   getHashedHexCode,
-} = require("../../utils/randomCodeGenerator");
+} = require("../../utils/randomCodeGenerator"); */
+
+import crypto from "crypto";
+import bcrypt from "bcryptjs";
+import {
+  generateRandomDigitsCode,
+  getHashedDigitCode,
+  generateRandomHexCode,
+  getHashedHexCode,
+} from "../../utils/randomCodeGenerator";
 
 describe("randomCodeGenerator utility functions", () => {
   describe("generateRandomDigitsCode", () => {
@@ -37,7 +46,7 @@ describe("randomCodeGenerator utility functions", () => {
     });
 
     it("should generate a code if not provided and hash it", async () => {
-      const hash = await getHashedDigitCode(null, 6);
+      const hash = await getHashedDigitCode(undefined, 6);
       expect(hash).toMatch(/^\$2[aby]\$.{56}$/);
     });
   });
@@ -67,7 +76,10 @@ describe("randomCodeGenerator utility functions", () => {
       const hash = getHashedHexCode(code);
       expect(hash).toMatch(/^[a-f0-9]{64}$/);
 
-      const expectedHash = crypto.createHash("sha256").update(code).digest("hex");
+      const expectedHash = crypto
+        .createHash("sha256")
+        .update(code)
+        .digest("hex");
       expect(hash).toBe(expectedHash);
     });
 

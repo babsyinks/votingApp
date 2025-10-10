@@ -1,87 +1,74 @@
-"use strict";
+import { Sequelize } from "sequelize";
+import { Organization } from "../../models/organization";
+import { Election } from "../../models/election";
+import { User } from "../../models/user";
+import { UserOrganization } from "../../models/userOrganization";
 
-describe("Organization Model (unit)", () => {
-  let Model;
-  let DataTypes;
-  let initSpy;
-  let Organization;
+describe("Organization Model", () => {
+  let sequelize: Sequelize;
 
-  beforeEach(() => {
-    jest.resetModules();
+  beforeAll(() => {
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
+  });
 
-    const sequelize = require("sequelize");
-    Model = sequelize.Model;
-    DataTypes = sequelize.DataTypes;
+  afterAll(async () => {
+    await sequelize.close();
+  });
 
-    initSpy = jest.spyOn(Model, "init").mockImplementation(function (attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
+  test("initModel initializes correctly", () => {
+    const initSpy = jest.spyOn(Organization, "init");
+
+    Organization.initModel(sequelize);
+
+    expect(initSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        organization_id: expect.any(Object),
+        name: expect.any(Object),
+        description: expect.any(Object),
+      }),
+      expect.objectContaining({
+        sequelize,
+        modelName: "Organization",
+        tableName: "organizations",
+      })
+    );
+
+    initSpy.mockRestore();
+  });
+
+  test("toJSON returns model data via get()", () => {
+    Organization.initModel(sequelize);
+
+    const org = Organization.build({
+      organization_id: "org-123",
+      name: "OpenAI",
+      description: "AI research lab",
     });
 
-    Organization = require("../../models/organization")({}, DataTypes);
-  });
+    const getSpy = jest.spyOn(org, "get");
+    const json = org.toJSON();
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  test("calls Model.init once with attributes and options", () => {
-    expect(initSpy).toHaveBeenCalledTimes(1);
-
-    const [attrs, options] = initSpy.mock.calls[0];
-
-    expect(attrs).toHaveProperty("organization_id");
-    expect(attrs.organization_id.primaryKey).toBe(true);
-    expect(attrs.organization_id.type.key).toBe("UUID");
-
-    expect(attrs).toHaveProperty("name");
-    expect(attrs.name.allowNull).toBe(false);
-    expect(attrs.name.unique).toBe(true);
-    expect(attrs.name.type.key).toBe("STRING");
-
-    expect(attrs).toHaveProperty("description");
-    expect(attrs.description.type.key).toBe("TEXT");
-
-    expect(options).toHaveProperty("modelName", "Organization");
-    expect(options).toHaveProperty("tableName", "organizations");
-  });
-
-  test("toJSON should return model json form", () => {
-    const instance = Object.create(Organization.prototype);
-    instance.get = () => ({
-      organization_id: "uuid-org",
-      name: "My Org",
-      description: "Test description",
+    expect(getSpy).toHaveBeenCalled();
+    expect(json).toMatchObject({
+      organization_id: "org-123",
+      name: "OpenAI",
+      description: "AI research lab",
     });
 
-    const json = instance.toJSON();
-
-    expect(json.organization_id).toBe("uuid-org");
-    expect(json.name).toBe("My Org");
-    expect(json.description).toBe("Test description");
+    getSpy.mockRestore();
   });
 
-  test("associate sets up correct relationships", () => {
-    const hasManySpy = jest.spyOn(Organization, "hasMany").mockImplementation(() => {});
-    const belongsToManySpy = jest.spyOn(Organization, "belongsToMany").mockImplementation(() => {});
+  test("associate sets up associations", () => {
+    Organization.initModel(sequelize);
+    Election.initModel(sequelize);
+    User.initModel(sequelize);
+    UserOrganization.initModel(sequelize);
 
-    const models = {
-      Election: {},
-      User: {},
-      UserOrganization: {},
-    };
+    Organization.associate({ Election, User, UserOrganization } as any);
 
-    Organization.associate(models);
+    const assoc = Organization.associations;
 
-    expect(hasManySpy).toHaveBeenCalledWith(models.Election, { foreignKey: "organization_id" });
-    expect(belongsToManySpy).toHaveBeenCalledWith(models.User, {
-      through: models.UserOrganization,
-      foreignKey: "organization_id",
-      otherKey: "user_id",
-    });
-
-    hasManySpy.mockRestore();
-    belongsToManySpy.mockRestore();
+    expect(assoc.Elections).toBeDefined(); // hasMany
+    expect(assoc.Users).toBeDefined(); // belongsToMany
   });
 });

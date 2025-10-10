@@ -1,110 +1,118 @@
+import type { Request } from "express";
+
+/**
+ * Ensure mocks are declared BEFORE any require/import that would load the module under test.
+ * The mock factories below return mock functions/objects we can inspect via jest.requireMock(...)
+ */
 jest.mock("cloudinary", () => ({
   v2: {
+    // make this a jest.fn so we can assert calls
     config: jest.fn(),
   },
 }));
-jest.mock("multer", () => jest.fn(() => "mockMulterInstance"));
+
+jest.mock("multer", () => {
+  // multer() returns an "upload" middleware object; we return a sentinel to assert equality
+  return jest.fn(() => ({ mocked: "multerInstance" }));
+});
+
 jest.mock("multer-storage-cloudinary", () => ({
-  CloudinaryStorage: jest.fn(function (options) {
-    return { options, mockStorage: true };
-  }),
+  CloudinaryStorage: jest.fn(),
 }));
 
-describe("uploadMedia configuration", () => {
-  let cloudinary;
-  let multer;
-  let CloudinaryStorage;
+/**
+ * Helper to load the middleware after setting environment variables.
+ * This uses require (not import) so the module loads under Jest's mocked module system.
+ */
+function loadUploadMedia() {
+  // clear the require cache so module re-evaluates with current env/mocks
+  jest.resetModules();
+  // require the module freshly
+  return require("../../middleware/uploadMedia");
+}
+
+describe("uploadMedia middleware", () => {
+  const OLD_ENV = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
-    cloudinary = require("cloudinary").v2;
-    multer = require("multer");
-    CloudinaryStorage = require("multer-storage-cloudinary").CloudinaryStorage;
-
-    process.env.CLOUDINARY_CLOUD_NAME = "testCloud";
-    process.env.CLOUDINARY_API_KEY = "testKey";
-    process.env.CLOUDINARY_API_SECRET = "testSecret";
-  });
-
-  it("calls cloudinary.config with correct environment variables", () => {
-    require("../../middleware/uploadMedia");
-    expect(cloudinary.config).toHaveBeenCalledWith({
-      cloud_name: "testCloud",
-      api_key: "testKey",
-      api_secret: "testSecret",
-    });
-  });
-
-  it("creates CloudinaryStorage with correct params", () => {
-    require("../../middleware/uploadMedia");
-
-    expect(CloudinaryStorage).toHaveBeenCalledWith({
-      cloudinary,
-      params: expect.objectContaining({
-        folder: "uploads",
-        format: expect.any(Function),
-        public_id: expect.any(Function),
-        transformation: [{ width: 300, height: 300, crop: "fill" }],
-      }),
-    });
-
-    const { format } = CloudinaryStorage.mock.calls[0][0].params;
-    return format({}, {}).then((result) => {
-      expect(result).toBe("png");
-    });
-  });
-
-  it("calls multer with the CloudinaryStorage instance", () => {
-    require("../../middleware/uploadMedia");
-    expect(multer).toHaveBeenCalledWith(
-      expect.objectContaining({
-        storage: expect.objectContaining({ mockStorage: true }),
-      }),
-    );
-  });
-
-  it("CloudinaryStorage params.format returns png", async () => {
-  jest.resetModules();
-
-  jest.mock("multer-storage-cloudinary", () => {
-    return {
-      CloudinaryStorage: jest.fn().mockImplementation((options) => {
-        global.__formatFn = options.params.format;
-        global.__publicIdFn = options.params.public_id;
-        return { mockStorage: true };
-      }),
+    // Give each test a fresh slate
+    jest.clearAllMocks();
+    process.env = {
+      ...OLD_ENV,
+      CLOUDINARY_CLOUD_NAME: "test_cloud",
+      CLOUDINARY_API_KEY: "test_key",
+      CLOUDINARY_API_SECRET: "test_secret",
     };
   });
 
-  require("../../middleware/uploadMedia");
-
-  const result = await global.__formatFn({}, { originalname: "test.jpg" });
-  expect(result).toBe("png");
-});
-
-it("CloudinaryStorage params.public_id generates unique filename", () => {
-  jest.resetModules();
-
-  jest.mock("multer-storage-cloudinary", () => {
-    return {
-      CloudinaryStorage: jest.fn().mockImplementation((options) => {
-        global.__publicIdFn = options.params.public_id;
-        return { mockStorage: true };
-      }),
-    };
+  afterAll(() => {
+    process.env = OLD_ENV;
   });
 
-  require("../../middleware/uploadMedia");
+  it("configures Cloudinary with environment variables", () => {
+    const mod = loadUploadMedia();
 
-  const file = { originalname: "myphoto.jpg" };
-  const id = global.__publicIdFn({}, file);
-  expect(id).toMatch(/^\d+_myphoto$/);
-});
+    // Grab the mock implementation returned by jest.mock for 'cloudinary'
+    const mockCloudinary = jest.requireMock("cloudinary").v2;
+    expect(mockCloudinary.config).toHaveBeenCalledTimes(1);
+    expect(mockCloudinary.config).toHaveBeenCalledWith({
+      cloud_name: "test_cloud",
+      api_key: "test_key",
+      api_secret: "test_secret",
+    });
 
+    // also the module export exists
+    expect(mod.cloudinary).toBeDefined();
+  });
 
-  it("exports upload and cloudinary objects", () => {
-    const { upload, cloudinary: exportedCloudinary } = require("../../middleware/uploadMedia");
-    expect(upload).toBe("mockMulterInstance");
-    expect(exportedCloudinary).toBe(cloudinary);
+  it("creates CloudinaryStorage with correct parameters", async () => {
+    const mod = loadUploadMedia();
+
+    const CloudinaryStorageMock = jest.requireMock("multer-storage-cloudinary")
+      .CloudinaryStorage as jest.Mock;
+
+    expect(CloudinaryStorageMock).toHaveBeenCalledTimes(1);
+
+    // the first arg object passed to new CloudinaryStorage({...})
+    const storageOptions = CloudinaryStorageMock.mock.calls[0][0];
+    expect(storageOptions).toHaveProperty("cloudinary");
+    expect(typeof storageOptions.params).toBe("function");
+
+    // storageOptions.cloudinary should be the module's exported cloudinary instance
+    expect(storageOptions.cloudinary).toBe(mod.cloudinary);
+
+    // test the async params function returns expected object
+    const fakeReq = {} as Request;
+    const fakeFile = { originalname: "example.jpg" } as Express.Multer.File;
+
+    const params = await storageOptions.params(fakeReq, fakeFile);
+
+    expect(params).toMatchObject({
+      folder: "uploads",
+      format: "png",
+      transformation: [{ width: 300, height: 300, crop: "fill" }],
+    });
+
+    // public_id contains timestamp + filename (without extension)
+    expect(typeof params.public_id).toBe("string");
+    expect(params.public_id).toMatch(/_example$/);
+  });
+
+  it("creates multer instance with the CloudinaryStorage", () => {
+    const mod = loadUploadMedia();
+
+    const multerMock = jest.requireMock("multer") as jest.Mock;
+    expect(multerMock).toHaveBeenCalledTimes(1);
+
+    const multerArg = multerMock.mock.calls[0][0];
+    expect(multerArg).toHaveProperty("storage");
+
+    // upload should equal the sentinel returned by our multer mock
+    expect(mod.upload).toEqual({ mocked: "multerInstance" });
+  });
+
+  it("exports configured Cloudinary instance", () => {
+    const mod = loadUploadMedia();
+    expect(mod.cloudinary).toBeDefined();
   });
 });

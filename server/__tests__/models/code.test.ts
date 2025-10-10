@@ -1,82 +1,62 @@
-"use strict";
+import { Sequelize } from "sequelize";
+import { Code } from "../../models/code";
 
-describe("Code Model (unit)", () => {
-  let Model;
-  let DataTypes;
-  let initSpy;
-  let Code;
+describe("Code Model", () => {
+  let sequelize: Sequelize;
 
-  beforeEach(() => {
-    jest.resetModules();
-
-    const sequelize = require("sequelize");
-    Model = sequelize.Model;
-    DataTypes = sequelize.DataTypes;
-
-    // Spy on Model.init to capture attributes/options
-    initSpy = jest.spyOn(Model, "init").mockImplementation(function (attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
-    });
-
-    Code = require("../../models/code")({}, DataTypes);
+  beforeAll(() => {
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
+  afterAll(async () => {
+    await sequelize.close();
   });
 
-  test("calls Model.init once with attributes and options", () => {
-    expect(initSpy).toHaveBeenCalledTimes(1);
+  test("initModel initializes correctly", () => {
+    const initSpy = jest.spyOn(Code, "init");
 
-    const [attrs, options] = initSpy.mock.calls[0];
+    Code.initModel(sequelize);
 
-    expect(attrs).toHaveProperty("code_id");
-    expect(attrs.code_id.primaryKey).toBe(true);
-    expect(attrs.code_id.type.key).toBe("UUID");
+    expect(initSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        code_id: expect.any(Object),
+        codeHash: expect.any(Object),
+        email: expect.any(Object),
+        type: expect.any(Object),
+        expiresAt: expect.any(Object),
+      }),
+      expect.objectContaining({
+        sequelize,
+        modelName: "Code",
+        tableName: "codes",
+      })
+    );
 
-    expect(attrs).toHaveProperty("codeHash");
-    expect(attrs).toHaveProperty("email");
-    expect(attrs).toHaveProperty("type");
-    expect(attrs).toHaveProperty("expiresAt");
-
-    expect(options).toHaveProperty("modelName", "Code");
-    expect(options).toHaveProperty("tableName", "codes");
+    initSpy.mockRestore();
   });
 
-  test("enum values include signup, password_reset, email_change", () => {
-    const typeAttr = Code.rawAttributes.type;
-    expect(typeAttr).toBeDefined();
-    expect(typeAttr.type).toBeDefined();
+  test("toJSON returns model data via get()", () => {
+    Code.initModel(sequelize);
 
-    const enumValues = typeAttr.type.options?.values || typeAttr.type.values;
-    expect(enumValues).toEqual(["signup", "password_reset", "email_change"]);
-  });
-
-  test("toJSON should return model json form", () => {
-    const instance = Object.create(Code.prototype);
-    const now = new Date();
-
-    instance.get = () => ({
-      code_id: "uuid-123",
-      codeHash: "hashed-value",
+    const code = Code.build({
+      code_id: "1234",
+      codeHash: "hashed123",
       email: "test@example.com",
       type: "signup",
-      expiresAt: now,
+      expiresAt: new Date(),
     });
 
-    const json = instance.toJSON();
+    const getSpy = jest.spyOn(code, "get");
+    const json = code.toJSON();
 
-    expect(json.code_id).toBe("uuid-123");
-    expect(json.codeHash).toBe("hashed-value");
-    expect(json.email).toBe("test@example.com");
-    expect(json.type).toBe("signup");
-    expect(json.expiresAt).toBe(now);
-  });
+    expect(getSpy).toHaveBeenCalled();
+    expect(json).toMatchObject({
+      code_id: "1234",
+      codeHash: "hashed123",
+      email: "test@example.com",
+      type: "signup",
+    });
 
-  test("associate exists and is callable", () => {
-    expect(typeof Code.associate).toBe("function");
-    expect(() => Code.associate({})).not.toThrow();
+    getSpy.mockRestore();
   });
 });

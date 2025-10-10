@@ -1,4 +1,4 @@
-const ranks = require("../../config/electionPositionRank");
+import ranks from "../../config/electionPositionRank"
 
 describe("Election Position Rank config", () => {
   it("should export an object with expected positions and ranks", () => {

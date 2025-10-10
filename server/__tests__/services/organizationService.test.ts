@@ -1,23 +1,44 @@
-const { sequelize } = require("../../models");
-const organizationServiceFactory = require("../../services/organizationService");
+import { createOrganizationService } from "../../services/organizationService";
+import { Organization } from "../../models/organization";
+import { UserOrganization } from "../../models/userOrganization";
+import { Election } from "../../models/election";
 
-const Organization = {
-  create: jest.fn(),
-  findAll: jest.fn(),
-  findByPk: jest.fn(),
-  update: jest.fn(),
-  destroy: jest.fn(),
-};
-const UserOrganization = { create: jest.fn(), destroy: jest.fn() };
-const Election = { destroy: jest.fn() };
-
-// Mock sequelize.transaction to execute callback immediately
-sequelize.transaction = jest.fn((cb) => cb({}));
-
-const organizationService = organizationServiceFactory(Organization, UserOrganization, Election);
+jest.mock("../../models", () => ({
+  sequelize: {
+    transaction: jest.fn((cb: any) => cb({})),
+  },
+}));
 
 describe("organizationService", () => {
+  let OrganizationModel: jest.Mocked<typeof Organization>;
+  let UserOrganizationModel: jest.Mocked<typeof UserOrganization>;
+  let ElectionModel: jest.Mocked<typeof Election>;
+  let service: ReturnType<typeof createOrganizationService>;
+
   beforeEach(() => {
+    OrganizationModel = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findByPk: jest.fn(),
+      update: jest.fn(),
+      destroy: jest.fn(),
+    } as any;
+
+    UserOrganizationModel = {
+      create: jest.fn(),
+      destroy: jest.fn(),
+    } as any;
+
+    ElectionModel = {
+      destroy: jest.fn(),
+    } as any;
+
+    service = createOrganizationService(
+      OrganizationModel,
+      UserOrganizationModel,
+      ElectionModel,
+    );
+
     jest.clearAllMocks();
   });
 
@@ -25,26 +46,69 @@ describe("organizationService", () => {
     it("creates an organization and assigns user to it", async () => {
       const mockOrg = {
         organization_id: "org-123",
-        toJSON: () => ({ organization_id: "org-123", name: "Test Org" }),
+        toJSON: jest
+          .fn()
+          .mockReturnValue({ organization_id: "org-123", name: "Test Org" }),
       };
-      Organization.create.mockResolvedValue(mockOrg);
-      UserOrganization.create.mockResolvedValue({});
 
-      const result = await organizationService.createOrganization({
+      (OrganizationModel.create as jest.Mock).mockResolvedValue(mockOrg);
+      (UserOrganizationModel.create as jest.Mock).mockResolvedValue({});
+
+      const result = await service.createOrganization({
         userId: "user-1",
         name: "Test Org",
         description: "Test description",
-        role: "admin",
+        role: "user",
       });
 
-      expect(Organization.create).toHaveBeenCalledWith(
+      expect(OrganizationModel.create).toHaveBeenCalledWith(
         { name: "Test Org", description: "Test description" },
         { transaction: {} },
       );
-      expect(UserOrganization.create).toHaveBeenCalledWith(
-        { user_id: "user-1", organization_id: "org-123", role: "admin" },
+
+      expect(UserOrganizationModel.create).toHaveBeenCalledWith(
+        {
+          user_id: "user-1",
+          organization_id: "org-123",
+          role: "user",
+        },
         { transaction: {} },
       );
+
+      expect(result).toEqual({ organization_id: "org-123", name: "Test Org" });
+    });
+
+    it("creates an organization and assigns election-manager role to it", async () => {
+      const mockOrg = {
+        organization_id: "org-123",
+        toJSON: jest
+          .fn()
+          .mockReturnValue({ organization_id: "org-123", name: "Test Org" }),
+      };
+
+      (OrganizationModel.create as jest.Mock).mockResolvedValue(mockOrg);
+      (UserOrganizationModel.create as jest.Mock).mockResolvedValue({});
+
+      const result = await service.createOrganization({
+        userId: "user-1",
+        name: "Test Org",
+        description: "Test description",
+      });
+
+      expect(OrganizationModel.create).toHaveBeenCalledWith(
+        { name: "Test Org", description: "Test description" },
+        { transaction: {} },
+      );
+
+      expect(UserOrganizationModel.create).toHaveBeenCalledWith(
+        {
+          user_id: "user-1",
+          organization_id: "org-123",
+          role: "election-manager",
+        },
+        { transaction: {} },
+      );
+
       expect(result).toEqual({ organization_id: "org-123", name: "Test Org" });
     });
   });
@@ -52,14 +116,22 @@ describe("organizationService", () => {
   describe("getAllOrganizations", () => {
     it("returns all organizations", async () => {
       const orgs = [
-        { toJSON: () => ({ organization_id: "1", name: "Org1" }) },
-        { toJSON: () => ({ organization_id: "2", name: "Org2" }) },
+        {
+          toJSON: jest
+            .fn()
+            .mockReturnValue({ organization_id: "1", name: "Org1" }),
+        },
+        {
+          toJSON: jest
+            .fn()
+            .mockReturnValue({ organization_id: "2", name: "Org2" }),
+        },
       ];
-      Organization.findAll.mockResolvedValue(orgs);
+      (OrganizationModel.findAll as jest.Mock).mockResolvedValue(orgs);
 
-      const result = await organizationService.getAllOrganizations();
+      const result = await service.getAllOrganizations();
 
-      expect(Organization.findAll).toHaveBeenCalled();
+      expect(OrganizationModel.findAll).toHaveBeenCalled();
       expect(result).toEqual([
         { organization_id: "1", name: "Org1" },
         { organization_id: "2", name: "Org2" },
@@ -69,19 +141,23 @@ describe("organizationService", () => {
 
   describe("getOrganizationById", () => {
     it("returns organization if found", async () => {
-      const org = { toJSON: () => ({ organization_id: "123", name: "Org1" }) };
-      Organization.findByPk.mockResolvedValue(org);
+      const org = {
+        toJSON: jest
+          .fn()
+          .mockReturnValue({ organization_id: "123", name: "Org1" }),
+      };
+      (OrganizationModel.findByPk as jest.Mock).mockResolvedValue(org);
 
-      const result = await organizationService.getOrganizationById("123");
+      const result = await service.getOrganizationById("123");
 
-      expect(Organization.findByPk).toHaveBeenCalledWith("123");
+      expect(OrganizationModel.findByPk).toHaveBeenCalledWith("123");
       expect(result).toEqual({ organization_id: "123", name: "Org1" });
     });
 
     it("returns null if not found", async () => {
-      Organization.findByPk.mockResolvedValue(null);
+      (OrganizationModel.findByPk as jest.Mock).mockResolvedValue(null);
 
-      const result = await organizationService.getOrganizationById("not-found");
+      const result = await service.getOrganizationById("not-found");
 
       expect(result).toBeNull();
     });
@@ -89,22 +165,34 @@ describe("organizationService", () => {
 
   describe("updateOrganization", () => {
     it("updates and returns updated organization", async () => {
-      const updatedOrg = { toJSON: () => ({ organization_id: "123", name: "Updated Org" }) };
-      Organization.update.mockResolvedValue([1, [updatedOrg]]);
+      const updatedOrg = {
+        toJSON: jest
+          .fn()
+          .mockReturnValue({ organization_id: "123", name: "Updated Org" }),
+      };
+      (OrganizationModel.update as jest.Mock).mockResolvedValue([
+        1,
+        [updatedOrg],
+      ]);
 
-      const result = await organizationService.updateOrganization("123", { name: "Updated Org" });
+      const result = await service.updateOrganization("123", {
+        name: "Updated Org",
+      });
 
-      expect(Organization.update).toHaveBeenCalledWith(
+      expect(OrganizationModel.update).toHaveBeenCalledWith(
         { name: "Updated Org" },
         { where: { organization_id: "123" }, returning: true },
       );
+
       expect(result).toEqual({ organization_id: "123", name: "Updated Org" });
     });
 
     it("returns null if no organization updated", async () => {
-      Organization.update.mockResolvedValue([0, []]);
+      (OrganizationModel.update as jest.Mock).mockResolvedValue([0, []]);
 
-      const result = await organizationService.updateOrganization("999", { name: "Nothing" });
+      const result = await service.updateOrganization("999", {
+        name: "Nothing",
+      });
 
       expect(result).toBeNull();
     });
@@ -112,33 +200,36 @@ describe("organizationService", () => {
 
   describe("deleteOrganization", () => {
     it("deletes elections, user orgs, and organization", async () => {
-      Election.destroy.mockResolvedValue(1);
-      UserOrganization.destroy.mockResolvedValue(1);
-      Organization.destroy.mockResolvedValue(1);
+      (ElectionModel.destroy as jest.Mock).mockResolvedValue(1);
+      (UserOrganizationModel.destroy as jest.Mock).mockResolvedValue(1);
+      (OrganizationModel.destroy as jest.Mock).mockResolvedValue(1);
 
-      const result = await organizationService.deleteOrganization("org-123");
+      const result = await service.deleteOrganization("org-123");
 
-      expect(Election.destroy).toHaveBeenCalledWith({
+      expect(ElectionModel.destroy).toHaveBeenCalledWith({
         where: { organization_id: "org-123" },
         transaction: {},
       });
-      expect(UserOrganization.destroy).toHaveBeenCalledWith({
+
+      expect(UserOrganizationModel.destroy).toHaveBeenCalledWith({
         where: { organization_id: "org-123" },
         transaction: {},
       });
-      expect(Organization.destroy).toHaveBeenCalledWith({
+
+      expect(OrganizationModel.destroy).toHaveBeenCalledWith({
         where: { organization_id: "org-123" },
         transaction: {},
       });
+
       expect(result).toBe(true);
     });
 
     it("returns false if organization not deleted", async () => {
-      Election.destroy.mockResolvedValue(0);
-      UserOrganization.destroy.mockResolvedValue(0);
-      Organization.destroy.mockResolvedValue(0);
+      (ElectionModel.destroy as jest.Mock).mockResolvedValue(0);
+      (UserOrganizationModel.destroy as jest.Mock).mockResolvedValue(0);
+      (OrganizationModel.destroy as jest.Mock).mockResolvedValue(0);
 
-      const result = await organizationService.deleteOrganization("missing-org");
+      const result = await service.deleteOrganization("missing-org");
 
       expect(result).toBe(false);
     });

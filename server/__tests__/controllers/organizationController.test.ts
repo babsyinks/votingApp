@@ -1,5 +1,10 @@
-const controller = require("../../controllers/organizationController");
-const { organizationService } = require("../../services");
+import {
+  createOrganization,
+  getOrganization,
+  updateOrganization,
+  deleteOrganization,
+} from "../../controllers/organizationController";
+import { organizationService } from "../../services";
 
 jest.mock("../../services", () => ({
   organizationService: {
@@ -11,7 +16,9 @@ jest.mock("../../services", () => ({
 }));
 
 describe("organizationController", () => {
-  let req, res, next;
+  let req: any;
+  let res: any;
+  let next: jest.Mock;
 
   beforeEach(() => {
     req = { body: {}, params: {} };
@@ -26,10 +33,17 @@ describe("organizationController", () => {
   describe("createOrganization", () => {
     it("creates organization and returns 201", async () => {
       const org = { organization_id: "1", name: "Test Org" };
-      req.body = { name: "Test Org", description: "Desc", userId: "user-1", role: "admin" };
-      organizationService.createOrganization.mockResolvedValue(org);
+      req.body = {
+        name: "Test Org",
+        description: "Desc",
+        userId: "user-1",
+        role: "admin",
+      };
+      (organizationService.createOrganization as jest.Mock).mockResolvedValue(
+        org,
+      );
 
-      await controller.createOrganization(req, res, next);
+      await createOrganization(req, res, next);
 
       expect(organizationService.createOrganization).toHaveBeenCalledWith({
         name: "Test Org",
@@ -43,9 +57,11 @@ describe("organizationController", () => {
 
     it("calls next on error", async () => {
       const error = new Error("DB error");
-      organizationService.createOrganization.mockRejectedValue(error);
+      (organizationService.createOrganization as jest.Mock).mockRejectedValue(
+        error,
+      );
 
-      await controller.createOrganization(req, res, next);
+      await createOrganization(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
@@ -55,9 +71,11 @@ describe("organizationController", () => {
     it("returns 200 and organization if found", async () => {
       const org = { organization_id: "1", name: "Org1" };
       req.params.id = "1";
-      organizationService.getOrganizationById.mockResolvedValue(org);
+      (organizationService.getOrganizationById as jest.Mock).mockResolvedValue(
+        org,
+      );
 
-      await controller.getOrganization(req, res, next);
+      await getOrganization(req, res, next);
 
       expect(organizationService.getOrganizationById).toHaveBeenCalledWith("1");
       expect(res.status).toHaveBeenCalledWith(200);
@@ -66,19 +84,25 @@ describe("organizationController", () => {
 
     it("returns 404 if not found", async () => {
       req.params.id = "1";
-      organizationService.getOrganizationById.mockResolvedValue(null);
+      (organizationService.getOrganizationById as jest.Mock).mockResolvedValue(
+        null,
+      );
 
-      await controller.getOrganization(req, res, next);
+      await getOrganization(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: "Organization not found" });
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Organization not found",
+      });
     });
 
     it("calls next on error", async () => {
       const error = new Error("Unexpected");
-      organizationService.getOrganizationById.mockRejectedValue(error);
+      (organizationService.getOrganizationById as jest.Mock).mockRejectedValue(
+        error,
+      );
 
-      await controller.getOrganization(req, res, next);
+      await getOrganization(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
@@ -89,11 +113,15 @@ describe("organizationController", () => {
       const updated = { organization_id: "1", name: "Updated Org" };
       req.params.id = "1";
       req.body = { name: "Updated Org" };
-      organizationService.updateOrganization.mockResolvedValue(updated);
+      (organizationService.updateOrganization as jest.Mock).mockResolvedValue(
+        updated,
+      );
 
-      await controller.updateOrganization(req, res, next);
+      await updateOrganization(req, res, next);
 
-      expect(organizationService.updateOrganization).toHaveBeenCalledWith("1", { name: "Updated Org" });
+      expect(organizationService.updateOrganization).toHaveBeenCalledWith("1", {
+        name: "Updated Org",
+      });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(updated);
     });
@@ -101,19 +129,25 @@ describe("organizationController", () => {
     it("returns 404 if not found", async () => {
       req.params.id = "99";
       req.body = { name: "Nothing" };
-      organizationService.updateOrganization.mockResolvedValue(null);
+      (organizationService.updateOrganization as jest.Mock).mockResolvedValue(
+        null,
+      );
 
-      await controller.updateOrganization(req, res, next);
+      await updateOrganization(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: "Organization not found" });
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Organization not found",
+      });
     });
 
     it("calls next on error", async () => {
       const error = new Error("DB issue");
-      organizationService.updateOrganization.mockRejectedValue(error);
+      (organizationService.updateOrganization as jest.Mock).mockRejectedValue(
+        error,
+      );
 
-      await controller.updateOrganization(req, res, next);
+      await updateOrganization(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
@@ -122,30 +156,40 @@ describe("organizationController", () => {
   describe("deleteOrganization", () => {
     it("returns 200 if deleted", async () => {
       req.params.id = "1";
-      organizationService.deleteOrganization.mockResolvedValue(true);
+      (organizationService.deleteOrganization as jest.Mock).mockResolvedValue(
+        true,
+      );
 
-      await controller.deleteOrganization(req, res, next);
+      await deleteOrganization(req, res, next);
 
       expect(organizationService.deleteOrganization).toHaveBeenCalledWith("1");
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ message: "Organization deleted successfully" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Organization deleted successfully",
+      });
     });
 
     it("returns 404 if not deleted", async () => {
       req.params.id = "1";
-      organizationService.deleteOrganization.mockResolvedValue(false);
+      (organizationService.deleteOrganization as jest.Mock).mockResolvedValue(
+        false,
+      );
 
-      await controller.deleteOrganization(req, res, next);
+      await deleteOrganization(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: "Organization not found" });
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Organization not found",
+      });
     });
 
     it("calls next on error", async () => {
       const error = new Error("DB error");
-      organizationService.deleteOrganization.mockRejectedValue(error);
+      (organizationService.deleteOrganization as jest.Mock).mockRejectedValue(
+        error,
+      );
 
-      await controller.deleteOrganization(req, res, next);
+      await deleteOrganization(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });

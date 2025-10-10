@@ -1,37 +1,28 @@
-const { Op } = require("sequelize");
+import { Op } from "sequelize";
 
-const {
+import { Code } from "../models/code";
+import {
   generateRandomDigitsCode,
   getHashedDigitCode,
   generateRandomHexCode,
   getHashedHexCode,
-} = require("../utils/randomCodeGenerator");
+} from "../utils/randomCodeGenerator";
 
-module.exports = (Code) => {
+export const createCodeService = (CodeModel: typeof Code) => {
   return {
-    /**
-     * @typedef {Object} Code
-     * 
-     * @property {string} code_id
-     * @property {string} codeHash
-     * @property {string} email
-     * @property {string} type
-     * @property {EpochTimeStamp} expiresAt
-     */
-
     /**
      * Create and return a new signup code (raw form).
      *
-     * @param {string} email The email of the user signing up
-     * @returns {Promise<number>} the signup code
+     * @param email - The email of the user signing up
+     * @returns The raw signup code
      */
-    async createSignupCode(email) {
+    async createSignupCode(email: string): Promise<string> {
       const code = generateRandomDigitsCode();
-      await Code.create({
+      await CodeModel.create({
         email,
         codeHash: await getHashedDigitCode(code),
         type: "signup",
-        expiresAt: Date.now() + 10 * 60 * 1000,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       });
       return code;
     },
@@ -39,11 +30,11 @@ module.exports = (Code) => {
     /**
      * Fetch latest valid signup code row.
      *
-     * @param {string} email The email of the user to get the latest valid signup code for
-     * @returns {Promise<Code>} the latest valid code model that is saved
+     * @param email - The email of the user to get the latest valid signup code for
+     * @returns The latest valid code record, or null
      */
-    async getLatestValidSignupCode(email) {
-      const signupCode = await Code.findOne({
+    async getLatestValidSignupCode(email: string): Promise<Code | null> {
+      const signupCode = await CodeModel.findOne({
         where: {
           email,
           type: "signup",
@@ -51,22 +42,22 @@ module.exports = (Code) => {
         },
         order: [["createdAt", "DESC"]],
       });
-      return signupCode?.toJSON();
+      return signupCode;
     },
 
     /**
      * Create and return a password reset code (raw).
      *
-     * @param {string} email The email of the user whose password is to be reset
-     * @returns {Promise<number>} the reset code
+     * @param email - The email of the user whose password is to be reset
+     * @returns The raw reset code
      */
-    async createResetCode(email) {
+    async createResetCode(email: string): Promise<string> {
       const code = generateRandomHexCode();
-      await Code.create({
+      await CodeModel.create({
         email,
         codeHash: getHashedHexCode(code),
         type: "password_reset",
-        expiresAt: Date.now() + 10 * 60 * 1000,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       });
       return code;
     },
@@ -74,11 +65,11 @@ module.exports = (Code) => {
     /**
      * Find valid reset code row for a given code string.
      *
-     * @param {number} resetCode The reset code to use to find out if it is valid
-     * @returns {Promise<Code>} the code model having the reset code
+     * @param resetCode - The reset code to use to find out if it is valid
+     * @returns The code record if valid, or null
      */
-    async findValidResetCodeRecord(resetCode) {
-      const resetCodeRecord = await Code.findOne({
+    async findValidResetCodeRecord(resetCode: string): Promise<Code | null> {
+      const resetCodeRecord = await CodeModel.findOne({
         where: {
           codeHash: getHashedHexCode(resetCode),
           expiresAt: { [Op.gt]: new Date() },
@@ -88,3 +79,5 @@ module.exports = (Code) => {
     },
   };
 };
+
+export default createCodeService;

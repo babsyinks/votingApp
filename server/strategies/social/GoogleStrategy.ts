@@ -1,22 +1,35 @@
-const { Strategy: GoogleOAuth2Strategy } = require("passport-google-oauth20");
+import type { DoneCallback } from "passport";
+import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
+import type { VerifyCallback } from "passport-oauth2";
 
-const Social = require("./Social");
+import Social from "./Social";
 
 class GoogleSocial extends Social {
-  constructor(profile) {
+  constructor(profile: Profile) {
     super(profile, "google");
   }
 }
 
-module.exports = () =>
-  new GoogleOAuth2Strategy(
+const verify = async (
+  _accessToken: string,
+  _refreshToken: string,
+  profile: Profile,
+  done: VerifyCallback,
+): Promise<void> => {
+  const strategy = new GoogleSocial(profile);
+  try {
+    await strategy.authenticate(done as DoneCallback);
+  } catch (err) {
+    done(err as Error);
+  }
+};
+
+export default () =>
+  new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: "/api/v1/oauth/google/callback",
     },
-    async (_accessToken, _refreshToken, profile, done) => {
-      const strategy = new GoogleSocial(profile);
-      return await strategy.authenticate(done);
-    },
+    verify,
   );

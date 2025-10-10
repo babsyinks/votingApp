@@ -1,13 +1,15 @@
-const generateCustomError = require("../../utils/generateCustomError");
-const {
+import generateCustomError from "../../utils/generateCustomError";
+import {
   userHasVoted,
   getAllVotesForAPosition,
   getVotesForAContestant,
   getAllContestantsElectionDetails,
-} = require("../../helpers/electionControllerHelpers");
+} from "../../helpers/electionControllerHelpers";
+import createElectionService from "../../services/electionService";
 
+// Mock dependencies
 jest.mock("../../utils/generateCustomError", () =>
-  jest.fn((message, status) => {
+  jest.fn((message: string, status: number) => {
     throw new Error(`${status}: ${message}`);
   }),
 );
@@ -20,10 +22,10 @@ jest.mock("../../helpers/electionControllerHelpers", () => ({
 }));
 
 describe("electionService", () => {
-  let electionService;
-  let votesService;
-  let contestantsService;
-  let timerService;
+  let electionService: ReturnType<typeof createElectionService>;
+  let votesService: any;
+  let contestantsService: any;
+  let timerService: any;
 
   beforeEach(() => {
     votesService = {
@@ -42,7 +44,7 @@ describe("electionService", () => {
 
     jest.clearAllMocks();
 
-    electionService = require("../../services/electionService")({
+    electionService = createElectionService({
       votesService,
       contestantsService,
       timerService,
@@ -50,19 +52,28 @@ describe("electionService", () => {
   });
 
   describe("createContestant", () => {
-    it("should call contestantsService.createContestant with provided data", async () => {
-      const contestantData = { name: "John" };
+    it("calls contestantsService.createContestant with provided data", async () => {
+      const contestantData = {
+        election_id: "elID",
+        surname: "Kane",
+        firstname: "John",
+        position: "president",
+        manifesto: "change",
+        picture: "pix.jpeg",
+      };
       contestantsService.createContestant.mockResolvedValue(contestantData);
 
       const result = await electionService.createContestant(contestantData);
 
-      expect(contestantsService.createContestant).toHaveBeenCalledWith(contestantData);
+      expect(contestantsService.createContestant).toHaveBeenCalledWith(
+        contestantData,
+      );
       expect(result).toEqual(contestantData);
     });
   });
 
   describe("findContestant", () => {
-    it("should call contestantsService.findContestantById", async () => {
+    it("calls contestantsService.findContestantById", async () => {
       const contestant = { id: 1 };
       contestantsService.findContestantById.mockResolvedValue(contestant);
 
@@ -74,21 +85,25 @@ describe("electionService", () => {
   });
 
   describe("getElectionSummary", () => {
-    it("should throw error if no contestants", async () => {
+    it("returns empty array if no contestants", async () => {
       contestantsService.getAllContestants.mockResolvedValue([]);
       votesService.getAllVotes.mockResolvedValue([]);
-      const res = await electionService.getElectionSummary();
-      expect(res).toEqual([]);
+
+      const result = await electionService.getElectionSummary();
+
+      expect(result).toEqual([]);
     });
 
-    it("should return grouped election details", async () => {
+    it("returns grouped election details", async () => {
       const contestants = [{ id: 1 }];
       const votes = [{ id: 2 }];
       contestantsService.getAllContestants.mockResolvedValue(contestants);
       votesService.getAllVotes.mockResolvedValue(votes);
 
       const mockDetails = { grouped: true };
-      getAllContestantsElectionDetails.mockReturnValue(mockDetails);
+      (getAllContestantsElectionDetails as jest.Mock).mockReturnValue(
+        mockDetails,
+      );
 
       const result = await electionService.getElectionSummary();
 
@@ -101,33 +116,44 @@ describe("electionService", () => {
   });
 
   describe("castVote", () => {
-    it("should throw error if user already voted", async () => {
-      userHasVoted.mockReturnValue(true);
-      await expect(electionService.castVote("user1", "contestant1", "president")).rejects.toThrow(
-        "403: User has already voted",
-      );
+    it("throws an error if user already voted", async () => {
+      (userHasVoted as jest.Mock).mockReturnValue(true);
 
-      expect(generateCustomError).toHaveBeenCalledWith("User has already voted", 403);
+      await expect(
+        electionService.castVote("user1", "contestant1", "president", "ele1"),
+      ).rejects.toThrow("403: User has already voted");
+
+      expect(generateCustomError).toHaveBeenCalledWith(
+        "User has already voted",
+        403,
+      );
       expect(votesService.castVote).not.toHaveBeenCalled();
     });
 
-    it("should cast vote and return position and contestant votes", async () => {
+    it("casts vote and returns position and contestant votes", async () => {
       const initialVotes = [{ id: 1 }];
       const finalVotes = [{ id: 1 }, { id: 2 }];
+
       votesService.getAllVotes
         .mockResolvedValueOnce(initialVotes) // before vote
         .mockResolvedValueOnce(finalVotes); // after vote
-      userHasVoted.mockReturnValue(false);
 
-      getAllVotesForAPosition.mockReturnValue("posVotes");
-      getVotesForAContestant.mockReturnValue("contestantVotes");
+      (userHasVoted as jest.Mock).mockReturnValue(false);
+      (getAllVotesForAPosition as jest.Mock).mockReturnValue("posVotes");
+      (getVotesForAContestant as jest.Mock).mockReturnValue("contestantVotes");
 
-      const result = await electionService.castVote("user1", "contestant1", "president");
+      const result = await electionService.castVote(
+        "user1",
+        "contestant1",
+        "president",
+        "ele1",
+      );
 
       expect(votesService.castVote).toHaveBeenCalledWith({
         userId: "user1",
         contestantId: "contestant1",
         position: "president",
+        electionId: "ele1",
       });
       expect(result).toEqual({
         positionVotes: "posVotes",
@@ -137,7 +163,7 @@ describe("electionService", () => {
   });
 
   describe("clearElectionData", () => {
-    it("should clear votes and timer", async () => {
+    it("clears votes and timer", async () => {
       await electionService.clearElectionData();
 
       expect(votesService.clearVotes).toHaveBeenCalled();

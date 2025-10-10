@@ -1,45 +1,71 @@
-const {
+import { Request, Response, NextFunction, RequestHandler } from "express";
+
+import {
   passportCallbackWrapper,
   getOauthStartMiddleware,
-} = require("../helpers/oAuthControllerHelpers");
+} from "../helpers/oAuthControllerHelpers";
+import type { UserAttributesWithRoles } from "../models/user";
 
-const googleOauthStart = getOauthStartMiddleware("google", {
-  scope: ["email", "profile"],
-});
+// Google OAuth
+export const googleOauthStart: RequestHandler = getOauthStartMiddleware(
+  "google",
+  {
+    scope: ["email", "profile"],
+  },
+);
 
-const googleOauthConclude = passportCallbackWrapper("google");
+export const googleOauthConclude: RequestHandler =
+  passportCallbackWrapper("google");
 
-const facebookOauthStart = getOauthStartMiddleware("facebook", {
-  scope: ["email", "public_profile"],
-});
+// Facebook OAuth
+export const facebookOauthStart: RequestHandler = getOauthStartMiddleware(
+  "facebook",
+  {
+    scope: ["email", "public_profile"],
+  },
+);
 
-const facebookOauthConclude = passportCallbackWrapper("facebook");
+export const facebookOauthConclude: RequestHandler =
+  passportCallbackWrapper("facebook");
 
-const githubOauthStart = getOauthStartMiddleware("github", {
-  scope: ["user:email", "read:user"],
-});
+// GitHub OAuth
+export const githubOauthStart: RequestHandler = getOauthStartMiddleware(
+  "github",
+  {
+    scope: ["user:email", "read:user"],
+  },
+);
 
-const githubOauthConclude = passportCallbackWrapper("github");
+export const githubOauthConclude: RequestHandler =
+  passportCallbackWrapper("github");
 
-const getUserDetailsOnOauthSuccess = async (req, res, next) => {
+// After OAuth success
+export const getUserDetailsOnOauthSuccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const user = req.user;
-    const { username, userId: user_id, role } = user;
+    const user = req.user as UserAttributesWithRoles;
+
+    if (!user) {
+      res
+        .status(401)
+        .json({ isAuthenticated: false, message: "No user found" });
+      return;
+    }
+
+    const { username, user_id, role } = user;
+
     res.json({
       isAuthenticated: true,
-      user: { username, userId: user_id, role },
+      user: {
+        username,
+        userId: user_id,
+        role,
+      },
     });
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  googleOauthStart,
-  googleOauthConclude,
-  facebookOauthStart,
-  facebookOauthConclude,
-  githubOauthStart,
-  githubOauthConclude,
-  getUserDetailsOnOauthSuccess,
 };

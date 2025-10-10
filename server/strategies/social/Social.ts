@@ -1,16 +1,22 @@
-const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require("uuid");
+import bcrypt from "bcryptjs";
+import type { Profile } from "passport";
+import type { DoneCallback } from "passport";
+import { v4 as uuidv4 } from "uuid";
 
-const { User } = require("../../models");
+import { User } from "../../models";
 
 class Social {
-  constructor(profile, strategy, namesCombined = true) {
+  protected profile: Profile;
+  protected strategy: string;
+  protected namesCombined: boolean;
+
+  constructor(profile: Profile, strategy = "Social", namesCombined = true) {
     this.profile = profile;
-    this.strategy = strategy || "Social";
+    this.strategy = strategy;
     this.namesCombined = namesCombined;
   }
 
-  async authenticate(done) {
+  async authenticate(done: DoneCallback): Promise<void> {
     try {
       const email = this.__extractEmail();
       let user = await User.findOne({ where: { email } });
@@ -21,39 +27,43 @@ class Social {
 
       return done(null, user);
     } catch (err) {
-      return done(err, null);
+      return done(err as Error, null);
     }
   }
 
-  async __createUser(email) {
+  private async __createUser(email: string): Promise<User> {
     const { firstname, lastname } = this.__extractFirstAndLastNames();
     return await User.create({
       user_id: uuidv4(),
       username: this.profile.username || email,
       email,
-      password: await bcrypt.hash(uuidv4(), 10), // unused placeholder (social strategies auth is external). Set for model consistency.
+      password: await bcrypt.hash(uuidv4(), 10),
       firstname,
       lastname,
-      role: "user",
+      isAdmin: false,
     });
   }
 
-  __extractEmail() {
+  private __extractEmail(): string {
     return (
       this.profile.emails?.[0]?.value ||
       `${this.profile.id}@${this.strategy}.com`
     );
   }
 
-  __extractFirstAndLastNames() {
-    if (this.namesCombined) {
-      return this.__extractNamesFromProfileDisplayNameProp();
-    } else {
-      return this.__extractNamesFromProfileNameProp();
-    }
+  private __extractFirstAndLastNames(): {
+    firstname: string;
+    lastname: string;
+  } {
+    return this.namesCombined
+      ? this.__extractNamesFromProfileDisplayNameProp()
+      : this.__extractNamesFromProfileNameProp();
   }
 
-  __extractNamesFromProfileNameProp() {
+  private __extractNamesFromProfileNameProp(): {
+    firstname: string;
+    lastname: string;
+  } {
     return {
       firstname:
         this.profile.name?.givenName ||
@@ -62,16 +72,19 @@ class Social {
     };
   }
 
-  __extractNamesFromProfileDisplayNameProp() {
+  private __extractNamesFromProfileDisplayNameProp(): {
+    firstname: string;
+    lastname: string;
+  } {
     const names = this.profile.displayName?.split(" ");
     const firstname = names?.[0] || this.__capitalizeFirstLetterOfStrategy();
     const lastname = names?.[1] || "User";
     return { firstname, lastname };
   }
 
-  __capitalizeFirstLetterOfStrategy() {
+  private __capitalizeFirstLetterOfStrategy(): string {
     return `${this.strategy.charAt(0).toUpperCase()}${this.strategy.slice(1)}`;
   }
 }
 
-module.exports = Social;
+export default Social;

@@ -1,16 +1,27 @@
-const apiInstance = require("../config/brevo");
-const logger = require("../utils/logger");
+import apiInstance from "../config/brevo";
+import logger from "../utils/logger";
 
-async function sendEmail({ toEmail, subject, htmlContent }) {
+export interface SendEmailParams {
+  toEmail: string;
+  subject: string;
+  htmlContent: string;
+}
+
+async function sendEmail({
+  toEmail,
+  subject,
+  htmlContent,
+}: SendEmailParams): Promise<void> {
   const emailConf = {
     to: [{ email: toEmail }],
     sender: {
       name: "VoteNow Voting App",
-      email: process.env.BREVO_VERIFIED_SENDER_EMAIL,
+      email: process.env.BREVO_VERIFIED_SENDER_EMAIL as string,
     },
     subject,
     htmlContent,
   };
+
   try {
     const response = await apiInstance.sendTransacEmail(emailConf);
     logger.info(`Email sent to ${toEmail}`, response);
@@ -19,4 +30,4 @@ async function sendEmail({ toEmail, subject, htmlContent }) {
   }
 }
 
-module.exports = sendEmail;
+export default sendEmail;

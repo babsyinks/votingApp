@@ -1,12 +1,13 @@
-const sendPasswordResetLink = require("../../helpers/sendPasswordResetLink");
-const emailTemplateBuilder = require("../../helpers/emailTemplateBuilder");
-const sendEmail = require("../../helpers/sendEmail");
+import sendPasswordResetLink from "../../helpers/sendPasswordResetLink";
+import emailTemplateBuilder from "../../helpers/emailTemplateBuilder";
+import sendEmail from "../../helpers/sendEmail";
 
 jest.mock("../../helpers/emailTemplateBuilder");
 jest.mock("../../helpers/sendEmail");
 
 describe("sendPasswordResetLink", () => {
   const OLD_ENV = process.env;
+  const mockedEmailTemplateBuilder = jest.mocked(emailTemplateBuilder);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -19,7 +20,7 @@ describe("sendPasswordResetLink", () => {
   });
 
   it("should build email and call sendEmail with correct parameters", async () => {
-    emailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
+    mockedEmailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
 
     await sendPasswordResetLink({
       toEmail: "user@example.com",
@@ -39,8 +40,7 @@ describe("sendPasswordResetLink", () => {
           },
         },
       ],
-      footNote:
-        "If you didn't request this, you can safely ignore this email.",
+      footNote: "If you didn't request this, you can safely ignore this email.",
     });
 
     expect(sendEmail).toHaveBeenCalledWith({
@@ -51,14 +51,14 @@ describe("sendPasswordResetLink", () => {
   });
 
   it("should propagate error if sendEmail throws", async () => {
-    emailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
-    sendEmail.mockRejectedValueOnce(new Error("Send failed"));
+    mockedEmailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
+    (sendEmail as jest.Mock).mockRejectedValueOnce(new Error("Send failed"));
 
     await expect(
       sendPasswordResetLink({
         toEmail: "fail@example.com",
         resetCode: "code123",
-      })
+      }),
     ).rejects.toThrow("Send failed");
   });
 });

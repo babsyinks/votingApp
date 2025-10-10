@@ -1,155 +1,474 @@
-const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require("uuid");
-const { User } = require("../../../models");
-const Social = require("../../../strategies/social/Social");
+import bcrypt from "bcryptjs";
+import type { Profile } from "passport";
+import { v4 as uuidv4 } from "uuid";
+
+import Social from "../../../strategies/social/Social";
+import { User } from "../../../models";
 
 jest.mock("bcryptjs");
-jest.mock("uuid", () => ({ v4: jest.fn() }));
-jest.mock("../../../models", () => ({
-  User: {
-    findOne: jest.fn(),
-    create: jest.fn(),
-  },
-}));
+jest.mock("uuid");
+jest.mock("../../../models");
 
-describe("Social", () => {
-  let profile;
-  let user;
-  let done;
+describe("Social Strategy", () => {
+  let mockProfile: Profile;
+  let mockUser: any;
+  let mockDone: jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    profile = {
-      id: "12345",
+    mockUser = {
+      user_id: "test-uuid",
       username: "testuser",
-      emails: [{ value: "test@example.com" }],
-      displayName: "John Doe",
-      name: { givenName: "John", familyName: "Doe" },
+      email: "test@example.com",
+      password: "hashed-password",
+      firstname: "John",
+      lastname: "Doe",
+      isAdmin: false,
     };
 
-    user = { id: "user-1", email: "test@example.com" };
-    done = jest.fn();
+    mockDone = jest.fn();
 
-    uuidv4.mockReturnValue("uuid-generated");
-    bcrypt.hash.mockResolvedValue("hashed-password");
+    (uuidv4 as jest.Mock).mockReturnValue("test-uuid");
+    (bcrypt.hash as jest.Mock).mockResolvedValue("hashed-password");
   });
 
   describe("authenticate", () => {
-    it("returns existing user if found", async () => {
-      User.findOne.mockResolvedValue(user);
+    it("should return existing user if found by email", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
 
-      await new Social(profile).authenticate(done);
+      (User.findOne as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
 
       expect(User.findOne).toHaveBeenCalledWith({
         where: { email: "test@example.com" },
       });
       expect(User.create).not.toHaveBeenCalled();
-      expect(done).toHaveBeenCalledWith(null, user);
+      expect(mockDone).toHaveBeenCalledWith(null, mockUser);
     });
 
-    it("creates new user if none found", async () => {
-      User.findOne.mockResolvedValue(null);
-      User.create.mockResolvedValue({ id: "new-user" });
-
-      await new Social(profile, "google").authenticate(done);
-
-      expect(User.create).toHaveBeenCalledWith({
-        user_id: "uuid-generated",
-        username: "testuser",
-        email: "test@example.com",
-        password: "hashed-password",
-        firstname: "John",
-        lastname: "Doe",
-        role: "user",
-      });
-      expect(done).toHaveBeenCalledWith(null, { id: "new-user" });
-    });
-
-    it("creates new user and sets username to email if username is not set on the Strategy", async () => {
-      User.findOne.mockResolvedValue(null);
-      User.create.mockResolvedValue({ id: "new-user" });
-
-      profile = {
-        // no username on this profile
-        id: "12345",
-        emails: [{ value: "test@example.com" }],
+    it("should create new user if not found by email", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
         displayName: "John Doe",
-        name: { givenName: "John", familyName: "Doe" },
+        emails: [{ value: "newuser@example.com" }],
       };
 
-      await new Social(profile, "google").authenticate(done);
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
 
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        where: { email: "newuser@example.com" },
+      });
       expect(User.create).toHaveBeenCalledWith({
-        user_id: "uuid-generated",
-        username: "test@example.com", // email used as username
-        email: "test@example.com",
+        user_id: "test-uuid",
+        username: "newuser@example.com",
+        email: "newuser@example.com",
         password: "hashed-password",
         firstname: "John",
         lastname: "Doe",
-        role: "user",
+        isAdmin: false,
       });
-      expect(done).toHaveBeenCalledWith(null, { id: "new-user" });
+      expect(mockDone).toHaveBeenCalledWith(null, mockUser);
     });
 
-    it("handles errors", async () => {
-      const error = new Error("DB error");
-      User.findOne.mockRejectedValue(error);
+    it("should handle errors and call done with error", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
 
-      await new Social(profile, "google").authenticate(done);
+      const error = new Error("Database error");
+      (User.findOne as jest.Mock).mockRejectedValue(error);
 
-      expect(done).toHaveBeenCalledWith(error, null);
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(mockDone).toHaveBeenCalledWith(error, null);
     });
   });
 
-  describe("__extractEmail", () => {
-    it("uses profile email if present", () => {
-      expect(new Social(profile, "google").__extractEmail()).toBe("test@example.com");
-    });
+  describe("email extraction", () => {
+    it("should extract email from profile emails array", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "primary@example.com" }],
+      };
 
-    it("falls back to id@strategy.com", () => {
-      delete profile.emails;
-      expect(new Social(profile, "facebook").__extractEmail()).toBe("12345@facebook.com");
-    });
-  });
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
 
-  describe("__extractFirstAndLastNames", () => {
-    it("uses displayName if namesCombined=true", () => {
-      expect(new Social(profile, "google", true).__extractFirstAndLastNames()).toEqual({
-        firstname: "John",
-        lastname: "Doe",
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        where: { email: "primary@example.com" },
       });
     });
 
-    it("uses name object if namesCombined=false", () => {
-      expect(new Social(profile, "google", false).__extractFirstAndLastNames()).toEqual({
-        firstname: "John",
-        lastname: "Doe",
-      });
-    });
-  });
+    it("should generate email from profile id and strategy if no email", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123456",
+        displayName: "John Doe",
+      };
 
-  describe("name fallbacks", () => {
-    it("falls back to capitalized strategy/User when displayName missing", () => {
-      profile.displayName = null;
-      expect(new Social(profile, "google", true).__extractFirstAndLastNames()).toEqual({
-        firstname: "Google",
-        lastname: "User",
-      });
-    });
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
 
-    it("falls back to capitalized strategy/User when givenName missing", () => {
-      profile.name = {};
-      expect(new Social(profile, "linkedin", false).__extractFirstAndLastNames()).toEqual({
-        firstname: "Linkedin",
-        lastname: "User",
+      const social = new Social(mockProfile, "github", true);
+      await social.authenticate(mockDone);
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        where: { email: "123456@github.com" },
       });
     });
   });
 
-  describe("__capitalizeFirstLetterOfStrategy", () => {
-    it("capitalizes correctly", () => {
-      expect(new Social(profile, "facebook").__capitalizeFirstLetterOfStrategy()).toBe("Facebook");
+  describe("username extraction", () => {
+    it("should use profile username if available", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        username: "johndoe123",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          username: "johndoe123",
+        }),
+      );
+    });
+
+    it("should use email as username if no profile username", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          username: "test@example.com",
+        }),
+      );
+    });
+  });
+
+  describe("name extraction - namesCombined=true", () => {
+    it("should extract names from displayName when namesCombined is true", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "Jane Smith",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Jane",
+          lastname: "Smith",
+        }),
+      );
+    });
+
+    it("should use strategy name and 'User' if displayName is missing", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "google", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Google",
+          lastname: "User",
+        }),
+      );
+    });
+
+    it("should use 'User' as lastname if only first name in displayName", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "Madonna",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Madonna",
+          lastname: "User",
+        }),
+      );
+    });
+  });
+
+  describe("name extraction - namesCombined=false", () => {
+    it("should extract names from profile.name when namesCombined is false", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        name: {
+          familyName: "Johnson",
+          givenName: "Robert",
+        },
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", false);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Robert",
+          lastname: "Johnson",
+        }),
+      );
+    });
+
+    it("should use strategy name if givenName is missing", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        name: {
+          familyName: "Smith",
+          givenName: "Alan",
+        },
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "facebook", false);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          email: "test@example.com",
+          firstname: "Alan",
+          isAdmin: false,
+          lastname: "Smith",
+          password: "hashed-password",
+          user_id: "test-uuid",
+          username: "test@example.com",
+        }),
+      );
+    });
+
+    it("should use 'User' as lastname if familyName is missing", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        name: {
+          familyName: "Baker",
+          givenName: "Alice",
+        },
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", false);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          email: "test@example.com",
+          firstname: "Alice",
+          isAdmin: false,
+          lastname: "Baker",
+          password: "hashed-password",
+          user_id: "test-uuid",
+          username: "test@example.com",
+        }),
+      );
+    });
+
+    it("should use strategy name and 'User' if name object is missing", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "twitter", false);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Twitter",
+          lastname: "User",
+        }),
+      );
+    });
+  });
+
+  describe("strategy capitalization", () => {
+    it("should capitalize first letter of strategy name", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "linkedin", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstname: "Linkedin",
+        }),
+      );
+    });
+  });
+
+  describe("default constructor values", () => {
+    it("should use default strategy name 'Social' if not provided", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile);
+      await social.authenticate(mockDone);
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        where: { email: "test@example.com" },
+      });
+    });
+  });
+
+  describe("password hashing", () => {
+    it("should hash a UUID for password", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(bcrypt.hash).toHaveBeenCalledWith("test-uuid", 10);
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          password: "hashed-password",
+        }),
+      );
+    });
+  });
+
+  describe("user properties", () => {
+    it("should create user with isAdmin set to false", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          isAdmin: false,
+        }),
+      );
+    });
+
+    it("should create user with generated UUID", async () => {
+      mockProfile = {
+        provider: "test",
+        id: "123",
+        displayName: "John Doe",
+        emails: [{ value: "test@example.com" }],
+      };
+
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+      (User.create as jest.Mock).mockResolvedValue(mockUser);
+      (uuidv4 as jest.Mock).mockReturnValue("unique-uuid-123");
+
+      const social = new Social(mockProfile, "test", true);
+      await social.authenticate(mockDone);
+
+      expect(User.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          user_id: "unique-uuid-123",
+        }),
+      );
     });
   });
 });

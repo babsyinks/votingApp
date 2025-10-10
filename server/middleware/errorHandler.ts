@@ -1,16 +1,32 @@
-const jwt = require("jsonwebtoken");
-const { ValidationError } = require("sequelize");
+import { Request, Response, NextFunction } from "express";
+import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
+import { ValidationError } from "sequelize";
 
-const logger = require("../utils/logger");
+import logger from "../utils/logger";
 
-function errorHandler(err, req, res, next) {
-  const errorDetails = {
+interface StatusErrorWithMessage {
+  statusCode: number;
+  message: string;
+}
+
+interface CustomError extends Error {
+  statusCode?: number;
+  stack?: string;
+}
+
+export function errorHandler(
+  err: CustomError,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
+  const errorDetails: StatusErrorWithMessage = {
     statusCode: err.statusCode || 400,
     message: err.message || "An unexpected error occurred.",
   };
 
-  _handleJwtErrors(err, errorDetails);
-  _handleValidationErrors(err, errorDetails);
+  handleJwtErrors(err, errorDetails);
+  handleValidationErrors(err, errorDetails);
 
   const { statusCode, message } = errorDetails;
 
@@ -22,21 +38,27 @@ function errorHandler(err, req, res, next) {
   });
 }
 
-const _handleJwtErrors = (err, errorDetails) => {
-  if (err instanceof jwt.TokenExpiredError) {
+function handleJwtErrors(
+  err: unknown,
+  errorDetails: StatusErrorWithMessage,
+): void {
+  if (err instanceof TokenExpiredError) {
     errorDetails.statusCode = 401;
     errorDetails.message = "Token has expired.";
-  } else if (err instanceof jwt.JsonWebTokenError) {
+  } else if (err instanceof JsonWebTokenError) {
     errorDetails.statusCode = 401;
     errorDetails.message = "Invalid token.";
   }
-};
+}
 
-const _handleValidationErrors = (err, errorDetails) => {
+function handleValidationErrors(
+  err: unknown,
+  errorDetails: StatusErrorWithMessage,
+): void {
   if (err instanceof ValidationError) {
     errorDetails.statusCode = 422;
     errorDetails.message = err.errors.map((e) => e.message).join("; ");
   }
-};
+}
 
-module.exports = errorHandler;
+export default errorHandler;

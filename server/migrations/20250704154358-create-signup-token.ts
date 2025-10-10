@@ -1,7 +1,10 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) => {
     await queryInterface.createTable("signup_tokens", {
       id: {
         allowNull: false,
@@ -34,7 +37,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     await queryInterface.dropTable("signup_tokens");
   },
 };

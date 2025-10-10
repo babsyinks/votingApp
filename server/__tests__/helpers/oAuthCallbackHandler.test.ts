@@ -1,24 +1,25 @@
-const {
+import {
   handleOauthCallback,
   sessionOff,
-} = require("../../../strategies/common/oAuthCallbackHandler");
-const { generateTokensAndRedirect } = require("../../../helpers/authControllerHelpers");
+} from "../../helpers/oAuthCallbackHandler";
+import { generateTokensAndRedirect } from "../../helpers/authControllerHelpers";
+import type { Request, Response } from "express";
+import type { PassportError } from "../../helpers/oAuthCallbackHandler";
+import type { User } from "../../models";
 
-jest.mock("../../../helpers/authControllerHelpers", () => ({
+jest.mock("../../helpers/authControllerHelpers", () => ({
   generateTokensAndRedirect: jest.fn(),
 }));
 
 describe("oAuthCallbackHandler", () => {
-  let req;
-  let res;
-  let next;
+  let req: Request;
+  let res: Response;
 
   beforeEach(() => {
-    req = {};
+    req = {} as unknown as Request;
     res = {
       redirect: jest.fn(),
-    };
-    next = jest.fn();
+    } as unknown as Response;
     jest.clearAllMocks();
   });
 
@@ -29,7 +30,7 @@ describe("oAuthCallbackHandler", () => {
   describe("failure cases", () => {
     it("should redirect to failure URL with default message if no user", () => {
       const handler = handleOauthCallback();
-      handler(req, res, next)(null, null, null);
+      handler(req, res)(null, undefined);
 
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringMatching(/\/signin\?error=Authentication%20failed/),
@@ -40,7 +41,7 @@ describe("oAuthCallbackHandler", () => {
       const handler = handleOauthCallback();
       const err = new Error("Something went wrong");
 
-      handler(req, res, next)(err, null, null);
+      handler(req, res)(err, undefined);
 
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringMatching(/\/signin\?error=Something%20went%20wrong/),
@@ -49,14 +50,20 @@ describe("oAuthCallbackHandler", () => {
 
     it("should redirect to failure URL with joined error messages if err.errors exists", () => {
       const handler = handleOauthCallback();
-      const err = {
+      const err: PassportError = new Error("");
+      err.errors = [
+        { message: "First error" },
+        { message: "Second error" },
+      ]; /* {
         errors: [{ message: "First error" }, { message: "Second error" }],
       };
-
-      handler(req, res, next)(err, null, null);
+ */
+      handler(req, res)(err, undefined);
 
       expect(res.redirect).toHaveBeenCalledWith(
-        expect.stringMatching(/\/signin\?error=First%20error%3B%20Second%20error/),
+        expect.stringMatching(
+          /\/signin\?error=First%20error%3B%20Second%20error/,
+        ),
       );
     });
 
@@ -65,10 +72,12 @@ describe("oAuthCallbackHandler", () => {
         failureRedirectUri: "http://custom-fail.com/fail",
       });
 
-      handler(req, res, next)(null, null, null);
+      handler(req, res)(null, undefined);
 
       expect(res.redirect).toHaveBeenCalledWith(
-        expect.stringMatching(/^http:\/\/custom-fail\.com\/fail\?error=Authentication%20failed/),
+        expect.stringMatching(
+          /^http:\/\/custom-fail\.com\/fail\?error=Authentication%20failed/,
+        ),
       );
     });
   });
@@ -76,9 +85,13 @@ describe("oAuthCallbackHandler", () => {
   describe("success cases", () => {
     it("should call generateTokensAndRedirect with user and successRedirectUri", () => {
       const handler = handleOauthCallback();
-      const user = { id: 123 };
+      const user = {
+        user_id: "1",
+        username: "doe",
+        isAdmin: false,
+      } as unknown as User;
 
-      handler(req, res, next)(null, user, null);
+      handler(req, res)(null, user);
 
       expect(generateTokensAndRedirect).toHaveBeenCalledWith({
         res,
@@ -91,9 +104,13 @@ describe("oAuthCallbackHandler", () => {
       const handler = handleOauthCallback({
         successRedirectUri: "http://custom-success.com/welcome",
       });
-      const user = { id: 456 };
+      const user = {
+        user_id: "456",
+        username: "doe",
+        isAdmin: false,
+      } as unknown as User;
 
-      handler(req, res, next)(null, user, null);
+      handler(req, res)(null, user);
 
       expect(generateTokensAndRedirect).toHaveBeenCalledWith({
         res,

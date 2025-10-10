@@ -1,33 +1,37 @@
-const passport = require("passport");
+import passport from "passport";
+import type { Request, Response, NextFunction } from "express";
 
 jest.mock("passport", () => ({
   authenticate: jest.fn(),
 }));
 
-jest.mock("../../strategies/common/oAuthCallbackHandler", () => ({
+jest.mock("../../helpers/oAuthCallbackHandler", () => ({
   sessionOff: { session: false },
   handleOauthCallback: jest.fn(() => jest.fn(() => "mockCallbackResult")),
 }));
 
-const {
+import {
   sessionOff,
   handleOauthCallback,
-} = require("../../strategies/common/oAuthCallbackHandler");
+} from "../../helpers/oAuthCallbackHandler";
 
-const {
+import {
   passportCallbackWrapper,
   getOauthStartMiddleware,
-} = require("../../helpers/oAuthControllerHelpers");
+} from "../../helpers/oAuthControllerHelpers";
 
 describe("oAuthControllerHelpers", () => {
-  let req, res, next, fakeMiddleware;
+  let req: Request,
+    res: Response,
+    next: NextFunction,
+    fakeMiddleware: jest.Mock;
 
   beforeEach(() => {
-    req = { req: true };
-    res = { res: true };
+    req = { req: true } as unknown as Request;
+    res = { res: true } as unknown as Response;
     next = jest.fn();
     fakeMiddleware = jest.fn();
-    passport.authenticate.mockReturnValue(fakeMiddleware);
+    (passport.authenticate as jest.Mock).mockReturnValue(fakeMiddleware);
     jest.clearAllMocks();
   });
 
@@ -39,12 +43,14 @@ describe("oAuthControllerHelpers", () => {
       cbWrapper(req, res, next);
 
       expect(handleOauthCallback).toHaveBeenCalledTimes(1);
-      const expectedCbReturn = handleOauthCallback.mock.results[0].value(req, res, next);
+      const expectedCbReturn = (
+        handleOauthCallback as jest.Mock
+      ).mock.results[0].value(req, res, next);
 
       expect(passport.authenticate).toHaveBeenCalledWith(
         strategy,
         sessionOff,
-        expectedCbReturn
+        expectedCbReturn,
       );
 
       expect(fakeMiddleware).toHaveBeenCalledWith(req, res, next);
@@ -52,18 +58,23 @@ describe("oAuthControllerHelpers", () => {
 
     it("should allow custom callbackFactory", () => {
       const strategy = "facebook";
-      const customCbFn = jest.fn(() => jest.fn(() => "customCbResult"));
+      let customCbFn: typeof handleOauthCallback;
+      customCbFn = jest.fn(() => jest.fn(() => "customCbResult")) as jest.Mock;
       const cbWrapper = passportCallbackWrapper(strategy, customCbFn);
 
       cbWrapper(req, res, next);
 
       expect(customCbFn).toHaveBeenCalledTimes(1);
-      const expectedCbReturn = customCbFn.mock.results[0].value(req, res, next);
+      const expectedCbReturn = (customCbFn as jest.Mock).mock.results[0].value(
+        req,
+        res,
+        next,
+      );
 
       expect(passport.authenticate).toHaveBeenCalledWith(
         strategy,
         sessionOff,
-        expectedCbReturn
+        expectedCbReturn,
       );
 
       expect(fakeMiddleware).toHaveBeenCalledWith(req, res, next);

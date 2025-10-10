@@ -1,12 +1,13 @@
-const bcrypt = require("bcryptjs");
-const {
+import bcrypt from "bcryptjs";
+import {
   setAccessTokenOnCookie,
   setRefreshTokenOnCookie,
-} = require("../../utils/setCookies");
-const {
+} from "../../utils/setCookies";
+
+import {
   generateAccessToken,
   generateRefreshToken,
-} = require("../../utils/tokenGenerators");
+} from "../../utils/tokenGenerators";
 
 jest.mock("bcryptjs");
 jest.mock("../../utils/setCookies", () => ({
@@ -25,14 +26,18 @@ const {
 } = require("../../helpers/authControllerHelpers");
 
 describe("authControllerHelpers", () => {
+  let mockedGenerateAccessToken = jest.mocked(generateAccessToken);
+  let mockedGenerateRefreshToken = jest.mocked(generateRefreshToken);
+  let mockedSetAccessTokenOnCookie = jest.mocked(setAccessTokenOnCookie);
+  let mockedSetRefreshTokenOnCookie = jest.mocked(setRefreshTokenOnCookie);
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe("hashPassWord", () => {
     test("should generate salt and hash the password", async () => {
-      bcrypt.genSalt.mockResolvedValue("salt123");
-      bcrypt.hash.mockResolvedValue("hashedPassword");
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt123");
+      (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
 
       const result = await hashPassWord("myPassword");
 
@@ -43,43 +48,79 @@ describe("authControllerHelpers", () => {
   });
 
   describe("generateTokensAndSendResponse", () => {
-    test("should generate tokens, set cookies, and send response", () => {
-      generateAccessToken.mockReturnValue("access123");
-      generateRefreshToken.mockReturnValue("refresh456");
+    let user: any, res: any;
 
-      const res = {
+    beforeEach(() => {
+      mockedGenerateAccessToken.mockReturnValue("access123");
+      mockedGenerateRefreshToken.mockReturnValue("refresh456");
+
+      res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
 
-      setAccessTokenOnCookie.mockImplementation(({ res, accessToken }) => {
-        expect(accessToken).toBe("access123");
-        return res;
-      });
+      mockedSetAccessTokenOnCookie.mockImplementation(
+        ({ res, accessToken }) => {
+          expect(accessToken).toBe("access123");
+          return res;
+        },
+      );
 
-      setRefreshTokenOnCookie.mockImplementation(({ res, refreshToken }) => {
-        expect(refreshToken).toBe("refresh456");
-        return res;
-      });
+      mockedSetRefreshTokenOnCookie.mockImplementation(
+        ({ res, refreshToken }) => {
+          expect(refreshToken).toBe("refresh456");
+          return res;
+        },
+      );
 
-      const user = { username: "John", user_id: 1, role: "admin", password: "hidden" };
-
+      user = {
+        username: "John",
+        firstname: "JohnBull",
+        lastname: "Bill",
+        user_id: "1",
+        email: "email@mail.com",
+        isAdmin: true,
+        password: "hidden",
+      };
+    });
+    test("should generate tokens, set cookies, and send response for admin", () => {
       generateTokensAndSendResponse({ res, user });
 
-      expect(generateAccessToken).toHaveBeenCalledWith(user);
-      expect(generateRefreshToken).toHaveBeenCalledWith(user);
+      expect(mockedGenerateAccessToken).toHaveBeenCalledWith(user);
+      expect(mockedGenerateRefreshToken).toHaveBeenCalledWith(user);
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         isAuthenticated: true,
-        user: { username: "John", userId: 1, role: "admin" },
+        user: {
+          username: "John",
+          userId: "1",
+          role: "admin",
+        },
+      });
+    });
+
+    test("should generate tokens, set cookies, and send response for user", () => {
+      user.isAdmin = false;
+      generateTokensAndSendResponse({ res, user });
+
+      expect(mockedGenerateAccessToken).toHaveBeenCalledWith(user);
+      expect(mockedGenerateRefreshToken).toHaveBeenCalledWith(user);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        isAuthenticated: true,
+        user: {
+          username: "John",
+          userId: "1",
+          role: "user",
+        },
       });
     });
   });
 
   describe("generateTokensAndRedirect", () => {
     test("should generate tokens, set cookies, and redirect", () => {
-      generateAccessToken.mockReturnValue("access789");
-      generateRefreshToken.mockReturnValue("refresh987");
+      mockedGenerateAccessToken.mockReturnValue("access789");
+      mockedGenerateRefreshToken.mockReturnValue("refresh987");
 
       const redirectUri = "/";
 
@@ -88,22 +129,34 @@ describe("authControllerHelpers", () => {
         redirect: jest.fn(),
       };
 
-      setAccessTokenOnCookie.mockImplementation(({ res, accessToken }) => {
-        expect(accessToken).toBe("access789");
-        return res;
-      });
+      mockedSetAccessTokenOnCookie.mockImplementation(
+        ({ res, accessToken }) => {
+          expect(accessToken).toBe("access789");
+          return res;
+        },
+      );
 
-      setRefreshTokenOnCookie.mockImplementation(({ res, refreshToken }) => {
-        expect(refreshToken).toBe("refresh987");
-        return res;
-      });
+      mockedSetRefreshTokenOnCookie.mockImplementation(
+        ({ res, refreshToken }) => {
+          expect(refreshToken).toBe("refresh987");
+          return res;
+        },
+      );
 
-      const user = { username: "Jane", user_id: 2, role: "user" };
+      const user = {
+        username: "Jane",
+        firstname: "Janet",
+        lastname: "Marr",
+        user_id: "2",
+        email: "janet@mail.com",
+        isAdmin: false,
+        password: "hidden",
+      };
 
       generateTokensAndRedirect({ res, user, redirectUri });
 
-      expect(generateAccessToken).toHaveBeenCalledWith(user);
-      expect(generateRefreshToken).toHaveBeenCalledWith(user);
+      expect(mockedGenerateAccessToken).toHaveBeenCalledWith(user);
+      expect(mockedGenerateRefreshToken).toHaveBeenCalledWith(user);
       expect(res.redirect).toHaveBeenCalledWith(redirectUri);
     });
   });

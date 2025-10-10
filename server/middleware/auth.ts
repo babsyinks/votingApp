@@ -1,51 +1,97 @@
-const path = require("path");
+import type { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-const jwt = require("jsonwebtoken");
+import { User } from "../models";
+import type { UserAttributesWithRoles } from "../models/user";
 
-const { User } = require("../models");
-require("dotenv").config({ path: path.join("..", ".env") });
-require("dotenv").config({ debug: process.env.DEBUG });
+// Define a type for the decoded JWT payload
+interface AuthTokenPayload extends JwtPayload {
+  user: {
+    user_id: string;
+  };
+}
 
-const checkAuthenticationStatus = async (req, res, next) => {
+/**
+ * Middleware to check if the user is authenticated.
+ */
+const checkAuthenticationStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   await _handleAuth("authentication")(req, res, next);
 };
 
-const checkAuthorizationStatus = async (req, res, next) => {
+/**
+ * Middleware to check if the user is authorized (admin only).
+ */
+const checkAuthorizationStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   await _handleAuth("authorization")(req, res, next);
 };
 
-const _handleAuth = (statusType) => {
-  return async (req, res, next) => {
+/**
+ * Shared handler for both authentication and authorization checks.
+ */
+function _handleAuth(statusType: "authentication" | "authorization") {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     const statusObj = _getAuthStatusObject(statusType);
+
     try {
       const token = req.cookies.access_token;
       const user = await _retrieveUser(token);
       if (!token || !user) {
-        return res
+        res
           .status(statusObj.statusCode)
           .json({ [statusObj.type]: false, error: statusObj.message });
+        return;
       }
+
       if (statusType === "authorization") {
-        _denyAuthorizationIfNotAdmin({ res, user });
+        const denied = _denyAuthorizationIfNotAdmin({ res, user });
+        if (denied) return;
       }
       req.user = user;
       next();
     } catch (error) {
-      return res.status(401).json({ [statusObj.type]: false, error: error.message });
+      const message = error instanceof Error ? error.message : String(error);
+
+      res.status(401).json({ [statusObj.type]: false, error: message });
     }
   };
-};
+}
 
-const _denyAuthorizationIfNotAdmin = ({ res, user }) => {
-  if (!user.isAdmin) {
-    return res.status(403).json({
+/**
+ * Restricts access if user is not an admin.
+ */
+function _denyAuthorizationIfNotAdmin({
+  res,
+  user,
+}: {
+  res: Response;
+  user: UserAttributesWithRoles;
+}) {
+  if (user.role !== "admin") {
+    res.status(403).json({
       authorized: false,
       error: `${user.username} is unauthorized to access this resource.`,
     });
+    return true;
   }
-};
+  return false;
+}
 
-const _getAuthStatusObject = (statusType) => {
+/**
+ * Returns appropriate auth error message depending on type.
+ */
+function _getAuthStatusObject(statusType: "authentication" | "authorization") {
   const authObj = {
     authentication: {
       statusCode: 401,
@@ -59,18 +105,25 @@ const _getAuthStatusObject = (statusType) => {
     },
   };
   return authObj[statusType];
-};
+}
 
-const _retrieveUser = async (token) => {
-  let user;
-  if (token) {
-    const authObj = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const { user_id } = authObj.user;
-    if (user_id) {
-      user = await User.findOne({ where: { user_id } });
-    }
-  }
-  return user;
-};
+/**
+ * Retrieves user from the access token.
+ */
+async function _retrieveUser(
+  token?: string,
+): Promise<UserAttributesWithRoles | null> {
+  if (!token) return null;
+  const authObj = jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET as string,
+  ) as AuthTokenPayload;
 
-module.exports = { checkAuthenticationStatus, checkAuthorizationStatus };
+  const { user_id } = authObj.user;
+  if (!user_id) return null;
+
+  const user = await User.findOne({ where: { user_id } });
+  return user ? user.toJSON() : null;
+}
+
+export { checkAuthenticationStatus, checkAuthorizationStatus };

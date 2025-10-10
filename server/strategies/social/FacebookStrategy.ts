@@ -1,23 +1,31 @@
-const { Strategy: FacebookStrategy } = require("passport-facebook");
+import { Strategy as FacebookStrategy, Profile } from "passport-facebook";
+import { VerifyFunction } from "passport-facebook";
 
-const Social = require("./Social");
+import Social from "./Social";
 
 class FacebookSocial extends Social {
-  constructor(profile) {
+  constructor(profile: Profile) {
     super(profile, "facebook", false);
   }
 }
 
-module.exports = () =>
+const verify: VerifyFunction = async (
+  _accessToken,
+  _refreshToken,
+  profile,
+  done,
+) => {
+  const strategy = new FacebookSocial(profile);
+  await strategy.authenticate(done);
+};
+
+export default () =>
   new FacebookStrategy(
     {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      clientID: process.env.FACEBOOK_APP_ID as string,
+      clientSecret: process.env.FACEBOOK_APP_SECRET as string,
       callbackURL: "/api/v1/oauth/facebook/callback",
       profileFields: ["id", "emails", "name", "displayName"],
     },
-    async (_accessToken, _refreshToken, profile, done) => {
-      const strategy = new FacebookSocial(profile);
-      return await strategy.authenticate(done);
-    },
+    verify,
   );

@@ -1,11 +1,15 @@
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
-const strongPasswordCriteria = require("../config/strongPasswordConf");
-const generateCustomError = require("../utils/generateCustomError");
+import strongPasswordCriteria from "../config/strongPasswordConf";
+import type { ValidUser } from "../helpers/types/validAuthUser";
+import type { CodeAttributes, Code } from "../models/code";
+import generateCustomError from "../utils/generateCustomError";
 
-const failIfEmpty = (fieldsObj) => {
+export type FieldsObject = Record<string, string | undefined | null>;
+
+export const failIfEmpty = (fieldsObj: FieldsObject): void => {
   const keys = Object.keys(fieldsObj);
-  const emptyField = [];
+  const emptyField: string[] = [];
   if (
     keys.some((key) => {
       if (!fieldsObj[key]) emptyField.push(key);
@@ -19,26 +23,32 @@ const failIfEmpty = (fieldsObj) => {
   }
 };
 
-const failIfUserExists = (user) => {
+export const failIfUserExists = (user: ValidUser | null): void => {
   if (user) {
     generateCustomError("This User Exists Already!", 403);
   }
 };
 
-const failIfUserDoesNotExist = (user) => {
+export const failIfUserDoesNotExist = (user: ValidUser | null): void => {
   if (!user) {
     generateCustomError("User not found", 400);
   }
 };
 
-const failIfVerificationCodeIsNotValid = async (code, row) => {
+export const failIfVerificationCodeIsNotValid = async (
+  code: string,
+  row: Code | CodeAttributes | null,
+): Promise<void> => {
   if (!row || !(await bcrypt.compare(code, row.codeHash))) {
     generateCustomError("Invalid or expired code", 403);
   }
 };
 
-const validateCredentials = async (user, password) => {
-  let checkPassword;
+export const validateCredentials = async (
+  user: ValidUser | null,
+  password: string,
+): Promise<void> => {
+  let checkPassword = false;
   if (user) {
     checkPassword = await bcrypt.compare(password, user.password);
   }
@@ -47,13 +57,16 @@ const validateCredentials = async (user, password) => {
   }
 };
 
-const _passwordStrengthStatus = (password) => {
-  for (const { message, test } of strongPasswordCriteria) {
+const _passwordStrengthStatus = (password: string): string | undefined => {
+  for (const { message, test } of strongPasswordCriteria as {
+    message: string;
+    test: (pwd: string) => boolean;
+  }[]) {
     if (!test(password)) return message;
   }
 };
 
-const failIfPasswordWeak = (password) => {
+export const failIfPasswordWeak = (password: string): void => {
   const passwordStrengthStatusMessage = _passwordStrengthStatus(password);
   if (passwordStrengthStatusMessage) {
     generateCustomError(
@@ -61,13 +74,4 @@ const failIfPasswordWeak = (password) => {
       400,
     );
   }
-};
-
-module.exports = {
-  failIfEmpty,
-  failIfUserExists,
-  failIfUserDoesNotExist,
-  validateCredentials,
-  failIfVerificationCodeIsNotValid,
-  failIfPasswordWeak,
 };

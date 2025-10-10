@@ -1,7 +1,10 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) {
     await queryInterface.addColumn("users", "email", {
       type: Sequelize.STRING,
       allowNull: false,
@@ -19,7 +22,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface) {
     await queryInterface.removeColumn("users", "email");
     await queryInterface.removeColumn("users", "firstname");
     await queryInterface.removeColumn("users", "lastname");

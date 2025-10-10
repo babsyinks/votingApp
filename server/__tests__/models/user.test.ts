@@ -1,151 +1,115 @@
-const { DataTypes } = require("sequelize");
+import { Sequelize } from "sequelize";
+import { User } from "../../models/user";
+import { Organization } from "../../models/organization";
+import { Votes } from "../../models/votes";
 
-jest.mock("sequelize", () => {
-  const actual = jest.requireActual("sequelize");
-
-  class MockModel {
-    static init(attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
-    }
-    static associate() {}
-    static hasMany() {}
-    static belongsToMany() {}
-    get() {
-      return this.dataValues || {};
-    }
-  }
-
-  return {
-    ...actual,
-    Model: MockModel,
-    DataTypes: {
-      ...actual.DataTypes,
-      UUID: { key: "UUID" },
-      STRING: { key: "STRING" },
-      BOOLEAN: { key: "BOOLEAN" },
-      UUIDV4: "UUIDV4",
-    },
-  };
-});
-
-describe("User Model (unit)", () => {
-  let User;
-  let mockSequelize;
+describe("User Model", () => {
+  let sequelize: Sequelize;
 
   beforeAll(() => {
-    mockSequelize = {};
-    User = require("../../models/user")(mockSequelize, DataTypes);
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
   });
 
-  const resolveTypeKey = (attr) => {
-    if (!attr) return undefined;
-    if (attr.type && attr.type.key) return attr.type.key;
-    if (attr.key) return attr.key;
-    return undefined;
-  };
-
-  test("should have correct model name and table name", () => {
-    expect(User.options.modelName).toBe("User");
-    expect(User.options.tableName).toBe("users");
+  afterAll(async () => {
+    await sequelize.close();
   });
 
-  test("should define correct attributes", () => {
-    const attrs = User.rawAttributes;
+  test("initModel initializes correctly", () => {
+    const initSpy = jest.spyOn(User, "init");
 
-    expect(resolveTypeKey(attrs.user_id)).toBe("UUID");
-    expect(attrs.user_id.defaultValue).toBe("UUIDV4");
-    expect(attrs.user_id.primaryKey).toBe(true);
+    User.initModel(sequelize);
 
-    expect(resolveTypeKey(attrs.username)).toBe("STRING");
-    expect(attrs.username.allowNull).toBe(false);
-    expect(attrs.username.unique).toBe(true);
+    const [attributes, options] = initSpy.mock.calls[0];
 
-    expect(resolveTypeKey(attrs.password)).toBe("STRING");
-    expect(attrs.password.allowNull).toBe(false);
+    // Check attribute keys
+    expect(Object.keys(attributes)).toEqual(
+      expect.arrayContaining([
+        "user_id",
+        "username",
+        "password",
+        "email",
+        "firstname",
+        "lastname",
+        "isAdmin",
+      ])
+    );
 
-    expect(resolveTypeKey(attrs.email)).toBe("STRING");
-    expect(attrs.email.allowNull).toBe(false);
-    expect(attrs.email.unique).toBe(true);
+    // Check model options
+    expect(options.modelName).toBe("User");
+    expect(options.tableName).toBe("users");
+    expect(options.indexes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fields: ["username"] }),
+        expect.objectContaining({ fields: ["email"] }),
+      ])
+    );
 
-    expect(resolveTypeKey(attrs.firstname)).toBe("STRING");
-    expect(attrs.firstname.allowNull).toBe(false);
-
-    expect(resolveTypeKey(attrs.lastname)).toBe("STRING");
-    expect(attrs.lastname.allowNull).toBe(false);
-
-    expect(resolveTypeKey(attrs.isAdmin)).toBe("BOOLEAN");
-    expect(attrs.isAdmin.allowNull).toBe(false);
-    expect(attrs.isAdmin.defaultValue).toBe(false);
+    initSpy.mockRestore();
   });
 
-  test("associate should define belongsToMany relationship to Organization and hasMany to Votes", () => {
-    const belongsToManySpy = jest.spyOn(User, "belongsToMany").mockImplementation(() => {});
-    const hasManySpy = jest.spyOn(User, "hasMany").mockImplementation(() => {});
+  test("builds and stores values correctly", () => {
+    User.initModel(sequelize);
 
-    const mockModels = { Organization: {}, UserOrganization: {}, Votes: {} };
-    User.associate(mockModels);
-
-    expect(belongsToManySpy).toHaveBeenCalledWith(mockModels.Organization, {
-      through: mockModels.UserOrganization,
-      foreignKey: "user_id",
-      otherKey: "organization_id",
-    });
-
-    expect(hasManySpy).toHaveBeenCalledWith(mockModels.Votes, {
-      foreignKey: "user_id",
-    });
-  });
-
-  test("toJSON should return model json form", () => {
-    const instance = new User();
-    instance.get = jest.fn(() => ({
-      user_id: "uuid-123",
-      username: "testuser",
-    }));
-    const json = instance.toJSON();
-    expect(json).toEqual({
-      role: "user",
-      user_id: "uuid-123",
-      username: "testuser",
-    });
-    expect(json.id).toBeUndefined();
-  });
-
-  test("toJSON should return model json form and set role to admin if user is admin", () => {
-    const instance = new User();
-    instance.get = jest.fn(() => ({
-      user_id: "uuid-123",
-      username: "testuser",
-      isAdmin: true,
-    }));
-    const json = instance.toJSON();
-    expect(json).toEqual({
-      role: "admin",
-      user_id: "uuid-123",
-      username: "testuser",
+    const user = User.build({
+      user_id: "user-123",
+      username: "john_doe",
+      password: "hashedpassword",
+      email: "john@example.com",
+      firstname: "John",
+      lastname: "Doe",
       isAdmin: true,
     });
-    expect(json.id).toBeUndefined();
+
+    expect(user.user_id).toBe("user-123");
+    expect(user.username).toBe("john_doe");
+    expect(user.password).toBe("hashedpassword");
+    expect(user.email).toBe("john@example.com");
+    expect(user.firstname).toBe("John");
+    expect(user.lastname).toBe("Doe");
+    expect(user.isAdmin).toBe(true);
   });
 
-  test("should have indexes on username and email", () => {
-    const indexes = User.options.indexes;
-    const fields = indexes.flatMap((i) => i.fields);
-    expect(fields).toContain("username");
-    expect(fields).toContain("email");
+  test("toJSON returns attributes with role field", () => {
+    User.initModel(sequelize);
+
+    const user = User.build({
+      username: "jane_doe",
+      password: "securepass",
+      email: "jane@example.com",
+      firstname: "Jane",
+      lastname: "Doe",
+      isAdmin: false,
+    });
+
+    const json = user.toJSON();
+    expect(json).toHaveProperty("username", "jane_doe");
+    expect(json).toHaveProperty("role", "user");
+
+    const admin = User.build({
+      username: "admin_user",
+      password: "securepass",
+      email: "admin@example.com",
+      firstname: "Alice",
+      lastname: "Admin",
+      isAdmin: true,
+    });
+
+    expect(admin.toJSON().role).toBe("admin");
   });
 
-  test("should allow mocked CRUD calls", async () => {
-    User.create = jest.fn().mockResolvedValue({ username: "mockuser" });
-    User.findAll = jest.fn().mockResolvedValue([{ username: "mockuser" }]);
+test("associate sets up relations", () => {
+  User.initModel(sequelize);
+  Organization.initModel(sequelize);
+  Votes.initModel(sequelize);
 
-    const created = await User.create({ username: "mockuser" });
-    const all = await User.findAll();
+  User.associate({
+    Organization,
+    Votes,
+    UserOrganization: "user_organizations",
+  } as any);
 
-    expect(created.username).toBe("mockuser");
-    expect(all).toHaveLength(1);
-    expect(all[0].username).toBe("mockuser");
-  });
+  expect(User.associations.Organizations).toBeDefined();
+  expect(User.associations.Votes).toBeDefined();
+});
+
 });

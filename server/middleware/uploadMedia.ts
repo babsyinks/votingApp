@@ -1,26 +1,24 @@
-const cloudinary = require("cloudinary").v2;
-const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+import { v2 as cloudinary } from "cloudinary";
+import { Request } from "express";
+import multer, { StorageEngine } from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-// Cloudinary Configuration
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+  api_key: process.env.CLOUDINARY_API_KEY as string,
+  api_secret: process.env.CLOUDINARY_API_SECRET as string,
 });
 
-// Cloudinary Multer Storage
-const storage = new CloudinaryStorage({
+const storage: StorageEngine = new CloudinaryStorage({
   cloudinary,
-  params: {
+  params: async (req: Request, file: Express.Multer.File) => ({
     folder: "uploads", // Cloudinary folder name
-    format: async (req, file) => "png", // Convert all images to PNG
-    public_id: (req, file) =>
-      `${Date.now()}_${file.originalname.split(".")[0]}`, // Create unique filename
+    format: "png", // Convert all images to PNG
+    public_id: `${Date.now()}_${file.originalname.split(".")[0]}`, // Unique filename
     transformation: [{ width: 300, height: 300, crop: "fill" }], // Resize to 300x300
-  },
+  }),
 });
 
-const upload = multer({ storage });
+export const upload = multer({ storage });
 
-module.exports = { upload, cloudinary };
+export { cloudinary };

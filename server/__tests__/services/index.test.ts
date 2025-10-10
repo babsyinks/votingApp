@@ -1,5 +1,5 @@
-describe("services index.js", () => {
-  let services;
+ describe("services index.js", () => {
+  let services: any;
 
   beforeEach(() => {
     jest.resetModules();

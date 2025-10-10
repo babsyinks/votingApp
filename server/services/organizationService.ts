@@ -1,21 +1,55 @@
-const { sequelize } = require("../models");
+import type { Transaction } from "sequelize";
 
-module.exports = (Organization, UserOrganization, Election) => {
+import { sequelize } from "../models";
+import type { Election } from "../models/election";
+import type { Organization } from "../models/organization";
+import type { UserOrganization } from "../models/userOrganization";
+
+export interface CreateOrganizationParams {
+  userId: string;
+  name: string;
+  description?: string;
+  role?: "user" | "election-manager";
+}
+
+export interface OrganizationService {
+  createOrganization(params: CreateOrganizationParams): Promise<Organization>;
+  getAllOrganizations(): Promise<Organization[]>;
+  getOrganizationById(organizationId: string): Promise<Organization | null>;
+  updateOrganization(
+    organizationId: string,
+    updates: Partial<Pick<Organization, "name" | "description">>,
+  ): Promise<Organization | null>;
+  deleteOrganization(organizationId: string): Promise<boolean>;
+}
+
+/**
+ * Organization service factory.
+ *
+ * Injects dependencies for Organization, UserOrganization, and Election models.
+ */
+export const createOrganizationService = (
+  OrganizationModel: typeof Organization,
+  UserOrganizationModel: typeof UserOrganization,
+  ElectionModel: typeof Election,
+): OrganizationService => {
   return {
     /**
      * Create a new organization and assign a user to it with a role.
-     *
-     * @param {string} userId - ID of the user creating the organization
-     * @param {string} name - Name of the organization
-     * @param {string} description - Description of the organization
-     * @param {string} role - Role of the user in the organization
-     * @returns {Promise<Object>} The created organization
      */
-    async createOrganization({ userId, name, description, role = "election-manager" }) {
-      return await sequelize.transaction(async (t) => {
-        const organization = await Organization.create({ name, description }, { transaction: t });
+    async createOrganization({
+      userId,
+      name,
+      description,
+      role = "election-manager",
+    }: CreateOrganizationParams): Promise<Organization> {
+      return sequelize.transaction(async (t: Transaction) => {
+        const organization = await OrganizationModel.create(
+          { name, description },
+          { transaction: t },
+        );
 
-        await UserOrganization.create(
+        await UserOrganizationModel.create(
           {
             user_id: userId,
             organization_id: organization.organization_id,
@@ -24,67 +58,60 @@ module.exports = (Organization, UserOrganization, Election) => {
           { transaction: t },
         );
 
-        return organization.toJSON();
+        return organization.toJSON() as Organization;
       });
     },
 
     /**
      * Get all organizations.
-     *
-     * @returns {Promise<Organization[]>} List of organizations
      */
-    async getAllOrganizations() {
-      const organizations = await Organization.findAll();
-      return organizations.map((org) => org.toJSON());
+    async getAllOrganizations(): Promise<Organization[]> {
+      const organizations = await OrganizationModel.findAll();
+      return organizations.map((org) => org.toJSON() as Organization);
     },
 
     /**
      * Get organization by ID.
-     *
-     * @param {string} organizationId - The ID of the organization
-     * @returns {Promise<Organization|null>} The organization or null
      */
-    async getOrganizationById(organizationId) {
-      const organization = await Organization.findByPk(organizationId);
-      return organization?.toJSON() || null;
+    async getOrganizationById(
+      organizationId: string,
+    ): Promise<Organization | null> {
+      const organization = await OrganizationModel.findByPk(organizationId);
+      return organization ? (organization.toJSON() as Organization) : null;
     },
 
     /**
      * Update organization details.
-     *
-     * @param {string} organizationId - The ID of the organization
-     * @param {Object} updates - Fields to update
-     * @returns {Promise<Organization|null>} Updated organization or null if not found
      */
-    async updateOrganization(organizationId, updates) {
-      const [count, rows] = await Organization.update(updates, {
+    async updateOrganization(
+      organizationId: string,
+      updates: Partial<Pick<Organization, "name" | "description">>,
+    ): Promise<Organization | null> {
+      const [count, rows] = await OrganizationModel.update(updates, {
         where: { organization_id: organizationId },
         returning: true,
       });
 
       if (count === 0) return null;
-      return rows[0].toJSON();
+      return rows[0].toJSON() as Organization;
     },
 
     /**
      * Delete organization and cascade delete elections and user organizations.
-     *
-     * @param {string} organizationId - The ID of the organization
-     * @returns {Promise<boolean>} True if deleted, false otherwise
      */
-    async deleteOrganization(organizationId) {
-      return await sequelize.transaction(async (t) => {
-        await Election.destroy({
+    async deleteOrganization(organizationId: string): Promise<boolean> {
+      return sequelize.transaction(async (t: Transaction) => {
+        await ElectionModel.destroy({
           where: { organization_id: organizationId },
           transaction: t,
         });
 
-        await UserOrganization.destroy({
+        await UserOrganizationModel.destroy({
           where: { organization_id: organizationId },
           transaction: t,
         });
 
-        const deletedCount = await Organization.destroy({
+        const deletedCount = await OrganizationModel.destroy({
           where: { organization_id: organizationId },
           transaction: t,
         });
@@ -94,3 +121,5 @@ module.exports = (Organization, UserOrganization, Election) => {
     },
   };
 };
+
+export default createOrganizationService;

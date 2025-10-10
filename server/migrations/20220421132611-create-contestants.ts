@@ -1,43 +1,40 @@
-'use strict';
+"use strict";
+
+import { QueryInterface } from "sequelize";
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('contestants', {
+  async up(
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) {
+    await queryInterface.createTable("contestants", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      contestant_id:{
-        type:Sequelize.UUID,
-        defaultValue:Sequelize.UUIDV4
+      contestant_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
-      surname: {
-        type: Sequelize.STRING
-      },
-      firstname: {
-        type: Sequelize.STRING
-      },
-      position: {
-        type: Sequelize.STRING
-      },
-      manifesto: {
-        type: Sequelize.TEXT
-      },
-      picture: {
-        type: Sequelize.STRING
-      },
+      surname: Sequelize.STRING,
+      firstname: Sequelize.STRING,
+      position: Sequelize.STRING,
+      manifesto: Sequelize.TEXT,
+      picture: Sequelize.STRING,
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('contestants');
-  }
+
+  async down(queryInterface: QueryInterface) {
+    await queryInterface.dropTable("contestants");
+  },
 };

@@ -1,9 +1,9 @@
-const express = require("express");
+import express, { Router } from "express";
 
-const oAuthController = require("../controllers/oAuthController");
-const { checkAuthenticationStatus } = require("../middleware/auth");
+import * as oAuthController from "../controllers/oAuthController";
+import { checkAuthenticationStatus } from "../middleware/auth";
 
-const router = express.Router();
+const router: Router = express.Router();
 router.use(express.json());
 
 router.get("/google", oAuthController.googleOauthStart);
@@ -24,4 +24,4 @@ router.get(
   oAuthController.getUserDetailsOnOauthSuccess,
 );
 
-module.exports = router;
+export default router;

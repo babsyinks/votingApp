@@ -1,13 +1,19 @@
-const { setAccessTokenOnCookie, setRefreshTokenOnCookie } = require("../../utils/setCookies");
+import {
+  setAccessTokenOnCookie,
+  setRefreshTokenOnCookie,
+} from "../../utils/setCookies";
 
-describe("setCookie utility", () => {
-  let res;
+import { Response } from "express";
+
+describe("setCookies utility", () => {
+  let res: Response;
   const actualNodeEnv = process.env.NODE_ENV;
 
   beforeEach(() => {
     res = {
       cookie: jest.fn(),
-    };
+    } as unknown as Response;
+    
     jest.resetModules();
     process.env.NODE_ENV = "test";
   });

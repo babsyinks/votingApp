@@ -1,45 +1,61 @@
-require("dotenv").config();
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const express = require("express");
-const helmet = require("helmet");
-const passport = require("passport");
-const xss = require("xss-clean");
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express, { Application } from "express";
+import helmet from "helmet";
+import passport from "passport";
+import xss from "xss-clean";
 
-require("./config/passport");
-const helmetConfig = require("./config/helmet");
-const errorHandler = require("./middleware/errorHandler");
-const { sequelize } = require("./models");
-const routes = require("./routes");
-const logger = require("./utils/logger");
+import "./config/passport";
+import helmetConfig from "./config/helmet";
+import errorHandler from "./middleware/errorHandler";
+import { sequelize } from "./models";
+import routes from "./routes";
+import logger from "./utils/logger";
 
-const port = process.env.PORT || 3001;
-const app = express();
+dotenv.config();
 
+const port = Number(process.env.PORT) || 3001;
+const app: Application = express();
+
+// Initialize Passport
 app.use(passport.initialize());
+
+// CORS configuration
 app.use(
   cors({
     origin: "http://localhost:3000", // https://demovotingapp.onrender.com/
     credentials: true,
   }),
 );
+
+// Helmet security middleware
 app.use(helmet.contentSecurityPolicy(helmetConfig.contentSecurityPolicy));
+
+// XSS protection
 app.use(xss());
+
+// Cookie parser
 app.use(cookieParser());
 
+// Main API routes
 app.use("/api/v1", routes);
+
+// Error handling middleware
 app.use(errorHandler);
 
-process.on("unhandledRejection", (err) => {
+// Global process error handlers
+process.on("unhandledRejection", (err: unknown) => {
   logger.error("Unhandled Rejection:", err);
   process.exit(1);
 });
 
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", (err: unknown) => {
   logger.error("Uncaught Exception:", err);
   process.exit(1);
 });
 
+// Start server
 app.listen(port, async () => {
   try {
     await sequelize.authenticate();
@@ -50,3 +66,5 @@ app.listen(port, async () => {
     process.exit(1);
   }
 });
+
+export default app;

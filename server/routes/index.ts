@@ -1,17 +1,17 @@
-const express = require("express");
+import express, { Router } from "express";
 
-const authRoutes = require("./authRoutes");
-const electionRoutes = require("./electionRoutes");
-const oAuthRoutes = require("./oauthRoutes");
-const refreshRoute = require("./refreshTokenRoute");
-const timerRoutes = require("./timerRoutes");
+import authRoutes from "./authRoutes";
+import electionRoutes from "./electionRoutes";
+import oAuthRoutes from "./oauthRoutes";
+import refreshTokenRoute from "./refreshTokenRoute";
+import timerRoutes from "./timerRoutes";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.use("/auth", authRoutes);
 router.use("/oauth", oAuthRoutes);
 router.use("/election", electionRoutes);
 router.use("/timer", timerRoutes);
-router.use("/token", refreshRoute);
+router.use("/token", refreshTokenRoute);
 
-module.exports = router;
+export default router;

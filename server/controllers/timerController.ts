@@ -1,38 +1,95 @@
-const { timerService } = require("../services");
-const generateCustomError = require("../utils/generateCustomError");
+import { Request, Response, NextFunction } from "express";
 
-const setTimer = async (req, res) => {
-  const { startDate, endDate } = req.body;
-  if (!startDate || !endDate) {
-    generateCustomError("Start and end dates must be set!", 400);
-  }
-  const timers = await timerService.getAllTimers({ raw: true });
-  if (timers.length === 0) {
-    await timerService.createTimer(req.body);
-  } else {
-    await timerService.updateExistingTimer(timers[0], req.body);
-  }
-  res.json({ startDate, endDate });
-};
+import { Timer } from "../models/timer";
+import type { TimerAttributes } from "../models/timer";
+import { timerService } from "../services";
+import generateCustomError from "../utils/generateCustomError";
 
-const getTimerStatus = async (req, res) => {
-  const timers = await timerService.getAllTimers();
-  let timerObj;
-  const timer = timers[0];
-  if (timers.length === 0) {
-    timerObj = {};
-  } else {
-    timerObj = {
-      startDate: timer.startDate ? new Date(timer.startDate).getTime() : timer.startDate,
-      endDate: timer.endDate ? new Date(timer.endDate).getTime() : timer.endDate,
+/**
+ * Create or update a timer.
+ */
+export const setTimer = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { startDate, endDate } = req.body as {
+      startDate?: string | Date;
+      endDate?: string | Date;
     };
+
+    if (!startDate || !endDate) {
+      generateCustomError("Start and end dates must be set!", 400);
+    }
+
+    // Fetch all timers (using raw for plain objects)
+    const timers = (await timerService.getAllTimers({
+      raw: true,
+    })) as Timer[];
+
+    if (timers.length === 0) {
+      await timerService.createTimer(req.body);
+    } else {
+      await timerService.updateExistingTimer(timers[0], req.body);
+    }
+
+    res.json({ startDate, endDate });
+  } catch (error) {
+    next(error);
   }
-  res.json(timerObj);
 };
 
-const cancelTimer = async (req, res) => {
-  await timerService.clearTimer();
-  res.json({});
+/**
+ * Get the current timer status (start and end timestamps).
+ */
+export const getTimerStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const timers: TimerAttributes[] = await timerService.getAllTimers();
+    const timer = timers[0];
+
+    let timerObj: Partial<
+      Record<
+        keyof Pick<TimerAttributes, "startDate" | "endDate">,
+        number | Date | undefined
+      >
+    >;
+
+    if (!timer) {
+      timerObj = {};
+    } else {
+      timerObj = {
+        startDate: timer.startDate
+          ? new Date(timer.startDate).getTime()
+          : timer.startDate,
+        endDate: timer.endDate
+          ? new Date(timer.endDate).getTime()
+          : timer.endDate,
+      };
+    }
+
+    res.json(timerObj);
+  } catch (error) {
+    next(error);
+  }
 };
 
-module.exports = { setTimer, getTimerStatus, cancelTimer };
+/**
+ * Cancel and clear the timer.
+ */
+export const cancelTimer = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    await timerService.clearTimer();
+    res.json({});
+  } catch (error) {
+    next(error);
+  }
+};

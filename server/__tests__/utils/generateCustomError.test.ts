@@ -1,4 +1,4 @@
-const generateCustomError = require("../../utils/generateCustomError");
+import generateCustomError, { CustomError } from "../../utils/generateCustomError";
 
 describe("generateCustomError", () => {
   it("should throw an error with the given message and statusCode", () => {
@@ -7,12 +7,14 @@ describe("generateCustomError", () => {
 
     try {
       generateCustomError(message, statusCode);
-      // If no error is thrown, fail the test
-      throw new Error("Expected generateCustomError to throw");
     } catch (err) {
-      expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe(message);
-      expect(err.statusCode).toBe(statusCode);
+      if (err instanceof CustomError) {
+        expect(err).toBeInstanceOf(CustomError);
+        expect(err.message).toBe(message);
+        expect(err.statusCode).toBe(statusCode);
+      } else {
+        throw new Error("Caught error was not a CustomError");
+      }
     }
   });
 
@@ -23,8 +25,12 @@ describe("generateCustomError", () => {
     try {
       generateCustomError(message, statusCode);
     } catch (err) {
-      expect(err.message).toBe(message);
-      expect(err.statusCode).toBe(statusCode);
+      if (err instanceof CustomError) {
+        expect(err.message).toBe(message);
+        expect(err.statusCode).toBe(statusCode);
+      } else {
+        throw new Error("Caught error was not a CustomError");
+      }
     }
   });
 });

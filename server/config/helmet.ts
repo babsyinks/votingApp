@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],

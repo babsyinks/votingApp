@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-const {
+import {
   Votes,
   Contestants,
   Timer,
@@ -8,30 +8,38 @@ const {
   Organization,
   UserOrganization,
   Election,
-} = require("../models");
+} from "../models";
 
-const votesService = require("./votesService")(Votes);
-const contestantsService = require("./contestantsService")(Contestants);
-const timerService = require("./timerService")(Timer);
-const codeService = require("./codeService")(Code);
-const userService = require("./userService")(User);
-const electionService = require("./electionService")({
+import createVotesService from "../services/votesService";
+import createContestantsService from "./contestantsService";
+import createTimerService from "./timerService";
+import createCodeService from "./codeService";
+import createUserService from "./userService";
+import createElectionService from "./electionService";
+import createOrganizationService from "./organizationService";
+
+export const votesService = createVotesService(Votes);
+export const contestantsService = createContestantsService(Contestants);
+export const timerService = createTimerService(Timer);
+export const codeService = createCodeService(Code);
+export const userService = createUserService(User);
+export const electionService = createElectionService({
   votesService,
   contestantsService,
   timerService,
 });
-const organizationService = require("./organizationService")({
+export const organizationService = createOrganizationService(
   Organization,
   UserOrganization,
   Election,
-});
+);
 
-const authService = {
+export const authService = {
   ...userService,
   ...codeService,
 };
 
-module.exports = {
+export default {
   votesService,
   contestantsService,
   timerService,

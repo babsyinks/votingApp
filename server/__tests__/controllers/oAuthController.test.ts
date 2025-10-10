@@ -1,11 +1,6 @@
-jest.mock("../../helpers/oAuthControllerHelpers", () => ({
-  passportCallbackWrapper: jest.fn((provider) => `${provider}CallbackWrapper`),
-  getOauthStartMiddleware: jest.fn((provider, _config) => `${provider}StartMiddleware`),
-}));
-
-const helpers = require("../../helpers/oAuthControllerHelpers");
-
-const {
+import { Request, Response, NextFunction } from "express";
+import * as helpers from "../../helpers/oAuthControllerHelpers";
+import {
   googleOauthStart,
   googleOauthConclude,
   facebookOauthStart,
@@ -13,11 +8,20 @@ const {
   githubOauthStart,
   githubOauthConclude,
   getUserDetailsOnOauthSuccess,
-} = require("../../controllers/oAuthController");
+} from "../../controllers/oAuthController";
+
+// Mock helpers
+jest.mock("../../helpers/oAuthControllerHelpers", () => ({
+  passportCallbackWrapper: jest.fn(
+    (provider: string) => `${provider}CallbackWrapper`,
+  ),
+  getOauthStartMiddleware: jest.fn(
+    (provider: string, _config: object) => `${provider}StartMiddleware`,
+  ),
+}));
 
 describe("oAuthController", () => {
   describe("Middleware creation (import-time)", () => {
-
     it("creates google start middleware with correct args", () => {
       expect(googleOauthStart).toBe("googleStartMiddleware");
       expect(helpers.getOauthStartMiddleware).toHaveBeenCalledWith("google", {
@@ -56,37 +60,56 @@ describe("oAuthController", () => {
   });
 
   describe("getUserDetailsOnOauthSuccess", () => {
-    
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    let next: NextFunction;
+
     beforeEach(() => {
       jest.clearAllMocks();
+      res = { json: jest.fn() as jest.Mock };
+      next = jest.fn();
     });
 
     it("responds with user details on success", async () => {
-      const req = { user: { username: "alice", userId: 42, role: "admin" } };
-      const res = { json: jest.fn() };
-      const next = jest.fn();
+      req = {
+        user: { username: "alice", user_id: "42", role: "admin" },
+      };
 
-      await getUserDetailsOnOauthSuccess(req, res, next);
+      await getUserDetailsOnOauthSuccess(req as Request, res as Response, next);
 
       expect(res.json).toHaveBeenCalledWith({
         isAuthenticated: true,
-        user: { username: "alice", userId: 42, role: "admin" },
+        user: { username: "alice", userId: "42", role: "admin" },
       });
       expect(next).not.toHaveBeenCalled();
     });
 
+    it("returns 401 if user is missing", async () => {
+      req = {};
+      res.status = jest.fn().mockReturnThis();
+      res.json = jest.fn();
+
+      await getUserDetailsOnOauthSuccess(req as Request, res as Response, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        isAuthenticated: false,
+        message: "No user found",
+      });
+    });
+
     it("calls next(err) on exception", async () => {
       const err = new Error("boom");
-      const req = {
+      const reqWithThrow = {
         get user() {
           throw err;
         },
       };
-      const res = { json: jest.fn() };
-      const next = jest.fn();
-
-      await getUserDetailsOnOauthSuccess(req, res, next);
-
+      await getUserDetailsOnOauthSuccess(
+        reqWithThrow as unknown as Request,
+        res as Response,
+        next,
+      );
       expect(next).toHaveBeenCalledWith(err);
     });
   });

@@ -1,5 +1,5 @@
-const sendSignupCode = require("../../helpers/sendSignupCode");
-const sendEmail = require("../../helpers/sendEmail");
+import sendSignupCode from "../../helpers/sendSignupCode";
+import sendEmail from "../../helpers/sendEmail";
 
 jest.mock("../../helpers/sendEmail");
 
@@ -20,7 +20,7 @@ describe("sendSignupCode", () => {
   });
 
   it("should propagate error if sendEmail throws", async () => {
-    sendEmail.mockRejectedValueOnce(new Error("Email send failed"));
+    (sendEmail as jest.Mock).mockRejectedValueOnce(new Error("Email send failed"));
 
     await expect(
       sendSignupCode({ toEmail: "fail@example.com", otpCode: "111111" })

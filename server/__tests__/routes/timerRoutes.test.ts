@@ -1,25 +1,35 @@
-const request = require("supertest");
-const express = require("express");
+import request from "supertest";
+import express, { Express } from "express";
 
 jest.mock("../../controllers/timerController", () => ({
-  setTimer: jest.fn((req, res) => res.status(200).json({ message: "Timer set" })),
-  getTimerStatus: jest.fn((req, res) => res.status(200).json({ status: "running" })),
-  cancelTimer: jest.fn((req, res) => res.status(200).json({ message: "Timer cancelled" })),
+  setTimer: jest.fn((req, res) =>
+    res.status(200).json({ message: "Timer set" }),
+  ),
+  getTimerStatus: jest.fn((req, res) =>
+    res.status(200).json({ status: "running" }),
+  ),
+  cancelTimer: jest.fn((req, res) =>
+    res.status(200).json({ message: "Timer cancelled" }),
+  ),
 }));
 
 jest.mock("../../middleware/auth", () => ({
   checkAuthorizationStatus: jest.fn((req, res, next) => next()),
 }));
 
-const timerController = require("../../controllers/timerController");
-const { checkAuthorizationStatus } = require("../../middleware/auth");
-const timerRoutes = require("../../routes/timerRoutes");
-
-const app = express();
-app.use(express.json());
-app.use(timerRoutes);
+import * as timerController from "../../controllers/timerController";
+import { checkAuthorizationStatus } from "../../middleware/auth";
+import timerRoutes from "../../routes/timerRoutes";
 
 describe("timerRoutes", () => {
+  let app: Express;
+
+  beforeAll(() => {
+    app = express();
+    app.use(express.json());
+    app.use(timerRoutes);
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });

@@ -1,46 +1,69 @@
-"use strict";
-const fs = require("fs");
-const path = require("path");
+import { Sequelize } from "sequelize";
 
-const Sequelize = require("sequelize");
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.js")[env];
-const db = {};
+import { Code } from "./code";
+import { Contestants } from "./contestants";
+import { Election } from "./election";
+import { Organization } from "./organization";
+import { Timer } from "./timer";
+import type { Models } from "./types/models";
+import { User } from "./user";
+import { UserOrganization } from "./userOrganization";
+import { Votes } from "./votes";
+import configFile from "../config/config";
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+type NodeEnv = keyof typeof configFile;
+const env = (process.env.NODE_ENV || "development") as NodeEnv;
+
+let sequelize: Sequelize;
+
+if (env === "test") {
+  // Override Postgres with SQLite in-memory for tests
+  sequelize = new Sequelize("sqlite::memory:", { logging: false });
 } else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config,
-  );
+  const config = configFile[env];
+  if ("use_env_variable" in config) {
+    sequelize = new Sequelize(
+      process.env[config.use_env_variable] as string,
+      config,
+    );
+  } else {
+    sequelize = new Sequelize(
+      config.database,
+      config.username,
+      config.password,
+      config,
+    );
+  }
 }
 
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-    );
-  })
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(
-      sequelize,
-      Sequelize.DataTypes,
-    );
-    db[model.name] = model;
-  });
+// Initialize all models
+const models: Models = {
+  User: User.initModel(sequelize),
+  Organization: Organization.initModel(sequelize),
+  UserOrganization: UserOrganization.initModel(sequelize),
+  Election: Election.initModel(sequelize),
+  Contestants: Contestants.initModel(sequelize),
+  Timer: Timer.initModel(sequelize),
+  Votes: Votes.initModel(sequelize),
+  Code: Code.initModel(sequelize),
+};
 
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+// Run associations
+Object.values(models).forEach((model) => {
+  if ("associate" in model && typeof model.associate === "function") {
+    model.associate(models);
   }
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+export { sequelize, Sequelize };
+export {
+  User,
+  Organization,
+  UserOrganization,
+  Election,
+  Contestants,
+  Timer,
+  Votes,
+  Code,
+};
+export default { ...models, sequelize, Sequelize };

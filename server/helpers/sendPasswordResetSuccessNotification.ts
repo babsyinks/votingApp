@@ -1,10 +1,19 @@
-const emailTemplateBuilder = require("./emailTemplateBuilder");
-const sendEmail = require("./sendEmail");
+/* eslint-disable max-len */
+import emailTemplateBuilder from "./emailTemplateBuilder";
+import sendEmail from "./sendEmail";
 
-async function sendPasswordResetSuccessNotification({ toEmail }) {
+interface SendPasswordResetSuccessNotificationParams {
+  toEmail: string;
+}
+
+async function sendPasswordResetSuccessNotification({
+  toEmail,
+}: SendPasswordResetSuccessNotificationParams): Promise<void> {
   const subject = "Your password was successfully reset";
-  const signinUrl = `${process.env.CLIENT_URL}/signin`;
-  const helpUrl = `${process.env.CLIENT_URL}/help`;
+  const clientUrl = process.env.CLIENT_URL;
+  const signinUrl = `${clientUrl}/signin`;
+  const helpUrl = `${clientUrl}/help`;
+
   const htmlContent = emailTemplateBuilder({
     heading: "Password Reset Successful",
     content: [
@@ -16,7 +25,11 @@ async function sendPasswordResetSuccessNotification({ toEmail }) {
       {
         message:
           "<strong>Didn't request this change?</strong> Please contact our support team immediately. Your account's security is important to us.",
-        linkDetails: { url: helpUrl, btnValue: "Contact Support", isMainBtn: false },
+        linkDetails: {
+          url: helpUrl,
+          btnValue: "Contact Support",
+          isMainBtn: false,
+        },
       },
     ],
     footNote:
@@ -26,4 +39,4 @@ async function sendPasswordResetSuccessNotification({ toEmail }) {
   await sendEmail({ toEmail, subject, htmlContent });
 }
 
-module.exports = sendPasswordResetSuccessNotification;
+export default sendPasswordResetSuccessNotification;

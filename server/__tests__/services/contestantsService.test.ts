@@ -1,6 +1,8 @@
+import { createContestantsService } from "../../services/contestantsService";
+
 describe("contestantsService", () => {
-  let Contestants;
-  let contestantsService;
+  let Contestants: any;
+  let contestantsService: ReturnType<typeof createContestantsService>;
 
   beforeEach(() => {
     Contestants = {
@@ -9,15 +11,22 @@ describe("contestantsService", () => {
       findAll: jest.fn(),
     };
 
-    contestantsService = require("../../services/contestantsService")(Contestants);
+    contestantsService = createContestantsService(Contestants);
 
     jest.clearAllMocks();
   });
 
   describe("createContestant", () => {
     it("should create a contestant and return the result", async () => {
-      const data = { contestant_id: "c1", firstname: "John", surname: "Doe" };
-      const mockResult = { id: 1, ...data };
+      const data = {
+        firstname: "John",
+        surname: "Doe",
+        election_id: "e1",
+        position: "President",
+        manifesto: "Peace and Unity",
+        picture: "image.jpg",
+      };
+      const mockResult = { contestant_id: "c1", ...data };
       Contestants.create.mockResolvedValue(mockResult);
 
       const result = await contestantsService.createContestant(data);
@@ -29,7 +38,7 @@ describe("contestantsService", () => {
 
   describe("findContestantById", () => {
     it("should return contestant as JSON if found", async () => {
-      const mockData = { id: 1, contestant_id: "c1" };
+      const mockData = { contestant_id: "c1", firstname: "John" };
       const mockRecord = { toJSON: jest.fn().mockReturnValue(mockData) };
       Contestants.findOne.mockResolvedValue(mockRecord);
 
@@ -54,8 +63,8 @@ describe("contestantsService", () => {
   describe("getAllContestants", () => {
     it("should return an array of contestants as JSON", async () => {
       const mockDataArray = [
-        { id: 1, toJSON: jest.fn().mockReturnValue({ id: 1, name: "John" }) },
-        { id: 2, toJSON: jest.fn().mockReturnValue({ id: 2, name: "Jane" }) },
+        { toJSON: jest.fn().mockReturnValue({ id: 1, name: "John" }) },
+        { toJSON: jest.fn().mockReturnValue({ id: 2, name: "Jane" }) },
       ];
       Contestants.findAll.mockResolvedValue(mockDataArray);
 

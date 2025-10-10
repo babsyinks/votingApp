@@ -1,6 +1,6 @@
-const sendEmail = require("../../helpers/sendEmail");
-const apiInstance = require("../../config/brevo");
-const logger = require("../../utils/logger");
+import sendEmail from "../../helpers/sendEmail";
+import apiInstance from "../../config/brevo";
+import logger from "../../utils/logger";
 
 jest.mock("../../config/brevo", () => ({
   sendTransacEmail: jest.fn(),

@@ -1,126 +1,76 @@
-const { DataTypes, Model } = require("sequelize");
+import { Sequelize, DataTypes, Model } from "sequelize";
+import { Contestants } from "../../models/contestants";
 
-jest.mock("sequelize", () => {
-  const actual = jest.requireActual("sequelize");
+// Minimal fake Election and Votes models to test associations
+class Election extends Model {}
+class Votes extends Model {}
 
-  class MockModel {
-    static init(attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
-    }
-    static hasMany(model, options) {
-      this.hasManyCall = { model, options };
-    }
-    static belongsTo(model, options) {
-      this.belongsToCall = { model, options };
-    }
-    get() {
-      return this.dataValues || {};
-    }
-  }
-
-  return {
-    ...actual,
-    Model: MockModel,
-    DataTypes: {
-      ...actual.DataTypes,
-      UUID: { key: "UUID" },
-      UUIDV4: { key: "UUIDV4" },
-      STRING: { key: "STRING" },
-      TEXT: { key: "TEXT" },
-    },
-  };
-});
-
-describe("Contestants Model (unit)", () => {
-  let Contestants;
-  let mockSequelize;
+describe("Contestants Model", () => {
+  let sequelize: Sequelize;
 
   beforeAll(() => {
-    mockSequelize = {};
-    Contestants = require("../../models/contestants")(mockSequelize, DataTypes);
-  });
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
 
-  test("should have correct model name and table name", () => {
-    expect(Contestants.options.modelName).toBe("Contestants");
-    expect(Contestants.options.tableName).toBe("contestants");
-  });
-
-  test("should define correct attributes", () => {
-    const attrs = Contestants.rawAttributes;
-
-    expect(attrs.contestant_id.type.key).toBe("UUID");
-    expect(attrs.contestant_id.defaultValue.key).toBe("UUIDV4");
-    expect(attrs.contestant_id.primaryKey).toBe(true);
-
-    expect(attrs.election_id.type.key).toBe("UUID");
-    expect(attrs.election_id.allowNull).toBe(false);
-
-    expect(attrs.surname.type.key).toBe("STRING");
-    expect(attrs.surname.allowNull).toBe(false);
-
-    expect(attrs.firstname.type.key).toBe("STRING");
-    expect(attrs.firstname.allowNull).toBe(false);
-
-    expect(attrs.position.type.key).toBe("STRING");
-    expect(attrs.position.allowNull).toBe(false);
-
-    expect(attrs.manifesto.type.key).toBe("TEXT");
-    expect(attrs.manifesto.allowNull).toBe(false);
-
-    expect(attrs.picture.type.key).toBe("STRING");
-    expect(attrs.picture.allowNull).toBe(false);
-  });
-
-  test("toJSON should return model json form", () => {
-    const instance = new Contestants();
-    instance.dataValues = {
-      id: 1,
-      firstname: "John",
-      surname: "Doe",
-    };
-    const json = instance.toJSON();
-    expect(json.firstname).toBe("John");
-    expect(json.surname).toBe("Doe");
-  });
-
-  test("associate should define relationships", () => {
-    const mockVotesModel = {};
-    const mockElectionModel = {};
-
-    Contestants.associate({ Votes: mockVotesModel, Election: mockElectionModel });
-
-    expect(Contestants.hasManyCall).toEqual({
-      model: mockVotesModel,
-      options: { foreignKey: "contestant_id" },
-    });
-
-    expect(Contestants.belongsToCall).toEqual({
-      model: mockElectionModel,
-      options: { foreignKey: "election_id" },
-    });
-  });
-
-  test("should include indexes on election_id and position", () => {
-    const indexes = Contestants.options.indexes;
-    expect(indexes).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ fields: ["election_id"] }),
-        expect.objectContaining({ fields: ["position"] }),
-      ])
+    Election.init(
+      { election_id: { type: DataTypes.UUID, primaryKey: true } },
+      { sequelize, modelName: "Election" }
     );
+    Votes.init(
+      { vote_id: { type: DataTypes.UUID, primaryKey: true } },
+      { sequelize, modelName: "Votes" }
+    );
+
+    Contestants.initModel(sequelize);
   });
 
-  test("should allow mocked CRUD calls", async () => {
-    Contestants.create = jest.fn().mockResolvedValue({ firstname: "John" });
-    Contestants.findAll = jest.fn().mockResolvedValue([{ firstname: "John" }]);
+  afterAll(async () => {
+    await sequelize.close();
+  });
 
-    const created = await Contestants.create({ firstname: "John" });
-    const all = await Contestants.findAll();
+test("initModel initializes correctly", () => {
+  const attributes = Contestants.getAttributes();
 
-    expect(created.firstname).toBe("John");
-    expect(all).toHaveLength(1);
-    expect(all[0].firstname).toBe("John");
+  expect(attributes.contestant_id).toBeDefined();
+  expect(attributes.election_id).toBeDefined();
+  expect(attributes.surname).toBeDefined();
+  expect(attributes.firstname).toBeDefined();
+  expect(attributes.position).toBeDefined();
+  expect(attributes.manifesto).toBeDefined();
+  expect(attributes.picture).toBeDefined();
+
+  expect(Contestants.tableName).toBe("contestants");
+  expect(Contestants.name).toBe("Contestants");
+});
+
+
+  test("toJSON returns model data via get()", () => {
+    const contestant = Contestants.build({
+      election_id: "e1",
+      surname: "Doe",
+      firstname: "John",
+      position: "President",
+      manifesto: "Change everything",
+      picture: "pic.png",
+    });
+
+    const json = contestant.toJSON();
+
+    expect(json).toMatchObject({
+      election_id: "e1",
+      surname: "Doe",
+      firstname: "John",
+      position: "President",
+      manifesto: "Change everything",
+      picture: "pic.png",
+    });
+  });
+
+  test("associate sets up associations", () => {
+    Contestants.associate({ Election, Votes } as any);
+
+    const assoc = Contestants.associations;
+
+    expect(assoc.Election).toBeDefined(); // belongsTo
+    expect(assoc.Votes).toBeDefined();    // hasMany
   });
 });

@@ -1,6 +1,6 @@
-const criteria = require("../../config/strongPasswordConf");
+import criteria from "../../config/strongPasswordConf";
 
-describe("strongPasswordConf.js", () => {
+describe("strongPasswordConf", () => {
   it("should export an array of password criteria", () => {
     expect(Array.isArray(criteria)).toBe(true);
     expect(criteria).toHaveLength(5);

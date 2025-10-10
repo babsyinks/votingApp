@@ -1,86 +1,73 @@
-const request = require("supertest");
-const express = require("express");
+import express, { Express } from "express";
+import request from "supertest";
+
+jest.mock("../../middleware/auth", () => ({
+  checkAuthenticationStatus: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => next(),
+}));
 
 jest.mock("../../controllers/oAuthController", () => ({
-  googleOauthStart: jest.fn((req, res) => res.status(200).json({ route: "google-start" })),
-  googleOauthConclude: jest.fn((req, res) => res.status(200).json({ route: "google-conclude" })),
-  facebookOauthStart: jest.fn((req, res) => res.status(200).json({ route: "facebook-start" })),
-  facebookOauthConclude: jest.fn((req, res) => res.status(200).json({ route: "facebook-conclude" })),
-  githubOauthStart: jest.fn((req, res) => res.status(200).json({ route: "github-start" })),
-  githubOauthConclude: jest.fn((req, res) => res.status(200).json({ route: "github-conclude" })),
-  getUserDetailsOnOauthSuccess: jest.fn((req, res) => res.status(200).json({ user: "mock-user" })),
+  googleOauthStart: jest.fn((req, res) =>
+    res.status(200).json({ called: "googleOauthStart" }),
+  ),
+  googleOauthConclude: jest.fn((req, res) =>
+    res.status(200).json({ called: "googleOauthConclude" }),
+  ),
+  facebookOauthStart: jest.fn((req, res) =>
+    res.status(200).json({ called: "facebookOauthStart" }),
+  ),
+  facebookOauthConclude: jest.fn((req, res) =>
+    res.status(200).json({ called: "facebookOauthConclude" }),
+  ),
+  githubOauthStart: jest.fn((req, res) =>
+    res.status(200).json({ called: "githubOauthStart" }),
+  ),
+  githubOauthConclude: jest.fn((req, res) =>
+    res.status(200).json({ called: "githubOauthConclude" }),
+  ),
+  getUserDetailsOnOauthSuccess: jest.fn((req, res) =>
+    res.status(200).json({ called: "getUserDetailsOnOauthSuccess" }),
+  ),
 }));
 
-const mockCheckAuth = jest.fn((req, res, next) => next());
-jest.mock("../../middleware/auth", () => ({
-  checkAuthenticationStatus: (...args) => mockCheckAuth(...args),
-}));
+import * as oAuthController from "../../controllers/oAuthController";
+import oAuthRoutes from "../../routes/oauthRoutes";
 
-const oAuthController = require("../../controllers/oAuthController");
-const oauthRoutes = require("../../routes/oauthRoutes");
+describe("oAuthRoutes", () => {
+  let app: Express;
 
-const app = express();
-app.use(oauthRoutes);
+  beforeAll(() => {
+    app = express();
+    app.use(express.json());
+    app.use("/", oAuthRoutes);
+  });
 
-describe("oauthRoutes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("GET /google calls googleOauthStart", async () => {
-    const res = await request(app).get("/google");
+  const endpoints = [
+    { path: "/google", handler: "googleOauthStart" },
+    { path: "/google/callback", handler: "googleOauthConclude" },
+    { path: "/facebook", handler: "facebookOauthStart" },
+    { path: "/facebook/callback", handler: "facebookOauthConclude" },
+    { path: "/github", handler: "githubOauthStart" },
+    { path: "/github/callback", handler: "githubOauthConclude" },
+    { path: "/me", handler: "getUserDetailsOnOauthSuccess" },
+  ] as const;
 
-    expect(oAuthController.googleOauthStart).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "google-start" });
-  });
+  endpoints.forEach(({ path, handler }) => {
+    it(`GET ${path} should call oAuthController.${handler}`, async () => {
+      const res = await request(app).get(path);
 
-  it("GET /google/callback calls googleOauthConclude", async () => {
-    const res = await request(app).get("/google/callback");
-
-    expect(oAuthController.googleOauthConclude).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "google-conclude" });
-  });
-
-  it("GET /facebook calls facebookOauthStart", async () => {
-    const res = await request(app).get("/facebook");
-
-    expect(oAuthController.facebookOauthStart).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "facebook-start" });
-  });
-
-  it("GET /facebook/callback calls facebookOauthConclude", async () => {
-    const res = await request(app).get("/facebook/callback");
-
-    expect(oAuthController.facebookOauthConclude).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "facebook-conclude" });
-  });
-
-  it("GET /github calls githubOauthStart", async () => {
-    const res = await request(app).get("/github");
-
-    expect(oAuthController.githubOauthStart).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "github-start" });
-  });
-
-  it("GET /github/callback calls githubOauthConclude", async () => {
-    const res = await request(app).get("/github/callback");
-
-    expect(oAuthController.githubOauthConclude).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ route: "github-conclude" });
-  });
-
-  it("GET /me calls checkAuthenticationStatus and getUserDetailsOnOauthSuccess", async () => {
-    const res = await request(app).get("/me");
-
-    expect(mockCheckAuth).toHaveBeenCalled();
-    expect(oAuthController.getUserDetailsOnOauthSuccess).toHaveBeenCalled();
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ user: "mock-user" });
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ called: handler });
+      expect(
+        oAuthController[handler as keyof typeof oAuthController],
+      ).toHaveBeenCalledTimes(1);
+    });
   });
 });

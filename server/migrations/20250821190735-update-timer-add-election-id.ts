@@ -1,8 +1,8 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
+type SequelizeType = typeof import("sequelize");
 module.exports = {
-  async up(queryInterface, Sequelize) {
-
+  async up(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     await queryInterface.addColumn("timers", "election_id", {
       type: Sequelize.UUID,
       allowNull: false,
@@ -28,7 +28,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     await queryInterface.removeIndex("timers", "uq_timer_per_election");
     await queryInterface.removeConstraint("timers", "fk_timer_election");
     await queryInterface.removeColumn("timers", "election_id");

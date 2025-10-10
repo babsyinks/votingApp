@@ -1,7 +1,18 @@
-function generateCustomError(message, statusCode) {
-  const err = new Error(message);
-  err.statusCode = statusCode;
-  throw err;
+export class CustomError extends Error {
+  public statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = "CustomError";
+    this.statusCode = statusCode;
+
+    Object.setPrototypeOf(this, CustomError.prototype);
+  }
 }
 
-module.exports = generateCustomError;
+export default function generateCustomError(
+  message: string,
+  statusCode: number,
+): never {
+  throw new CustomError(message, statusCode);
+}

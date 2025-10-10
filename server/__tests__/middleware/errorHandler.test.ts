@@ -1,21 +1,23 @@
-const jwt = require("jsonwebtoken");
-const { ValidationError } = require("sequelize");
-const errorHandler = require("../../middleware/errorHandler");
-const logger = require("../../utils/logger");
+import jwt from "jsonwebtoken";
+import { ValidationError, ValidationErrorItem } from "sequelize";
+import errorHandler from "../../middleware/errorHandler";
+import logger from "../../utils/logger";
+import { Request, Response, NextFunction } from "express";
+import { CustomError } from "../../utils/generateCustomError";
 
 jest.mock("../../utils/logger", () => ({
   error: jest.fn(),
 }));
 
 describe("errorHandler middleware", () => {
-  let req, res, next;
+  let req: Request, res: Response, next: NextFunction;
 
   beforeEach(() => {
-    req = {};
+    req = {} as unknown as Request;
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    };
+    } as unknown as Response;
     next = jest.fn();
     process.env.NODE_ENV = "development";
     jest.clearAllMocks();
@@ -63,10 +65,30 @@ describe("errorHandler middleware", () => {
   });
 
   it("handles Sequelize ValidationError", () => {
-    const err = new ValidationError("Validation failed", [
-      { message: "Name is required" },
-      { message: "Email is invalid" },
-    ]);
+    const errorItems = [
+      new ValidationErrorItem(
+        "Name is required",
+        "validation error",
+        "path",
+        "error",
+        undefined as any,
+        "validation_key",
+        "fn",
+        [],
+      ),
+      new ValidationErrorItem(
+        "Email is invalid",
+        "validation error",
+        "path",
+        "error",
+        undefined as any,
+        "validation_key",
+        "fn",
+        [],
+      ),
+    ];
+
+    const err = new ValidationError("Validation failed", errorItems);
 
     errorHandler(err, req, res, next);
 
@@ -94,8 +116,7 @@ describe("errorHandler middleware", () => {
   });
 
   it("respects custom statusCode from error object", () => {
-    const err = new Error("Custom error");
-    err.statusCode = 418;
+    const err = new CustomError("Custom error", 418);
 
     errorHandler(err, req, res, next);
 

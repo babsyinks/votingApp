@@ -1,4 +1,4 @@
-const path = require("path");
+import path from "path"
 
 jest.mock("fs");
 
@@ -6,7 +6,7 @@ jest.mock("winston", () => {
   const actual = jest.requireActual("winston");
 
   class ConsoleStub {
-    constructor(opts) {
+    constructor(opts: any) {
       Object.assign(this, opts, { __isStub: true });
     }
   }
@@ -34,15 +34,15 @@ jest.mock("winston", () => {
 });
 
 jest.mock("winston-daily-rotate-file", () => {
-  return jest.fn().mockImplementation(function DailyRotateFile(opts) {
+  return jest.fn().mockImplementation(function DailyRotateFile(this: any, opts) {
     Object.assign(this, opts, { __isStub: true });
   });
 });
 
 describe("logger", () => {
-  let fs;
-  let winston;
-  let DailyRotateFile;
+  let fs: any;
+  let winston: any;
+  let DailyRotateFile: any;
   const logDirPath = path.join(__dirname, "..", "..", "logs");
 
   beforeEach(() => {
@@ -121,7 +121,9 @@ describe("logger", () => {
   it("should expose info and error methods", () => {
     fs.existsSync.mockReturnValue(true);
 
-    const logger = require("../../utils/logger");
+    const loggerModule = require("../../utils/logger");
+    const logger = loggerModule.default || loggerModule;
+
     logger.info("Test info");
     logger.error("Test error");
 
@@ -148,6 +150,6 @@ describe("logger", () => {
       timestamp: "2025-08-11 10:05:00",
     });
 
-    expect(errorLog).toContain(error.stack.split("\n")[0]);
+    expect(errorLog).toContain(error.stack?.split("\n")[0]);
   });
 });

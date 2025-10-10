@@ -1,74 +1,110 @@
-const { organizationService } = require("../services");
+import { Request, Response, NextFunction } from "express";
 
-module.exports = {
-  /**
-   * Create a new organization and assign user to given role.
-   */
-  async createOrganization(req, res, next) {
-    try {
-      const { name, description, userId, role } = req.body;
+import type { Organization } from "../models/organization";
+import { organizationService } from "../services";
+import type { CreateOrganizationParams } from "../services/organizationService";
 
-      const org = await organizationService.createOrganization({ name, description, userId, role });
+/**
+ * Create a new organization and assign user to given role.
+ */
+export const createOrganization = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { name, description, userId, role } =
+      req.body as CreateOrganizationParams;
 
-      return res.status(201).json(org);
-    } catch (error) {
-      next(error);
+    const org = await organizationService.createOrganization({
+      name,
+      description,
+      userId,
+      role,
+    });
+
+    res.status(201).json(org);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Retrieves an organization by its ID.
+ */
+export const getOrganization = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const org: Organization | null =
+      await organizationService.getOrganizationById(id);
+
+    if (!org) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
     }
-  },
 
-  /**
-   * Get an organization by ID
-   */
-  async getOrganization(req, res, next) {
-    try {
-      const { id } = req.params;
-      const org = await organizationService.getOrganizationById(id);
+    res.status(200).json(org);
+  } catch (error) {
+    next(error);
+  }
+};
 
-      if (!org) {
-        return res.status(404).json({ error: "Organization not found" });
-      }
+/**
+ * Updates organization details.
+ */
+export const updateOrganization = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const updates = req.body as Partial<Organization>;
 
-      return res.status(200).json(org);
-    } catch (error) {
-      next(error);
+    const org: Organization | null =
+      await organizationService.updateOrganization(id, updates);
+
+    if (!org) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
     }
-  },
 
-  /**
-   * Update organization details
-   */
-  async updateOrganization(req, res, next) {
-    try {
-      const { id } = req.params;
-      const updates = req.body;
+    res.status(200).json(org);
+  } catch (error) {
+    next(error);
+  }
+};
 
-      const org = await organizationService.updateOrganization(id, updates);
+/**
+ * Deletes an organization (and cascades to its elections).
+ */
+export const deleteOrganization = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const deleted: boolean = await organizationService.deleteOrganization(id);
 
-      if (!org) {
-        return res.status(404).json({ error: "Organization not found" });
-      }
-
-      return res.status(200).json(org);
-    } catch (error) {
-      next(error);
+    if (!deleted) {
+      res.status(404).json({ error: "Organization not found" });
+      return;
     }
-  },
 
-  /**
-   * Delete organization (and cascade delete elections)
-   */
-  async deleteOrganization(req, res, next) {
-    try {
-      const { id } = req.params;
-      const deleted = await organizationService.deleteOrganization(id);
+    res.status(200).json({ message: "Organization deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
 
-      if (!deleted) {
-        return res.status(404).json({ error: "Organization not found" });
-      }
-
-      return res.status(200).json({ message: "Organization deleted successfully" });
-    } catch (error) {
-      next(error);
-    }
-  },
+export default {
+  createOrganization,
+  getOrganization,
+  updateOrganization,
+  deleteOrganization,
 };

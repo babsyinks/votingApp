@@ -1,5 +1,4 @@
-const { Op } = require("sequelize");
-
+import { Op } from "sequelize";
 
 jest.mock("../../utils/randomCodeGenerator", () => ({
   generateRandomDigitsCode: jest.fn(),
@@ -8,55 +7,65 @@ jest.mock("../../utils/randomCodeGenerator", () => ({
   getHashedHexCode: jest.fn(),
 }));
 
-const {
+import {
   generateRandomDigitsCode,
   getHashedDigitCode,
   generateRandomHexCode,
   getHashedHexCode,
-} = require("../../utils/randomCodeGenerator");
+} from "../../utils/randomCodeGenerator";
+import createCodeService from "../../services/codeService";
+import type { Models } from "../../models/types/models";
 
 describe("codeService", () => {
-  let Code;
-  let codeService;
+  type CodeType = Models["Code"];
+
+  let Code: CodeType;
+  let codeService: any;
+  const mockedGenerateRandomDigitsCode = jest.mocked(generateRandomDigitsCode);
+  const mockedGetHashedDigitCode = jest.mocked(getHashedDigitCode);
+  const mockedGenerateRandomHexCode = jest.mocked(generateRandomHexCode);
+  const mockedGetHashedHexCode = jest.mocked(getHashedHexCode);
+  let mockedCodeFindOne: any;
 
   beforeEach(() => {
     Code = {
       create: jest.fn(),
       findOne: jest.fn(),
-    };
-    codeService = require("../../services/codeService")(Code);
-
+    } as unknown as CodeType;
+    codeService = createCodeService(Code);
+    mockedCodeFindOne = jest.mocked(Code.findOne);
     jest.clearAllMocks();
   });
 
   describe("createSignupCode", () => {
     it("should create a signup code and return the raw code", async () => {
-      generateRandomDigitsCode.mockReturnValue(123456);
-      getHashedDigitCode.mockResolvedValue("hashed123456");
+      mockedGenerateRandomDigitsCode.mockReturnValue("123456");
+      mockedGetHashedDigitCode.mockResolvedValue("hashed123456");
 
       const email = "test@example.com";
-      await expect(codeService.createSignupCode(email)).resolves.toBe(123456);
+      await expect(codeService.createSignupCode(email)).resolves.toBe("123456");
 
-      expect(generateRandomDigitsCode).toHaveBeenCalledTimes(1);
-      expect(getHashedDigitCode).toHaveBeenCalledWith(123456);
+      expect(mockedGenerateRandomDigitsCode).toHaveBeenCalledTimes(1);
+      expect(mockedGetHashedDigitCode).toHaveBeenCalledWith("123456");
       expect(Code.create).toHaveBeenCalledWith(
         expect.objectContaining({
           email,
           codeHash: "hashed123456",
           type: "signup",
-        })
+        }),
       );
     });
   });
 
   describe("getLatestValidSignupCode", () => {
-    it("should return latest valid signup code as JSON", async () => {
-      const mockCode = { id: 1, toJSON: jest.fn().mockReturnValue({ id: 1 }) };
-      Code.findOne.mockResolvedValue(mockCode);
+    it("should return latest valid signup code", async () => {
+      const mockCode = { id: 1};
+      mockedCodeFindOne.mockResolvedValue(mockCode);
 
-      const result = await codeService.getLatestValidSignupCode("test@example.com");
+      const result =
+        await codeService.getLatestValidSignupCode("test@example.com");
 
-      expect(Code.findOne).toHaveBeenCalledWith({
+      expect(mockedCodeFindOne).toHaveBeenCalledWith({
         where: {
           email: "test@example.com",
           type: "signup",
@@ -67,32 +76,33 @@ describe("codeService", () => {
       expect(result).toEqual({ id: 1 });
     });
 
-    it("should return undefined if no code is found", async () => {
-      Code.findOne.mockResolvedValue(null);
+    it("should return null if no code is found", async () => {
+      mockedCodeFindOne.mockResolvedValue(null);
 
-      const result = await codeService.getLatestValidSignupCode("test@example.com");
+      const result =
+        await codeService.getLatestValidSignupCode("test@example.com");
 
-      expect(result).toBeUndefined();
+      expect(result).toBeNull();
     });
   });
 
   describe("createResetCode", () => {
     it("should create a reset code and return the raw code", async () => {
-      generateRandomHexCode.mockReturnValue("abc123");
-      getHashedHexCode.mockReturnValue("hashedabc123");
+      mockedGenerateRandomHexCode.mockReturnValue("abc123");
+      mockedGetHashedHexCode.mockReturnValue("hashedabc123");
 
       const email = "reset@example.com";
       const result = await codeService.createResetCode(email);
 
       expect(result).toBe("abc123");
-      expect(generateRandomHexCode).toHaveBeenCalledTimes(1);
-      expect(getHashedHexCode).toHaveBeenCalledWith("abc123");
+      expect(mockedGenerateRandomHexCode).toHaveBeenCalledTimes(1);
+      expect(mockedGetHashedHexCode).toHaveBeenCalledWith("abc123");
       expect(Code.create).toHaveBeenCalledWith(
         expect.objectContaining({
           email,
           codeHash: "hashedabc123",
           type: "password_reset",
-        })
+        }),
       );
     });
   });
@@ -100,13 +110,13 @@ describe("codeService", () => {
   describe("findValidResetCodeRecord", () => {
     it("should find and return valid reset code record", async () => {
       const mockRecord = { id: 99 };
-      Code.findOne.mockResolvedValue(mockRecord);
-      getHashedHexCode.mockReturnValue("hashed123");
+      mockedCodeFindOne.mockResolvedValue(mockRecord);
+      mockedGetHashedHexCode.mockReturnValue("hashed123");
 
       const result = await codeService.findValidResetCodeRecord("123");
 
-      expect(getHashedHexCode).toHaveBeenCalledWith("123");
-      expect(Code.findOne).toHaveBeenCalledWith({
+      expect(mockedGetHashedHexCode).toHaveBeenCalledWith("123");
+      expect(mockedCodeFindOne).toHaveBeenCalledWith({
         where: {
           codeHash: "hashed123",
           expiresAt: { [Op.gt]: expect.any(Date) },
@@ -116,8 +126,8 @@ describe("codeService", () => {
     });
 
     it("should return null if no record found", async () => {
-      Code.findOne.mockResolvedValue(null);
-      getHashedHexCode.mockReturnValue("hashed456");
+      mockedCodeFindOne.mockResolvedValue(null);
+      mockedGetHashedHexCode.mockReturnValue("hashed456");
 
       const result = await codeService.findValidResetCodeRecord("456");
 

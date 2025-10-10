@@ -1,7 +1,11 @@
 "use strict";
+import { QueryInterface } from "sequelize";
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) {
     await queryInterface.createTable("user_organizations", {
       user_id: {
         type: Sequelize.UUID,
@@ -48,7 +52,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface) {
     await queryInterface.dropTable("user_organizations");
   },
 };

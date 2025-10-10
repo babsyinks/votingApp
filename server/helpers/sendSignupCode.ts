@@ -1,9 +1,19 @@
-const sendEmail = require("./sendEmail");
+import sendEmail from "./sendEmail";
 
-async function sendSignupCode({ toEmail, otpCode }) {
-  const subject = "Your One-Time Password (OTP)";
-  const htmlContent = `<p>Your OTP is <strong>${otpCode}</strong>. It will expire in 10 minutes.</p>`;
-  await sendEmail({ toEmail, subject, htmlContent });
+interface SendSignupCodeParams {
+  toEmail: string;
+  otpCode: string;
 }
 
-module.exports = sendSignupCode;
+async function sendSignupCode({
+  toEmail,
+  otpCode,
+}: SendSignupCodeParams): Promise<void> {
+  await sendEmail({
+    toEmail,
+    subject: "Your One-Time Password (OTP)",
+    htmlContent: `<p>Your OTP is <strong>${otpCode}</strong>. It will expire in 10 minutes.</p>`,
+  });
+}
+
+export default sendSignupCode;

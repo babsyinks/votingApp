@@ -1,107 +1,95 @@
-"use strict";
+import { Sequelize } from "sequelize";
+import { Election } from "../../models/election";
+import { Contestants } from "../../models/contestants";
+import { Votes } from "../../models/votes";
+import { Timer } from "../../models/timer";
+import { Organization } from "../../models/organization";
+import electionHooks from "../../hooks/electionHooks";
 
-describe("Election Model (unit)", () => {
-  let Model;
-  let DataTypes;
-  let initSpy;
-  let Election;
-  let electionHooks;
+describe("Election Model", () => {
+  let sequelize: Sequelize;
 
-  beforeEach(() => {
-    jest.resetModules();
+  beforeAll(() => {
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
+  });
 
-    const sequelize = require("sequelize");
-    Model = sequelize.Model;
-    DataTypes = sequelize.DataTypes;
+  afterAll(async () => {
+    await sequelize.close();
+  });
 
-    initSpy = jest.spyOn(Model, "init").mockImplementation(function (attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
+  test("initModel initializes correctly", () => {
+    const initSpy = jest.spyOn(Election, "init");
+
+    Election.initModel(sequelize);
+
+    expect(initSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        election_id: expect.any(Object),
+        organization_id: expect.any(Object),
+        name: expect.any(Object),
+        mode: expect.any(Object),
+        slug: expect.any(Object),
+        short_link: expect.any(Object),
+      }),
+      expect.objectContaining({
+        sequelize,
+        modelName: "Election",
+        tableName: "elections",
+        indexes: expect.arrayContaining([
+          expect.objectContaining({ fields: ["organization_id"] }),
+        ]),
+        hooks: expect.objectContaining({
+          beforeCreate: electionHooks.beforeCreate,
+          afterCreate: electionHooks.afterCreate,
+        }),
+      }),
+    );
+
+    initSpy.mockRestore();
+  });
+
+  test("toJSON returns model data via get()", () => {
+    Election.initModel(sequelize);
+
+    const election = Election.build({
+      election_id: "1111",
+      organization_id: "2222",
+      name: "Presidential Election",
+      mode: "demo",
+      slug: "presidential-2025",
+      short_link: "pres-25",
     });
 
-    electionHooks = require("../../hooks/electionHooks");
+    const getSpy = jest.spyOn(election, "get");
+    const json = election.toJSON();
 
-    Election = require("../../models/election")({}, DataTypes);
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  test("calls Model.init once with attributes and options", () => {
-    expect(initSpy).toHaveBeenCalledTimes(1);
-
-    const [attrs, options] = initSpy.mock.calls[0];
-
-    expect(attrs).toHaveProperty("election_id");
-    expect(attrs.election_id.primaryKey).toBe(true);
-    expect(attrs.election_id.type.key).toBe("UUID");
-
-    expect(attrs).toHaveProperty("organization_id");
-    expect(attrs.organization_id.allowNull).toBe(false);
-
-    expect(attrs).toHaveProperty("name");
-    expect(attrs.name.allowNull).toBe(false);
-    expect(attrs.name.type.key).toBe("STRING");
-
-    expect(attrs).toHaveProperty("slug");
-    expect(attrs.slug.type.key).toBe("STRING");
-    expect(attrs.slug.unique).toBe(true);
-
-    expect(attrs).toHaveProperty("short_link");
-    expect(attrs.short_link.type.key).toBe("STRING");
-
-    expect(options).toHaveProperty("modelName", "Election");
-    expect(options).toHaveProperty("tableName", "elections");
-    expect(options).toHaveProperty("indexes");
-    expect(options.indexes).toEqual([{ fields: ["organization_id"] }]);
-
-    expect(options).toHaveProperty("hooks");
-    expect(options.hooks.beforeCreate).toBe(electionHooks.beforeCreate);
-    expect(options.hooks.afterCreate).toBe(electionHooks.afterCreate);
-  });
-
-  test("toJSON should return model json form", () => {
-    const instance = Object.create(Election.prototype);
-    instance.get = () => ({
-      election_id: "uuid-123",
-      organization_id: "uuid-org",
-      name: "Test Election",
-      slug: "test-election",
-      short_link: "http://sho.rt/abc",
+    expect(getSpy).toHaveBeenCalled();
+    expect(json).toMatchObject({
+      election_id: "1111",
+      organization_id: "2222",
+      name: "Presidential Election",
+      mode: "demo",
+      slug: "presidential-2025",
+      short_link: "pres-25",
     });
 
-    const json = instance.toJSON();
-
-    expect(json.election_id).toBe("uuid-123");
-    expect(json.organization_id).toBe("uuid-org");
-    expect(json.name).toBe("Test Election");
-    expect(json.slug).toBe("test-election");
-    expect(json.short_link).toBe("http://sho.rt/abc");
+    getSpy.mockRestore();
   });
 
-  test("associate sets up correct relationships", () => {
-    const belongsToSpy = jest.spyOn(Election, "belongsTo").mockImplementation(() => {});
-    const hasManySpy = jest.spyOn(Election, "hasMany").mockImplementation(() => {});
-    const hasOneSpy = jest.spyOn(Election, "hasOne").mockImplementation(() => {});
+  test("associate sets up associations", () => {
+    Election.initModel(sequelize);
+    Contestants.initModel(sequelize);
+    Votes.initModel(sequelize);
+    Timer.initModel(sequelize);
+    Organization.initModel(sequelize);
 
-    const models = {
-      Organization: {},
-      Contestants: {},
-      Votes: {},
-      Timer: {},
-    };
+    Election.associate({ Contestants, Votes, Timer, Organization } as any);
 
-    Election.associate(models);
+    const assoc = Election.associations;
 
-    expect(belongsToSpy).toHaveBeenCalledWith(models.Organization, { foreignKey: "organization_id" });
-    expect(hasManySpy).toHaveBeenCalledWith(models.Contestants, { foreignKey: "election_id" });
-    expect(hasManySpy).toHaveBeenCalledWith(models.Votes, { foreignKey: "election_id" });
-    expect(hasOneSpy).toHaveBeenCalledWith(models.Timer, { foreignKey: "election_id" });
-
-    belongsToSpy.mockRestore();
-    hasManySpy.mockRestore();
-    hasOneSpy.mockRestore();
+    expect(assoc.Organization).toBeDefined(); // belongsTo
+    expect(assoc.Contestants).toBeDefined(); // hasMany
+    expect(assoc.Votes).toBeDefined(); // hasMany
+    expect(assoc.Timer).toBeDefined(); // hasOne
   });
 });

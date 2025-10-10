@@ -1,140 +1,157 @@
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
+import { CustomError } from "../../utils/generateCustomError";
 
 jest.mock("bcryptjs");
 
-jest.mock("../../utils/generateCustomError", () =>
-  jest.fn((message, statusCode) => {
-    const err = new Error(message);
-    err.statusCode = statusCode;
-    throw err;
-  })
-);
+jest.mock("../../utils/generateCustomError", () => {
+  const { CustomError } = jest.requireActual("../../utils/generateCustomError");
+  return jest.fn((message: string, statusCode: number) => {
+    throw new CustomError(message, statusCode);
+  });
+});
 
-const generateCustomError = require("../../utils/generateCustomError");
-const validators = require("../../validators/authValidators");
+import generateCustomError from "../../utils/generateCustomError";
+
+import {
+  failIfEmpty,
+  failIfUserExists,
+  failIfUserDoesNotExist,
+  validateCredentials,
+  failIfVerificationCodeIsNotValid,
+  failIfPasswordWeak,
+} from "../../validators/authValidators";
 
 describe("authValidators", () => {
+  const mockedUser = {
+    user_id: "1",
+    username: "user1",
+    firstname: "john",
+    lastname: "doe",
+    email: "user@mail.com",
+    password: "pw",
+    isAdmin: false,
+  };
+
+  const mockedBcryptCompare = bcrypt.compare as jest.Mock;
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe("failIfEmpty", () => {
     test("should throw if any field is empty", () => {
-      expect(() =>
-        validators.failIfEmpty({ email: "", password: "123" })
-      ).toThrow("email field must be filled!");
+      expect(() => failIfEmpty({ email: "", password: "123" })).toThrow(
+        "email field must be filled!",
+      );
       expect(generateCustomError).toHaveBeenCalledWith(
         "email field must be filled!",
-        400
+        400,
       );
     });
 
     test("should not throw if all fields are filled", () => {
-      expect(() =>
-        validators.failIfEmpty({ email: "a", password: "b" })
-      ).not.toThrow();
+      expect(() => failIfEmpty({ email: "a", password: "b" })).not.toThrow();
     });
   });
 
   describe("failIfUserExists", () => {
     test("should throw if user exists", () => {
-      expect(() => validators.failIfUserExists({ id: 1 })).toThrow(
-        "This User Exists Already!"
+      expect(() => failIfUserExists(mockedUser)).toThrow(
+        "This User Exists Already!",
       );
       expect(generateCustomError).toHaveBeenCalledWith(
         "This User Exists Already!",
-        403
+        403,
       );
     });
 
     test("should not throw if user does not exist", () => {
-      expect(() => validators.failIfUserExists(null)).not.toThrow();
+      expect(() => failIfUserExists(null)).not.toThrow();
     });
   });
 
   describe("failIfUserDoesNotExist", () => {
     test("should throw if user does not exist", () => {
-      expect(() => validators.failIfUserDoesNotExist(null)).toThrow(
-        "User not found"
-      );
+      expect(() => failIfUserDoesNotExist(null)).toThrow("User not found");
       expect(generateCustomError).toHaveBeenCalledWith("User not found", 400);
     });
 
     test("should not throw if user exists", () => {
-      expect(() => validators.failIfUserDoesNotExist({ id: 1 })).not.toThrow();
+      expect(() => failIfUserDoesNotExist(mockedUser)).not.toThrow();
     });
   });
 
   describe("failIfVerificationCodeIsNotValid", () => {
     test("should throw if row is missing", async () => {
       await expect(
-        validators.failIfVerificationCodeIsNotValid("123", null)
+        failIfVerificationCodeIsNotValid("123", null),
       ).rejects.toThrow("Invalid or expired code");
       expect(generateCustomError).toHaveBeenCalledWith(
         "Invalid or expired code",
-        403
+        403,
       );
     });
 
     test("should throw if bcrypt.compare returns false", async () => {
-      bcrypt.compare.mockResolvedValue(false);
+      mockedBcryptCompare.mockResolvedValue(false);
       await expect(
-        validators.failIfVerificationCodeIsNotValid("123", {
+        failIfVerificationCodeIsNotValid("123", {
+          code_id: "123",
           codeHash: "hash",
-        })
+          email: "mail@mail.com",
+          type: "signup",
+          expiresAt: new Date("2025-10-02"),
+        }),
       ).rejects.toThrow("Invalid or expired code");
     });
 
     test("should not throw if bcrypt.compare returns true", async () => {
-      bcrypt.compare.mockResolvedValue(true);
+      mockedBcryptCompare.mockResolvedValue(true);
       await expect(
-        validators.failIfVerificationCodeIsNotValid("123", {
+        failIfVerificationCodeIsNotValid("123", {
+          code_id: "123",
           codeHash: "hash",
-        })
+          email: "mail@mail.com",
+          type: "signup",
+          expiresAt: new Date("2025-10-02"),
+        }),
       ).resolves.not.toThrow();
     });
   });
 
   describe("validateCredentials", () => {
     test("should throw if user is null", async () => {
-      await expect(
-        validators.validateCredentials(null, "pass")
-      ).rejects.toThrow("Wrong Username, Email or Password");
+      await expect(validateCredentials(null, "pass")).rejects.toThrow(
+        "Wrong Username, Email or Password",
+      );
       expect(generateCustomError).toHaveBeenCalledWith(
         "Wrong Username, Email or Password",
-        401
+        401,
       );
     });
 
     test("should throw if password does not match", async () => {
-      bcrypt.compare.mockResolvedValue(false);
-      const user = { password: "hashed" };
-      await expect(
-        validators.validateCredentials(user, "wrong")
-      ).rejects.toThrow("Wrong Username, Email or Password");
+      mockedBcryptCompare.mockResolvedValue(false);
+      const user = { ...mockedUser, password: "hashed" };
+      await expect(validateCredentials(user, "wrong")).rejects.toThrow(
+        "Wrong Username, Email or Password",
+      );
     });
 
     test("should not throw if password matches", async () => {
-      bcrypt.compare.mockResolvedValue(true);
-      const user = { password: "hashed" };
-      await expect(
-        validators.validateCredentials(user, "correct")
-      ).resolves.not.toThrow();
+      mockedBcryptCompare.mockResolvedValue(true);
+      const user = { ...mockedUser, password: "hashed" };
+      await expect(validateCredentials(user, "correct")).resolves.not.toThrow();
     });
   });
 
   describe("failIfPasswordWeak", () => {
     test("should throw if password does not meet criteria", () => {
-      expect(() => validators.failIfPasswordWeak("Short1!")).toThrow(
-        /minimum length/i
-      );
+      expect(() => failIfPasswordWeak("Short1!")).toThrow(/minimum length/i);
     });
 
     test("should not throw if password meets all criteria", () => {
       const strongPassword = "StrongPass1!";
-      expect(() =>
-        validators.failIfPasswordWeak(strongPassword)
-      ).not.toThrow();
+      expect(() => failIfPasswordWeak(strongPassword)).not.toThrow();
     });
   });
 });

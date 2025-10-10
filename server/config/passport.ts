@@ -1,8 +1,8 @@
-const passport = require("passport");
+import passport from "passport";
 
-const getFacebookStrategy = require("../strategies/social/FacebookStrategy");
-const githubStrategy = require("../strategies/social/GitHubStrategy");
-const getGoogleStrategy = require("../strategies/social/GoogleStrategy");
+import getFacebookStrategy from "../strategies/social/FacebookStrategy";
+import githubStrategy from "../strategies/social/GitHubStrategy";
+import getGoogleStrategy from "../strategies/social/GoogleStrategy";
 
 passport.use(getFacebookStrategy());
 passport.use(githubStrategy());

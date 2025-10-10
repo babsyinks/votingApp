@@ -1,4 +1,4 @@
-module.exports = {
+const positionRanks: Record<string, number> = {
   president: 0,
   "vice president": 1,
   "general secretary": 2,
@@ -11,3 +11,4 @@ module.exports = {
   "national internal auditor": 9,
   "chief whip": 10,
 };
+export default positionRanks;

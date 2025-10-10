@@ -1,24 +1,58 @@
-const request = require("supertest");
-const express = require("express");
+import request from "supertest";
+import express, { Request, Response } from "express";
 
-const mockAuthRoutes = express.Router().get("/", (req, res) => res.json({ route: "auth" }));
-const mockElectionRoutes = express.Router().get("/", (req, res) => res.json({ route: "election" }));
-const mockOAuthRoutes = express.Router().get("/", (req, res) => res.json({ route: "oauth" }));
-const mockRefreshRoute = express.Router().get("/", (req, res) => res.json({ route: "refresh" }));
-const mockTimerRoutes = express.Router().get("/", (req, res) => res.json({ route: "timer" }));
+const mockAuthRoutes = express.Router().get("/", (_req: Request, res: Response) =>
+  res.json({ route: "auth" })
+);
+const mockElectionRoutes = express.Router().get("/", (_req: Request, res: Response) =>
+  res.json({ route: "election" })
+);
+const mockOAuthRoutes = express.Router().get("/", (_req: Request, res: Response) =>
+  res.json({ route: "oauth" })
+);
+const mockRefreshRoute = express.Router().get("/", (_req: Request, res: Response) =>
+  res.json({ route: "refresh" })
+);
+const mockTimerRoutes = express.Router().get("/", (_req: Request, res: Response) =>
+  res.json({ route: "timer" })
+);
 
-jest.mock("../../routes/authRoutes", () => mockAuthRoutes);
-jest.mock("../../routes/electionRoutes", () => mockElectionRoutes);
-jest.mock("../../routes/oauthRoutes", () => mockOAuthRoutes);
-jest.mock("../../routes/refreshTokenRoute", () => mockRefreshRoute);
-jest.mock("../../routes/timerRoutes", () => mockTimerRoutes);
+// Define mocks BEFORE dynamic import
+jest.mock("../../routes/authRoutes", () => ({
+  __esModule: true,
+  default: mockAuthRoutes,
+}));
+jest.mock("../../routes/electionRoutes", () => ({
+  __esModule: true,
+  default: mockElectionRoutes,
+}));
+jest.mock("../../routes/oAuthRoutes", () => ({
+  __esModule: true,
+  default: mockOAuthRoutes,
+}));
+jest.mock("../../routes/refreshTokenRoute", () => ({
+  __esModule: true,
+  default: mockRefreshRoute,
+}));
+jest.mock("../../routes/timerRoutes", () => ({
+  __esModule: true,
+  default: mockTimerRoutes,
+}));
 
-const indexRouter = require("../../routes/index");
+// Dynamically import AFTER mocks are registered
+let indexRouter: express.Router;
+beforeAll(async () => {
+  const mod = await import("../../routes/index");
+  indexRouter = mod.default;
+});
 
-const app = express();
-app.use(indexRouter);
+let app: express.Application;
+beforeAll(() => {
+  app = express();
+  app.use(indexRouter);
+});
 
-describe("index.js routes", () => {
+describe("index.ts routes", () => {
   it("should mount /auth routes", async () => {
     const res = await request(app).get("/auth");
     expect(res.status).toBe(200);

@@ -1,5 +1,7 @@
-const electionController = require("../../controllers/electionController");
-const { electionService } = require("../../services");
+import { Request, Response, NextFunction } from "express";
+import * as electionController  from "../../controllers/electionController";
+import { electionService } from "../../services";
+import type { AuthenticatedRequest } from "../../controllers/electionController";
 
 jest.mock("../../services", () => ({
   electionService: {
@@ -11,10 +13,12 @@ jest.mock("../../services", () => ({
 }));
 
 describe("electionController", () => {
-  let req, res, next;
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let next: NextFunction;
 
   beforeEach(() => {
-    req = { body: {}, file: {}, user: {} };
+    req = { body: {}, file: {} as any, user: {} };
     res = {
       json: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis(),
@@ -25,26 +29,37 @@ describe("electionController", () => {
 
   describe("addNewContestant", () => {
     it("should return 400 if no file is uploaded", async () => {
-      req.file = null;
+      req.file = null as any;
 
-      await electionController.addNewContestant(req, res, next);
+      await electionController.addNewContestant(
+        req as Request,
+        res as Response,
+        next,
+      );
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ error: "No file uploaded" });
     });
 
     it("should create contestant and return 201", async () => {
-      req.file = { path: "path/to/file.jpg" };
+      req.file = { path: "path/to/file.jpg" } as Express.Multer.File;
       req.body = {
         surname: "Doe",
         firstName: "John",
         post: "President",
         manifesto: "My vision...",
       };
-      const newContestant = { id: 1, surname: "Doe" };
-      electionService.createContestant.mockResolvedValue(newContestant);
 
-      await electionController.addNewContestant(req, res, next);
+      const newContestant = { id: '1', surname: "Doe" };
+      (electionService.createContestant as jest.Mock).mockResolvedValue(
+        newContestant,
+      );
+
+      await electionController.addNewContestant(
+        req as Request,
+        res as Response,
+        next,
+      );
 
       expect(electionService.createContestant).toHaveBeenCalledWith({
         surname: "Doe",
@@ -61,10 +76,16 @@ describe("electionController", () => {
     });
 
     it("should call next on error", async () => {
-      req.file = { path: "pic.jpg" };
-      electionService.createContestant.mockRejectedValue(new Error("DB fail"));
+      req.file = { path: "pic.jpg" } as Express.Multer.File;
+      (electionService.createContestant as jest.Mock).mockRejectedValue(
+        new Error("DB fail"),
+      );
 
-      await electionController.addNewContestant(req, res, next);
+      await electionController.addNewContestant(
+        req as Request,
+        res as Response,
+        next,
+      );
 
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });
@@ -72,24 +93,36 @@ describe("electionController", () => {
 
   describe("getElectionDetails", () => {
     it("should return election summary with user info", async () => {
-      req.user = { user_id: 5, username: "john", role: "voter" };
-      electionService.getElectionSummary.mockResolvedValue({ totalVotes: 100 });
+      req.user = { user_id: '5', username: "john", role: "voter" } as any;
+      (electionService.getElectionSummary as jest.Mock).mockResolvedValue({
+        totalVotes: 100,
+      });
 
-      await electionController.getElectionDetails(req, res, next);
+      await electionController.getElectionDetails(
+        req as AuthenticatedRequest,
+        res as Response,
+        next,
+      );
 
       expect(electionService.getElectionSummary).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith({
         electionData: { totalVotes: 100 },
-        userId: 5,
+        userId: '5',
         username: "john",
         role: "voter",
       });
     });
 
     it("should call next on error", async () => {
-      electionService.getElectionSummary.mockRejectedValue(new Error("DB fail"));
+      (electionService.getElectionSummary as jest.Mock).mockRejectedValue(
+        new Error("DB fail"),
+      );
 
-      await electionController.getElectionDetails(req, res, next);
+      await electionController.getElectionDetails(
+        req as AuthenticatedRequest,
+        res as Response,
+        next,
+      );
 
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });
@@ -97,24 +130,24 @@ describe("electionController", () => {
 
   describe("castVote", () => {
     it("should return 400 if request is malformed", async () => {
-      req.body = { userId: 1, contestantId: null, position: "President" };
+      req.body = { userId: '1', contestantId: null, position: "President" };
 
-      await electionController.castVote(req, res, next);
+      await electionController.castVote(req as Request, res as Response, next);
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ message: "malformed request" });
     });
 
     it("should cast vote and return updated vote counts", async () => {
-      req.body = { userId: 1, contestantId: 2, position: "President" };
-      electionService.castVote.mockResolvedValue({
+      req.body = { userId: '1', contestantId: '2', electionId: '3', position: "President" };
+      (electionService.castVote as jest.Mock).mockResolvedValue({
         positionVotes: 10,
         contestantVotes: 4,
       });
 
-      await electionController.castVote(req, res, next);
+      await electionController.castVote(req as Request, res as Response, next);
 
-      expect(electionService.castVote).toHaveBeenCalledWith(1, 2, "President");
+      expect(electionService.castVote).toHaveBeenCalledWith('1', '2', "President", '3');
       expect(res.json).toHaveBeenCalledWith({
         positionVotes: 10,
         contestantVotes: 4,
@@ -122,10 +155,12 @@ describe("electionController", () => {
     });
 
     it("should call next on error", async () => {
-      req.body = { userId: 1, contestantId: 2, position: "President" };
-      electionService.castVote.mockRejectedValue(new Error("Vote fail"));
+      req.body = { userId: '1', contestantId: '2', electionId: '3', position: "President" };
+      (electionService.castVote as jest.Mock).mockRejectedValue(
+        new Error("Vote fail"),
+      );
 
-      await electionController.castVote(req, res, next);
+      await electionController.castVote(req as Request, res as Response, next);
 
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });
@@ -133,16 +168,26 @@ describe("electionController", () => {
 
   describe("deleteElection", () => {
     it("should clear election data and return success", async () => {
-      await electionController.deleteElection(req, res, next);
+      await electionController.deleteElection(
+        req as Request,
+        res as Response,
+        next,
+      );
 
       expect(electionService.clearElectionData).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith({ message: "success" });
     });
 
     it("should call next on error", async () => {
-      electionService.clearElectionData.mockRejectedValue(new Error("Delete fail"));
+      (electionService.clearElectionData as jest.Mock).mockRejectedValue(
+        new Error("Delete fail"),
+      );
 
-      await electionController.deleteElection(req, res, next);
+      await electionController.deleteElection(
+        req as Request,
+        res as Response,
+        next,
+      );
 
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });

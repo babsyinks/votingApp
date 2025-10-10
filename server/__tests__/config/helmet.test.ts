@@ -1,4 +1,4 @@
-const helmetConfig = require("../../config/helmet");
+import helmetConfig from "../../config/helmet";
 
 describe("Helmet content security policy config", () => {
   it("should export a contentSecurityPolicy object with directives", () => {

@@ -1,18 +1,24 @@
-const request = require("supertest");
-const express = require("express");
+import express, { Express } from "express";
+import request from "supertest";
 
 jest.mock("../../controllers/refreshTokenController", () => ({
-  refreshToken: jest.fn((req, res) => res.status(200).json({ refreshed: true })),
+  refreshToken: jest.fn((req, res) =>
+    res.status(200).json({ refreshed: true }),
+  ),
 }));
 
-const refreshTokenController = require("../../controllers/refreshTokenController");
-const refreshTokenRoute = require("../../routes/refreshTokenRoute");
-
-const app = express();
-app.use(express.json());
-app.use(refreshTokenRoute);
+import { refreshToken } from "../../controllers/refreshTokenController";
+import refreshTokenRoute from "../../routes/refreshTokenRoute";
 
 describe("refreshTokenRoute", () => {
+  let app: Express;
+
+  beforeAll(() => {
+    app = express();
+    app.use(express.json());
+    app.use(refreshTokenRoute);
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -20,7 +26,7 @@ describe("refreshTokenRoute", () => {
   it("POST /refresh calls refreshToken controller", async () => {
     const res = await request(app).post("/refresh").send({ token: "oldToken" });
 
-    expect(refreshTokenController.refreshToken).toHaveBeenCalled();
+    expect(refreshToken).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ refreshed: true });
   });

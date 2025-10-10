@@ -1,38 +1,62 @@
+import SibApiV3Sdk from "sib-api-v3-sdk";
+
+// Mock the SDK
 jest.mock("sib-api-v3-sdk", () => {
-  const mockApiClientInstance = {
-    authentications: {
-      "api-key": {},
+  const mockAuth = { apiKey: "" };
+  const mockClient = {
+    authentications: { "api-key": mockAuth },
+  };
+
+  return {
+    __esModule: true,
+    default: {
+      ApiClient: { instance: mockClient },
+      TransactionalEmailsApi: jest.fn(() => ({ sendTransacEmail: jest.fn() })),
     },
   };
-
-  const ApiClient = {
-    instance: mockApiClientInstance,
-  };
-
-  class TransactionalEmailsApi {
-    sendTransacEmail() {}
-  }
-
-  return { ApiClient, TransactionalEmailsApi };
 });
 
-describe("brevo", () => {
+describe("Brevo config", () => {
+  const OLD_ENV = process.env;
+
   beforeEach(() => {
-    jest.resetModules();
+    jest.resetModules(); // clears module cache between tests
+    process.env = { ...OLD_ENV };
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
+  it("should configure the Brevo client with API key", () => {
     process.env.BREVO_API_KEY = "test-api-key";
+
+    const apiInstance = require("../../config/brevo").default;
+
+    // Verify API key was set
+    const mockSdk = require("sib-api-v3-sdk").default;
+    expect(
+      mockSdk.ApiClient.instance.authentications["api-key"].apiKey
+    ).toBe("test-api-key");
+
+    // Verify TransactionalEmailsApi was instantiated
+    expect(mockSdk.TransactionalEmailsApi).toHaveBeenCalledTimes(1);
+
+    // And that the exported object is the instance
+    expect(apiInstance).toEqual(expect.any(Object));
+    expect(apiInstance.sendTransacEmail).toEqual(expect.any(Function));
   });
 
-  it("should set the BREVO_API_KEY on the api-key authentication", () => {
-    const SibApiV3Sdk = require("sib-api-v3-sdk");
+  it("should handle missing API key gracefully", () => {
+    delete process.env.BREVO_API_KEY;
 
-    require("../../config/brevo");
-    expect(SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey).toBe("test-api-key");
-  });
+    const apiInstance = require("../../config/brevo").default;
 
-  it("should export an instance of TransactionalEmailsApi", () => {
-    const SibApiV3Sdk = require("sib-api-v3-sdk");
+    const mockSdk = require("sib-api-v3-sdk").default;
+    expect(
+      mockSdk.ApiClient.instance.authentications["api-key"].apiKey
+    ).toBeUndefined();
 
-    const apiInstance = require("../../config/brevo");
-    expect(apiInstance).toBeInstanceOf(SibApiV3Sdk.TransactionalEmailsApi);
+    expect(apiInstance).toEqual(expect.any(Object));
   });
 });

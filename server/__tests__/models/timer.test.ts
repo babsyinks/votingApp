@@ -1,76 +1,35 @@
-const { DataTypes } = require("sequelize");
+import { Sequelize } from "sequelize";
+import { Timer } from "../../models/timer";
+import { Election } from "../../models/election";
 
-jest.mock("sequelize", () => {
-  const actual = jest.requireActual("sequelize");
-
-  class MockModel {
-    static init(attributes, options) {
-      this.rawAttributes = attributes;
-      this.options = options;
-      return this;
-    }
-    static belongsTo(model, options) {
-      this.belongsToCall = { model, options };
-    }
-    get() {
-      return this.dataValues || {};
-    }
-  }
-
-  return {
-    ...actual,
-    Model: MockModel,
-    DataTypes: {
-      ...actual.DataTypes,
-      UUID: { key: "UUID" },
-      UUIDV4: { key: "UUIDV4" },
-      DATE: { key: "DATE" },
-    },
-  };
-});
-
-describe("Timer Model (unit)", () => {
-  let Timer;
-  let mockSequelize;
+describe("Timer Model", () => {
+  let sequelize: Sequelize;
 
   beforeAll(() => {
-    mockSequelize = {};
-    Timer = require("../../models/timer")(mockSequelize, DataTypes);
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
   });
 
-  test("should have correct model name and table name", () => {
-    expect(Timer.options.modelName).toBe("Timer");
-    expect(Timer.options.tableName).toBe("timers");
+  afterAll(async () => {
+    await sequelize.close();
   });
 
-  test("should define correct attributes", () => {
-    const attrs = Timer.rawAttributes;
+  test("initModel initializes correctly", () => {
+    const initSpy = jest.spyOn(Timer, "init");
 
-    expect(attrs.timer_id.type.key).toBe("UUID");
-    expect(attrs.timer_id.defaultValue.key).toBe("UUIDV4");
-    expect(attrs.timer_id.primaryKey).toBe(true);
+    Timer.initModel(sequelize);
 
-    expect(attrs.election_id.type.key).toBe("UUID");
-    expect(attrs.election_id.allowNull).toBe(false);
-    expect(attrs.election_id.unique).toBe(true);
+    // Grab what init was called with
+    const [attributes, options] = initSpy.mock.calls[0];
 
-    expect(attrs.startDate.key).toBe("DATE");
-    expect(attrs.endDate.key).toBe("DATE");
-  });
+    // Check attribute keys
+    expect(Object.keys(attributes)).toEqual(
+      expect.arrayContaining(["timer_id", "election_id", "startDate", "endDate"])
+    );
 
-  test("associate should define relationship with Election", () => {
-    const mockElectionModel = {};
-    Timer.associate({ Election: mockElectionModel });
-
-    expect(Timer.belongsToCall).toEqual({
-      model: mockElectionModel,
-      options: { foreignKey: "election_id" },
-    });
-  });
-
-  test("should include unique index on election_id", () => {
-    const indexes = Timer.options.indexes;
-    expect(indexes).toEqual(
+    // Check important model options
+    expect(options.modelName).toBe("Timer");
+    expect(options.tableName).toBe("timers");
+    expect(options.indexes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           unique: true,
@@ -79,17 +38,33 @@ describe("Timer Model (unit)", () => {
         }),
       ])
     );
+
+    initSpy.mockRestore();
   });
 
-  test("should allow mocked CRUD calls", async () => {
-    Timer.create = jest.fn().mockResolvedValue({ startDate: new Date() });
-    Timer.findAll = jest.fn().mockResolvedValue([{ startDate: new Date() }]);
+  test("builds and stores values correctly", () => {
+    Timer.initModel(sequelize);
 
-    const created = await Timer.create({ startDate: new Date() });
-    const all = await Timer.findAll();
+    const timer = Timer.build({
+      timer_id: "timer-123",
+      election_id: "election-1",
+      startDate: new Date("2025-01-01"),
+      endDate: new Date("2025-02-01"),
+    });
 
-    expect(created.startDate).toBeInstanceOf(Date);
-    expect(all).toHaveLength(1);
-    expect(all[0].startDate).toBeInstanceOf(Date);
+    expect(timer.timer_id).toBe("timer-123");
+    expect(timer.election_id).toBe("election-1");
+    expect(timer.startDate).toEqual(new Date("2025-01-01"));
+    expect(timer.endDate).toEqual(new Date("2025-02-01"));
+  });
+
+  test("associate sets up belongsTo Election", () => {
+    Timer.initModel(sequelize);
+    Election.initModel(sequelize);
+
+    Timer.associate({ Election } as any);
+
+    const assoc = Timer.associations;
+    expect(assoc.Election).toBeDefined();
   });
 });

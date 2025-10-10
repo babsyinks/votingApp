@@ -1,7 +1,10 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (
+    queryInterface: QueryInterface,
+    Sequelize: typeof import("sequelize"),
+  ) => {
     await queryInterface.createTable("codes", {
       id: {
         allowNull: false,
@@ -38,11 +41,11 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     await queryInterface.dropTable("codes");
     // Remove ENUM manually to prevent ENUM leak in Postgres
     await queryInterface.sequelize.query(
-      "DROP TYPE IF EXISTS enum_codes_type;"
+      "DROP TYPE IF EXISTS enum_codes_type;",
     );
   },
 };

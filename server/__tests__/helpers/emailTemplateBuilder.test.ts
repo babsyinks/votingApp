@@ -1,4 +1,4 @@
-const emailTemplateBuilder = require("../../helpers/emailTemplateBuilder");
+import emailTemplateBuilder from "../../helpers/emailTemplateBuilder";
 
 describe("emailTemplateBuilder", () => {
   const currentYear = new Date().getFullYear();

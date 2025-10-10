@@ -1,6 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { checkAuthenticationStatus, checkAuthorizationStatus } = require("../../middleware/auth");
-const models = require("../../models");
+import jwt from "jsonwebtoken";
+import {
+  checkAuthenticationStatus,
+  checkAuthorizationStatus,
+} from "../../middleware/auth";
+import models from "../../models";
+import type { Request, Response, NextFunction } from "express";
 
 jest.mock("jsonwebtoken", () => ({ verify: jest.fn() }));
 
@@ -12,12 +16,17 @@ const mockUser = { user_id: 123, username: "John", role: "user" };
 const mockAdmin = { user_id: 1, username: "Admin", role: "admin" };
 
 describe("Auth Middleware", () => {
-  let req, res, next;
+  let req: Request, res: Response, next: NextFunction;
+  const mockedJwtVerify = jwt.verify as jest.Mock;
+  const mockedUserFindOne = models.User.findOne as jest.Mock;
 
   beforeEach(() => {
-    jwt.verify.mockReturnValue({ user: { user_id: 123 } });
-    req = { headers: {}, cookies: {} };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    mockedJwtVerify.mockReturnValue({ user: { user_id: 123 } });
+    req = { headers: {}, cookies: {} } as unknown as Request;
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
     next = jest.fn();
     req.cookies.access_token = "validtoken";
     jest.clearAllMocks();
@@ -25,7 +34,7 @@ describe("Auth Middleware", () => {
 
   describe("checkAuthenticationStatus", () => {
     it("returns 401 if user not found", async () => {
-      models.User.findOne.mockResolvedValue(null);
+      mockedUserFindOne.mockResolvedValue(null);
 
       await checkAuthenticationStatus(req, res, next);
 
@@ -37,16 +46,16 @@ describe("Auth Middleware", () => {
     });
 
     it("calls next if authentication succeeds", async () => {
-      models.User.findOne.mockResolvedValue(mockUser);
+      mockedUserFindOne.mockResolvedValue({ toJSON: () => mockUser });
 
       await checkAuthenticationStatus(req, res, next);
 
       expect(req.user).toEqual(mockUser);
-      expect(next).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledTimes(1);
     });
 
     it("returns 401 with error message if jwt.verify throws", async () => {
-      jwt.verify.mockImplementation(() => {
+      mockedJwtVerify.mockImplementation(() => {
         throw new Error("invalid token");
       });
 
@@ -58,11 +67,67 @@ describe("Auth Middleware", () => {
         error: "invalid token",
       });
     });
+
+    it("returns 401 and uses error.message when jwt.verify throws an Error object", async () => {
+      mockedJwtVerify.mockImplementation(() => {
+        throw new Error("boom");
+      });
+
+      await checkAuthenticationStatus(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        authenticated: false,
+        error: "boom", // exercises the 'error instanceof Error' branch
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it("returns 401 and stringifies non-Error thrown value from jwt.verify", async () => {
+      mockedJwtVerify.mockImplementation(() => {
+        throw "string-error";
+      });
+
+      await checkAuthenticationStatus(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        authenticated: false,
+        error: "string-error", // exercises the String(error) branch
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it("returns 401 if no token provided", async () => {
+      req.cookies.access_token = undefined; // simulate missing cookie
+
+      await checkAuthenticationStatus(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        authenticated: false,
+        error: "authentication failed!",
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it("returns 401 if jwt payload does not contain user_id", async () => {
+      mockedJwtVerify.mockReturnValue({ user: {} }); // no user_id field
+
+      await checkAuthenticationStatus(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        authenticated: false,
+        error: "authentication failed!",
+      });
+      expect(next).not.toHaveBeenCalled();
+    });
   });
 
   describe("checkAuthorizationStatus", () => {
     it("returns 403 if not admin", async () => {
-      models.User.findOne.mockResolvedValue(mockUser);
+      mockedUserFindOne.mockResolvedValue({ toJSON: () => mockUser });
 
       await checkAuthorizationStatus(req, res, next);
 
@@ -74,13 +139,13 @@ describe("Auth Middleware", () => {
     });
 
     it("calls next if admin", async () => {
-      jwt.verify.mockReturnValue({ user: { user_id: 1 } });
-      models.User.findOne.mockResolvedValue(mockAdmin);
+      mockedJwtVerify.mockReturnValue({ user: { user_id: 1 } });
+      mockedUserFindOne.mockResolvedValue({ toJSON: () => mockAdmin });
 
       await checkAuthorizationStatus(req, res, next);
 
       expect(req.user).toEqual(mockAdmin);
-      expect(next).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledTimes(1);
     });
   });
 });

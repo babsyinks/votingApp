@@ -1,13 +1,14 @@
-const sendPasswordResetSuccessNotification = require("../../helpers/sendPasswordResetSuccessNotification");
-const emailTemplateBuilder = require("../../helpers/emailTemplateBuilder");
-const sendEmail = require("../../helpers/sendEmail");
+import sendPasswordResetSuccessNotification from "../../helpers/sendPasswordResetSuccessNotification";
+import emailTemplateBuilder from "../../helpers/emailTemplateBuilder";
+import sendEmail from "../../helpers/sendEmail";
 
 jest.mock("../../helpers/emailTemplateBuilder");
 jest.mock("../../helpers/sendEmail");
 
 describe("sendPasswordResetSuccessNotification", () => {
   const REAL_ENV = process.env;
-
+  const mockedEmailTemplateBuilder = jest.mocked(emailTemplateBuilder);
+  
   beforeEach(() => {
     jest.clearAllMocks();
     process.env = { ...REAL_ENV };
@@ -19,7 +20,7 @@ describe("sendPasswordResetSuccessNotification", () => {
   });
 
   it("should build email and call sendEmail with correct parameters", async () => {
-    emailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
+    mockedEmailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
 
     await sendPasswordResetSuccessNotification({
       toEmail: "user@example.com",
@@ -59,8 +60,8 @@ describe("sendPasswordResetSuccessNotification", () => {
   });
 
   it("should propagate error if sendEmail throws", async () => {
-    emailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
-    sendEmail.mockRejectedValueOnce(new Error("Send failed"));
+    mockedEmailTemplateBuilder.mockReturnValue("<p>Email HTML</p>");
+    (sendEmail as jest.Mock).mockRejectedValueOnce(new Error("Send failed"));
 
     await expect(
       sendPasswordResetSuccessNotification({

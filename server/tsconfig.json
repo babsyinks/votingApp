@@ -8,11 +8,11 @@
     "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "dist"],
-  "typeRoots": ["./types", "./node_modules/@types"]
 }

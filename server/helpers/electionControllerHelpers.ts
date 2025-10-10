@@ -1,151 +1,142 @@
-const positionRank = require("../config/electionPositionRank");
+import positionRank from "../config/electionPositionRank";
+import type { ContestantsAttributes } from "../models/contestants";
+import type { VotesAttributes } from "../models/votes";
 
-/**
- * @typedef {Object} Contestant
- * @property {number} id
- * @property {string} contestant_id
- * @property {string} surname
- * @property {string} firstname
- * @property {string} position
- * @property {string} manifesto
- * @property {string} picture
- */
-
-/**
- * @typedef {Object} Vote
- * @property {number} id
- * @property {string} vote_id
- * @property {string} user_id
- * @property {string} contestant_id
- * @property {string} position
- */
+export type ElectionDetails = {
+  positionVotes: string[];
+  position: string;
+  contestants: (ContestantsAttributes & { votes: string[] })[];
+};
 
 /**
  * creates array of same length as all keys of positionRank object, then fills it with null.
- *
- * @returns {Array}
  */
-const _initializeArrayOfContestants = () => {
+const _initializeArrayOfContestants = (): (ElectionDetails | null)[] => {
   return new Array(Object.keys(positionRank).length).fill(null);
 };
 
 /**
- * Gets the current rank of a position. The ranks are arranged in ascending order between 0 and 10,
- * with the president having the best rank (0).
- *
- * @param {Contestant} contestant The reference to the contestant
- *
- * @returns {number}
+ * Gets the current rank of a position. The ranks are arranged in ascending order between 0 and 10.
  */
-const _getCurrentPositionRank = (contestant) => {
+const _getCurrentPositionRank = (contestant: ContestantsAttributes): number => {
   return positionRank[contestant.position.toLowerCase()];
 };
 
 /**
- * Filters the voting data based on the provided property. For example, if the provided property is
- * 'position', it will access the position the contestant is vying for, and return all the data
- * for that position in the votes array
- *
- * @param {Object} param Object parameter
- * @param {Array} [param.votes] Array of objects having voting details of the contestants
- * @param {string} [param.property] The property to use in filtering results, e.g 'position'
- * @param {string} [param.value] The value to use to determine how the votes will be filtered
- *
- * @returns {Vote[]}
+ * Filters the voting data based on a property (e.g., position, contestant_id).
  */
-const _filterVotesByProperty = ({ votes, property, value }) => {
+const _filterVotesByProperty = ({
+  votes,
+  property,
+  value,
+}: {
+  votes: VotesAttributes[];
+  property: keyof VotesAttributes;
+  value: string | undefined;
+}): VotesAttributes[] => {
+  if (value === undefined)
+    throw new Error(`value set to filter ${property} shouldn't be undefined`);
   return votes.filter((voteDetails) => voteDetails[property] === value);
 };
 
 /**
- * Returns an array of ids of voters from an array of voter objects.
- *
- * @param {Array} voters Array to extract all votes from
- * @returns {string[]}
+ * Returns an array of voter ids from vote objects.
  */
-const _getAllVotersId = (voters) => {
+const _getAllVotersId = (voters: VotesAttributes[]): string[] => {
   return voters.map((voteDetails) => voteDetails.user_id);
 };
 
 /**
- * Returns all votes for a position. E.g, if the position is 'president', it returns all votes cast under
- * this category.
- *
- * @param {{ votes: Vote[], contestant: Contestant, position: string }} param0
- * @returns {string[]}
+ * Returns all votes for a position.
  */
-const getAllVotesForAPosition = ({ votes, contestant, position }) => {
+export const getAllVotesForAPosition = ({
+  votes,
+  contestant,
+  position,
+}: {
+  votes: VotesAttributes[];
+  contestant?: ContestantsAttributes;
+  position?: string;
+}): string[] => {
   return _getAllVotersId(
     _filterVotesByProperty({
       votes,
       property: "position",
-      value: position || contestant.position,
+      value: position || contestant?.position,
     }),
   );
 };
 
 /**
  * Returns all votes for a given contestant.
- *
- * @param {{ votes: Vote[], contestant: Contestant, contestantId: string }} param0
- * @returns {string[]}
  */
-const getVotesForAContestant = ({ votes, contestant, contestantId }) => {
+export const getVotesForAContestant = ({
+  votes,
+  contestant,
+  contestantId,
+}: {
+  votes: VotesAttributes[];
+  contestant?: ContestantsAttributes;
+  contestantId?: string;
+}): string[] => {
   return _getAllVotersId(
     _filterVotesByProperty({
       votes,
       property: "contestant_id",
-      value: contestantId || contestant.contestant_id,
+      value: contestantId || contestant?.contestant_id,
     }),
   );
 };
 
 /**
- * Builds the contestant object to be sent to the frontend client
- *
- * @param {{ votes: Vote[], contestant: Contestant}} param0
- * @returns {Object}
+ * Builds the contestant object with votes.
  */
-const _buildContestantsObj = ({ votes, contestant }) => {
+const _buildContestantsObj = ({
+  votes,
+  contestant,
+}: {
+  votes: VotesAttributes[];
+  contestant: ContestantsAttributes;
+}): ContestantsAttributes & { votes: string[] } => {
   const contestantVote = getVotesForAContestant({
     votes,
     contestant,
   });
-  const updatedContestant = { votes: contestantVote, ...contestant };
-  return updatedContestant;
+  return { votes: contestantVote, ...contestant };
 };
 
 /**
- * Adds the built contestant object, total votes, position and contestants to a single consumable
- * object by the frontend.
- *
- * @param {{ votes: Vote[], contestant: Contestant}} param0
- * @returns {Object}
+ * Builds election details for a contestant's position.
  */
-const _buildElectionDetailsObj = ({ votes, contestant }) => {
-  contestant = _buildContestantsObj({
-    votes,
-    contestant,
-  });
-  const electionDetailsObj = {};
-  electionDetailsObj.positionVotes = getAllVotesForAPosition({
+const _buildElectionDetailsObj = ({
+  votes,
+  contestant,
+}: {
+  votes: VotesAttributes[];
+  contestant: ContestantsAttributes;
+}): ElectionDetails => {
+  const updatedContestant = _buildContestantsObj({
     votes,
     contestant,
   });
 
-  electionDetailsObj.position = contestant.position;
-  electionDetailsObj.contestants = [contestant];
-  return electionDetailsObj;
+  return {
+    positionVotes: getAllVotesForAPosition({
+      votes,
+      contestant: updatedContestant,
+    }),
+    position: updatedContestant.position,
+    contestants: [updatedContestant],
+  };
 };
 
 /**
- * Returns a contestant from the contestants list based on the contestant_id of the contestant
- *
- * @param {Contestant[]} contestants List of contestants
- * @param {Contestant} contestant A single contestant
- * @returns {Contestant | undefined}
+ * Returns a contestant from a list based on contestant_id.
  */
-const _findContestant = (contestants, contestant) => {
+const _findContestant = (
+  contestants: (ContestantsAttributes & { votes: string[] })[],
+  contestant: ContestantsAttributes,
+): (ContestantsAttributes & { votes: string[] }) | undefined => {
   return contestants.find(
     ({ contestant_id }) => contestant_id === contestant.contestant_id,
   );
@@ -153,15 +144,20 @@ const _findContestant = (contestants, contestant) => {
 
 /**
  * Groups contestants by position and attaches vote count per contestant.
- *
- * @param {{ contestants: Contestant[], votes: Vote[] }} param0
- * @returns {Contestant[]}
  */
-const getAllContestantsElectionDetails = ({ contestants, votes }) => {
+export const getAllContestantsElectionDetails = ({
+  contestants,
+  votes,
+}: {
+  contestants: ContestantsAttributes[];
+  votes: VotesAttributes[];
+}): ElectionDetails[] => {
   const arrOfContestants = _initializeArrayOfContestants();
+
   for (let contestant of contestants) {
     const rank = _getCurrentPositionRank(contestant);
     let electionDetailsObj = arrOfContestants[rank];
+
     if (!electionDetailsObj) {
       electionDetailsObj = _buildElectionDetailsObj({
         votes,
@@ -169,31 +165,25 @@ const getAllContestantsElectionDetails = ({ contestants, votes }) => {
       });
       arrOfContestants[rank] = electionDetailsObj;
     } else if (!_findContestant(electionDetailsObj.contestants, contestant)) {
-      contestant = _buildContestantsObj({
+      const updated = _buildContestantsObj({
         votes,
         contestant,
       });
-      arrOfContestants[rank].contestants.push(contestant);
+      arrOfContestants[rank]!.contestants.push(updated);
     }
   }
-  return arrOfContestants.filter((contestantObj) => contestantObj !== null);
+
+  return arrOfContestants.filter(
+    (contestantObj): contestantObj is ElectionDetails => contestantObj !== null,
+  );
 };
 
 /**
  * Checks if a user has already voted.
- *
- * @param {Vote[]} votes
- * @param {string} userId
- *
- * @returns {boolean}
  */
-const userHasVoted = (votes, userId) => {
-  return votes.find((voteDetails) => voteDetails.user_id === userId);
-};
-
-module.exports = {
-  getAllContestantsElectionDetails,
-  userHasVoted,
-  getAllVotesForAPosition,
-  getVotesForAContestant,
+export const userHasVoted = (
+  votes: VotesAttributes[],
+  userId: string,
+): boolean => {
+  return votes.some((voteDetails) => voteDetails.user_id === userId);
 };

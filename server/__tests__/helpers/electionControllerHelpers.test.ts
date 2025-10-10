@@ -1,26 +1,52 @@
-const {
+import {
   getAllContestantsElectionDetails,
   userHasVoted,
   getAllVotesForAPosition,
   getVotesForAContestant,
-} = require("../../helpers/electionControllerHelpers");
+} from "../../helpers/electionControllerHelpers";
+import type { VotesAttributes } from "../../models/votes";
+import type { ContestantsAttributes } from "../../models/contestants";
 
 describe("electionControllerHelpers", () => {
-  let votes;
-  let contestants;
+  let votes: VotesAttributes[];
+  let contestants: ContestantsAttributes[];
 
   beforeEach(() => {
     votes = [
-      { id: 1, vote_id: "v1", user_id: "u1", contestant_id: "c1", position: "president" },
-      { id: 2, vote_id: "v2", user_id: "u2", contestant_id: "c1", position: "president" },
-      { id: 3, vote_id: "v3", user_id: "u3", contestant_id: "c2", position: "vice president" },
-      { id: 4, vote_id: "v4", user_id: "u4", contestant_id: "c3", position: "vice president" },
+      {
+        vote_id: "v1",
+        user_id: "u1",
+        election_id: "e1",
+        contestant_id: "c1",
+        position: "president",
+      },
+      {
+        vote_id: "v2",
+        user_id: "u2",
+        election_id: "e1",
+        contestant_id: "c1",
+        position: "president",
+      },
+      {
+        vote_id: "v3",
+        user_id: "u3",
+        election_id: "e1",
+        contestant_id: "c2",
+        position: "vice president",
+      },
+      {
+        vote_id: "v4",
+        user_id: "u4",
+        election_id: "e1",
+        contestant_id: "c3",
+        position: "vice president",
+      },
     ];
 
     contestants = [
       {
-        id: 1,
         contestant_id: "c1",
+        election_id: "e1",
         surname: "Doe",
         firstname: "John",
         position: "president",
@@ -28,8 +54,8 @@ describe("electionControllerHelpers", () => {
         picture: "john.jpg",
       },
       {
-        id: 2,
         contestant_id: "c2",
+        election_id: "e1",
         surname: "Smith",
         firstname: "Jane",
         position: "vice president",
@@ -37,8 +63,8 @@ describe("electionControllerHelpers", () => {
         picture: "jane.jpg",
       },
       {
-        id: 3,
         contestant_id: "c3",
+        election_id: "e1",
         surname: "Brown",
         firstname: "Bob",
         position: "vice president",
@@ -74,6 +100,14 @@ describe("electionControllerHelpers", () => {
       });
       expect(result).toEqual([]);
     });
+
+    it("should throw an error if both position and contestant are undefined", () => {
+      expect(() =>
+        getAllVotesForAPosition({
+          votes,
+        } as any),
+      ).toThrow("value set to filter position shouldn't be undefined");
+    });
   });
 
   describe("getVotesForAContestant", () => {
@@ -102,6 +136,14 @@ describe("electionControllerHelpers", () => {
       });
       expect(result).toEqual([]);
     });
+
+    it("should throw an error if both contestant and contestantId are undefined", () => {
+      expect(() =>
+        getVotesForAContestant({
+          votes,
+        } as any),
+      ).toThrow("value set to filter contestant_id shouldn't be undefined");
+    });
   });
 
   describe("getAllContestantsElectionDetails", () => {
@@ -116,7 +158,9 @@ describe("electionControllerHelpers", () => {
       expect(result[1].position).toBe("vice president");
       expect(result[1].positionVotes).toEqual(["u3", "u4"]);
       expect(result[1].contestants).toHaveLength(2);
-      expect(result[1].contestants.find((c) => c.contestant_id === "c3").votes).toEqual(["u4"]);
+      expect(
+        result[1].contestants.find((c) => c.contestant_id === "c3")?.votes,
+      ).toEqual(["u4"]);
     });
 
     it("should ignore null entries in position ranks", () => {
@@ -133,6 +177,7 @@ describe("electionControllerHelpers", () => {
       const contestants = [
         {
           contestant_id: "c1",
+          election_id: "e1",
           surname: "Doe",
           firstname: "John",
           position: "president",
@@ -141,6 +186,7 @@ describe("electionControllerHelpers", () => {
         },
         {
           contestant_id: "c2", // different ID but same position
+          election_id: "e1",
           surname: "Smith",
           firstname: "Jane",
           position: "president",
@@ -150,8 +196,20 @@ describe("electionControllerHelpers", () => {
       ];
 
       const votes = [
-        { user_id: "u1", contestant_id: "c1", position: "president" },
-        { user_id: "u2", contestant_id: "c2", position: "president" },
+        {
+          vote_id: "v1",
+          user_id: "u1",
+          election_id: "e1",
+          contestant_id: "c1",
+          position: "president",
+        },
+        {
+          vote_id: "v2",
+          user_id: "u2",
+          election_id: "e1",
+          contestant_id: "c2",
+          position: "president",
+        },
       ];
 
       const result = getAllContestantsElectionDetails({ contestants, votes });
@@ -165,6 +223,7 @@ describe("electionControllerHelpers", () => {
       const contestants = [
         {
           contestant_id: "c1",
+          election_id: "e1",
           surname: "Doe",
           firstname: "John",
           position: "president",
@@ -173,6 +232,7 @@ describe("electionControllerHelpers", () => {
         },
         {
           contestant_id: "c1", // same contestant
+          election_id: "e1",
           surname: "Doe",
           firstname: "John",
           position: "president",
@@ -182,7 +242,13 @@ describe("electionControllerHelpers", () => {
       ];
 
       const votes = [
-        { user_id: "u1", contestant_id: "c1", position: "president" },
+        {
+          vote_id: "v1",
+          user_id: "u1",
+          election_id: "e1",
+          contestant_id: "c1",
+          position: "president",
+        },
       ];
 
       const result = getAllContestantsElectionDetails({ contestants, votes });
@@ -194,14 +260,14 @@ describe("electionControllerHelpers", () => {
   });
 
   describe("userHasVoted", () => {
-    it("should return the vote object if user has voted", () => {
+    it("should return true if user has voted", () => {
       const result = userHasVoted(votes, "u1");
-      expect(result).toEqual(expect.objectContaining({ user_id: "u1", contestant_id: "c1" }));
+      expect(result).toBe(true);
     });
 
-    it("should return undefined if user has not voted", () => {
+    it("should return false if user has not voted", () => {
       const result = userHasVoted(votes, "non-existent");
-      expect(result).toBeUndefined();
+      expect(result).toBe(false);
     });
   });
 });

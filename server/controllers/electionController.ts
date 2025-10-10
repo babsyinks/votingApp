@@ -1,17 +1,36 @@
-const { electionService } = require("../services");
+import { Request, Response, NextFunction } from "express";
 
-const addNewContestant = async (req, res, next) => {
+import type { UserAttributesWithRoles } from "../models/user";
+import { electionService } from "../services";
+
+// Extend Express Request to include `user` (since you access req.user)
+export interface AuthenticatedRequest extends Request {
+  user: UserAttributesWithRoles;
+}
+
+/**
+ * Handles uploading and creating a new contestant record.
+ */
+export const addNewContestant = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+      res.status(400).json({ error: "No file uploaded" });
+      return;
     }
-    const { surname, firstName, post, manifesto } = req.body;
+
+    const { surname, firstName, post, manifesto, election_id } = req.body;
+
     const newContestant = await electionService.createContestant({
       surname,
       firstname: firstName,
       position: post,
       manifesto,
       picture: req.file.path,
+      election_id,
     });
 
     res.status(201).json({ message: "success", contestant: newContestant });
@@ -20,10 +39,18 @@ const addNewContestant = async (req, res, next) => {
   }
 };
 
-const getElectionDetails = async (req, res, next) => {
+/**
+ * Fetches election summary and user details.
+ */
+export const getElectionDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const user = req.user;
+    const user = (req as AuthenticatedRequest).user;
     const summary = await electionService.getElectionSummary();
+
     res.json({
       electionData: summary,
       userId: user.user_id,
@@ -35,29 +62,54 @@ const getElectionDetails = async (req, res, next) => {
   }
 };
 
-const castVote = async (req, res, next) => {
+/**
+ * Handles casting of votes by a user.
+ */
+export const castVote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const { userId, contestantId, position } = req.body;
-    if (!userId || !contestantId || !position) {
-      return res.status(400).json({ message: "malformed request" });
+    const { userId, contestantId, electionId, position } = req.body;
+
+    if (![userId, contestantId, electionId, position].every(Boolean)) {
+      res.status(400).json({ message: "malformed request" });
+      return;
     }
+
     const { positionVotes, contestantVotes } = await electionService.castVote(
       userId,
       contestantId,
       position,
+      electionId,
     );
+
     res.json({ positionVotes, contestantVotes });
   } catch (error) {
     next(error);
   }
 };
 
-const deleteElection = async (req, res, next) => {
+/**
+ * Deletes all election data (admin only).
+ */
+export const deleteElection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     await electionService.clearElectionData();
     res.json({ message: "success" });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
-module.exports = { addNewContestant, getElectionDetails, castVote, deleteElection };
+
+export default {
+  addNewContestant,
+  getElectionDetails,
+  castVote,
+  deleteElection,
+};

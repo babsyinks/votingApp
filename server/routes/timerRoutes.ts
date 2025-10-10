@@ -1,9 +1,9 @@
-const express = require("express");
+import express, { Router } from "express";
 
-const timerController = require("../controllers/timerController");
-const { checkAuthorizationStatus } = require("../middleware/auth");
+import * as timerController from "../controllers/timerController";
+import { checkAuthorizationStatus } from "../middleware/auth";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.use(express.json());
 
@@ -13,4 +13,4 @@ router.get("/status", timerController.getTimerStatus);
 
 router.delete("/cancel", checkAuthorizationStatus, timerController.cancelTimer);
 
-module.exports = router;
+export default router;

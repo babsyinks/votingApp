@@ -1,8 +1,8 @@
 "use strict";
-
+import { QueryInterface } from "sequelize";
+type SequelizeType = typeof import("sequelize");
 module.exports = {
-  async up(queryInterface, Sequelize) {
-
+  async up(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     await queryInterface.addColumn("users", "isAdmin", {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -30,7 +30,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: QueryInterface, Sequelize: SequelizeType) {
     await queryInterface.removeIndex("users", "users_username_unique");
     await queryInterface.removeIndex("users", "users_email_unique");
 
