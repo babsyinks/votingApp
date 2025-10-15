@@ -33,7 +33,7 @@ const ElectionDetailsAllData: React.FC<ElectionDetailsAllDataProps> = ({
         options={params}
       />
       <ElectionDetailsHeader message="Please Proceed To Vote." />
-      {timer.endDate > Date.now() && (
+      {timer.endDate && timer.endDate > Date.now() && (
         <Block type="flex-horz">
           <LiveTimer electionEndTime={timer.endDate} />
         </Block>

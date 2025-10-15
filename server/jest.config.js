@@ -4,7 +4,7 @@ module.exports = {
   testEnvironment: "node",
   coverageProvider: "v8",
   transform: {
-    "^.+\\.[tj]s$": "babel-jest",
+    "^.+\\.[tj]s$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "js", "json"],
   testMatch: ["<rootDir>/__tests__/**/*.test.ts", "<rootDir>/__tests__/**/*.spec.ts"],
