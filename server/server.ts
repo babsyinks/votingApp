@@ -6,14 +6,13 @@ import helmet from "helmet";
 import passport from "passport";
 import xss from "xss-clean";
 
+dotenv.config();
 import "./config/passport";
 import helmetConfig from "./config/helmet";
 import errorHandler from "./middleware/errorHandler";
 import { sequelize } from "./models";
 import routes from "./routes";
 import logger from "./utils/logger";
-
-dotenv.config();
 
 const port = Number(process.env.PORT) || 3001;
 const app: Application = express();

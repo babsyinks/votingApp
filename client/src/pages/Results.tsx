@@ -4,10 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
 import { electionStatus } from "features/election/electionSlice";
-import {
-  userAuth,
-  userNotAuthenticated,
-} from "features/auth/userAuthSlice";
+import { userAuth, userNotAuthenticated } from "features/auth/userAuthSlice";
 import ResultsAll from "features/results/components/ResultsAll";
 import ResultsRemoved from "features/results/components/ResultsRemoved";
 import ResultsNotAvailable from "features/results/components/ResultsNotAvailable";
@@ -52,23 +49,20 @@ function Results() {
     }
   }, [response]);
 
-    useEffect(() => {
-      if (error) {
-        dispatch(userNotAuthenticated());
-        navigate("/signin");
-      }
-    }, [error, dispatch, navigate]);
+  useEffect(() => {
+    if (error) {
+      dispatch(userNotAuthenticated());
+      navigate("/signin");
+    }
+  }, [error, dispatch, navigate]);
 
   if (statusOfElection === "active_election_ended") {
     if (resultsLoaded) {
       if (result.length > 0) return <ResultsAll result={result} />;
       else return <ResultsRemoved />;
-    } else {
-      return null;
     }
-  } else {
-    if (resultsLoaded) return <ResultsNotAvailable />;
-  }
+  } else if (resultsLoaded) return <ResultsNotAvailable />;
+  return null;
 }
 
 export default Results;

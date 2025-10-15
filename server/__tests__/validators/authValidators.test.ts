@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { CustomError } from "../../utils/generateCustomError";
+import type { ValidUser } from "../../helpers/types/validAuthUser";
 
 jest.mock("bcryptjs");
 
@@ -22,7 +23,7 @@ import {
 } from "../../validators/authValidators";
 
 describe("authValidators", () => {
-  const mockedUser = {
+  const mockedUser: ValidUser = {
     user_id: "1",
     username: "user1",
     firstname: "john",
@@ -30,6 +31,7 @@ describe("authValidators", () => {
     email: "user@mail.com",
     password: "pw",
     isAdmin: false,
+    role: "user",
   };
 
   const mockedBcryptCompare = bcrypt.compare as jest.Mock;

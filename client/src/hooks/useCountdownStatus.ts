@@ -4,7 +4,7 @@ import { timerData } from "features/timer/timerSlice";
 import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import type { AppDispatch } from "app/rootReducer";
 
-const useCountdownStatus = (time: number): boolean => {
+const useCountdownStatus = (time: number | undefined): boolean => { 
   const [countDownOver, setCountDownOver] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const timer = useSelector(timerData);
@@ -19,7 +19,7 @@ const useCountdownStatus = (time: number): boolean => {
     };
 
     const checkTimerStatus = () => {
-      if (time <= Date.now()) return;
+      if (!time || time <= Date.now()) return;
 
       const timeSecs = time / 1000;
       timerInterval = setInterval(() => {

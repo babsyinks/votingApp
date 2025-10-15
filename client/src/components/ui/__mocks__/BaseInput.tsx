@@ -15,7 +15,9 @@ export default function MockBaseInput(props: BaseInputProps) {
       data-testid="mock-baseinput"
       value={val}
       onChange={(e) => {
-        onChange(e);
+        if (onChange) {
+          onChange(e);
+        }
         setVal(e.target.value);
       }}
       onInput={handleInput}
