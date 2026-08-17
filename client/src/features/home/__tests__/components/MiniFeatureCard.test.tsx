@@ -41,7 +41,7 @@ describe("MiniFeatureCard Component", () => {
   it("applies correct heading styles", () => {
     render(<MiniFeatureCard {...defaultProps} />);
     const heading = screen.getByRole("heading", { level: 3 });
-    expect(heading).toHaveClass("text-xl fw-600");
+    expect(heading).toHaveClass("text-xl-r fw-600");
   });
 
   it("renders description inside a paragraph", () => {

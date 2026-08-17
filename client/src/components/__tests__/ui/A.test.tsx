@@ -1,15 +1,15 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import A from "components/ui/A";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("components/ui/A.module.css", () => ({
+vi.mock("components/ui/A.module.css", () => ({
   link: "mock-link-class",
 }));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<A />", () => {
   const href = "https://example.com";

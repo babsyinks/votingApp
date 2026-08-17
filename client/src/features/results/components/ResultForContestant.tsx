@@ -15,7 +15,7 @@ export default function ResultForContestant({
   index,
 }: ResultForContestantProps) {
   return (
-    <ContestantFrame className="mb-10">
+    <ContestantFrame className="mb-10p">
       <ContestantMainInfo
         contestant={contestant}
         showInfo={true}

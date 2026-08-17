@@ -2,11 +2,12 @@ import { render, screen } from "@testing-library/react";
 import AuthValidationIndicator from "features/auth/components/AuthValidationIndicator";
 import { SpanProps } from "components/ui/Span";
 import { IProps } from "components/ui/I";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Span", () => ({ children, className, ...props }: SpanProps) => (
+vi.mock("components/ui/Span", () => ({ children, className, ...props }: SpanProps) => (
   <span data-testid="span" className={className} {...props}>{children}</span>
 ));
-jest.mock("components/ui/I", () => ({ className }: IProps) => (
+vi.mock("components/ui/I", () => ({ className }: IProps) => (
   <i data-testid="icon" className={className}></i>
 ));
 

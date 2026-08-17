@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import AuthFieldUser from "features/auth/components/AuthFieldUser";
 import { AuthFieldWithIconProps } from "features/auth/components/AuthFieldWithIcon";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldWithIcon",
   () =>
     ({ onChange, placeholder, iconClass }: AuthFieldWithIconProps) => (
@@ -18,12 +19,12 @@ jest.mock(
 describe("AuthFieldUser", () => {
   const defaultProps = {
     value: "",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Username",
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders AuthFieldWithIcon with correct props", () => {

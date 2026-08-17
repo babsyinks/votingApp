@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import InputTime from "components/ui/InputTime";
 import { BaseInputProps } from "components/ui/BaseInput";
+import { vi } from "vitest";
 
-jest.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
-  const { className, ...rest } = props; 
+vi.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
+  const { className, ...rest } = props;
   return <input data-testid="mock-baseinput" className={className} {...rest} />;
 });
 
@@ -12,13 +12,13 @@ describe("<InputTime />", () => {
   const baseProps = {
     name: "startTime",
     value: "12:00",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Select time",
     className: "custom-class",
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders the time input with correct props", () => {
@@ -48,12 +48,7 @@ describe("<InputTime />", () => {
   });
 
   it("applies empty string className by default", () => {
-    render(
-      <InputTime
-        value="08:00"
-        onChange={jest.fn()}
-      />
-    );
+    render(<InputTime value="08:00" onChange={vi.fn()} />);
     const input = screen.getByTestId("mock-baseinput");
 
     expect(input.className).toBe("");

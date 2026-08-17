@@ -1,11 +1,12 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import TestimonialCard from "features/home/components/TestimonialCard";
 import { BlockquoteProps } from "components/ui/Blockquote";
 import { ParagraphProps } from "components/ui/Paragraph";
 import { FooterProps } from "components/ui/Footer";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Blockquote",
   () =>
     ({ children, ...props }: BlockquoteProps) => (
@@ -14,7 +15,7 @@ jest.mock(
       </blockquote>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Paragraph",
   () =>
     ({ children, ...props }: ParagraphProps) => (
@@ -23,7 +24,7 @@ jest.mock(
       </p>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Footer",
   () =>
     ({ children, ...props }: FooterProps) => (

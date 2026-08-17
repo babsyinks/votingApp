@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionDetailsHeaderButton from "features/election/components/ElectionDetailsHeaderButton";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ onClick, className, children }: ButtonProps) => (
@@ -39,13 +40,13 @@ describe("ElectionDetailsHeaderButton", () => {
       "bg-slateblue",
       "text-white",
       "border-rounded-5",
-      "p-10",
+      "p-10p",
       "custom-class",
     );
   });
 
   it("calls onClick when clicked", () => {
-    const mockClick = jest.fn();
+    const mockClick = vi.fn();
     render(<ElectionDetailsHeaderButton onClick={mockClick} btnLabel="Vote" />);
     const button = screen.getByTestId("custom-button");
     fireEvent.click(button);

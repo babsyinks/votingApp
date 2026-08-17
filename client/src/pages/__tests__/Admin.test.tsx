@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import { MemoryRouter, useNavigate } from "react-router-dom";
@@ -8,21 +7,22 @@ import * as useToastMessageHook from "hooks/useToastMessage";
 import type { AdminFormDetailsProps } from "features/admin/components/AdminFormDetails";
 import type { AdminDataToolTipsBtnsListProps } from "features/admin/components/AdminDataToolTipsBtnsList";
 import type { ToastMessageProps } from "components/ui/ToastMessage";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", async () => ({
+  ...(await vi.importActual("react-router-dom")),
+  useNavigate: vi.fn(),
 }));
-jest.mock("hooks/useAxios");
-jest.mock("hooks/useToastMessage");
-jest.mock("features/admin/components/AdminElectionDelete", () => () => (
+vi.mock("hooks/useAxios");
+vi.mock("hooks/useToastMessage");
+vi.mock("features/admin/components/AdminElectionDelete", () => () => (
   <div>AdminElectionDelete</div>
 ));
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminFormDetails",
   () => (props: AdminFormDetailsProps) => (
     <div data-testid="admin-form-details">
@@ -30,7 +30,7 @@ jest.mock(
       <button onClick={() => props.setIsDisabled(false)}>Enable Submit</button>
       <button
         onClick={() => {
-          const formData = { surname: "Test Candidate" } as unknown as FormData
+          const formData = { surname: "Test Candidate" } as unknown as FormData;
           props.setFormData(formData);
         }}
       >
@@ -39,7 +39,7 @@ jest.mock(
     </div>
   ),
 );
-jest.mock(
+vi.mock(
   "features/admin/components/AdminDataToolTipsBtnsList",
   () => (props: AdminDataToolTipsBtnsListProps) => (
     <div data-testid="tooltips-list">
@@ -53,36 +53,34 @@ jest.mock(
     </div>
   ),
 );
-jest.mock(
-  "components/ui/ToastMessage",
-  () =>
-    ({ toast }: ToastMessageProps) => <div>ToastMessage: {toast?.message}</div>,
-);
+vi.mock("components/ui/ToastMessage", () => ({ toast }: ToastMessageProps) => (
+  <div>ToastMessage: {toast?.message}</div>
+));
 
 describe("Admin Component", () => {
-  const mockNavigate = jest.fn();
-  const mockUseSelector = jest.mocked(useSelector);
-  const mockUseNavigate = jest.mocked(useNavigate);
-  const mockUseAxios = jest.mocked(useAxiosHook.useAxios);
-  const mockUseToastMessage = jest.mocked(useToastMessageHook.useToastMessage);
+  const mockNavigate = vi.fn();
+  const mockUseSelector = vi.mocked(useSelector);
+  const mockUseNavigate = vi.mocked(useNavigate);
+  const mockUseAxios = vi.mocked(useAxiosHook.useAxios);
+  const mockUseToastMessage = vi.mocked(useToastMessageHook.useToastMessage);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     mockUseSelector.mockReturnValue(true); // User is admin
     mockUseNavigate.mockReturnValue(mockNavigate);
 
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: null,
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     mockUseToastMessage.mockReturnValue({
       toast: { message: "Success!", status: "success" },
-      triggerSuccessToast: jest.fn(),
-      triggerFailureToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
+      triggerFailureToast: vi.fn(),
       toastDetailsSet: () => true,
     });
   });
@@ -105,12 +103,12 @@ describe("Admin Component", () => {
   });
 
   it("enables submit button and triggers form submission", async () => {
-    const mockTriggerRequest = jest.fn();
+    const mockTriggerRequest = vi.fn();
     mockUseAxios.mockReturnValue({
       triggerRequest: mockTriggerRequest,
       response: null,
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Admin />, { wrapper: MemoryRouter });
@@ -136,17 +134,17 @@ describe("Admin Component", () => {
 
   it("shows success toast on successful response", () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: { status: 200 },
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
-    const mockSuccess = jest.fn();
+    const mockSuccess = vi.fn();
     mockUseToastMessage.mockReturnValue({
       toast: { message: "Success!", status: "success" },
       triggerSuccessToast: mockSuccess,
-      triggerFailureToast: jest.fn(),
+      triggerFailureToast: vi.fn(),
       toastDetailsSet: () => true,
     });
 
@@ -159,16 +157,16 @@ describe("Admin Component", () => {
 
   it("shows error toast on failure response when error message is received", () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: null,
       error: { message: "API Error" },
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
-    const mockFailure = jest.fn();
+    const mockFailure = vi.fn();
     mockUseToastMessage.mockReturnValue({
       toast: { message: "Failed!", status: "failure" },
-      triggerSuccessToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
       triggerFailureToast: mockFailure,
       toastDetailsSet: () => true,
     });

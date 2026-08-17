@@ -5,10 +5,10 @@ import Span from "components/ui/Span";
 export default function HeroSectionMessage() {
   return (
     <>
-      <Heading type="h1" className="text-4xl fw-700 mb-1p5r ta-left">
+      <Heading type="h1" className="text-4xl-r fw-700 mb-1p5r ta-left">
         Welcome to <Span className="text-aqua">VoteNow</Span>
       </Heading>
-      <Paragraph className="text-xl mb-2p5r paragraph-white paragraph-md fw-bold"> 
+      <Paragraph className="text-xl-r mb-2p5r paragraph-white paragraph-md fw-bold"> 
         Your secure and reliable online voting platform. Whether you're running
         a student election, hosting a community poll, or conducting an
         organizational vote, VoteNow is built to handle it with ease and

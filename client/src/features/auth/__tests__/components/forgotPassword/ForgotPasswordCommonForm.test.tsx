@@ -6,31 +6,32 @@ import { ToastMessageProps } from "components/ui/ToastMessage";
 import { AuthButtonProps } from "features/auth/components/AuthButton";
 import { AuthAlternativeAccessMeansProps } from "features/auth/components/AuthAlternativeAccessMeans";
 import { UseAxiosReturn } from "hooks/useAxios";
+import { vi } from "vitest";
 
-jest.mock("hooks/useAxios");
-jest.mock("hooks/useToastMessage");
-jest.mock(
+vi.mock("hooks/useAxios");
+vi.mock("hooks/useToastMessage");
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, className }: BlockProps) => (
       <div className={className}>{children}</div>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Paragraph",
   () =>
     ({ children, className }: ParagraphProps) => (
       <p className={className}>{children}</p>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/ToastMessage",
   () =>
     ({ toast }: ToastMessageProps) => (
       <div data-testid="toast-message">{toast.message}</div>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthButton",
   () =>
     ({ children, onClick, disabled }: AuthButtonProps) => (
@@ -39,7 +40,7 @@ jest.mock(
       </button>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthAlternativeAccessMeans",
   () =>
     ({ btnLabel, route }: AuthAlternativeAccessMeansProps) => (
@@ -52,20 +53,20 @@ jest.mock(
 const mockUseAxios: UseAxiosReturn = {
   response: null,
   error: null,
-  triggerRequest: jest.fn(),
-  clearError: jest.fn(),
+  triggerRequest: vi.fn(),
+  clearError: vi.fn(),
 };
 const mockUseToastMessage = {
   toast: { message: "", type: "" },
-  triggerSuccessToast: jest.fn(),
-  triggerFailureToast: jest.fn(),
-  toastDetailsSet: jest.fn(() => false),
+  triggerSuccessToast: vi.fn(),
+  triggerFailureToast: vi.fn(),
+  toastDetailsSet: vi.fn(() => false),
 };
 
-jest.mock("hooks/useAxios", () => ({
+vi.mock("hooks/useAxios", () => ({
   useAxios: () => mockUseAxios,
 }));
-jest.mock("hooks/useToastMessage", () => ({
+vi.mock("hooks/useToastMessage", () => ({
   useToastMessage: () => mockUseToastMessage,
 }));
 
@@ -74,12 +75,12 @@ describe("ForgotPasswordCommonForm", () => {
     path: "/forgot-password",
     data: { email: "test@example.com" },
     buttonLabel: "Send Reset Link",
-    clearField: jest.fn(),
+    clearField: vi.fn(),
     children: <div>Test Child</div>,
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseAxios.response = null;
     mockUseAxios.error = null;
     mockUseToastMessage.toast = { message: "", type: "" };

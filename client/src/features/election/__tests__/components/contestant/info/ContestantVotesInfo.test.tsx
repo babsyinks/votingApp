@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import ContestantVotesInfo from "features/election/components/contestant/info/ContestantVotesInfo";
 import { ContestantTextInfoWrapperProps } from "features/election/components/contestant/info/ContestantTextInfoWrapper";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantTextInfoWrapper",
   () =>
     ({ children }: ContestantTextInfoWrapperProps) => <div data-testid="wrapper">{children}</div>,

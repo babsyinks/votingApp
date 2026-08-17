@@ -1,4 +1,5 @@
 import { JSX } from "react";
+
 import BaseInput, { BaseInputProps } from "./BaseInput";
 
 export interface InputDateProps extends Omit<BaseInputProps, "type"> {
@@ -15,5 +16,5 @@ export default function InputDate({
   className = "",
   ...rest
 }: InputDateProps): JSX.Element {
-  return <BaseInput {...rest} className={className} type="date"/>;
+  return <BaseInput {...rest} className={className} type="date" />;
 }

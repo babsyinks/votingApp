@@ -12,8 +12,8 @@ export default function MiniFeatureSection({
   section,
 }: MiniFeatureSectionProps) {
   return (
-    <Section className="mx-auto-my-0 px-1p5r-py-2r">
-      <Heading type="h2" className="text-3xl fw-700 ta-center mb-3r">
+    <Section className="mx-auto-my-0p px-1p5r-py-2r">
+      <Heading type="h2" className="text-3xl-r fw-700 ta-center mb-3r">
         {section.title}
       </Heading>
       <Grid className="grid-basic ta-center">

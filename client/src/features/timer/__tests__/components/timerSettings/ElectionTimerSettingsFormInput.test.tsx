@@ -1,30 +1,31 @@
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionTimerSettingsFormInput from "features/timer/components/timerSettings/ElectionTimerSettingsFormInput";
 import { useSelector } from "react-redux";
 import useResponsiveFontSize from "features/timer/hooks/useResponsiveFontSize";
 import type { ElectionTimerSettingsFormInputProps } from "features/timer/components/timerSettings/ElectionTimerSettingsFormInput";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("features/timer/hooks/useResponsiveFontSize", () => jest.fn());
+vi.mock("features/timer/hooks/useResponsiveFontSize", () => vi.fn());
 
 describe("ElectionTimerSettingsFormInput", () => {
-  const mockUseResponsiveFontSize = jest.mocked(useResponsiveFontSize);
-  const mockedUseSelector = jest.mocked(useSelector);
+  const mockUseResponsiveFontSize = vi.mocked(useResponsiveFontSize);
+  const mockedUseSelector = vi.mocked(useSelector);
 
   const baseProps: ElectionTimerSettingsFormInputProps = {
     label: "Start Date",
     type: "date",
     value: "2025-08-08",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
   };
 
   beforeEach(() => {
-    mockUseResponsiveFontSize.mockReturnValue("text-sm");
-    jest.clearAllMocks();
+    mockUseResponsiveFontSize.mockReturnValue("text-sm-r");
+    vi.clearAllMocks();
   });
 
   it("renders label and input with correct props", () => {
@@ -34,7 +35,7 @@ describe("ElectionTimerSettingsFormInput", () => {
 
     // Label should render correctly
     expect(screen.getByText(/Start Date:/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Start Date/i)).toHaveClass("text-sm");
+    expect(screen.getByLabelText(/Start Date/i)).toHaveClass("text-sm-r");
 
     // Input should render with correct type and value
     const input = screen.getByLabelText(/Start Date/i);

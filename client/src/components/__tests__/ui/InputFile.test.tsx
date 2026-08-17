@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import InputFile from "components/ui/InputFile";
 import { BaseInputProps } from "components/ui/BaseInput";
+import { vi } from "vitest";
 
-jest.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
+vi.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
   const { onChange, resetKey, ...rest } = props;
 
   return (
@@ -16,10 +16,8 @@ jest.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
   );
 });
 
-
-
 describe("<InputFile />", () => {
-  const onChangeMock = jest.fn();
+  const onChangeMock = vi.fn();
 
   const baseProps = {
     name: "upload",

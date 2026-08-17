@@ -16,7 +16,7 @@ export default function LiveTimerRenderer({
   completed,
 }: LiveTimerRendererProps) {
   return (
-    <Span className="text-sky-blue fw-bold px-0-py-10 text-responsive-1p5">
+    <Span className="text-sky-blue fw-bold px-0-py-10p text-responsive-1p5">
       {completed ? (
         <LiveTimerElectionOver />
       ) : (

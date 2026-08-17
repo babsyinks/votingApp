@@ -3,15 +3,16 @@ import HelpMeans from "features/help/components/HelpMeans";
 import useBreakpoint from "hooks/useBreakpoint";
 import { BlockProps } from "components/ui/Block";
 import { HelpMeansWhatsAppProps } from "features/help/components/HelpMeansWhatsApp";
+import { vi, type Mock } from "vitest";
 
-jest.mock("features/help/data/helpNums", () => [
+vi.mock("features/help/data/helpNums", () => [
   "2348051750010",
   "2349154549010",
 ]);
 
-jest.mock("hooks/useBreakpoint", () => jest.fn());
+vi.mock("hooks/useBreakpoint", () => vi.fn());
 
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, type, className }: BlockProps) => (
@@ -21,7 +22,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/help/components/HelpMeansWhatsApp",
   () =>
     ({ phoneNumber, helpDeskSlot }: HelpMeansWhatsAppProps) => (
@@ -31,14 +32,14 @@ jest.mock(
     ),
 );
 
-jest.mock("features/help/components/HelpMeansEmail", () => () => (
+vi.mock("features/help/components/HelpMeansEmail", () => () => (
   <div data-testid="email">Email Section</div>
 ));
 
 describe("HelpMeans component", () => {
-  const mockUseBreakpoint = useBreakpoint as jest.Mock;
+  const mockUseBreakpoint = useBreakpoint as Mock;
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders WhatsApp help with vertical layout on mobile", () => {

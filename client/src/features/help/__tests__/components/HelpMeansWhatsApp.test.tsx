@@ -3,20 +3,21 @@ import HelpMeansWhatsApp from "features/help/components/HelpMeansWhatsApp";
 import { BlockProps } from "components/ui/Block";
 import { AProps } from "components/ui/A";
 import { IProps } from "components/ui/I";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, className }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, className }: BlockProps) => (
   <div data-testid="block" className={className}>
     {children}
   </div>
 ));
 
-jest.mock("components/ui/A", () => ({ children, ...props }: AProps) => (
+vi.mock("components/ui/A", () => ({ children, ...props }: AProps) => (
   <a data-testid="link" {...props}>
     {children}
   </a>
 ));
 
-jest.mock("components/ui/I", () => ({ className }: IProps) => (
+vi.mock("components/ui/I", () => ({ className }: IProps) => (
   <i data-testid="icon" className={className}></i>
 ));
 

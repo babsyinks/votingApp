@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import HomePage from "pages/HomePage";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,19 +6,20 @@ import featureCardConfig from "features/home/data/featureCardConfig";
 import type { MainProps } from "components/ui/Main";
 import type { UserAuthStatus } from "features/home/types/userAuthStatus";
 import type { MiniFeatureSectionProps } from "features/home/components/MiniFeatureSection";
+import { vi, type Mock } from "vitest";
 
-jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(() => ({
+vi.mock("features/timer/timerSlice", () => ({
+  fetchThenSetCurrentTimerStatus: vi.fn(() => ({
     type: "mock/fetchThenSetCurrentTimerStatus",
   })),
 }));
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("components/ui/Main", () => ({
+vi.mock("components/ui/Main", () => ({
   __esModule: true,
   default: ({ children, className }: MainProps) => (
     <div data-testid="Main" className={className}>
@@ -28,67 +28,67 @@ jest.mock("components/ui/Main", () => ({
   ),
 }));
 
-jest.mock("layout/MainHeader", () => ({
+vi.mock("layout/MainHeader", () => ({
   __esModule: true,
   default: () => <div data-testid="MainHeader" />,
 }));
 
-jest.mock("layout/MainFooter", () => ({
+vi.mock("layout/MainFooter", () => ({
   __esModule: true,
   default: () => <div data-testid="MainFooter" />,
 }));
 
-jest.mock("features/home/components/ElectionStatusIndicator", () => ({
+vi.mock("features/home/components/ElectionStatusIndicator", () => ({
   __esModule: true,
   default: () => <div data-testid="ElectionStatusIndicator" />,
 }));
 
-jest.mock("features/home/components/HeroSection", () => ({
+vi.mock("features/home/components/HeroSection", () => ({
   __esModule: true,
   default: ({ userIsAuthenticated }: UserAuthStatus) => (
     <div data-testid="HeroSection">{String(userIsAuthenticated)}</div>
   ),
 }));
 
-jest.mock("features/home/components/MiniFeatureSection", () => ({
+vi.mock("features/home/components/MiniFeatureSection", () => ({
   __esModule: true,
   default: ({ section }: MiniFeatureSectionProps) => (
     <div data-testid={`MiniFeatureSection-${section.title}`} />
   ),
 }));
 
-jest.mock("features/home/components/TestimonialList", () => ({
+vi.mock("features/home/components/TestimonialList", () => ({
   __esModule: true,
   default: () => <div data-testid="TestimonialList" />,
 }));
 
-jest.mock("features/home/components/IndustriesServedDetails", () => ({
+vi.mock("features/home/components/IndustriesServedDetails", () => ({
   __esModule: true,
   default: () => <div data-testid="IndustriesServed" />,
 }));
 
-jest.mock("features/home/components/HelpSection", () => ({
+vi.mock("features/home/components/HelpSection", () => ({
   __esModule: true,
   default: () => <div data-testid="HelpSection" />,
 }));
 
-const mockedFetchThenSetCurrentTimerStatus = jest.mocked(
+const mockedFetchThenSetCurrentTimerStatus = vi.mocked(
   fetchThenSetCurrentTimerStatus,
 );
 
 describe("HomePage component", () => {
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
 
   beforeEach(() => {
-    jest.useFakeTimers({ legacyFakeTimers: false });
-    (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useSelector as jest.Mock).mockImplementation((selector) =>
+    vi.useFakeTimers();
+    (useDispatch as Mock).mockReturnValue(mockDispatch);
+    (useSelector as Mock).mockImplementation((selector) =>
       selector.name === "userAuth" ? true : null,
     );
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders all the home page sections", () => {

@@ -1,33 +1,34 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import ElectionTimerSettingsButtons from "features/timer/components/timerSettings/ElectionTimerSettingsButtons";
 import ElectionTimerSettingsButton from "features/timer/components/timerSettings/ElectionTimerSettingsButton";
+import { vi, type Mock } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/timer/components/timerSettings/ElectionTimerSettingsButton",
-  () => jest.fn(() => <div data-testid="mock-button" />),
+  () => vi.fn(() => <div data-testid="mock-button" />),
 );
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
 describe("ElectionTimerSettingsButtons", () => {
   const defaultProps = {
-    setEnableDone: jest.fn(),
-    triggerSuccessToast: jest.fn(),
-    triggerFailureToast: jest.fn(),
+    setEnableDone: vi.fn(),
+    triggerSuccessToast: vi.fn(),
+    triggerFailureToast: vi.fn(),
     electionSchedule: {
       startDate: 1754816400000,
       endDate: 1754902800000,
     },
   };
 
-  const mockUseSelector = useSelector as jest.Mock;
+  const mockUseSelector = useSelector as Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders only 'Set Timer' button when enableDone is true and timer has no start/end date", () => {

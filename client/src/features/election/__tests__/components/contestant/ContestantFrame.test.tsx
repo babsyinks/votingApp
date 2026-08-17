@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ContestantFrame from "features/election/components/contestant/ContestantFrame";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, className }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, className }: BlockProps) => (
   <div data-testid="mock-block" className={className}>
     {children}
   </div>
@@ -27,10 +27,10 @@ describe("ContestantFrame", () => {
 
     const block = screen.getByTestId("mock-block");
     expect(block.className).toContain("z-30");
-    expect(block.className).toContain("p-10");
+    expect(block.className).toContain("p-10p");
     expect(block.className).toContain("border-2-grey");
     expect(block.className).toContain("border-rounded-5");
-    expect(block.className).toContain("ml-2");
+    expect(block.className).toContain("ml-2p");
     expect(block.className).toContain("bg-white");
     expect(block.className).toContain("fw-bold");
   });

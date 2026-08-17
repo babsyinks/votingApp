@@ -1,10 +1,11 @@
 import React from "react";
-import InputFile, { InputFileProps } from "./InputFile";
-import InputText, { InputTextProps } from "./InputText";
-import InputDate, { InputDateProps } from "./InputDate";
-import InputTime, { InputTimeProps } from "./InputTime";
-import InputNumber, { InputNumberProps } from "./InputNumber";
+
 import { BaseInputProps } from "./BaseInput";
+import InputDate, { InputDateProps } from "./InputDate";
+import InputFile, { InputFileProps } from "./InputFile";
+import InputNumber, { InputNumberProps } from "./InputNumber";
+import InputText, { InputTextProps } from "./InputText";
+import InputTime, { InputTimeProps } from "./InputTime";
 
 interface InputTypeMap {
   text: InputTextProps;

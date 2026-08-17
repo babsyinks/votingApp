@@ -1,12 +1,12 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Label from "../../ui/Label";
 import "@testing-library/jest-dom";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses"); 
+vi.mock("util/getCompClasses"); 
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Label />", () => {
   it("renders label text via children", () => {

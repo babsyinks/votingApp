@@ -6,38 +6,39 @@ import { HeadingProps } from "components/ui/Heading";
 import { ParagraphProps } from "components/ui/Paragraph";
 
 import useWindowSize from "hooks/useWindowSize";
+import { vi } from "vitest";
 
-jest.mock("features/home/components/IndustryList", () => () => (
+vi.mock("features/home/components/IndustryList", () => () => (
   <div data-testid="industry-list">IndustryList</div>
 ));
-jest.mock("components/ui/Section", () => ({ children, ...props }: SectionProps) => (
+vi.mock("components/ui/Section", () => ({ children, ...props }: SectionProps) => (
   <div data-testid="section" {...props}>
     {children}
   </div>
 ));
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="block" {...props}>
     {children}
   </div>
 ));
-jest.mock("components/ui/Heading", () => ({ children, ...props }: HeadingProps) => (
+vi.mock("components/ui/Heading", () => ({ children, ...props }: HeadingProps) => (
   <h2 data-testid="heading" {...props}>
     {children}
   </h2>
 ));
-jest.mock("components/ui/Paragraph", () => ({ children, ...props }: ParagraphProps) => (
+vi.mock("components/ui/Paragraph", () => ({ children, ...props }: ParagraphProps) => (
   <p data-testid="paragraph" {...props}>
     {children}
   </p>
 ));
 
-jest.mock("hooks/useWindowSize", () => jest.fn());
+vi.mock("hooks/useWindowSize", () => vi.fn());
 
 describe("IndustriesServedDetails component", () => {
-  const mockUseWindowSize = jest.mocked(useWindowSize);
+  const mockUseWindowSize = vi.mocked(useWindowSize);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders correctly on small screens (width < 768)", () => {

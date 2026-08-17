@@ -1,17 +1,18 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SignUpStartAccountDoesNotExist from "features/auth/components/signup/SignUpStartAccountDoesNotExist";
 import { mockErrorType } from "../types/authResults";
+import { vi } from "vitest";
 
-const mockTriggerRequest = jest.fn();
-const mockTriggerFailureToast = jest.fn();
-const mockNavigate = jest.fn();
+const mockTriggerRequest = vi.fn();
+const mockTriggerFailureToast = vi.fn();
+const mockNavigate = vi.fn();
 
 let mockResponse: { success: boolean } | null = null;
 let mockError: mockErrorType = null;
 let mockToastDetailsSet = () => false;
 let mockToast = { status: "failure", message: "Something went wrong" };
 
-jest.mock("hooks/useAxios", () => ({
+vi.mock("hooks/useAxios", () => ({
   useAxios: () => ({
     triggerRequest: mockTriggerRequest,
     response: mockResponse,
@@ -19,7 +20,7 @@ jest.mock("hooks/useAxios", () => ({
   }),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
+vi.mock("hooks/useToastMessage", () => ({
   useToastMessage: () => ({
     toast: mockToast,
     triggerFailureToast: mockTriggerFailureToast,
@@ -27,7 +28,7 @@ jest.mock("hooks/useToastMessage", () => ({
   }),
 }));
 
-jest.mock("react-router-dom", () => ({
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
@@ -35,7 +36,7 @@ beforeEach(() => {
   mockResponse = null;
   mockError = null;
   mockToastDetailsSet = () => false;
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("SignUpStartAccountDoesNotExist", () => {

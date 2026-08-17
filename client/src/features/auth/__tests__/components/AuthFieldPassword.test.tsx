@@ -2,8 +2,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import AuthFieldPassword from "features/auth/components/AuthFieldPassword";
 import { AuthFieldWithIconProps } from "features/auth/components/AuthFieldWithIcon";
 import { IProps } from "components/ui/I";
+import { vi } from "vitest";
 
-jest.mock("components/ui/I", () => ({ className, onClick, role }: IProps) => (
+vi.mock("components/ui/I", () => ({ className, onClick, role }: IProps) => (
   <i
     className={className}
     onClick={onClick}
@@ -12,7 +13,7 @@ jest.mock("components/ui/I", () => ({ className, onClick, role }: IProps) => (
   />
 ));
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldWithIcon",
   () =>
     ({
@@ -38,11 +39,11 @@ jest.mock(
 describe("AuthFieldPassword", () => {
   const defaultProps = {
     value: "",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders input with password type and correct props initially", () => {

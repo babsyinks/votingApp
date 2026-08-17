@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import AuthAlternativeAccessMeans from "features/auth/components/AuthAlternativeAccessMeans";
 import { ParagraphProps } from "components/ui/Paragraph";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
-jest.mock(
+vi.mock(
   "components/ui/Paragraph",
   () =>
     ({ children, className }: ParagraphProps) => (
@@ -16,7 +17,7 @@ jest.mock(
       </p>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ children, className, onClick }: ButtonProps) => (
@@ -27,11 +28,11 @@ jest.mock(
 );
 
 describe("AuthAlternativeAccessMeans", () => {
-  const mockNavigate = jest.fn();
-  const mockedUseNavigate = jest.mocked(useNavigate);
+  const mockNavigate = vi.fn();
+  const mockedUseNavigate = vi.mocked(useNavigate);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedUseNavigate.mockReturnValue(mockNavigate);
   });
 
@@ -43,7 +44,7 @@ describe("AuthAlternativeAccessMeans", () => {
         route="/signup"
       />,
     );
-    expect(screen.getByTestId("paragraph")).toHaveClass("text-sm ta-center");
+    expect(screen.getByTestId("paragraph")).toHaveClass("text-sm-r ta-center");
     expect(screen.getByTestId("paragraph")).toHaveTextContent(
       "Don't have an account?",
     );

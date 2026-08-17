@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ContestantButtonManifestoTemplate from 'features/election/components/contestant/buttons/ContestantButtonManifestoTemplate';
+import { vi } from 'vitest';
 
 describe('ContestantButtonManifestoTemplate', () => {
   it('renders children content inside the button', () => {
@@ -13,7 +14,7 @@ describe('ContestantButtonManifestoTemplate', () => {
   });
 
   it('calls handler function on button click', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
 
     render(
       <ContestantButtonManifestoTemplate handler={handleClick}>

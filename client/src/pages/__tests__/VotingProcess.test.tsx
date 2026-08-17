@@ -1,40 +1,40 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchThenSetCurrentTimerStatus, timerData } from "features/timer/timerSlice";
 import useCountdownStatus from "hooks/useCountdownStatus";
 import VotingProcess from "pages/VotingProcess";
+import { vi } from "vitest";
 
-jest.useFakeTimers().setSystemTime(1753795664000);
+vi.useFakeTimers().setSystemTime(1753795664000);
 
-jest.mock("features/election/components/ElectionDetails", () => () => (
+vi.mock("features/election/components/ElectionDetails", () => () => (
   <div data-testid="election-details">ElectionDetails Component</div>
 ));
-jest.mock("features/timer/components/preElectionTimer/PreElectionCountDown", () => () => (
+vi.mock("features/timer/components/preElectionTimer/PreElectionCountDown", () => () => (
   <div data-testid="pre-election-countdown">PreElectionCountDown Component</div>
 ));
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(() => ({ type: "MOCK_DISPATCH" })),
-  timerData: jest.fn(),
+vi.mock("features/timer/timerSlice", () => ({
+  fetchThenSetCurrentTimerStatus: vi.fn(() => ({ type: "MOCK_DISPATCH" })),
+  timerData: vi.fn(),
 }));
 
-jest.mock("hooks/useCountdownStatus", () => jest.fn());
+vi.mock("hooks/useCountdownStatus", () => vi.fn());
 
 describe("VotingProcess", () => {
   const NOW = Date.now();
-  const mockDispatch = jest.fn();
-    const mockUseDispatch = jest.mocked(useDispatch);
-    const mockTimerData = jest.mocked(timerData);
-    const mockUseSelector = jest.mocked(useSelector);
+  const mockDispatch = vi.fn();
+    const mockUseDispatch = vi.mocked(useDispatch);
+    const mockTimerData = vi.mocked(timerData);
+    const mockUseSelector = vi.mocked(useSelector);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseDispatch.mockReturnValue(mockDispatch);
   });
 

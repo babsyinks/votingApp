@@ -1,13 +1,14 @@
 /* eslint-disable testing-library/no-node-access */
-import React from "react";
+
 import { render, screen, cleanup } from "@testing-library/react";
 import Container from "layout/Container";
 import useOrientation from "hooks/useOrientation";
 import { ContainerProps } from "layout/Container";
 import type { FlexDirection } from "layout/Container";
+import { type MockedFunction, vi } from "vitest";
 
-jest.mock("hooks/useOrientation");
-const mockedUseOrientation = useOrientation as jest.MockedFunction<
+vi.mock("hooks/useOrientation");
+const mockedUseOrientation = useOrientation as MockedFunction<
   typeof useOrientation
 >;
 
@@ -26,7 +27,7 @@ describe("Container Component", () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedUseOrientation.mockReturnValue(true);
   });
 

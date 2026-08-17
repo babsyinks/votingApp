@@ -4,7 +4,7 @@ import {
   getAllVotesForAPosition,
   getVotesForAContestant,
   getAllContestantsElectionDetails,
-} from "../../helpers/electionControllerHelpers";
+} from "../../helpers/electionHelpers";
 import createElectionService from "../../services/electionService";
 
 // Mock dependencies
@@ -14,7 +14,7 @@ jest.mock("../../utils/generateCustomError", () =>
   }),
 );
 
-jest.mock("../../helpers/electionControllerHelpers", () => ({
+jest.mock("../../helpers/electionHelpers", () => ({
   userHasVoted: jest.fn(),
   getAllVotesForAPosition: jest.fn(),
   getVotesForAContestant: jest.fn(),

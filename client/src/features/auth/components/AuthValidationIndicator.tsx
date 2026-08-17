@@ -28,7 +28,7 @@ export default function AuthValidationIndicator({
       <Span type="inline-block" className={labelWidth}>
         {label}
       </Span>
-      <Span type="inline-block" className={`ml-10 text-lg ta-right ${iconWidth}`}>
+      <Span type="inline-block" className={`ml-10p text-lg-r ta-right ${iconWidth}`}>
         <I
           className={`fas ${isValid ? "fa-check-circle" : "fa-times-circle"} icon`}
         />

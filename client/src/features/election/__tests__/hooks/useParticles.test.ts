@@ -2,14 +2,15 @@ import { renderHook } from "@testing-library/react";
 import { useParticles } from "../../hooks/useParticles";
 import { loadFull } from "tsparticles";
 import type { Engine, Container } from "tsparticles-engine";
+import { vi } from "vitest";
 
-jest.mock("tsparticles", () => ({
-  loadFull: jest.fn(),
+vi.mock("tsparticles", () => ({
+  loadFull: vi.fn(),
 }));
 
 describe("useParticles", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("returns particlesInit and particlesLoaded functions", () => {

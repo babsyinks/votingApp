@@ -1,52 +1,53 @@
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionTimerSettingsButton from "features/timer/components/timerSettings/ElectionTimerSettingsButton";
 import { useDispatch } from "react-redux";
 import { setTimerData } from "features/timer/timerSlice";
 import { useAxios } from "hooks/useAxios";
 import useResponsiveFontSize from "features/timer/hooks/useResponsiveFontSize";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
 
-jest.mock("features/timer/hooks/useResponsiveFontSize", () => jest.fn());
+vi.mock("features/timer/hooks/useResponsiveFontSize", () => vi.fn());
 
-jest.mock("features/timer/timerSlice", () => ({
-  setTimerData: jest.fn(),
+vi.mock("features/timer/timerSlice", () => ({
+  setTimerData: vi.fn(),
 }));
 
 describe("ElectionTimerSettingsButton", () => {
-  let mockDispatch: jest.Mock;
-  let mockTriggerRequest: jest.Mock;
-  let triggerSuccessToast: jest.Mock;
-  let triggerFailureToast: jest.Mock;
-  let setEnableDone: jest.Mock;
+  let mockDispatch: Mock;
+  let mockTriggerRequest: Mock;
+  let triggerSuccessToast: Mock;
+  let triggerFailureToast: Mock;
+  let setEnableDone: Mock;
   let electionSchedule: { startDate: number; endDate: number };
 
   beforeEach(() => {
-    mockDispatch = jest.fn();
-    mockTriggerRequest = jest.fn();
+    mockDispatch = vi.fn();
+    mockTriggerRequest = vi.fn();
     electionSchedule = {
       startDate: 1754816400000,
       endDate: 1754902800000,
     };
-    (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useAxios as jest.Mock).mockReturnValue({
+    (useDispatch as Mock).mockReturnValue(mockDispatch);
+    (useAxios as Mock).mockReturnValue({
       response: null,
       error: null,
       triggerRequest: mockTriggerRequest,
     });
-    (useResponsiveFontSize as jest.Mock).mockReturnValue("text-lg");
+    (useResponsiveFontSize as Mock).mockReturnValue("text-lg-r");
 
-    triggerSuccessToast = jest.fn();
-    triggerFailureToast = jest.fn();
-    setEnableDone = jest.fn();
-    jest.clearAllMocks();
+    triggerSuccessToast = vi.fn();
+    triggerFailureToast = vi.fn();
+    setEnableDone = vi.fn();
+    vi.clearAllMocks();
   });
 
   it("calls triggerRequest with POST when label is 'Set Timer'", async () => {
@@ -99,7 +100,7 @@ describe("ElectionTimerSettingsButton", () => {
   it("handles success response", () => {
     const mockResponse = electionSchedule;
 
-    (useAxios as jest.Mock).mockReturnValue({
+    (useAxios as Mock).mockReturnValue({
       response: mockResponse,
       error: null,
       triggerRequest: mockTriggerRequest,
@@ -127,7 +128,7 @@ describe("ElectionTimerSettingsButton", () => {
   });
 
   it("handles error response", () => {
-    (useAxios as jest.Mock).mockReturnValue({
+    (useAxios as Mock).mockReturnValue({
       response: null,
       error: { message: "Oops" },
       triggerRequest: mockTriggerRequest,

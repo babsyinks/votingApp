@@ -5,16 +5,17 @@ import { IProps } from "components/ui/I";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminDataToolTipBtn",
   () =>
     ({ data, disabled, className, onClick, children }: AdminDataToolTipBtnProps) => (
@@ -29,11 +30,11 @@ jest.mock(
     ),
 );
 
-jest.mock("components/ui/I", () => ({ className }: IProps) => (
+vi.mock("components/ui/I", () => ({ className }: IProps) => (
   <i data-testid="icon" className={className}></i>
 ));
 
-jest.mock("features/admin/helpers/tooltipBtnDetails", () => () => [
+vi.mock("features/admin/helpers/tooltipBtnDetails", () => () => [
   {
     data: "Add A New Contestant",
     compClass: "shd-grn",
@@ -49,9 +50,9 @@ jest.mock("features/admin/helpers/tooltipBtnDetails", () => () => [
 ]);
 
 describe("AdminDataToolTipsBtnsList", () => {
-  const mockNavigate = jest.fn();
-  const mockUseSelector = jest.mocked(useSelector);
-  const mockUseNavigate = jest.mocked(useNavigate)
+  const mockNavigate = vi.fn();
+  const mockUseSelector = vi.mocked(useSelector);
+  const mockUseNavigate = vi.mocked(useNavigate)
 
   beforeEach(() => {
     mockUseSelector.mockImplementation(() => false);
@@ -59,13 +60,13 @@ describe("AdminDataToolTipsBtnsList", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders the submit button with loading icon when loading is true", () => {
     mockUseSelector.mockReturnValue(true);
 
-    render(<AdminDataToolTipsBtnsList isSubmitBtnDisabled={false} handleSubmitVals={jest.fn()} />);
+    render(<AdminDataToolTipsBtnsList isSubmitBtnDisabled={false} handleSubmitVals={vi.fn()} />);
 
     const submitBtn = screen.getByTestId("tooltip-btn-Add A New Contestant");
     const icon = screen.getAllByTestId("icon")[0];
@@ -77,7 +78,7 @@ describe("AdminDataToolTipsBtnsList", () => {
   it("renders submit button normally when loading is false", () => {
     mockUseSelector.mockReturnValue(false);
 
-    render(<AdminDataToolTipsBtnsList isSubmitBtnDisabled={false} handleSubmitVals={jest.fn()} />);
+    render(<AdminDataToolTipsBtnsList isSubmitBtnDisabled={false} handleSubmitVals={vi.fn()} />);
 
     const icon = screen.getAllByTestId("icon")[0];
     expect(icon).toHaveClass("fas fa-plus");

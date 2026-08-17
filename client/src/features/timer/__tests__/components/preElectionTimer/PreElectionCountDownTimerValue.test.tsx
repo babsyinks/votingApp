@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import PreElectionCountDownTimerValue from "features/timer/components/preElectionTimer/PreElectionCountDownTimerValue";
 import type { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => {
+vi.mock("components/ui/Block", () => {
   return ({ children, className }: BlockProps) => (
     <div data-testid="block" className={className}>
       {children}
@@ -18,11 +19,11 @@ describe("PreElectionCountDownTimerValue", () => {
     expect(screen.getByText("Minutes")).toBeInTheDocument();
   });
 
-  test('applies "text-32" class to time block', () => {
+  test('applies "text-32p" class to time block', () => {
     render(<PreElectionCountDownTimerValue time={12} dimension="Seconds" />);
 
     const timeBlock = screen.getByText("12");
-    expect(timeBlock).toHaveClass("text-32");
+    expect(timeBlock).toHaveClass("text-32p");
   });
 
   test("renders exactly three Block components", () => {

@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
-export interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface BaseInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   type: "text" | "password" | "email" | "file" | "date" | "time" | "number";
   /**
    * Key used to forcefully reset the input (mainly for file inputs).
@@ -20,12 +21,5 @@ export default function BaseInput({
   style,
   ...rest
 }: BaseInputProps): JSX.Element {
-  return (
-    <input
-      key={resetKey}
-      className={className}
-      style={style}
-      {...rest}
-    />
-  );
+  return <input key={resetKey} className={className} style={style} {...rest} />;
 }

@@ -4,8 +4,9 @@ import { ContestantPictureProps } from "features/election/components/contestant/
 import { ContestantBasicInfoProps } from "features/election/components/contestant/info/ContestantBasicInfo";
 import { ContestantVotesInfoSummaryProps } from "features/election/components/contestant/info/ContestantVotesInfoSummary";
 import { ContestantVotesInfoStatProps } from "features/election/components/contestant/info/ContestantVotesInfoStat";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantPicture",
   () =>
     ({ picture, showFullPicture }: ContestantPictureProps) => (
@@ -13,7 +14,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantBasicInfo",
   () =>
     ({ type, value }: ContestantBasicInfoProps) => (
@@ -21,14 +22,13 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantVotesInfoSummary",
   () =>
     ({
       showInfo,
       contestantVotes,
       totalVotes,
-      showExpandedStats,
     }: ContestantVotesInfoSummaryProps) => (
       <div data-testid="mock-summary">
         {showInfo ? `${contestantVotes} out of ${totalVotes}` : "Hidden"}
@@ -36,7 +36,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantVotesInfoStat",
   () =>
     ({

@@ -30,8 +30,8 @@ const ElectionDetailsHeaderButtons: React.FC<
   };
 
   const styleToApply: { type: BlockProps["type"]; class: string } = isPortrait
-    ? { type: "flex-vert-sb", class: "mb-5" }
-    : { type: "flex-horz-sb", class: "mr-5" };
+    ? { type: "flex-vert-sb", class: "mb-5p" }
+    : { type: "flex-horz-sb", class: "mr-5p" };
 
   return (
     <Block type={styleToApply.type}>

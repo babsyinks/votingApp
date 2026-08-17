@@ -7,21 +7,21 @@ import timerReducer, {
 import axios from "axios";
 import {
   expect,
-  jest,
+  vi,
   test,
   describe,
   beforeEach,
   afterEach,
-} from "@jest/globals";
+} from "vitest";
 import { RootState, AppDispatch } from "app/rootReducer";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("timerSlice", () => {
   let store: ReturnType<typeof configureStore>;
   let getState: () => RootState;
   let dispatch: AppDispatch;
-  const mockedAxios = axios as jest.Mocked<typeof axios>;
+  const mockedAxios = axios as vi.Mocked<typeof axios>;
 
   beforeEach(() => {
     store = configureStore({
@@ -36,7 +36,7 @@ describe("timerSlice", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("should return initial state", () => {

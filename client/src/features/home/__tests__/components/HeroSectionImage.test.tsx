@@ -2,8 +2,9 @@
 import { render, screen } from "@testing-library/react";
 import HeroSectionImage from "features/home/components/HeroSectionImage";
 import { ImgProps } from "components/ui/Img";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Img", () => ({ src, alt, className }: ImgProps) => (
+vi.mock("components/ui/Img", () => ({ src, alt, className }: ImgProps) => (
   <img data-testid="hero-img" src={src} alt={alt} className={className} />
 ));
 

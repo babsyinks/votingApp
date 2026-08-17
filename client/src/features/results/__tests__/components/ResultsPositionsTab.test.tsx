@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsPositionsTab from "features/results/components/ResultsPositionsTab";
+import { vi } from "vitest";
 
 describe("ResultsPositionsTab", () => {
   const setup = (propsOverride = {}) => {
-    const setCurrentIndex = jest.fn();
+    const setCurrentIndex = vi.fn();
     const defaultProps = {
       position: "President",
       currentIndex: 0,

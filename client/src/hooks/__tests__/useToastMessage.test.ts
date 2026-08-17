@@ -1,7 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import { useToastMessage } from "hooks/useToastMessage";
+import { vi } from "vitest";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("useToastMessage", () => {
   it("returns initial toast state", () => {
@@ -51,7 +52,7 @@ describe("useToastMessage", () => {
     });
 
     act(() => {
-      jest.advanceTimersByTime(3000);
+      vi.advanceTimersByTime(3000);
     });
 
     expect(result.current.toast).toEqual({
@@ -62,7 +63,7 @@ describe("useToastMessage", () => {
   });
 
   it("clears timeout on unmount", () => {
-    const clearTimeoutSpy = jest.spyOn(global, "clearTimeout");
+    const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
     const { result, unmount } = renderHook(() => useToastMessage());
 
     act(() => {

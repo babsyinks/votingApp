@@ -1,4 +1,5 @@
 import React from "react";
+
 import defaultStyle from "./Select.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
@@ -9,7 +10,8 @@ export interface SelectOption {
   optionValue?: string;
 }
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement> {
   /** The name of the select component. */
   name: string;
   /** The id attribute of the select component. Defaults to `name`. */

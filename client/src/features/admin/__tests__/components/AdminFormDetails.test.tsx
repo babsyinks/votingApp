@@ -1,4 +1,4 @@
-import React from "react";
+
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminFormDetails from "features/admin/components/AdminFormDetails";
 import { HeadingProps } from "components/ui/Heading";
@@ -7,8 +7,9 @@ import { AdminFormFieldSelectProps } from "features/admin/components/AdminFormFi
 import { AdminFormFieldFileProps } from "features/admin/components/AdminFormFieldFile";
 import { AdminFormFieldTextProps } from "features/admin/components/AdminFormFieldText";
 import { AdminFormFieldTextAreaProps } from "features/admin/components/AdminFormFieldTextArea";
+import { vi, type Mock } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Heading",
   () =>
     ({ children, className }: HeadingProps) => (
@@ -18,13 +19,13 @@ jest.mock(
     ),
 );
 
-jest.mock("components/ui/Block", () => ({ children, type }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, type }: BlockProps) => (
   <div data-testid="block" data-type={type}>
     {children}
   </div>
 ));
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminFormFieldText",
   () =>
     ({ label, name, value, onChange }: AdminFormFieldTextProps) => (
@@ -41,7 +42,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminFormFieldSelect",
   () =>
     ({ label, name, value, onChange }: AdminFormFieldSelectProps) => (
@@ -55,7 +56,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminFormFieldTextArea",
   () =>
     ({ label, name, value, onChange }: AdminFormFieldTextAreaProps) => (
@@ -66,7 +67,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminFormFieldFile",
   () =>
     ({ label, name, resetFile, onChange }: AdminFormFieldFileProps) => (
@@ -78,12 +79,12 @@ jest.mock(
 );
 
 describe("AdminFormDetails", () => {
-  let setIsDisabled: jest.Mock;
-  let setFormData: jest.Mock;
+  let setIsDisabled: Mock;
+  let setFormData: Mock;
 
   beforeEach(() => {
-    setIsDisabled = jest.fn();
-    setFormData = jest.fn();
+    setIsDisabled = vi.fn();
+    setFormData = vi.fn();
   });
 
   it("renders all form fields", () => {

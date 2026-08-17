@@ -76,7 +76,7 @@ function ElectionTimerSettingsButton({
 
   return (
     <Button
-      className={`rect-btn m-10 ${fontSize} ${className}`}
+      className={`rect-btn m-10p ${fontSize} ${className}`}
       onClick={clickHandler}
     >
       {label}

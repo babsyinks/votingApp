@@ -3,8 +3,9 @@ import IndustryList from "features/home/components/IndustryList";
 import industriesServed from "features/home/data/industriesServed";
 import type { IndustryCardProps } from "features/home/components/IndustryCard";
 import type { GridProps } from "layout/Grid";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/home/components/IndustryCard",
   () =>
     ({ name }: IndustryCardProps) => (
@@ -14,7 +15,7 @@ jest.mock(
 
 const stack: string[] = [];
 
-jest.mock("layout/Grid", () => ({ children, ...props }: GridProps) => {
+vi.mock("layout/Grid", () => ({ children, ...props }: GridProps) => {
   const propCopy = { ...props };
   delete propCopy.useDefaultStyle;
   stack.push(`useDefaultStyle - ${props.useDefaultStyle}`);

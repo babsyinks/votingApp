@@ -1,9 +1,9 @@
 import express, { Express, RequestHandler } from "express";
 import request from "supertest";
 import type * as ElectionControllerType from "../../controllers/electionController";
+let stack: string[] = []; // create stack array before importing electionRoutes to put it in scope
+// for the mock of "../../middleware/uploadMedia"
 import electionRoutes from "../../routes/electionRoutes";
-
-const stack: string[] = [];
 
 jest.mock("../../middleware/uploadMedia", () => ({
   upload: {

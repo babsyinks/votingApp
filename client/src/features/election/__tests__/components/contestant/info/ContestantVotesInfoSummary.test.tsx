@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ContestantVotesInfoSummary from "features/election/components/contestant/info/ContestantVotesInfoSummary";
 import { ContestantVotesInfoProps } from "features/election/components/contestant/info/ContestantVotesInfo";
 import { SpanProps } from "components/ui/Span";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantVotesInfo",
   () =>
     ({ type, showInfo, children }: ContestantVotesInfoProps) => (
@@ -14,7 +14,7 @@ jest.mock(
     ),
 );
 
-jest.mock("components/ui/Span", () => ({ children, ...props }: SpanProps) => (
+vi.mock("components/ui/Span", () => ({ children, ...props }: SpanProps) => (
   <span {...props}>{children}</span>
 ));
 
@@ -34,7 +34,12 @@ describe("ContestantVotesInfoSummary", () => {
   });
 
   it("renders only contestantVotes when showExpandedStats is false", () => {
-    render(<ContestantVotesInfoSummary {...defaultProps} showExpandedStats={false} />);
+    render(
+      <ContestantVotesInfoSummary
+        {...defaultProps}
+        showExpandedStats={false}
+      />,
+    );
 
     const wrapper = screen.getByTestId("votes-info-mock");
     expect(wrapper).toHaveTextContent("Votes:120");

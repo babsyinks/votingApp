@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import ElectionDetailsNoData from "features/election/components/ElectionDetailsNoData";
 import { ElectionDetailsHeaderProps } from "features/election/components/ElectionDetailsHeader";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectionDetailsHeader",
   () =>
     ({ message }: ElectionDetailsHeaderProps) => (

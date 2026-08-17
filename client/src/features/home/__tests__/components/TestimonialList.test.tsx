@@ -5,8 +5,9 @@ import { SectionProps } from "components/ui/Section";
 import { HeadingProps } from "components/ui/Heading";
 import { BlockProps } from "components/ui/Block";
 import { TestimonialCardProps } from "features/home/components/TestimonialCard";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Section",
   () =>
     ({ children, ...props }: SectionProps) => (
@@ -15,7 +16,7 @@ jest.mock(
       </section>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Heading",
   () =>
     ({ children, ...props }: HeadingProps) => (
@@ -24,12 +25,12 @@ jest.mock(
       </h2>
     ),
 );
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="block" {...props}>
     {children}
   </div>
 ));
-jest.mock(
+vi.mock(
   "features/home/components/TestimonialCard",
   () =>
     ({ quote, author }: TestimonialCardProps) => (
@@ -50,7 +51,7 @@ describe("TestimonialList Component", () => {
     render(<TestimonialList />);
     const heading = screen.getByTestId("heading");
     expect(heading).toHaveTextContent("What Our Customers Are Saying");
-    expect(heading).toHaveClass("ta-center text-white");
+    expect(heading).toHaveClass("ta-center text-white text-3xl-r mb-3r");
   });
 
   it("renders the Block wrapper with correct classes", () => {

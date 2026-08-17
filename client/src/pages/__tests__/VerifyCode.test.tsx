@@ -1,46 +1,47 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import VerifyCode from "pages/VerifyCode";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import * as reactRouterDom from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useAxios } from "hooks/useAxios";
 import { useToastMessage } from "hooks/useToastMessage";
+import { vi } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useSearchParams: jest.fn(),
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...reactRouterDom,
+  useSearchParams: vi.fn(),
+  useNavigate: vi.fn(),
 }));
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
-  useToastMessage: jest.fn(),
+vi.mock("hooks/useToastMessage", () => ({
+  useToastMessage: vi.fn(),
 }));
 
 describe("VerifyCode component", () => {
-  const mockNavigate = jest.fn();
-  const mockDispatch = jest.fn();
-  const mockTriggerRequest = jest.fn();
-  const mockTriggerFailureToast = jest.fn();
-  const mockedUseNavigate = jest.mocked(useNavigate);
-  const mockUseSearchParams = jest.mocked(useSearchParams);
-  const mockUseDispatch = jest.mocked(useDispatch);
-  const mockUseAxios = jest.mocked(useAxios);
-  const mockUseToastMessage = jest.mocked(useToastMessage);
+  const mockNavigate = vi.fn();
+  const mockDispatch = vi.fn();
+  const mockTriggerRequest = vi.fn();
+  const mockTriggerFailureToast = vi.fn();
+  const mockedUseNavigate = vi.mocked(useNavigate);
+  const mockUseSearchParams = vi.mocked(useSearchParams);
+  const mockUseDispatch = vi.mocked(useDispatch);
+  const mockUseAxios = vi.mocked(useAxios);
+  const mockUseToastMessage = vi.mocked(useToastMessage);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     mockUseSearchParams.mockReturnValue([
       new URLSearchParams({ email: "test@example.com" }),
-      jest.fn(),
+      vi.fn(),
     ]);
     mockedUseNavigate.mockReturnValue(mockNavigate);
     mockUseDispatch.mockReturnValue(mockDispatch);
@@ -48,13 +49,13 @@ describe("VerifyCode component", () => {
       response: null,
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
     mockUseToastMessage.mockReturnValue({
       toast: { status: "failure", message: "Some error" },
       triggerFailureToast: mockTriggerFailureToast,
       toastDetailsSet: () => false,
-      triggerSuccessToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
     });
   });
 
@@ -101,7 +102,7 @@ describe("VerifyCode component", () => {
   });
 
   it("redirects to /signup-start if email is missing", () => {
-    mockUseSearchParams.mockReturnValue([new URLSearchParams(), jest.fn()]);
+    mockUseSearchParams.mockReturnValue([new URLSearchParams(), vi.fn()]);
     render(<VerifyCode />);
     expect(mockNavigate).toHaveBeenCalledWith("/signup-start");
   });
@@ -109,15 +110,15 @@ describe("VerifyCode component", () => {
   it("shows toast and calls triggerFailureToast when there's an error", () => {
     mockUseAxios.mockReturnValue({
       response: null,
-      error: {message: "Invalid sign up code!" },
+      error: { message: "Invalid sign up code!" },
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
     mockUseToastMessage.mockReturnValue({
       toast: { status: "failure", message: "Invalid sign up code!" },
       triggerFailureToast: mockTriggerFailureToast,
       toastDetailsSet: () => true,
-      triggerSuccessToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
     });
 
     render(<VerifyCode />);
@@ -134,7 +135,7 @@ describe("VerifyCode component", () => {
       response: { success: true },
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<VerifyCode />);

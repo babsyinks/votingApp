@@ -25,7 +25,7 @@ const ElectionDetailsAllData: React.FC<ElectionDetailsAllDataProps> = ({
   const { particlesInit, particlesLoaded } = useParticles();
 
   return (
-    <Block className="bg-blue-mute px-0-py-10 w-full">
+    <Block className="bg-blue-mute px-0-py-10p w-full">
       <Particles
         id="tsparticles"
         init={particlesInit as (engine: Engine) => Promise<void>}

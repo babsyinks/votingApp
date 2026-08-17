@@ -1,32 +1,33 @@
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import InputText from "components/ui/InputText";
 import getCompClasses from "util/getCompClasses";
 import { InputTextProps } from "components/ui/InputText";
 import { BaseInputProps } from "components/ui/BaseInput";
+import { vi } from "vitest";
 
-jest.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
+vi.mock("components/ui/BaseInput", () => (props: BaseInputProps) => {
   const { className, ...rest } = props;
   return <input data-testid="mock-baseinput" className={className} {...rest} />;
 });
 
-jest.mock("components/ui/InputText.module.css", () => ({
+vi.mock("components/ui/InputText.module.css", () => ({
   "inp-txt": "inp-txt",
   otherClass: "otherClass",
 }));
 
-jest.mock("util/getCompClasses", () => {
-  return jest.fn();
+vi.mock("util/getCompClasses", () => {
+  return vi.fn();
 });
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<InputText />", () => {
   const baseProps: InputTextProps = {
     type: "text",
     name: "username",
     value: "John Doe",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter name",
     className: "otherClass",
   };
@@ -35,7 +36,7 @@ describe("<InputText />", () => {
     type: "password",
     name: "password",
     value: "password",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter password",
     className: "otherClass",
   };
@@ -44,13 +45,13 @@ describe("<InputText />", () => {
     type: "email",
     name: "email",
     value: "johnDoe@mail.com",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter email",
     className: "otherClass",
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders the input with correct value and placeholder and defaults to 'text' when no type is provided", () => {

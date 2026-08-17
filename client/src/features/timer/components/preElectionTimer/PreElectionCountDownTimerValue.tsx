@@ -11,7 +11,7 @@ function PreElectionCountDownTimerValue({
 }: PreElectionCountDownTimerValueProps) {
   return (
     <Block>
-      <Block className="text-32">{time}</Block>
+      <Block className="text-32p">{time}</Block>
       <Block>{dimension}</Block>
     </Block>
   );

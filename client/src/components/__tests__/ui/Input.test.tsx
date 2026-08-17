@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Input from "components/ui/Input";
 import { InputTextProps } from "components/ui/InputText";
@@ -6,28 +5,29 @@ import { InputFileProps } from "components/ui/InputFile";
 import { InputDateProps } from "components/ui/InputDate";
 import { InputTimeProps } from "components/ui/InputTime";
 import { InputNumberProps } from "components/ui/InputNumber";
+import { vi } from "vitest";
 
 // Mock all input subcomponents
-jest.mock("components/ui/InputText", () => (props: InputTextProps) => (
+vi.mock("components/ui/InputText", () => (props: InputTextProps) => (
   <input data-testid="text-input" {...props} />
 ));
-jest.mock("components/ui/InputFile", () => (props: InputFileProps) => (
+vi.mock("components/ui/InputFile", () => (props: InputFileProps) => (
   <input data-testid="file-input" {...props} />
 ));
-jest.mock("components/ui/InputDate", () => (props: InputDateProps) => (
+vi.mock("components/ui/InputDate", () => (props: InputDateProps) => (
   <input data-testid="date-input" {...props} />
 ));
-jest.mock("components/ui/InputTime", () => (props: InputTimeProps) => (
+vi.mock("components/ui/InputTime", () => (props: InputTimeProps) => (
   <input data-testid="time-input" {...props} />
 ));
-jest.mock("components/ui/InputNumber", () => (props: InputNumberProps) => (
+vi.mock("components/ui/InputNumber", () => (props: InputNumberProps) => (
   <input data-testid="number-input" {...props} />
 ));
 
 describe("<Input />", () => {
   const baseProps = {
     name: "testInput",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter value",
     className: "test-class",
     style: { color: "blue" },

@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import ContestantBasicInfo from "features/election/components/contestant/info/ContestantBasicInfo";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => (props: BlockProps) => (
+vi.mock("components/ui/Block", () => (props: BlockProps) => (
   <div data-testid="contestant-info-wrapper" {...props}></div>
 ));
 
@@ -21,7 +22,7 @@ describe("ContestantBasicInfo", () => {
     expect(valueSpan).toHaveClass(
       "tt-cap",
       "ff-berkshire",
-      "px-0-py-5",
+      "px-0-py-5p",
       "text-blue",
     );
   });

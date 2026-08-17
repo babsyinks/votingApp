@@ -2,15 +2,16 @@ import { render, screen } from "@testing-library/react";
 import SocialButtons from "features/auth/components/socials/SocialButtons";
 import { BlockProps } from "components/ui/Block";
 import { SocialButtonProps } from "features/auth/components/socials/SocialButton";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({
+vi.mock("components/ui/Block", () => ({
   __esModule: true,
   default: ({ children }: BlockProps) => (
     <div data-testid="block">{children}</div>
   ),
 }));
 
-jest.mock("features/auth/components/socials/SocialButton", () => ({
+vi.mock("features/auth/components/socials/SocialButton", () => ({
   __esModule: true,
   default: ({ type }: SocialButtonProps) => (
     <div data-testid="social-button">{`Button: ${type}`}</div>

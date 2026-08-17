@@ -3,11 +3,12 @@ import Grid from "layout/Grid";
 import defaultStyle from "layout/Grid.module.css";
 import getCompClasses from "util/getCompClasses";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+vi.mock("util/getCompClasses");
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
-jest.mock("components/ui/Block", () => ({ children, ...rest }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...rest }: BlockProps) => (
   <div data-testid="grid-container" {...rest}>
     {children}
   </div>

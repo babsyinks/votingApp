@@ -1,4 +1,3 @@
-import React from "react";
 import BaseInput, { BaseInputProps } from "./BaseInput";
 import defaultStyle from "./InputText.module.css";
 import getCompClasses from "../../util/getCompClasses";

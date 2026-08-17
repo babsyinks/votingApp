@@ -1,7 +1,7 @@
+import { BaseInputProps } from "./BaseInput";
+import Block from "./Block";
 import Input from "./Input";
 import Label from "./Label";
-import Block from "./Block";
-import { BaseInputProps } from "./BaseInput";
 
 export interface InputAndLabelGroupProps extends BaseInputProps {
   /** The label text to display beside the input */

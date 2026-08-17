@@ -1,25 +1,31 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NotFound from "pages/NotFound";
 import type { BlockProps } from "components/ui/Block";
 import type { HeadingProps } from "components/ui/Heading";
 import type { ButtonProps } from "components/ui/Button";
 import type { ContainerProps } from "layout/Container";
+import { vi } from "vitest";
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom",
+  );
 
-jest.mock("components/ui/Block", () => ({
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+vi.mock("components/ui/Block", () => ({
   __esModule: true,
   default: ({ children }: BlockProps) => (
     <div data-testid="Block">{children}</div>
   ),
 }));
 
-jest.mock("components/ui/Heading", () => ({
+vi.mock("components/ui/Heading", () => ({
   __esModule: true,
   default: ({ children, type, className }: HeadingProps) => (
     <div data-testid={`Heading-${type}`} className={className}>
@@ -28,7 +34,7 @@ jest.mock("components/ui/Heading", () => ({
   ),
 }));
 
-jest.mock("components/ui/Button", () => ({
+vi.mock("components/ui/Button", () => ({
   __esModule: true,
   default: ({ children, onClick, className }: ButtonProps) => (
     <button className={className} onClick={onClick}>
@@ -37,7 +43,7 @@ jest.mock("components/ui/Button", () => ({
   ),
 }));
 
-jest.mock("layout/Container", () => ({
+vi.mock("layout/Container", () => ({
   __esModule: true,
   default: ({ children }: ContainerProps) => (
     <div data-testid="Container">{children}</div>

@@ -1,21 +1,21 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Tab from "components/ui/Tab";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
-jest.mock("components/ui/Tab.module.css", () => ({
+vi.mock("util/getCompClasses");
+vi.mock("components/ui/Tab.module.css", () => ({
   tb: "default-tab-class",
 }));
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Tab />", () => {
   const labels = ["Home", "Profile", "Settings"];
 
   beforeEach(() => {
     mockedGetCompClasses.mockReturnValue("resolved-class");
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders all tab labels", () => {

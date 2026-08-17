@@ -1,5 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import useWindowSize from "hooks/useWindowSize";
+import { vi } from "vitest";
+
+vi.useFakeTimers();
 
 describe("useWindowSize", () => {
   const setWindowSize = (width: number, height: number) => {
@@ -29,7 +32,7 @@ describe("useWindowSize", () => {
   });
 
   it("should clean up event listener on unmount", () => {
-    const removeEventListenerSpy = jest.spyOn(window, "removeEventListener");
+    const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
     const { unmount } = renderHook(() => useWindowSize());
 
     unmount();

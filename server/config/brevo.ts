@@ -1,3 +1,4 @@
+// @ts-ignore
 import SibApiV3Sdk from "sib-api-v3-sdk";
 
 const defaultClient = SibApiV3Sdk.ApiClient.instance;

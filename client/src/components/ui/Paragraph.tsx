@@ -1,8 +1,10 @@
 import React from "react";
+
 import defaultStyle from "./Paragraph.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
-export interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface ParagraphProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {
   /** Additional class names to style the paragraph. */
   className?: string;
   /** Inline styles. */
@@ -34,7 +36,7 @@ export default function Paragraph({
     <p
       className={`${useDefaultStyle ? defaultStyle.paragraph : ""} ${getCompClasses(
         defaultStyle,
-        className
+        className,
       )}`}
       style={style}
       {...rest}

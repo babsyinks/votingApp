@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Modal from "components/modal/Modal";
 import { ModalProps } from "components/modal/Modal";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ children, ...props }: ButtonProps) => (
@@ -16,13 +16,13 @@ describe("Modal", () => {
   let defaultProps: ModalProps;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     defaultProps = {
       message: "Are you sure you want to proceed?",
       positiveBtnTxt: "Yes",
       negativeBtnTxt: "No",
-      positiveHandler: jest.fn(),
-      negativeHandler: jest.fn(),
+      positiveHandler: vi.fn(),
+      negativeHandler: vi.fn(),
       ariaLabel: "Confirmation Modal",
       ariaLabelledBy: "modal-title",
       ariaDescribedBy: "modal-description",

@@ -15,7 +15,7 @@ export default function ResultStatusIndicator({
 }: ResultStatusIndicatorProps) {
   return (
     <Block className={textColor}>
-      <Span className="fw-bold ff-nanum mr-5">{message}</Span>
+      <Span className="fw-bold ff-nanum mr-5p">{message}</Span>
       <I className={`far ${indicatorType} fa-lg`} />
     </Block>
   );

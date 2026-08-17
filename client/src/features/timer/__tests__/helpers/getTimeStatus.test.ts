@@ -1,17 +1,18 @@
 import getTimeStatus from "../../helpers/getTimeStatus";
 import { daySeconds } from "../../data/timePartsInSeconds";
+import { vi } from "vitest";
 
 describe("c", () => {
   const now = Date.now();
 
   beforeAll(() => {
     // Freeze Date.now to a fixed point in time
-    jest.useFakeTimers();
-    jest.setSystemTime(now);
+    vi.useFakeTimers();
+    vi.setSystemTime(now);
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test("should return remainingTime and daysDuration for exact 1 day", () => {

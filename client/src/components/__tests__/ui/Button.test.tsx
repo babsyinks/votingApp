@@ -1,19 +1,19 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Button from "components/ui/Button";
 import getCompClasses from "util/getCompClasses";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Button />", () => {
   const children = "Click me";
   
   const defaultProps: ButtonProps = {
     children,
-    onClick: jest.fn(),
+    onClick: vi.fn(),
     className: "extra-class",
     type: "submit",
     name: "my-button",

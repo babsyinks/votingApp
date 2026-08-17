@@ -4,31 +4,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAxios } from "hooks/useAxios";
 import { useToastMessage } from "hooks/useToastMessage";
 import { updateVotes } from "features/election/electionSlice";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
-jest.mock("hooks/useToastMessage", () => ({
-  useToastMessage: jest.fn(),
+vi.mock("hooks/useToastMessage", () => ({
+  useToastMessage: vi.fn(),
 }));
 
-jest.mock("features/election/electionSlice", () => ({
-  updateVotes: jest.fn(),
+vi.mock("features/election/electionSlice", () => ({
+  updateVotes: vi.fn(),
 }));
 
 describe("ContestantButtonVote", () => {
-  let mockDispatch: jest.Mock;
-  let mockTriggerRequest: jest.Mock;
-  let mockTriggerFailureToast: jest.Mock;
-  let mockTriggerSuccessToast: jest.Mock;
-  let mockedUseDispatch = jest.mocked(useDispatch);
-  let mockedUseSelector = jest.mocked(useSelector);
-  let mockedUseAxios = jest.mocked(useAxios);
-  let mockedUseToastMessage = jest.mocked(useToastMessage);
+  let mockDispatch: Mock;
+  let mockTriggerRequest: Mock;
+  let mockTriggerFailureToast: Mock;
+  let mockTriggerSuccessToast: Mock;
+  let mockedUseDispatch = vi.mocked(useDispatch);
+  let mockedUseSelector = vi.mocked(useSelector);
+  let mockedUseAxios = vi.mocked(useAxios);
+  let mockedUseToastMessage = vi.mocked(useToastMessage);
 
   const defaultProps = {
     contestantId: "abc123",
@@ -38,10 +39,10 @@ describe("ContestantButtonVote", () => {
   const mockUserId = "user42";
 
   beforeEach(() => {
-    mockDispatch = jest.fn();
-    mockTriggerRequest = jest.fn();
-    mockTriggerFailureToast = jest.fn();
-    mockTriggerSuccessToast = jest.fn();
+    mockDispatch = vi.fn();
+    mockTriggerRequest = vi.fn();
+    mockTriggerFailureToast = vi.fn();
+    mockTriggerSuccessToast = vi.fn();
 
     mockedUseDispatch.mockReturnValue(mockDispatch);
     mockedUseSelector.mockImplementation((selector) =>
@@ -53,7 +54,7 @@ describe("ContestantButtonVote", () => {
       response: null,
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
     mockedUseToastMessage.mockReturnValue({
       toast: { message: "Test toast", status: "success" },
@@ -64,7 +65,7 @@ describe("ContestantButtonVote", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders vote button enabled by default", () => {
@@ -106,7 +107,7 @@ describe("ContestantButtonVote", () => {
       response: mockResponse,
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<ContestantButtonVote {...defaultProps} />);
@@ -128,7 +129,7 @@ describe("ContestantButtonVote", () => {
       response: null,
       error: {message: "Some error" },
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<ContestantButtonVote {...defaultProps} />);

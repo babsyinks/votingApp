@@ -5,7 +5,7 @@ function HelpMeansEmail() {
   return (
       <Paragraph>
         Alternatively, you can send an email to:{" "}
-        <A href="mailto:multac@proton.me" className="text-base">
+        <A href="mailto:multac@proton.me" className="text-base-r">
           multac@proton.me
         </A>
       </Paragraph>

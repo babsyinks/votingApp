@@ -1,9 +1,10 @@
+import Block from "components/ui/Block";
+import Button from "components/ui/Button";
+import { electionStatus } from "features/election/electionSlice";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { electionStatus } from "features/election/electionSlice";
-import Block from "components/ui/Block";
-import Button from "components/ui/Button";
+
 import type { UserAuthStatus } from "../types/userAuthStatus";
 
 export default function HeroSectionLink({
@@ -30,18 +31,27 @@ export default function HeroSectionLink({
   return (
     <Block className="mt-3r">
       {userIsAuthenticated ? (
-        <Link to={btnState.link}>
-          <Button
-            className={btnState.class}
-          >{`Go to ${btnState.msg} Page`}</Button>
-        </Link>
+        <Block type="flex-horz-fs" className="gap-1r">
+          <Link to={btnState.link}>
+            <Button
+              className={btnState.class}
+            >{`Go to ${btnState.msg} Page`}</Button>
+          </Link>
+          <Link to="/dashboard">
+            <Button className="neutral-btn bg-blueviolet-cool fw-bold text-black">
+              {"Go to Dashboard"}
+            </Button>
+          </Link>
+        </Block>
       ) : (
         <Block type="flex-horz-fs" className="gap-1r">
           <Link to="/signin">
-            <Button className="neutral-btn bg-blueviolet-cool fw-bold">{`Sign In`}</Button>
+            <Button className="neutral-btn bg-blueviolet-cool fw-bold text-black">
+              {"Sign In"}
+            </Button>
           </Link>
           <Link to="/signup-start">
-            <Button className="primary-btn fw-bold">{`Sign up`}</Button>
+            <Button className="primary-btn fw-bold">{"Sign up"}</Button>
           </Link>
         </Block>
       )}

@@ -4,8 +4,9 @@ import { result } from "../testData/result";
 import type { ContestantFrameProps } from "features/election/components/contestant/ContestantFrame";
 import type { ContestantMainInfoProps } from "features/election/components/contestant/info/ContestantMainInfo";
 import type { ResultStatusIndicatorChooserProps } from "features/results/components/ResultStatusIndicatorChooser";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantFrame",
   () =>
     ({ children, className }: ContestantFrameProps) => (
@@ -15,7 +16,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantMainInfo",
   () =>
     ({ contestant, showInfo, showExpandedStats }: ContestantMainInfoProps) => (
@@ -26,7 +27,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/results/components/ResultStatusIndicatorChooser",
   () =>
     ({
@@ -54,7 +55,7 @@ describe("ResultForContestant", () => {
     );
 
     expect(screen.getByTestId("contestant-frame")).toBeInTheDocument();
-    expect(screen.getByTestId("contestant-frame")).toHaveClass("mb-10");
+    expect(screen.getByTestId("contestant-frame")).toHaveClass("mb-10p");
 
     expect(screen.getByTestId("contestant-main-info")).toHaveTextContent(
       "Alice",

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { generateTokensAndRedirect } from "./authControllerHelpers";
+import { generateTokensAndRedirect } from "./authHelpers";
 import type { User } from "../models";
 
 const FAILURE_REDIRECT = `${process.env.CLIENT_URL}/signin`;

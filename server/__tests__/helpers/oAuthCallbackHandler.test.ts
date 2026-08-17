@@ -2,12 +2,12 @@ import {
   handleOauthCallback,
   sessionOff,
 } from "../../helpers/oAuthCallbackHandler";
-import { generateTokensAndRedirect } from "../../helpers/authControllerHelpers";
+import { generateTokensAndRedirect } from "../../helpers/authHelpers";
 import type { Request, Response } from "express";
 import type { PassportError } from "../../helpers/oAuthCallbackHandler";
 import type { User } from "../../models";
 
-jest.mock("../../helpers/authControllerHelpers", () => ({
+jest.mock("../../helpers/authHelpers", () => ({
   generateTokensAndRedirect: jest.fn(),
 }));
 

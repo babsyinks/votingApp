@@ -1,11 +1,12 @@
 import { renderHook } from "@testing-library/react";
 import useBreakpoint from "hooks/useBreakpoint";
 import useWindowSize from "hooks/useWindowSize";
+import { vi, type Mock } from "vitest";
 
-jest.mock("hooks/useWindowSize");
+vi.mock("hooks/useWindowSize");
 
 describe("useBreakpoint", () => {
-  const mockedUseWindowSize = useWindowSize as jest.Mock;
+  const mockedUseWindowSize = useWindowSize as Mock;
   it('returns "mobile" when width is 640 or less', () => {
     mockedUseWindowSize.mockReturnValue({ width: 480 });
     const { result } = renderHook(() => useBreakpoint());

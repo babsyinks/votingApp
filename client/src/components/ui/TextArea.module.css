@@ -4,6 +4,7 @@
     box-sizing: border-box;
     max-width: 100%;
     background: transparent;
+    border: 1px solid grey;
 }
 
 .no-bg{

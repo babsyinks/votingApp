@@ -1,23 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import Help from "pages/Help";
 import type { MultiLayerWrapperProps } from "layout/MultiLayerWrapper";
+import { vi } from "vitest";
 
-jest.mock("features/help/components/HelpMessage", () => ({
+vi.mock("features/help/components/HelpMessage", () => ({
   __esModule: true,
   default: () => <div data-testid="HelpMessage" />,
 }));
 
-jest.mock("features/help/components/HelpMeans", () => ({
+vi.mock("features/help/components/HelpMeans", () => ({
   __esModule: true,
   default: () => <div data-testid="HelpMeans" />,
 }));
 
-jest.mock("features/help/components/HelpFootNote", () => ({
+vi.mock("features/help/components/HelpFootNote", () => ({
   __esModule: true,
   default: () => <div data-testid="HelpFootNote" />,
 }));
 
-jest.mock("layout/MultiLayerWrapper", () => ({
+vi.mock("layout/MultiLayerWrapper", () => ({
   __esModule: true,
   default: ({ children }: MultiLayerWrapperProps) => (
     <div data-testid="MultiLayerWrapper">{children}</div>

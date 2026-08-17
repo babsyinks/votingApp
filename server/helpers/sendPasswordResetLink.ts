@@ -27,8 +27,14 @@ async function sendPasswordResetLink({
     ],
     footNote: "If you didn't request this, you can safely ignore this email.",
   });
-
   await sendEmail({ toEmail, subject, htmlContent });
 }
+
+sendPasswordResetLink({
+  toEmail: "babawarunn@yahoo.com",
+  resetCode: "123456",
+}).then((res) => {
+  console.log("done");
+});
 
 export default sendPasswordResetLink;

@@ -3,8 +3,9 @@ import ResetPassword from "pages/ResetPassword";
 import type { AuthFrameProps } from "features/auth/components/AuthFrame";
 import type { AuthHeadingProps } from "features/auth/components/AuthHeading";
 import type { ForgotPasswordResetPasswordProps } from "features/auth/components/forgotPassword/ForgotPasswordResetPassword";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFrame",
   () =>
     ({ children, className }: AuthFrameProps) => (
@@ -14,7 +15,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthHeading",
   () =>
     ({ children }: AuthHeadingProps) => (
@@ -22,7 +23,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/auth/components/forgotPassword/ForgotPasswordResetPassword",
   () =>
     ({ setBottomSpacingClass }: ForgotPasswordResetPasswordProps) => {

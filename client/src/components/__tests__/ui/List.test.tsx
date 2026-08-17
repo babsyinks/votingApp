@@ -2,14 +2,17 @@ import { render, screen } from "@testing-library/react";
 import List from "components/ui/List";
 import Li from "components/ui/Li";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
-jest.mock("components/ui/List.module.css", () => ({
-  ul: "default-ul",
-  ol: "default-ol",
+vi.mock("components/ui/List.module.css", () => ({
+  default: {
+    ul: "default-ul",
+    ol: "default-ol",
+  },
 }));
 
 describe("List component", () => {

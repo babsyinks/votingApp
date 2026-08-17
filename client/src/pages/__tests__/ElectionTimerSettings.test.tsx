@@ -5,78 +5,78 @@ import { useSelector, useDispatch } from "react-redux";
 import ElectionTimerSettings from "pages/ElectionTimerSettings";
 import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
 import type { UseToastMessageReturn } from "hooks/useToastMessage";
+import { vi, type Mock } from "vitest";
 
-jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(),
+vi.mock("features/timer/timerSlice", () => ({
+  fetchThenSetCurrentTimerStatus: vi.fn(),
 }));
 
-const mockNavigate = jest.fn();
-const mockDispatch = jest.fn();
+const mockNavigate = vi.fn();
+const mockDispatch = vi.fn();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
   MemoryRouter: ({ children }: { children: React.ReactElement }) => (
     <div>{children}</div>
   ),
 }));
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
+  useSelector: vi.fn(),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
-  useToastMessage: jest.fn(),
+vi.mock("hooks/useToastMessage", () => ({
+  useToastMessage: vi.fn(),
 }));
 
-jest.mock("features/timer/timerSlice", () => ({
-  fetchThenSetCurrentTimerStatus: jest.fn(() => ({
+vi.mock("features/timer/timerSlice", () => ({
+  fetchThenSetCurrentTimerStatus: vi.fn(() => ({
     type: "mock/fetchThenSetCurrentTimerStatus",
   })),
 }));
 
-jest.mock(
+vi.mock(
   "features/timer/components/timerSettings/ElectionTimerSettingsForm",
   () => () => <div data-testid="mock-timer-form">Timer Settings Form</div>,
 );
 
-jest.mock(
+vi.mock(
   "features/timer/components/timerSettings/ElectionTimerSettingsButtons",
   () => () => (
     <div data-testid="mock-timer-buttons">Timer Settings Buttons</div>
   ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/ToastMessage",
   () => (props: UseToastMessageReturn) => (
     <div data-testid="mock-toast">Toast: {props.toast?.message}</div>
   ),
 );
 
-const mockedFetchThenSetCurrentTimerStatus = jest.mocked(
+const mockedFetchThenSetCurrentTimerStatus = vi.mocked(
   fetchThenSetCurrentTimerStatus,
 );
 
 describe("ElectionTimerSettings Component", () => {
   beforeEach(() => {
-    (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useSelector as jest.Mock).mockImplementation((selectorFn) => {
+    (useDispatch as Mock).mockReturnValue(mockDispatch);
+    (useSelector as Mock).mockImplementation((selectorFn) => {
       if (selectorFn.name === "userIsAdmin") return true;
       return selectorFn();
     });
 
-    (useToastMessage as jest.Mock).mockReturnValue({
+    (useToastMessage as Mock).mockReturnValue({
       toast: { message: "Test toast message" },
-      triggerSuccessToast: jest.fn(),
-      triggerFailureToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
+      triggerFailureToast: vi.fn(),
       toastDetailsSet: () => true,
     });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders timer settings layout", () => {
@@ -98,7 +98,7 @@ describe("ElectionTimerSettings Component", () => {
   });
 
   it("redirects to home if user is not admin", () => {
-    (useSelector as jest.Mock).mockImplementation(() => false); // Not admin
+    (useSelector as Mock).mockImplementation(() => false); // Not admin
     render(<ElectionTimerSettings />);
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });

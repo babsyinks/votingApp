@@ -1,8 +1,8 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResultStatusIndicatorLoser from "features/results/components/ResultStatusIndicatorLoser";
+import { vi } from "vitest";
 
-jest.mock("features/results/components/ResultStatusIndicator");
+vi.mock("features/results/components/ResultStatusIndicator");
 
 describe("ResultStatusIndicatorLoser", () => {
   it("renders the ResultStatusIndicator with loser message and icon", () => {

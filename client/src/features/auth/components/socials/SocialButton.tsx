@@ -33,7 +33,7 @@ export default function SocialButton({ type }: SocialButtonProps): JSX.Element {
       className={`btn-social ${type.toLowerCase()}`}
     >
       <Span type="flex-horz" className="w-full">
-        <Span className="w-10p mr-5">{icons[type]}</Span>
+        <Span className="w-10p mr-5p">{icons[type]}</Span>
         <Span className={contentWidth}>{`Continue with ${type}`}</Span>
       </Span>
     </AuthButton>

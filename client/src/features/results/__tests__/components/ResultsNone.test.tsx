@@ -1,25 +1,29 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ResultsNone from "features/results/components/ResultsNone";
 import { useNavigate } from "react-router-dom";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
-}));
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  };
+});
 
 describe("ResultsNone", () => {
   const heading = "No Results Found";
   const content = "We couldn't find any results for your request.";
-  const mockNavigate = jest.fn();
+  const mockNavigate = vi.fn();
 
   beforeEach(() => {
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+    (useNavigate as Mock).mockReturnValue(mockNavigate);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders heading, content, and static prompt", () => {

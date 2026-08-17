@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ToastMessage from "components/ui/ToastMessage";
 import { Toast } from "components/ui/ToastMessage";
+import { vi } from "vitest";
 
-jest.mock("components/ui/ToastMessage.module.css", () => ({
+vi.mock("components/ui/ToastMessage.module.css", () => ({
   display: "toast-display",
   success: "toast-success",
   failure: "toast-failure",

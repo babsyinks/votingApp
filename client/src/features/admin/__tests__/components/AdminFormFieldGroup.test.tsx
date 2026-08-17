@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import AdminFormFieldGroup from "features/admin/components/AdminFormFieldGroup";
 import { BlockProps } from "components/ui/Block";
 import { LabelProps } from "components/ui/Label";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="block" {...props}>
     {children}
   </div>
 ));
 
-jest.mock(
+vi.mock(
   "components/ui/Label",
   () =>
     ({ name, className, children }: LabelProps) => (

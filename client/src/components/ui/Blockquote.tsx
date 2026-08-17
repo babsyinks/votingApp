@@ -1,4 +1,5 @@
 import { ReactNode, CSSProperties, JSX } from "react";
+
 import defaultStyle from "./Base.module.css";
 import getCompClasses from "../../util/getCompClasses";
 

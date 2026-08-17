@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ElectivePositionDetailsSummaryPart from "features/election/components/ElectivePositionDetailsSummaryPart";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="mock-block" {...props}>
     {children}
   </div>
@@ -33,7 +33,7 @@ describe("ElectivePositionDetailsSummaryPart", () => {
     expect(wrapper).toHaveClass("z-30 bg-black w-full");
 
     const heading = screen.getByRole("heading");
-    expect(heading).toHaveClass("ff-patrick mx-0-my-7 ta-center");
+    expect(heading).toHaveClass("ff-patrick mx-0-my-7p ta-center");
 
     const span = screen.getByText("30");
     expect(span).toHaveClass("text-sky-blue");

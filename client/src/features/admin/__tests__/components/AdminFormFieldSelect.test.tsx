@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminFormFieldSelect from "features/admin/components/AdminFormFieldSelect";
 import { LabelProps } from "components/ui/Label";
@@ -6,8 +5,9 @@ import { BlockProps } from "components/ui/Block";
 import { SelectProps } from "components/ui/Select";
 
 import getOptions from "features/admin/helpers/options";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Label",
   () =>
     ({ name, className, children }: LabelProps) => (
@@ -17,7 +17,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, type, className }: BlockProps) => (
@@ -27,7 +27,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/Select",
   () =>
     ({ name, value, onChange, selectOptions }: SelectProps) => (
@@ -47,7 +47,7 @@ jest.mock(
 );
 
 describe("AdminFormFieldSelect", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     mockOnChange.mockClear();

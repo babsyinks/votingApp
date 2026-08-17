@@ -1,8 +1,10 @@
 import React from "react";
+
 import defaultStyle from "./Label.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
-export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /** The name/id of the component this label is for (used for htmlFor) */
   name: string;
   /** Optional className for additional styling */
@@ -30,7 +32,7 @@ export default function Label({
       htmlFor={name}
       className={`${defaultStyle["mg-r-5"]} ${defaultStyle["pd-05"]} ${getCompClasses(
         defaultStyle,
-        className
+        className,
       )}`}
       style={style}
       {...rest}

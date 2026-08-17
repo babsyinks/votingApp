@@ -1,16 +1,17 @@
 import { mapTimerStatusToElectionStatus } from "features/election/utils/mapTimerStatusToElectionStatus";
+import { vi } from "vitest";
 
 describe('mapTimerStatusToElectionStatus', () => {
   const fixedNow = new Date('2025-01-01T00:00:00Z');
   const fixedNowTimestamp = fixedNow.getTime();
 
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(fixedNow); // freeze time to a known moment
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow); // freeze time to a known moment
   });
  
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('returns "inActive" when timerStatus is undefined', () => {

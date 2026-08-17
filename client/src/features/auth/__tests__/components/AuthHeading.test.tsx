@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import AuthHeading from "features/auth/components/AuthHeading";
 import { HeadingProps } from "components/ui/Heading";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Heading", () => ({ children, className, type }: HeadingProps) => {
+vi.mock("components/ui/Heading", () => ({ children, className, type }: HeadingProps) => {
   return (
     <h1 data-testid="mock-heading" data-type={type} className={className}>
       {children}
@@ -24,6 +25,6 @@ describe("AuthHeading", () => {
     const heading = screen.getByTestId("mock-heading");
 
     expect(heading.getAttribute("data-type")).toBe("h1");
-    expect(heading).toHaveClass("text-2xl", "lh-2r", "fw-600", "ta-center");
+    expect(heading).toHaveClass("text-2xl-r", "lh-2r", "fw-600", "ta-center");
   });
 });

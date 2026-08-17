@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ContestantVotesInfoStat from "features/election/components/contestant/info/ContestantVotesInfoStat";
 import { ContestantVotesInfoProps } from "features/election/components/contestant/info/ContestantVotesInfo";
 import { SpanProps } from "components/ui/Span";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantVotesInfo",
   () =>
     ({ type, showInfo, children }: ContestantVotesInfoProps) => (
@@ -14,7 +14,7 @@ jest.mock(
     ),
 );
 
-jest.mock("components/ui/Span", () => ({ children, ...props }: SpanProps) => (
+vi.mock("components/ui/Span", () => ({ children, ...props }: SpanProps) => (
   <span {...props}>{children}</span>
 ));
 
@@ -46,7 +46,7 @@ describe("ContestantVotesInfoStat", () => {
     expect(screen.getByTestId("votes-info")).toHaveTextContent("0%");
   });
 
-    it("uses 0 by default to represent totalVotes if not set and shows 0% vote info", () => {
+  it("uses 0 by default to represent totalVotes if not set and shows 0% vote info", () => {
     render(
       <ContestantVotesInfoStat
         showInfo={true}

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useSelector } from "react-redux";
 
@@ -7,31 +6,32 @@ import { timerData } from "features/timer/timerSlice";
 import { BlockProps } from "components/ui/Block";
 import { ElectionDetailsHeaderProps } from "features/election/components/ElectionDetailsHeader";
 import { ElectivePositionDetailsProps } from "features/election/components/ElectivePositionDetails";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("features/election/hooks/useParticles", () => ({
+vi.mock("features/election/hooks/useParticles", () => ({
   useParticles: () => ({
-    particlesInit: jest.fn(),
-    particlesLoaded: jest.fn(),
+    particlesInit: vi.fn(),
+    particlesLoaded: vi.fn(),
   }),
 }));
 
-jest.mock("react-tsparticles", () => () => <div data-testid="particles" />);
+vi.mock("react-tsparticles", () => () => <div data-testid="particles" />);
 
-jest.mock("components/ui/Block", () => ({ children, ...rest }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...rest }: BlockProps) => (
   <div data-testid="block" {...rest}>
     {children}
   </div>
 ));
 
-jest.mock("features/election/components/ElectionDetailsHeader", () => ({ message }: ElectionDetailsHeaderProps) => (
+vi.mock("features/election/components/ElectionDetailsHeader", () => ({ message }: ElectionDetailsHeaderProps) => (
   <div data-testid="header">{message}</div>
 ));
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectivePositionDetails",
   () => ({ contestantsDetailsByPosition }: ElectivePositionDetailsProps) =>
     (
@@ -41,12 +41,12 @@ jest.mock(
     ),
 );
 
-jest.mock("features/timer/components/liveElectionTimer/LiveTimer", () => ({ electionEndTime }: {electionEndTime: number}) => (
+vi.mock("features/timer/components/liveElectionTimer/LiveTimer", () => ({ electionEndTime }: {electionEndTime: number}) => (
   <div data-testid="live-timer">{`EndTime: ${electionEndTime}`}</div>
 ));
 
-jest.mock("features/timer/timerSlice", () => ({
-  timerData: jest.fn(),
+vi.mock("features/timer/timerSlice", () => ({
+  timerData: vi.fn(),
 }));
 
 describe("ElectionDetailsAllData", () => {
@@ -57,10 +57,10 @@ describe("ElectionDetailsAllData", () => {
     { position: "Vice President", contestants: ["C", "D"] },
   ];
 
-  const mockedUseSelector = useSelector as jest.Mock;
+  const mockedUseSelector = useSelector as Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedUseSelector.mockImplementation((selectorFn) => {
       if (selectorFn === timerData) {
         return mockTimer;

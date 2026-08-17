@@ -5,18 +5,19 @@ import { InputAndLabelGroupProps } from "components/ui/InputAndLabelGroup";
 import { BlockProps } from "components/ui/Block";
 import { BaseInputProps } from "components/ui/BaseInput";
 import { LabelProps } from "components/ui/Label";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Label", () => (props: LabelProps) => (
+vi.mock("components/ui/Label", () => (props: LabelProps) => (
   <label data-testid="mock-label" htmlFor={props.name}>
     {props.children}
   </label>
 ));
 
-jest.mock("components/ui/Input", () => (props: BaseInputProps) => (
+vi.mock("components/ui/Input", () => (props: BaseInputProps) => (
   <input data-testid="mock-input" {...props} />
 ));
 
-jest.mock("components/ui/Block", () => (props: BlockProps) => (
+vi.mock("components/ui/Block", () => (props: BlockProps) => (
   <div data-testid="mock-block">{props.children}</div>
 ));
 
@@ -26,7 +27,7 @@ describe("<InputAndLabelGroup />", () => {
     type: "email",
     name: "email",
     value: "test@example.com",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter your email",
     className: "email-class",
     style: { color: "blue" },

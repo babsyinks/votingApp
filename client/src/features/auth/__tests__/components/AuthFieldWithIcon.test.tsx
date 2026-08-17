@@ -2,8 +2,9 @@ import { render, screen } from "@testing-library/react";
 import AuthFieldWithIcon from "features/auth/components/AuthFieldWithIcon";
 import { InputWithIconProps } from "components/ui/InputWithIcon";
 import { AuthFieldWithIconProps } from "features/auth/components/AuthFieldWithIcon";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/InputWithIcon",
   () =>
     ({
@@ -42,7 +43,7 @@ jest.mock(
 describe("AuthFieldWithIcon", () => {
   const defaultProps: AuthFieldWithIconProps = {
     value: "hello@example.com",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Email",
     iconClass: "fa-at",
   };

@@ -2,17 +2,18 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import SignInAccountDoesNotExist from "features/auth/components/signIn/SignInAccountDoesNotExist";
 import { ButtonProps } from "components/ui/Button";
 import { ParagraphProps } from "components/ui/Paragraph";
+import { vi } from "vitest";
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-router-dom", () => ({
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock("components/ui/Button", () => ({ children, ...props }: ButtonProps) => ( 
+vi.mock("components/ui/Button", () => ({ children, ...props }: ButtonProps) => ( 
   <button {...props}>{children}</button>
 ));
-jest.mock("components/ui/Paragraph", () => ({ children, ...props }: ParagraphProps) => (
+vi.mock("components/ui/Paragraph", () => ({ children, ...props }: ParagraphProps) => (
   <p {...props}>{children}</p>
 ));
 

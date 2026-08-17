@@ -1,4 +1,3 @@
-import React from "react";
 import BaseInput, { BaseInputProps } from "./BaseInput";
 
 export interface InputTimeProps extends Omit<BaseInputProps, "type"> {

@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import AuthFieldCode from "features/auth/components/AuthFieldCode";
 import { AuthFieldWithIconProps } from "features/auth/components/AuthFieldWithIcon";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldWithIcon",
   () =>
     ({
@@ -28,11 +29,11 @@ jest.mock(
 describe("AuthFieldCode", () => {
   const defaultProps = {
     value: "",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders AuthFieldWithIcon with default props", () => {

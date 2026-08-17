@@ -8,12 +8,13 @@ import { AuthFrameProps } from "features/auth/components/AuthFrame";
 import { AuthFieldBaseProps } from "features/auth/types/authFieldTypes";
 import { AuthPasswordValidatorProps } from "features/auth/components/AuthPasswordValidator";
 import { AuthValidationIndicatorProps } from "features/auth/components/AuthValidationIndicator";
+import { vi } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  useParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useParams: vi.fn(),
 }));
-jest.mock("hooks/useWindowSize");
-jest.mock(
+vi.mock("hooks/useWindowSize");
+vi.mock(
   "features/auth/components/forgotPassword/ForgotPasswordCommonForm",
   () =>
     ({
@@ -36,7 +37,7 @@ jest.mock(
       </div>
     ),
 );
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, className }: BlockProps) => (
@@ -45,7 +46,7 @@ jest.mock(
       </div>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFrame",
   () =>
     ({ children, className }: AuthFrameProps) => (
@@ -54,7 +55,7 @@ jest.mock(
       </div>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldPassword",
   () =>
     ({ value, onChange, placeholder }: AuthFieldBaseProps) => (
@@ -71,7 +72,7 @@ jest.mock(
       />
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthPasswordValidator",
   () =>
     ({ password, setPasswordValid }: AuthPasswordValidatorProps) => {
@@ -84,7 +85,7 @@ jest.mock(
       return <div data-testid="auth-password-validator">Validator</div>;
     },
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthValidationIndicator",
   () =>
     ({ label, isValid }: AuthValidationIndicatorProps) => (
@@ -95,12 +96,12 @@ jest.mock(
 );
 
 describe("ForgotPasswordResetPassword", () => {
-  const mockSetBottomSpacingClass = jest.fn();
-  const mockUseParams = jest.mocked(useParams);
-  const mockUseWindowSize = jest.mocked(useWindowSize);
+  const mockSetBottomSpacingClass = vi.fn();
+  const mockUseParams = vi.mocked(useParams);
+  const mockUseWindowSize = vi.mocked(useWindowSize);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseParams.mockReturnValue({ resetCode: "abc123" });
     mockUseWindowSize.mockReturnValue({ height: 700, width: 360 });
   });

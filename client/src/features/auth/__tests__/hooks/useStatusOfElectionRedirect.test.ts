@@ -2,19 +2,20 @@ import { renderHook } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElectionRedirect";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
 
 describe("useStatusOfElectionRedirect", () => {
-  const mockNavigate = jest.fn();
-  const mockUseNavigate = jest.mocked(useNavigate);
-  const mockUseSelector = jest.mocked(useSelector);
+  const mockNavigate = vi.fn();
+  const mockUseNavigate = vi.mocked(useNavigate);
+  const mockUseSelector = vi.mocked(useSelector);
 
   beforeEach(() => {
     mockUseNavigate.mockReturnValue(mockNavigate);

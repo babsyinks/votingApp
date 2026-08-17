@@ -1,14 +1,14 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResultStatusIndicatorTie from "features/results/components/ResultStatusIndicatorTie";
+import { vi } from "vitest";
 
-jest.mock("features/results/components/ResultStatusIndicator");
+vi.mock("features/results/components/ResultStatusIndicator");
 
 describe("ResultStatusIndicatorTie", () => {
   it("renders the ResultStatusIndicator with tie message and icon", () => {
     render(<ResultStatusIndicatorTie />);
 
-    const wrapper = screen.getByTestId("result-status-indicator"); 
+    const wrapper = screen.getByTestId("result-status-indicator");
     expect(screen.getByText("Tie")).toBeInTheDocument();
     expect(wrapper).toHaveClass("text-yellow-cool");
 

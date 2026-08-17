@@ -26,7 +26,7 @@ function ElectionTimerSettingsFormInput({
   const id = label.replace(/\s+/g, "-").toLowerCase();
 
   return (
-    <Block className="p-10">
+    <Block className="p-10p">
       <Label className={`mg-r-10 ${fontSize}`} htmlFor={id} name={label}>
         {label}:
       </Label>{" "}

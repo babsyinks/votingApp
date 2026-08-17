@@ -1,19 +1,23 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import InputNumber from "components/ui/InputNumber";
-jest.mock("components/ui/BaseInput");
+import { vi } from "vitest";
+vi.mock("components/ui/BaseInput");
 
-describe("<InputNumber />", () => { 
+vi.mock("components/ui/BaseInput", () => (props: any) => (
+  <input data-testid="mock-baseinput" {...props} />
+));
+
+describe("<InputNumber />", () => {
   const baseProps = {
     name: "pin",
     value: "1234",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter number",
     className: "extra-class",
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders correctly with required props", () => {
@@ -68,7 +72,7 @@ describe("<InputNumber />", () => {
   });
 
   it("renders with default styles even if className is empty", () => {
-    render(<InputNumber value="9" onChange={jest.fn()} />);
+    render(<InputNumber value="9" onChange={vi.fn()} />);
     const input = screen.getByTestId("mock-baseinput");
 
     expect(input.className).toContain("inp-txt");

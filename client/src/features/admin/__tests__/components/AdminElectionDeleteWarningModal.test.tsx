@@ -1,14 +1,14 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminElectionDeleteWarningModal from "features/admin/components/AdminElectionDeleteWarningModal";
 import { BlockProps } from "components/ui/Block";
 import { ModalProps } from "components/modal/Modal";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children }: BlockProps) => (
   <div data-testid="block">{children}</div>
 ));
 
-jest.mock(
+vi.mock(
   "components/modal/Modal",
   () =>
     ({
@@ -38,8 +38,8 @@ describe("AdminElectionDeleteWarningModal", () => {
     render(
       <AdminElectionDeleteWarningModal
         openModal={false}
-        setOpenModal={jest.fn()}
-        deleteElection={jest.fn()}
+        setOpenModal={vi.fn()}
+        deleteElection={vi.fn()}
       />,
     );
 
@@ -50,8 +50,8 @@ describe("AdminElectionDeleteWarningModal", () => {
     render(
       <AdminElectionDeleteWarningModal
         openModal={true}
-        setOpenModal={jest.fn()}
-        deleteElection={jest.fn()}
+        setOpenModal={vi.fn()}
+        deleteElection={vi.fn()}
       />,
     );
 
@@ -60,12 +60,12 @@ describe("AdminElectionDeleteWarningModal", () => {
   });
 
   it('calls deleteElection when "Yes" button is clicked', () => {
-    const mockDelete = jest.fn();
+    const mockDelete = vi.fn();
 
     render(
       <AdminElectionDeleteWarningModal
         openModal={true}
-        setOpenModal={jest.fn()}
+        setOpenModal={vi.fn()}
         deleteElection={mockDelete}
       />,
     );
@@ -75,13 +75,13 @@ describe("AdminElectionDeleteWarningModal", () => {
   });
 
   it('calls setOpenModal(false) when "No" button is clicked', () => {
-    const mockSetOpenModal = jest.fn();
+    const mockSetOpenModal = vi.fn();
 
     render(
       <AdminElectionDeleteWarningModal
         openModal={true}
         setOpenModal={mockSetOpenModal}
-        deleteElection={jest.fn()}
+        deleteElection={vi.fn()}
       />,
     );
 

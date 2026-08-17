@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import I from "components/ui/I";
+import { vi } from "vitest";
 
 describe("<I />", () => {
   it("renders an <i> tag with children", () => {
@@ -20,7 +21,7 @@ describe("<I />", () => {
   });
 
   it("handles onClick events", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<I onClick={handleClick}>Clickable</I>);
     fireEvent.click(screen.getByText("Clickable"));
     expect(handleClick).toHaveBeenCalledTimes(1);

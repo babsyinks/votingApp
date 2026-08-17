@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminElectionDeleteButton from "features/admin/components/AdminElectionDeleteButton";
 import { BlockProps } from "components/ui/Block";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="block" {...props}>
     {children}
   </div>
 ));
 
-jest.mock("components/ui/Button", () => ({ children, onClick, ...props }: ButtonProps) => (
+vi.mock("components/ui/Button", () => ({ children, onClick, ...props }: ButtonProps) => (
   <button data-testid="button" onClick={onClick} {...props}>
     {children}
   </button>
@@ -18,7 +18,7 @@ jest.mock("components/ui/Button", () => ({ children, onClick, ...props }: Button
 
 describe("AdminElectionDeleteButton", () => {
   it("renders the button inside Block", () => {
-    const mockSetOpenModal = jest.fn();
+    const mockSetOpenModal = vi.fn();
     render(<AdminElectionDeleteButton setOpenModal={mockSetOpenModal} />);
 
     const block = screen.getByTestId("block");
@@ -30,7 +30,7 @@ describe("AdminElectionDeleteButton", () => {
   });
 
   it("calls setOpenModal(true) when button is clicked", () => {
-    const mockSetOpenModal = jest.fn();
+    const mockSetOpenModal = vi.fn();
     render(<AdminElectionDeleteButton setOpenModal={mockSetOpenModal} />);
 
     const button = screen.getByTestId("button");

@@ -1,15 +1,15 @@
-import React, { useState, useEffect, memo } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import Block from "components/ui/Block";
+import ToastMessage from "components/ui/ToastMessage";
+import AdminDataToolTipsBtnsList from "features/admin/components/AdminDataToolTipsBtnsList";
+import AdminElectionDelete from "features/admin/components/AdminElectionDelete";
+import AdminFormDetails from "features/admin/components/AdminFormDetails";
 import { userIsAdmin } from "features/auth/userAuthSlice";
 import { useAxios } from "hooks/useAxios";
 import { useToastMessage } from "hooks/useToastMessage";
 import Container from "layout/Container";
-import Block from "components/ui/Block";
-import ToastMessage from "components/ui/ToastMessage";
-import AdminFormDetails from "features/admin/components/AdminFormDetails";
-import AdminDataToolTipsBtnsList from "features/admin/components/AdminDataToolTipsBtnsList";
-import AdminElectionDelete from "features/admin/components/AdminElectionDelete";
+import { useState, useEffect, memo } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const [submitData, setSubmitData] = useState(false);

@@ -10,25 +10,26 @@ import { AuthAlternativeAccessMeansProps } from "features/auth/components/AuthAl
 import { AuthFieldBaseProps } from "features/auth/types/authFieldTypes";
 import { AuthButtonProps } from "features/auth/components/AuthButton";
 import { mockResponseType, mockErrorType } from "../types/authResults";
+import { vi } from "vitest";
 
-const mockDispatch = jest.fn();
-jest.mock("react-redux", () => ({
+const mockDispatch = vi.fn();
+vi.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const mockTriggerRequest = jest.fn();
+const mockTriggerRequest = vi.fn();
 const mockUser = { username: "john", userId: "1", role: "user" };
 let mockResponse: mockResponseType = { user: mockUser };
 let mockError: mockErrorType = null;
-const mockTriggerFailureToast = jest.fn();
-let mockToastDetailsSet = jest.fn(() => false);
+const mockTriggerFailureToast = vi.fn();
+let mockToastDetailsSet = vi.fn(() => false);
 
-jest.mock("hooks/useAxios", () => ({
+vi.mock("hooks/useAxios", () => ({
   useAxios: () => ({
     triggerRequest: mockTriggerRequest,
     response: mockResponse,
@@ -36,7 +37,7 @@ jest.mock("hooks/useAxios", () => ({
   }),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
+vi.mock("hooks/useToastMessage", () => ({
   useToastMessage: () => ({
     toast: { status: "failure", message: "Invalid credentials" },
     triggerFailureToast: mockTriggerFailureToast,
@@ -46,24 +47,24 @@ jest.mock("hooks/useToastMessage", () => ({
 
 let mockRedirect = "";
 
-jest.mock("features/auth/hooks/useStatusOfElectionRedirect", () => ({
+vi.mock("features/auth/hooks/useStatusOfElectionRedirect", () => ({
   __esModule: true,
   default: () => mockRedirect,
 }));
 
-jest.mock(
+vi.mock(
   "components/ui/ToastMessage",
   () =>
     ({ toast }: ToastMessageProps) => <div>Toast: {toast.message}</div>,
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldUser",
   () =>
     ({ value, onChange, placeholder }: AuthFieldBaseProps) => (
       <input value={value} onChange={onChange} placeholder={placeholder} />
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldPassword",
   () =>
     ({ value, onChange }: AuthFieldBaseProps) => (
@@ -75,7 +76,7 @@ jest.mock(
       />
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthButton",
   () =>
     ({ onClick, disabled, children }: AuthButtonProps) => (
@@ -84,7 +85,7 @@ jest.mock(
       </button>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthAlternativeAccessMeans",
   () =>
     ({ btnLabel }: AuthAlternativeAccessMeansProps) => (

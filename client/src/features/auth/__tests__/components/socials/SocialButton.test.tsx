@@ -4,15 +4,16 @@ import { IProps } from "components/ui/I";
 import { SpanProps } from "components/ui/Span";
 import { AuthButtonProps } from "features/auth/components/AuthButton";
 import { SocialProvider } from "features/auth/components/socials/SocialButton";
+import { vi } from "vitest";
 
-jest.mock("components/ui/I", () => ({
+vi.mock("components/ui/I", () => ({
   __esModule: true,
   default: ({ className }: IProps) => (
     <i data-testid="social-icon" className={className} />
   ),
 }));
 
-jest.mock("components/ui/Span", () => ({
+vi.mock("components/ui/Span", () => ({
   __esModule: true,
   default: ({ children, ...props }: SpanProps) => (
     <span {...props}>{children}</span>
@@ -21,12 +22,12 @@ jest.mock("components/ui/Span", () => ({
 
 let mockWidth = 1024;
 
-jest.mock("hooks/useWindowSize", () => ({
+vi.mock("hooks/useWindowSize", () => ({
   __esModule: true,
   default: () => ({ width: mockWidth }),
 }));
 
-jest.mock("features/auth/components/AuthButton", () => ({
+vi.mock("features/auth/components/AuthButton", () => ({
   __esModule: true,
   default: ({ children, ...props }: AuthButtonProps) => (
     <button {...props}>{children}</button>

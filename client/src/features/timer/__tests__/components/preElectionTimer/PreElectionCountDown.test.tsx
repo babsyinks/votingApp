@@ -1,9 +1,10 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import PreElectionCountDown from "features/timer/components/preElectionTimer/PreElectionCountDown";
 import type { MultiLayerWrapperProps } from "layout/MultiLayerWrapper";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "layout/MultiLayerWrapper",
   () =>
     ({ children }: MultiLayerWrapperProps) => (
@@ -11,7 +12,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/timer/components/preElectionTimer/PreElectionCountDownTimer",
   () =>
     ({ endTime }: { endTime: number }) => (

@@ -1,10 +1,10 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ContestantView from "features/election/components/contestant/ContestantView";
 import { ContestantMainViewProps } from "features/election/components/contestant/ContestantMainView";
 import { ContestantManifestoViewProps } from "features/election/components/contestant/ContestantManifestoView";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantMainView",
   () => (props: ContestantMainViewProps) => (
     <div data-testid="contestant-main-view">
@@ -15,7 +15,7 @@ jest.mock(
   ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantManifestoView",
   () =>
     ({ manifestoControl, manifesto }: ContestantManifestoViewProps) => (

@@ -1,7 +1,8 @@
 import React from "react";
+
 import defaultStyle from "./TextArea.module.css";
-import getCompClasses from "../../util/getCompClasses";
 import useOrientation from "../../hooks/useOrientation";
+import getCompClasses from "../../util/getCompClasses";
 
 export interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -59,7 +60,7 @@ export default function TextArea({
       disabled={disabled}
       className={`${defaultStyle["txt-area"]} ${getCompClasses(
         defaultStyle,
-        className
+        className,
       )}`}
       style={{ resize: "none", ...style }}
       {...rest}

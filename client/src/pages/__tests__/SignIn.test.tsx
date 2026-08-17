@@ -9,26 +9,27 @@ import type { HrProps } from "components/ui/Hr";
 import type { AuthFrameProps } from "features/auth/components/AuthFrame";
 import type { AuthHeadingProps } from "features/auth/components/AuthHeading";
 import type { Toast } from "hooks/useToastMessage";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
 }));
-jest.mock("hooks/useToastMessage");
-jest.mock("hooks/useWindowSize");
+vi.mock("hooks/useToastMessage");
+vi.mock("hooks/useWindowSize");
 
-jest.mock(
+vi.mock(
   "components/ui/ToastMessage",
   () =>
     ({ toast }: ToastMessageProps) => (
       <div data-testid="toast">{toast?.message || "Mock Toast"}</div>
     ),
 );
-jest.mock("components/ui/Hr", () => (props: HrProps) => (
+vi.mock("components/ui/Hr", () => (props: HrProps) => (
   <div data-testid="hr" {...props}>
     Mock Hr
   </div>
 ));
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFrame",
   () =>
     ({ children, className }: AuthFrameProps) => (
@@ -37,40 +38,40 @@ jest.mock(
       </div>
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthHeading",
   () =>
     ({ children }: AuthHeadingProps) => (
       <div data-testid="auth-heading">{children}</div>
     ),
 );
-jest.mock("features/auth/components/signIn/SignInForm", () => () => (
+vi.mock("features/auth/components/signIn/SignInForm", () => () => (
   <div data-testid="sign-in-form">SignInForm</div>
 ));
-jest.mock("features/auth/components/socials/SocialButtons", () => () => (
+vi.mock("features/auth/components/socials/SocialButtons", () => () => (
   <div data-testid="social-buttons">SocialButtons</div>
 ));
-jest.mock(
+vi.mock(
   "features/auth/components/signIn/SignInAccountDoesNotExist",
   () => () => <div data-testid="account-does-not-exist">No Account</div>,
 );
 
 describe("SignIn component", () => {
-  const mockDispatch = jest.fn();
-  const mockTriggerFailureToast = jest.fn();
+  const mockDispatch = vi.fn();
+  const mockTriggerFailureToast = vi.fn();
   const mockToast: Toast = { message: "Something went wrong", status:"failure" };
-  const mockUseDispatch = jest.mocked(useDispatch);
-  const mockedUseToastMessage = jest.mocked(useToastMessage);
-  const mockUseWindowSize = jest.mocked(useWindowSize);
+  const mockUseDispatch = vi.mocked(useDispatch);
+  const mockedUseToastMessage = vi.mocked(useToastMessage);
+  const mockUseWindowSize = vi.mocked(useWindowSize);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseDispatch.mockReturnValue(mockDispatch);
     mockedUseToastMessage.mockReturnValue({
       toast: mockToast,
-      toastDetailsSet: jest.fn().mockReturnValue(false),
+      toastDetailsSet: vi.fn().mockReturnValue(false),
       triggerFailureToast: mockTriggerFailureToast,
-      triggerSuccessToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
     });
     mockUseWindowSize.mockReturnValue({ height: 700, width: 1024 });
 
@@ -114,7 +115,7 @@ describe("SignIn component", () => {
       toast: mockToast,
       triggerFailureToast: mockTriggerFailureToast,
       toastDetailsSet: () => true,
-      triggerSuccessToast: jest.fn(),
+      triggerSuccessToast: vi.fn(),
     });
 
     render(<SignIn />);

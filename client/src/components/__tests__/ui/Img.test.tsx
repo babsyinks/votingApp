@@ -1,15 +1,15 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Img from "components/ui/Img";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Img.module.css", () => ({
+vi.mock("components/ui/Img.module.css", () => ({
   img: "default-img-class",
 }));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Img />", () => {
   it("renders an img element with required src and alt", () => {
@@ -21,7 +21,7 @@ describe("<Img />", () => {
   });
 
   it("applies default and resolved class names", () => {
-    mockedGetCompClasses.mockReturnValue("resolved-class")
+    mockedGetCompClasses.mockReturnValue("resolved-class");
     render(<Img src="a.png" alt="test" className="my-class" />);
     const img = screen.getByAltText("test");
     expect(img).toHaveClass("default-img-class");

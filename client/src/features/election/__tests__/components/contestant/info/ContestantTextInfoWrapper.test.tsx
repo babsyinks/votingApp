@@ -2,8 +2,9 @@ import { render, screen } from "@testing-library/react";
 import ContestantTextInfoWrapper from "features/election/components/contestant/info/ContestantTextInfoWrapper";
 import styles from "features/election/components/contestant/info/ContestantTextInfoWrapper.module.css";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => (props: BlockProps) => <div data-testid="contestant-info-wrapper" {...props}></div>);
+vi.mock("components/ui/Block", () => (props: BlockProps) => <div data-testid="contestant-info-wrapper" {...props}></div>);
 
 describe("ContestantTextInfoWrapper", () => {
   it("renders children correctly", () => {

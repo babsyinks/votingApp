@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import AuthButton from "features/auth/components/AuthButton";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ children, className, onClick, disabled }: ButtonProps) => (
@@ -19,12 +20,12 @@ jest.mock(
 
 describe("AuthButton", () => {
   const defaultProps = {
-    onClick: jest.fn(),
+    onClick: vi.fn(),
     children: "Click Me",
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders Button with default props and correct className", () => {

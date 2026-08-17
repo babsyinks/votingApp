@@ -3,8 +3,9 @@ import { LucideIcon } from "lucide-react";
 import MiniFeatureSection from "features/home/components/MiniFeatureSection";
 import type { FeatureSection } from "features/home/data/featureCardConfig";
 import type { MiniFeatureCardProps } from "features/home/components/MiniFeatureCard";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/home/components/MiniFeatureCard",
   () =>
     ({ title, description, icon: Icon }: MiniFeatureCardProps) => (

@@ -4,40 +4,41 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "hooks/useAxios";
 import type { ElectionCategory } from "features/election/types/electionCategoryType";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
+  useSelector: vi.fn(),
 }));
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
-jest.mock("hooks/useAxios");
+vi.mock("hooks/useAxios");
 
-jest.mock(
+vi.mock(
   "features/results/components/ResultsAll",
   () =>
     ({ result }: { result: ElectionCategory[] }) => (
       <div data-testid="results-all">{result.length} results</div>
     ),
 );
-jest.mock("features/results/components/ResultsRemoved", () => () => (
+vi.mock("features/results/components/ResultsRemoved", () => () => (
   <div data-testid="results-removed">No Results</div>
 ));
-jest.mock("features/results/components/ResultsNotAvailable", () => () => (
+vi.mock("features/results/components/ResultsNotAvailable", () => () => (
   <div data-testid="results-na">Not Available</div>
 ));
 
 describe("Results component", () => {
-  const mockDispatch = jest.fn();
-  const mockNavigate = jest.fn();
-  const mockUseDispatch = jest.mocked(useDispatch);
-  const mockUseNavigate = jest.mocked(useNavigate);
-  const mockUseSelector = jest.mocked(useSelector);
-  const mockUseAxios = jest.mocked(useAxios);
+  const mockDispatch = vi.fn();
+  const mockNavigate = vi.fn();
+  const mockUseDispatch = vi.mocked(useDispatch);
+  const mockUseNavigate = vi.mocked(useNavigate);
+  const mockUseSelector = vi.mocked(useSelector);
+  const mockUseAxios = vi.mocked(useAxios);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseDispatch.mockReturnValue(mockDispatch);
     mockUseNavigate.mockReturnValue(mockNavigate);
     mockUseSelector.mockImplementation((selector) => {
@@ -53,10 +54,10 @@ describe("Results component", () => {
     });
 
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: null,
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);
@@ -66,10 +67,10 @@ describe("Results component", () => {
 
   it("dispatches fetchThenSetCurrentTimerStatus", async () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: null,
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);
@@ -78,10 +79,10 @@ describe("Results component", () => {
 
   it("renders ResultsAll when election ended and results exist", async () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: { electionData: [{ id: 1 }, { id: 2 }] },
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);
@@ -97,10 +98,10 @@ describe("Results component", () => {
 
   it("renders ResultsRemoved when election ended and no results", async () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: { electionData: [] },
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);
@@ -117,10 +118,10 @@ describe("Results component", () => {
     });
 
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: { electionData: [{ id: 1 }] },
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);
@@ -132,10 +133,10 @@ describe("Results component", () => {
 
   it("dispatches userNotAuthenticated and redirects on error", async () => {
     mockUseAxios.mockReturnValue({
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       response: null,
       error: { message: "Some error" },
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<Results />);

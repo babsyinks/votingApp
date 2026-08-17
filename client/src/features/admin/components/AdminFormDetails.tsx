@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Heading from "components/ui/Heading";
 import Block from "components/ui/Block";
-import AdminFormFieldText from "./AdminFormFieldText";
-import AdminFormFieldSelect from "./AdminFormFieldSelect";
-import AdminFormFieldTextArea from "./AdminFormFieldTextArea";
+import Heading from "components/ui/Heading";
+import React, { useState, useEffect } from "react";
+
 import AdminFormFieldFile from "./AdminFormFieldFile";
+import AdminFormFieldSelect from "./AdminFormFieldSelect";
+import AdminFormFieldText from "./AdminFormFieldText";
+import AdminFormFieldTextArea from "./AdminFormFieldTextArea";
 
 /**
  * Props for the AdminFormDetails component.
@@ -21,7 +22,7 @@ export interface AdminFormDetailsProps {
 /**
  * Admin form component for adding a contestant.
  * Handles local state, resets on submission, and passes back FormData.
- * 
+ *
  * @param props - Component props
  * @returns The rendered AdminFormDetails component.
  */
@@ -50,7 +51,15 @@ const AdminFormDetails: React.FC<AdminFormDetailsProps> = ({
     } else {
       setIsDisabled(true);
     }
-  }, [surname, firstName, post, manifesto, picture, setIsDisabled, setFormData]);
+  }, [
+    surname,
+    firstName,
+    post,
+    manifesto,
+    picture,
+    setIsDisabled,
+    setFormData,
+  ]);
 
   useEffect(() => {
     if (dataSubmitted) {

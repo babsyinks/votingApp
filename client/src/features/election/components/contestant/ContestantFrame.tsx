@@ -13,7 +13,7 @@ export interface ContestantFrameProps {
 const ContestantFrame: React.FC<ContestantFrameProps> = ({ className = "", children }) => {
   return (
     <Block
-      className={`z-30 p-10 border-2-grey border-rounded-5 ml-2 bg-white fw-bold ${className}`}
+      className={`z-30 p-10p border-2-grey border-rounded-5 ml-2p bg-white fw-bold ${className}`}
     >
       {children}
     </Block>

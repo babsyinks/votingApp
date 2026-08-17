@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ElectionDetailsHeaderMessage from "features/election/components/ElectionDetailsHeaderMessage";
 import type { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="mock-block" {...props}>
     {children}
   </div>
@@ -31,7 +31,7 @@ describe("ElectionDetailsHeaderMessage", () => {
       "fs-italic",
       "ff-merienda",
       "tt-cap",
-      "mx-10-my-0",
+      "mx-10-my-0p",
       "text-blue",
     );
   });
@@ -44,7 +44,7 @@ describe("ElectionDetailsHeaderMessage", () => {
       "fs-italic",
       "ta-center",
       "ff-cormorant",
-      "mx-10-my-0",
+      "mx-10-my-0p",
     );
   });
 });

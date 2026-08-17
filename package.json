@@ -4,7 +4,7 @@
   "description": "",
   "main": "/server/server.js",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\" ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "yinka babawarun",

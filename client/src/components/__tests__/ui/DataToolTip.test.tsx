@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import DataToolTip from "components/ui/DataToolTip";
+import { vi } from "vitest";
 
 describe("<DataToolTip />", () => {
   const defaultProps = {
@@ -10,7 +11,7 @@ describe("<DataToolTip />", () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders the tooltip content with data-tooltip attribute", () => {

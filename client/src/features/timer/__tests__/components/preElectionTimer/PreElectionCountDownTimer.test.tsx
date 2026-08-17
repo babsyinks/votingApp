@@ -1,4 +1,4 @@
-import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import PreElectionCountDownTimer from "features/timer/components/preElectionTimer/PreElectionCountDownTimer";
 import * as useOrientationHook from "hooks/useOrientation";
@@ -6,8 +6,9 @@ import * as getTimeStatusHelper from "features/timer/helpers/getTimeStatus";
 import * as getTimerConfig from "features/timer/data/getPreElectionTimerSettings";
 import type { BlockProps } from "components/ui/Block";
 import type { PreElectionCountDownTimerPartProps } from "features/timer/components/preElectionTimer/PreElectionCountDownTimerPart";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/timer/components/preElectionTimer/PreElectionCountDownTimerPart",
   () =>
     ({ remainingTime, type }: PreElectionCountDownTimerPartProps) => (
@@ -17,7 +18,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ type, className, children }: BlockProps) => {
@@ -31,14 +32,14 @@ jest.mock(
 
 describe("PreElectionCountDownTimer", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    jest.spyOn(getTimeStatusHelper, "default").mockReturnValue({
+    vi.spyOn(getTimeStatusHelper, "default").mockReturnValue({
       remainingTime: 100,
       daysDuration: 3,
     });
 
-    jest.spyOn(getTimerConfig, "default").mockReturnValue([
+    vi.spyOn(getTimerConfig, "default").mockReturnValue([
       { type: "days", duration: 3, color: "#7E2E84" },
       { type: "hours", duration: 24, color: "#D14081" },
       { type: "minutes", duration: 60, color: "#EF798A" },
@@ -47,7 +48,7 @@ describe("PreElectionCountDownTimer", () => {
   });
 
   it("renders the correct number of timer parts", () => {
-    jest.spyOn(useOrientationHook, "default").mockReturnValue(true);
+    vi.spyOn(useOrientationHook, "default").mockReturnValue(true);
 
     render(<PreElectionCountDownTimer endTime={9999999} />);
 
@@ -56,7 +57,7 @@ describe("PreElectionCountDownTimer", () => {
   });
 
   it("renders timer parts with correct props", () => {
-    jest.spyOn(useOrientationHook, "default").mockReturnValue(true);
+    vi.spyOn(useOrientationHook, "default").mockReturnValue(true);
 
     render(<PreElectionCountDownTimer endTime={9999999} />);
 
@@ -72,7 +73,7 @@ describe("PreElectionCountDownTimer", () => {
   });
 
   it("uses vertical layout in portrait mode", () => {
-    jest.spyOn(useOrientationHook, "default").mockReturnValue(true);
+    vi.spyOn(useOrientationHook, "default").mockReturnValue(true);
 
     render(<PreElectionCountDownTimer endTime={9999999} />);
     const root = screen.getByTestId("pre-election-root");
@@ -80,7 +81,7 @@ describe("PreElectionCountDownTimer", () => {
   });
 
   it("uses horizontal layout in landscape mode", () => {
-    jest.spyOn(useOrientationHook, "default").mockReturnValue(false);
+    vi.spyOn(useOrientationHook, "default").mockReturnValue(false);
 
     render(<PreElectionCountDownTimer endTime={9999999} />);
     const root = screen.getByTestId("pre-election-root");

@@ -2,22 +2,23 @@ import { render, screen } from '@testing-library/react';
 import ElectionStatusIndicator from 'features/home/components/ElectionStatusIndicator';
 import { useSelector } from 'react-redux';
 import useCountdownStatus from 'hooks/useCountdownStatus';
+import { vi } from 'vitest';
 
-jest.mock('react-redux', () => ({
-  useSelector: jest.fn(),
+vi.mock('react-redux', () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock('hooks/useCountdownStatus', () => jest.fn());
+vi.mock('hooks/useCountdownStatus', () => vi.fn());
 
 describe('ElectionStatusIndicator', () => {
-  let mockUseSelector = jest.mocked(useSelector);
+  let mockUseSelector = vi.mocked(useSelector);
   const mockTimer = {
     startDate: '2025-08-01T00:00:00Z',
     endDate: '2025-08-10T00:00:00Z',
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseSelector.mockImplementation((selector) => {
       if (selector.name === 'electionStatus') return 'inActive';
       if (selector.name === 'timerData') return mockTimer;

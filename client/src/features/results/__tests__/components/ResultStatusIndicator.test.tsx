@@ -3,10 +3,11 @@ import ResultStatusIndicator from 'features/results/components/ResultStatusIndic
 import type { BlockProps } from 'components/ui/Block';
 import type { SpanProps } from 'components/ui/Span';
 import type { IProps } from 'components/ui/I';
+import { vi } from 'vitest';
 
-jest.mock('components/ui/Block', () => (props: BlockProps) => <div data-testid="block" {...props} />);
-jest.mock('components/ui/Span', () => (props: SpanProps) => <span data-testid="span" {...props} />);
-jest.mock('components/ui/I', () => (props: IProps) => <i data-testid="icon" {...props} />);
+vi.mock('components/ui/Block', () => (props: BlockProps) => <div data-testid="block" {...props} />);
+vi.mock('components/ui/Span', () => (props: SpanProps) => <span data-testid="span" {...props} />);
+vi.mock('components/ui/I', () => (props: IProps) => <i data-testid="icon" {...props} />);
 
 describe('ResultStatusIndicator', () => {
   it('renders the message text in a Span component', () => {
@@ -20,7 +21,7 @@ describe('ResultStatusIndicator', () => {
 
     const span = screen.getByTestId('span');
     expect(span).toHaveTextContent("Won the election");
-    expect(span).toHaveClass('fw-bold', 'ff-nanum', 'mr-5');
+    expect(span).toHaveClass('fw-bold', 'ff-nanum', 'mr-5p');
   });
 
   it('applies the correct text color class to the Block component', () => {

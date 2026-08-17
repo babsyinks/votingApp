@@ -70,7 +70,7 @@ export default function ForgotPasswordResetPassword({
             type="flex"
             className={`${
               passwordMatch ? "text-green" : "text-red"
-            } flex align-items-center justify-content-center mb-0p5r text-base transition-color`}
+            } flex align-items-center justify-content-center mb-0p5r text-base-r transition-color`}
           >
             <AuthValidationIndicator
               label={passwordMatch ? "Password Match" : "Password Mismatch"}

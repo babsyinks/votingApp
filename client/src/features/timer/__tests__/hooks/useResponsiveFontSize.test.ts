@@ -2,16 +2,17 @@ import { renderHook } from "@testing-library/react";
 import useResponsiveFontSize from "../../hooks/useResponsiveFontSize";
 
 import useOrientation from "hooks/useOrientation";
+import { vi } from "vitest";
 
-jest.mock("hooks/useOrientation", () => ({
+vi.mock("hooks/useOrientation", () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 }));
 
 describe("useResponsiveFontSize", () => {
-  let mockUseOrientation = jest.mocked(useOrientation);
+  let mockUseOrientation = vi.mocked(useOrientation);
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("returns portrait class when orientation is portrait", () => {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import * as helpers from "../../helpers/oAuthControllerHelpers";
+import * as helpers from "../../helpers/oAuthHelpers";
 import {
   googleOauthStart,
   googleOauthConclude,
@@ -11,7 +11,7 @@ import {
 } from "../../controllers/oAuthController";
 
 // Mock helpers
-jest.mock("../../helpers/oAuthControllerHelpers", () => ({
+jest.mock("../../helpers/oAuthHelpers", () => ({
   passportCallbackWrapper: jest.fn(
     (provider: string) => `${provider}CallbackWrapper`,
   ),

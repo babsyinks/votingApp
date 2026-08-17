@@ -37,7 +37,7 @@ const ContestantVotesInfoStat: React.FC<ContestantVotesInfoStatProps> = ({
     <ContestantVotesInfo type="Vote Percent" showInfo={showInfo}>
       <Span>
         <Span
-          className="fs-italic fw-bold p-5 bg-black border-rounded-100p"
+          className="fs-italic fw-bold p-5p bg-black border-rounded-100p"
           style={{ color: contestantElectionStatusColor }}
         >
           {getContestantVotePercent()}

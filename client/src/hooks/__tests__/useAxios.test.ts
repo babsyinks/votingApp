@@ -3,28 +3,29 @@ import { useAxios } from "hooks/useAxios";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import type { CancelTokenSource, Method } from "axios";
+import { type Mocked, vi, type Mock } from "vitest";
 
-jest.mock("axios");
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+vi.mock("axios");
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
 }));
 
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedAxios = axios as Mocked<typeof axios>;
 
 describe("useAxios hook", () => {
-  let dispatchMock: jest.Mock;
-  let cancelMock: jest.Mock;
+  let dispatchMock: Mock;
+  let cancelMock: Mock;
   let interceptorSuccessFn: (res: { data: { message: string } }) => any;
   let interceptorReject: (err: any) => any;
-  let useResponseMock: jest.Mock;
+  let useResponseMock: Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    dispatchMock = jest.fn();
-    (useDispatch as jest.Mock).mockReturnValue(dispatchMock);
+    vi.clearAllMocks();
+    dispatchMock = vi.fn();
+    (useDispatch as Mock).mockReturnValue(dispatchMock);
 
-    cancelMock = jest.fn();
-    mockedAxios.CancelToken.source = jest.fn(
+    cancelMock = vi.fn();
+    mockedAxios.CancelToken.source = vi.fn(
       () =>
         ({
           token: "mockToken",
@@ -32,7 +33,7 @@ describe("useAxios hook", () => {
         }) as unknown as CancelTokenSource,
     );
 
-    useResponseMock = mockedAxios.interceptors.response.use as jest.Mock;
+    useResponseMock = mockedAxios.interceptors.response.use as Mock;
 
     useResponseMock.mockImplementation((success, error) => {
       interceptorSuccessFn = success;
@@ -40,11 +41,11 @@ describe("useAxios hook", () => {
       return 123;
     });
 
-    mockedAxios.isCancel = jest.fn((_value?: any) => false) as any;
+    mockedAxios.isCancel = vi.fn((_value?: any) => false) as any;
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("performs a successful request and sets response", async () => {
@@ -86,9 +87,9 @@ describe("useAxios hook", () => {
       response: { status: 500 },
     };
 
-    (mockedAxios.CancelToken.source as jest.Mock).mockReturnValue({
+    (mockedAxios.CancelToken.source as Mock).mockReturnValue({
       token: "mockToken",
-      cancel: jest.fn(),
+      cancel: vi.fn(),
     });
 
     useResponseMock.mockImplementation((success, error) => {
@@ -102,7 +103,7 @@ describe("useAxios hook", () => {
       try {
         await interceptorReject(errorObject);
       } catch (err) {
-        // eslint-disable-next-line jest/no-conditional-expect
+        // eslint-disable-next-line vi/no-conditional-expect
         expect(err).toBe(errorObject);
       }
     });
@@ -117,9 +118,9 @@ describe("useAxios hook", () => {
 
     const refreshError = new Error("Refresh failed");
 
-    (mockedAxios.CancelToken.source as jest.Mock).mockReturnValue({
+    (mockedAxios.CancelToken.source as Mock).mockReturnValue({
       token: "mockToken",
-      cancel: jest.fn(),
+      cancel: vi.fn(),
     });
 
     mockedAxios.request.mockRejectedValueOnce({
@@ -143,7 +144,7 @@ describe("useAxios hook", () => {
           response: { status: 401 },
         });
       } catch (err) {
-        // eslint-disable-next-line jest/no-conditional-expect
+        // eslint-disable-next-line vi/no-conditional-expect
         expect(err).toBe(refreshError);
       }
     });
@@ -180,7 +181,7 @@ describe("useAxios hook", () => {
 
     const { result } = renderHook(() => useAxios());
 
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     await act(async () => {
       await result.current.triggerRequest({
@@ -240,7 +241,7 @@ describe("useAxios hook", () => {
   });
 
   it("registers response interceptor on mount", () => {
-    const mockUse = jest.fn();
+    const mockUse = vi.fn();
     mockedAxios.interceptors.response.use = mockUse;
 
     renderHook(() => useAxios());
@@ -284,7 +285,7 @@ describe("useAxios hook", () => {
       config: originalRequest,
     };
     function asMock<T extends (...args: any[]) => any>(fn: T) {
-      return fn as unknown as jest.Mock<ReturnType<T>, Parameters<T>>;
+      return fn as unknown as Mock;
     }
     // 1. First call to mockedAxios.request will simulate a 401
     mockedAxios.request.mockRejectedValueOnce(firstError);
@@ -347,8 +348,8 @@ describe("useAxios hook", () => {
 
 it("covers 'Cancel token not initialized' path when CancelToken.source returns undefined", async () => {
   // make CancelToken.source return undefined for this test run
-  // cast to jest.Mock so ts accepts mockReturnValueOnce
-  (mockedAxios.CancelToken.source as jest.Mock).mockReturnValueOnce(undefined);
+  // cast to vi.Mock so ts accepts mockReturnValueOnce
+  (mockedAxios.CancelToken.source as Mock).mockReturnValueOnce(undefined);
 
   const { result } = renderHook(() => useAxios());
 

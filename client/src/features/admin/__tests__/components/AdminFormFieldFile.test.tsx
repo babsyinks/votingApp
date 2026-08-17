@@ -1,11 +1,11 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminFormFieldFile from "features/admin/components/AdminFormFieldFile";
 import { InputFileProps } from "components/ui/InputFile";
 import { LabelProps } from "components/ui/Label";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Input",
   () =>
     ({ type, name, resetKey, onChange }: InputFileProps) => (
@@ -19,20 +19,28 @@ jest.mock(
     ),
 );
 
-jest.mock("components/ui/Label", () => ({ name, className, children }: LabelProps) => (
-  <label data-testid="label" data-name={name} className={className}>
-    {children}
-  </label>
-));
+vi.mock(
+  "components/ui/Label",
+  () =>
+    ({ name, className, children }: LabelProps) => (
+      <label data-testid="label" data-name={name} className={className}>
+        {children}
+      </label>
+    ),
+);
 
-jest.mock("components/ui/Block", () => ({ children, type, className }: BlockProps) => (
-  <div data-testid="block" data-type={type} className={className}>
-    {children}
-  </div>
-));
+vi.mock(
+  "components/ui/Block",
+  () =>
+    ({ children, type, className }: BlockProps) => (
+      <div data-testid="block" data-type={type} className={className}>
+        {children}
+      </div>
+    ),
+);
 
 describe("AdminFormFieldFile", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     mockOnChange.mockClear();

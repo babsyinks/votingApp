@@ -6,12 +6,13 @@ import { ContestantMainInfoProps } from "features/election/components/contestant
 import { ContestantButtonManifestoProps } from "features/election/components/contestant/buttons/ContestantButtonManifesto";
 import { ContestantButtonVoteProps } from "features/election/components/contestant/buttons/ContestantButtonVote";
 import { ContestantButtonVoteCompletedProps } from "features/election/components/contestant/buttons/ContestantButtonVoteCompleted";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantFrame",
   () =>
     ({ children }: ContestantFrameProps) => (
@@ -19,14 +20,14 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantMainInfo",
   () => (props: ContestantMainInfoProps) => (
     <div data-testid="main-info">{JSON.stringify(props)}</div>
   ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/buttons/ContestantButtonManifesto",
   () =>
     ({ manifestoControl }: ContestantButtonManifestoProps) => (
@@ -34,7 +35,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/buttons/ContestantButtonVote",
   () =>
     ({ contestantId, position }: ContestantButtonVoteProps) => (
@@ -42,7 +43,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/buttons/ContestantButtonVoteCompleted",
   () =>
     ({ votedFor }: ContestantButtonVoteCompletedProps) => (
@@ -68,14 +69,14 @@ describe("ContestantMainView", () => {
     votePercentColor: { c123: "green" },
     manifestoControl: {
       showManifesto: true,
-      setShowManifesto: jest.fn(),
+      setShowManifesto: vi.fn(),
     },
   };
 
-  const mockedUseSelector = useSelector as jest.Mock;
+  const mockedUseSelector = useSelector as Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders all base components inside ContestantFrame", () => {

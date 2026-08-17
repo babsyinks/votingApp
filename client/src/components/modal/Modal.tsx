@@ -1,6 +1,8 @@
-import React, { FC } from "react";
-import Button from "components/ui/Button";
+import { FC } from "react";
+
 import defaultStyle from "./Modal.module.css";
+
+import Button from "@/components/ui/Button";
 
 export interface ModalProps {
   /** The content/message shown inside the modal. */

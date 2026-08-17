@@ -1,23 +1,23 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminFormFieldText from "features/admin/components/AdminFormFieldText";
 import { LabelProps } from "components/ui/Label";
 import { BlockProps } from "components/ui/Block";
 import { InputTextProps } from "components/ui/InputText";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Label", () => ({ name, className, children }: LabelProps) => (
+vi.mock("components/ui/Label", () => ({ name, className, children }: LabelProps) => (
   <label data-testid="label" data-name={name} className={className}>
     {children}
   </label>
 ));
 
-jest.mock("components/ui/Block", () => ({ children, type, className }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, type, className }: BlockProps) => (
   <div data-testid="block" data-type={type} className={className}>
     {children}
   </div>
 ));
 
-jest.mock("components/ui/Input", () => ({ name, value, onChange, className }: InputTextProps) => (
+vi.mock("components/ui/Input", () => ({ name, value, onChange, className }: InputTextProps) => (
   <input
     data-testid="input"
     type="text"
@@ -29,7 +29,7 @@ jest.mock("components/ui/Input", () => ({ name, value, onChange, className }: In
 ));
 
 describe("AdminFormFieldText", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     mockOnChange.mockClear();

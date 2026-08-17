@@ -1,4 +1,4 @@
-import React from "react";
+
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminElectionDelete from "features/admin/components/AdminElectionDelete";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,21 +9,22 @@ import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import { AdminElectionDeleteWarningModalProps } from "features/admin/components/AdminElectionDeleteWarningModal";
 import { AdminElectionDeleteButtonProps } from "features/admin/components/AdminElectionDeleteButton";
 import { ToastMessageProps } from "components/ui/ToastMessage";
+import { vi } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
-  useToastMessage: jest.fn(),
+vi.mock("hooks/useToastMessage", () => ({
+  useToastMessage: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "components/ui/ToastMessage",
   () =>
     ({ toast }: ToastMessageProps) => (
@@ -31,7 +32,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminElectionDeleteWarningModal",
   () =>
     ({
@@ -49,7 +50,7 @@ jest.mock(
       ) : null,
 );
 
-jest.mock(
+vi.mock(
   "features/admin/components/AdminElectionDeleteButton",
   () =>
     ({ setOpenModal }: AdminElectionDeleteButtonProps) => (
@@ -60,21 +61,21 @@ jest.mock(
 );
 
 describe("AdminElectionDelete", () => {
-  const mockDispatch = jest.fn();
-  const mockTriggerRequest = jest.fn();
-  const mockTriggerSuccessToast = jest.fn();
-  const mockTriggerFailureToast = jest.fn();
-  const mockedUseDispatch = jest.mocked(useDispatch);
-  const mockedUseAxios = jest.mocked(useAxios);
-  const mockedUseToastMessage = jest.mocked(useToastMessage);
-  const mockedUseSelector = jest.mocked(useSelector);
+  const mockDispatch = vi.fn();
+  const mockTriggerRequest = vi.fn();
+  const mockTriggerSuccessToast = vi.fn();
+  const mockTriggerFailureToast = vi.fn();
+  const mockedUseDispatch = vi.mocked(useDispatch);
+  const mockedUseAxios = vi.mocked(useAxios);
+  const mockedUseToastMessage = vi.mocked(useToastMessage);
+  const mockedUseSelector = vi.mocked(useSelector);
   beforeEach(() => {
     mockedUseDispatch.mockReturnValue(mockDispatch);
     mockedUseAxios.mockReturnValue({
       response: null,
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
     mockedUseToastMessage.mockReturnValue({
       toast: { message: "Test toast", status: "success" },
@@ -85,7 +86,7 @@ describe("AdminElectionDelete", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('does not render anything when status is not "active_election_ended"', () => {
@@ -127,7 +128,7 @@ describe("AdminElectionDelete", () => {
       response: true,
       error: null,
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<AdminElectionDelete />);
@@ -156,7 +157,7 @@ describe("AdminElectionDelete", () => {
       response: null,
       error: { message: "error" },
       triggerRequest: mockTriggerRequest,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<AdminElectionDelete />);

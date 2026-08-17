@@ -17,16 +17,16 @@ export default function ResultsNone({ heading, content }: ResultsNoneProps) {
       <Heading type="h1" className="text-red-cool ta-center">
         {heading}
       </Heading>
-      <Paragraph className="p-10 w-50p">{content}</Paragraph>
-      <Heading type="h2" className="p-10">
+      <Paragraph className="p-10p w-50p">{content}</Paragraph>
+      <Heading type="h2" className="p-10p">
         What Would You Like To Do?
       </Heading>
       <Block type="flex-horz-sb">
-        <Button className="primary-btn m-20 ml-5" onClick={() => navigate("/")}>
+        <Button className="primary-btn m-20p ml-5p" onClick={() => navigate("/")}>
           Go To Home Page
         </Button>
         <Button
-          className="secondary-btn mr-5"
+          className="secondary-btn mr-5p"
           onClick={() => navigate("/help")}
         >
           Go To Help Page

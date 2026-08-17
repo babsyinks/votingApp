@@ -1,12 +1,12 @@
 import { Op } from "sequelize";
 import { createUserService } from "../../services/userService";
-import { hashPassWord } from "../../helpers/authControllerHelpers";
+import { hashPassWord } from "../../helpers/authHelpers";
 import {
   failIfUserDoesNotExist,
   failIfPasswordWeak,
 } from "../../validators/authValidators";
 
-jest.mock("../../helpers/authControllerHelpers", () => ({
+jest.mock("../../helpers/authHelpers", () => ({
   hashPassWord: jest.fn(),
 }));
 

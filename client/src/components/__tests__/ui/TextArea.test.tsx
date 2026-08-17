@@ -2,16 +2,17 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import TextArea from "components/ui/TextArea";
 import getCompClasses from "util/getCompClasses";
 import { TextAreaProps } from "components/ui/TextArea";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses", () => jest.fn());
-jest.mock("components/ui/TextArea.module.css", () => ({
+vi.mock("util/getCompClasses", () => vi.fn());
+vi.mock("components/ui/TextArea.module.css", () => ({
   "txt-area": "default-textarea-class",
 }));
-jest.mock("hooks/useOrientation", () => jest.fn());
+vi.mock("hooks/useOrientation", () => vi.fn());
 
 const mockUseOrientation = require("hooks/useOrientation");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<TextArea />", () => {
   let baseProps: TextAreaProps;
@@ -21,11 +22,11 @@ describe("<TextArea />", () => {
       name: "comment",
       value: "Initial text",
       dimension: { rows: 5, cols: 60 },
-      onChange: jest.fn(),
+      onChange: vi.fn(),
       placeholder: "Enter your comment",
     };
     mockedGetCompClasses.mockReturnValue("resolved-class");
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders with default values", () => {
@@ -33,11 +34,11 @@ describe("<TextArea />", () => {
     baseProps = {
       name: "comment",
       value: "Initial text",
-      onChange: jest.fn(),
+      onChange: vi.fn(),
       placeholder: "Enter your comment",
     };
     // Suppress expected console error temporarily
-    const spy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     render(<TextArea {...baseProps} />);
 

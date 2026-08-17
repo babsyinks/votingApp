@@ -1,23 +1,25 @@
 import { render, screen } from "@testing-library/react";
+import { InitialEntry } from "history";
 import { MemoryRouter } from "react-router-dom";
 import AppRoutes from "routes/AppRoutes";
+import { vi } from "vitest";
 
-jest.mock("pages/HomePage", () => () => <div>Home Page</div>);
-jest.mock("pages/Register", () => () => <div>Register Page</div>);
-jest.mock("pages/SignIn", () => () => <div>Sign In Page</div>);
-jest.mock("pages/SignUpStart", () => () => <div>Sign Up Start Page</div>);
-jest.mock("pages/VerifyCode", () => () => <div>Verify Code Page</div>);
-jest.mock("pages/OAuthSuccess", () => () => <div>OAuth Success Page</div>);
-jest.mock("pages/ForgotPassword", () => () => <div>Forgot Password Page</div>);
-jest.mock("pages/ResetPassword", () => () => <div>Reset Password Page</div>);
-jest.mock("pages/Admin", () => () => <div>Admin Page</div>);
-jest.mock("pages/VotingProcess", () => () => <div>Voting Process Page</div>);
-jest.mock("pages/ElectionTimerSettings", () => () => <div>Election Timer Settings Page</div>);
-jest.mock("pages/Help", () => () => <div>Help Page</div>);
-jest.mock("pages/Results", () => () => <div>Results Page</div>);
-jest.mock("pages/NotFound", () => () => <div>404 Not Found</div>);
+vi.mock("pages/HomePage", () => () => <div>Home Page</div>);
+vi.mock("pages/Register", () => () => <div>Register Page</div>);
+vi.mock("pages/SignIn", () => () => <div>Sign In Page</div>);
+vi.mock("pages/SignUpStart", () => () => <div>Sign Up Start Page</div>);
+vi.mock("pages/VerifyCode", () => () => <div>Verify Code Page</div>);
+vi.mock("pages/OAuthSuccess", () => () => <div>OAuth Success Page</div>);
+vi.mock("pages/ForgotPassword", () => () => <div>Forgot Password Page</div>);
+vi.mock("pages/ResetPassword", () => () => <div>Reset Password Page</div>);
+vi.mock("pages/Admin", () => () => <div>Admin Page</div>);
+vi.mock("pages/VotingProcess", () => () => <div>Voting Process Page</div>);
+vi.mock("pages/ElectionTimerSettings", () => () => <div>Election Timer Settings Page</div>);
+vi.mock("pages/Help", () => () => <div>Help Page</div>);
+vi.mock("pages/Results", () => () => <div>Results Page</div>);
+vi.mock("pages/NotFound", () => () => <div>404 Not Found</div>);
 
-const renderWithRoute = (route) =>
+const renderWithRoute = (route: InitialEntry) =>
   render(
     <MemoryRouter initialEntries={[route]}>
       <AppRoutes />

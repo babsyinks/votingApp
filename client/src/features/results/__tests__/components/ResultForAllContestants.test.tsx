@@ -3,8 +3,9 @@ import ResultForAllContestants from "features/results/components/ResultForAllCon
 import getTieStatus from "features/results/helpers/getTieStatus";
 import { result } from "../testData/result";
 import type { ResultForContestantProps } from "features/results/components/ResultForContestant";
+import { vi } from "vitest";
 
-jest.mock("features/results/components/ResultForContestant", () => {
+vi.mock("features/results/components/ResultForContestant", () => {
   return function MockResultForContestant({
     contestant,
     isTie,
@@ -19,8 +20,8 @@ jest.mock("features/results/components/ResultForContestant", () => {
   };
 });
 
-jest.mock("../../helpers/getTieStatus");
-const getTieStatusMock = jest.mocked(getTieStatus);
+vi.mock("../../helpers/getTieStatus");
+const getTieStatusMock = vi.mocked(getTieStatus);
 
 describe("ResultForAllContestants", () => {
   const mockSortedResults = result[0].contestants;
@@ -30,7 +31,7 @@ describe("ResultForAllContestants", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders a ResultForContestant for each contestant in sortedResults", () => {

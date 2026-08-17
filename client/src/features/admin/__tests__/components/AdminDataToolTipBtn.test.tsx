@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminDataToolTipBtn from "features/admin/components/AdminDataToolTipBtn";
 import { ButtonProps } from "components/ui/Button";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ children, onClick, disabled, className }: ButtonProps) => (
@@ -33,7 +34,7 @@ describe("AdminDataToolTipBtn", () => {
   });
 
   it("calls onClick when button is clicked", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
 
     render(
       <AdminDataToolTipBtn data="Info" onClick={handleClick}>

@@ -3,13 +3,14 @@ import LiveTimer from "features/timer/components/liveElectionTimer/LiveTimer";
 import { useDispatch, useSelector } from "react-redux";
 import { updateElectionStatusFromTimer } from "features/election/electionSlice";
 import type { LiveTimerRendererProps } from "features/timer/components/liveElectionTimer/LiveTimerRenderer";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/timer/components/liveElectionTimer/LiveTimerRenderer",
   () => {
     return function MockRenderer() {
@@ -18,11 +19,11 @@ jest.mock(
   },
 );
 
-jest.mock("features/election/electionSlice", () => ({
-  updateElectionStatusFromTimer: jest.fn(),
+vi.mock("features/election/electionSlice", () => ({
+  updateElectionStatusFromTimer: vi.fn(),
 }));
 
-jest.mock("react-countdown", () => {
+vi.mock("react-countdown", () => {
   return ({
     date,
     renderer: Renderer,
@@ -43,16 +44,16 @@ jest.mock("react-countdown", () => {
 });
 
 describe("LiveTimer", () => {
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   const mockTimerState = {
   startDate: 1758979661570,
   endDate: 1758992341783
 };
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useSelector as jest.Mock).mockImplementation((selector) =>
+    vi.clearAllMocks();
+    (useDispatch as Mock).mockReturnValue(mockDispatch);
+    (useSelector as Mock).mockImplementation((selector) =>
       selector({ timer: mockTimerState }),
     );
   });

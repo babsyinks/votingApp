@@ -13,6 +13,7 @@ import { fetchThenSetCurrentTimerStatus } from "features/timer/timerSlice";
 import * as utils from "../utils/mapTimerStatusToElectionStatus";
 import { ElectionState } from "../electionSlice";
 import { RootState } from "app/rootReducer";
+import { vi } from "vitest";
 
 describe("electionSlice", () => {
   const initialState: ElectionState = {
@@ -68,7 +69,7 @@ describe("electionSlice", () => {
     const contestant1ForSecretaryVotes = ["id4", "id5", "id9", "id14"];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should handle setAllElectionData", () => {
@@ -173,7 +174,7 @@ describe("electionSlice", () => {
 
   it("should handle updateElectionStatusFromTimer using utility", () => {
     const timerStatus = { startDate: 9999, endDate: 10000 };
-    jest
+    vi
       .spyOn(utils, "mapTimerStatusToElectionStatus")
       .mockReturnValue("active_election_live");
 
@@ -190,7 +191,7 @@ describe("electionSlice", () => {
 
   it("should handle fetchThenSetCurrentTimerStatus.fulfilled (extraReducer)", () => {
     const timerStatus = { startDate: 1111, endDate: 2222 };
-    jest
+    vi
       .spyOn(utils, "mapTimerStatusToElectionStatus")
       .mockReturnValue("active_election_ended");
 

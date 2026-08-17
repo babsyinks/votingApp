@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Section from "components/ui/Section";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Base.module.css", () => ({
+vi.mock("components/ui/Base.module.css", () => ({
   section: "base-section",
   "flex-vert": "base-flex-vert",
 }));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Section />", () => {
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe("<Section />", () => {
     render(
       <Section type="flex-vert" className="custom-class">
         Custom Section
-      </Section>
+      </Section>,
     );
 
     const section = screen.getByText("Custom Section");

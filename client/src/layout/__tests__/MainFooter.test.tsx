@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import MainFooter from "layout/MainFooter";
@@ -15,7 +14,7 @@ describe("MainFooter Component", () => {
     render(<MainFooter />);
     const footer = screen.getByText(`© ${currentYear} Corestack Technologies`);
     expect(footer).toHaveClass(
-      "ta-center px-1p5r-py-2r text-base text-white bg-gradient-translucent-blue",
+      "ta-center px-1p5r-py-2r text-base-r text-white bg-gradient-translucent-blue",
     );
   });
 });

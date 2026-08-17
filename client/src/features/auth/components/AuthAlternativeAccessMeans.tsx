@@ -28,7 +28,7 @@ export default function AuthAlternativeAccessMeans({
   const navigate = useNavigate();
 
   return (
-    <Paragraph className="text-sm ta-center">
+    <Paragraph className="text-sm-r ta-center">
       {question}{" "}
       <Button
         className="text-blueviolet-mute td-none-with-hover fw-500 bg-transparent"

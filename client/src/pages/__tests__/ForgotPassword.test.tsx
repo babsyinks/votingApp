@@ -1,22 +1,22 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ForgotPassword from "pages/ForgotPassword";
 import type { AuthFrameProps } from "features/auth/components/AuthFrame";
 import type { AuthHeadingProps } from "features/auth/components/AuthHeading";
+import { vi } from "vitest";
 
-jest.mock("features/auth/components/AuthFrame", () => ({
+vi.mock("features/auth/components/AuthFrame", () => ({
   __esModule: true,
   default: ({ children }: AuthFrameProps) => (
     <div data-testid="auth-frame">{children}</div>
   ),
 }));
 
-jest.mock("features/auth/components/AuthHeading", () => ({
+vi.mock("features/auth/components/AuthHeading", () => ({
   __esModule: true,
   default: ({ children }: AuthHeadingProps) => <h1>{children}</h1>,
 }));
 
-jest.mock(
+vi.mock(
   "features/auth/components/forgotPassword/ForgotPasswordStartForm",
   () => ({
     __esModule: true,

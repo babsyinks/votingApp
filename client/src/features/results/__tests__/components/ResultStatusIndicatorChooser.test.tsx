@@ -1,14 +1,14 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResultStatusIndicatorChooser from "features/results/components/ResultStatusIndicatorChooser";
+import { vi } from "vitest";
 
-jest.mock("features/results/components/ResultStatusIndicatorWinner", () => () => (
+vi.mock("features/results/components/ResultStatusIndicatorWinner", () => () => (
   <div data-testid="winner">Winner</div>
 ));
-jest.mock("features/results/components/ResultStatusIndicatorTie", () => () => (
+vi.mock("features/results/components/ResultStatusIndicatorTie", () => () => (
   <div data-testid="tie">Tie</div>
 ));
-jest.mock("features/results/components/ResultStatusIndicatorLoser", () => () => (
+vi.mock("features/results/components/ResultStatusIndicatorLoser", () => () => (
   <div data-testid="loser">Loser</div>
 ));
 

@@ -26,7 +26,7 @@ const ContestantVotesInfoSummary: React.FC<ContestantVotesInfoSummaryProps> = ({
   return (
     <ContestantVotesInfo type="Votes" showInfo={showInfo}>
       <Span>
-        <Span className="text-purple-cool fs-italic px-0-py-5">
+        <Span className="text-purple-cool fs-italic px-0-py-5p">
           {contestantVotes}
         </Span>{" "}
         {showExpandedStats && (

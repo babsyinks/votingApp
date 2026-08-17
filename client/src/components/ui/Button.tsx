@@ -1,4 +1,5 @@
 import { CSSProperties, ReactNode, JSX } from "react";
+
 import defaultStyle from "./Button.module.css";
 import getCompClasses from "../../util/getCompClasses";
 

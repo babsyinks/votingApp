@@ -7,25 +7,26 @@ import Register from "pages/Register";
 import type { AuthFrameProps } from "features/auth/components/AuthFrame";
 import type { AuthHeadingProps } from "features/auth/components/AuthHeading";
 import type { SignUpRegistrationFormProps } from "features/auth/components/signup/SignUpRegistrationForm";
+import { vi } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
-  useSearchParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useNavigate: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("hooks/useWindowSize");
+vi.mock("hooks/useWindowSize");
 
-jest.mock("features/auth/hooks/useStatusOfElectionRedirect", () => ({
+vi.mock("features/auth/hooks/useStatusOfElectionRedirect", () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFrame",
   () =>
     ({ children, className }: AuthFrameProps) => (
@@ -35,13 +36,13 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthHeading",
   () =>
     ({ children }: AuthHeadingProps) => <h1>{children}</h1>,
 );
 
-jest.mock(
+vi.mock(
   "features/auth/components/signup/SignUpRegistrationForm",
   () =>
     ({ email }: SignUpRegistrationFormProps) => (
@@ -50,14 +51,14 @@ jest.mock(
 );
 
 describe("Register component", () => {
-  const mockNavigate = jest.fn();
-  const mockUseNavigate = jest.mocked(useNavigate);
-  const mockUseSearchParams = jest.mocked(useSearchParams);
-  const mockUseSelector = jest.mocked(useSelector);
-  const mockUseWindowSize = jest.mocked(useWindowSize);
+  const mockNavigate = vi.fn();
+  const mockUseNavigate = vi.mocked(useNavigate);
+  const mockUseSearchParams = vi.mocked(useSearchParams);
+  const mockUseSelector = vi.mocked(useSelector);
+  const mockUseWindowSize = vi.mocked(useWindowSize);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseNavigate.mockReturnValue(mockNavigate);
     mockUseWindowSize.mockReturnValue({ height: 1000, width: 1500 });
   });
@@ -69,7 +70,7 @@ describe("Register component", () => {
 
     mockUseSearchParams.mockReturnValue([
       new URLSearchParams("?email=test@example.com"),
-      jest.fn(),
+      vi.fn(),
     ]);
     mockUseSelector.mockReturnValue(true);
 
@@ -85,7 +86,7 @@ describe("Register component", () => {
       );
       mockUseSearchParams.mockReturnValue([
         new URLSearchParams("?email=test@example.com"),
-        jest.fn(),
+        vi.fn(),
       ]);
       mockUseSelector.mockReturnValue(true);
     });
@@ -103,7 +104,7 @@ describe("Register component", () => {
     });
 
     it("renders null if email is missing", () => {
-      mockUseSearchParams.mockReturnValue([new URLSearchParams(""), jest.fn()]);
+      mockUseSearchParams.mockReturnValue([new URLSearchParams(""), vi.fn()]);
 
       const { container } = render(<Register />);
       expect(container.firstChild).toBeNull();

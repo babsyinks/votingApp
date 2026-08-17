@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import defaultStyle from "Tab.module.css";
+
 import getCompClasses from "../../util/getCompClasses";
 
 export interface TabProps {
@@ -39,7 +40,7 @@ export default function Tab({
             tabIndex={isSelected ? 0 : -1}
             className={`${defaultStyle.tb} ${getCompClasses(
               defaultStyle,
-              className
+              className,
             )}`}
             onClick={() => setSelectedIndex(index)}
             style={{ ...style, width }}

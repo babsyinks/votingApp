@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import {
@@ -10,17 +9,18 @@ import { ElectivePositionDetailsSummaryProps } from "features/election/component
 import { ElectivePositionDetailsContestantsProps } from "features/election/components/ElectivePositionDetailsContestants";
 import { mockContestants } from "../testData/mockContestants";
 import type { ContestantType } from "features/election/types/contestantType";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("../../electionSlice", () => ({
-  getAllVotesInACategory: jest.fn(),
-  getAllContestantsInCategory: jest.fn(),
+vi.mock("../../electionSlice", () => ({
+  getAllVotesInACategory: vi.fn(),
+  getAllContestantsInCategory: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectivePositionDetailsSummary",
   () =>
     ({
@@ -36,7 +36,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectivePositionDetailsContestants",
   () =>
     ({
@@ -53,10 +53,10 @@ jest.mock(
 );
 
 describe("ElectivePositionDetails", () => {
-  const mockedGetAllVotesInACategory = getAllVotesInACategory as jest.Mock;
+  const mockedGetAllVotesInACategory = getAllVotesInACategory as Mock;
   const mockedGetAllContestantsInCategory =
-    getAllContestantsInCategory as jest.Mock;
-  const mockedUseSelector = useSelector as jest.Mock;
+    getAllContestantsInCategory as Mock;
+  const mockedUseSelector = useSelector as Mock;
   let mockPosition = "President";
   const mockProps = {
     contestantsDetailsByPosition: { position: mockPosition },
@@ -66,7 +66,7 @@ describe("ElectivePositionDetails", () => {
   let contestants: ContestantType[];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     contestants = [...mockContestants];
 

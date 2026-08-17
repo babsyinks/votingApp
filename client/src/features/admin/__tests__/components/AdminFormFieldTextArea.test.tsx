@@ -1,11 +1,12 @@
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import AdminFormFieldTextArea from "features/admin/components/AdminFormFieldTextArea";
 import { LabelProps } from "components/ui/Label";
 import { BlockProps } from "components/ui/Block";
 import { TextAreaProps } from "components/ui/TextArea";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Label",
   () =>
     ({ name, className, children }: LabelProps) => (
@@ -15,7 +16,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, type, className }: BlockProps) => (
@@ -25,7 +26,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/TextArea",
   () =>
     ({ name, value, onChange }: TextAreaProps) => (
@@ -39,7 +40,7 @@ jest.mock(
 );
 
 describe("AdminFormFieldTextArea", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     mockOnChange.mockClear();

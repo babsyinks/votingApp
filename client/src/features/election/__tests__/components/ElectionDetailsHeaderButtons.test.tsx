@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionDetailsHeaderButtons from "features/election/components/ElectionDetailsHeaderButtons";
 import { useDispatch } from "react-redux";
@@ -8,46 +7,53 @@ import useOrientation from "hooks/useOrientation";
 import { userNotAuthenticated } from "features/auth/userAuthSlice";
 import { BlockProps } from "components/ui/Block";
 import { ElectionDetailsHeaderButtonProps } from "features/election/components/ElectionDetailsHeaderButton";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
 
-jest.mock("hooks/useOrientation", () => jest.fn());
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useOrientation", () => vi.fn());
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
 
-jest.mock("components/ui/Block", () => ({ children, type }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, type }: BlockProps) => (
   <div data-testid={`block-${type}`}>{children}</div>
 ));
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectionDetailsHeaderButton",
   () =>
     ({ onClick, btnLabel, className }: ElectionDetailsHeaderButtonProps) => (
-      <button onClick={onClick} className={className} data-testid={`btn-${btnLabel}`}>
+      <button
+        onClick={onClick}
+        className={className}
+        data-testid={`btn-${btnLabel}`}
+      >
         {btnLabel}
       </button>
     ),
 );
 
-const mockNavigate = jest.fn();
-const mockDispatch = jest.fn();
-const mockTriggerRequest = jest.fn(() => Promise.resolve());
+const mockNavigate = vi.fn();
+const mockDispatch = vi.fn();
+const mockTriggerRequest = vi.fn(() => Promise.resolve());
 
 describe("ElectionDetailsHeaderButtons", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useAxios as jest.Mock).mockReturnValue({ triggerRequest: mockTriggerRequest });
-    (useOrientation as jest.Mock).mockReturnValue(true); // portrait
+    (useNavigate as Mock).mockReturnValue(mockNavigate);
+    (useDispatch as Mock).mockReturnValue(mockDispatch);
+    (useAxios as Mock).mockReturnValue({
+      triggerRequest: mockTriggerRequest,
+    });
+    (useOrientation as Mock).mockReturnValue(true); // portrait
   });
 
   it("renders both buttons for admin role", () => {
@@ -68,15 +74,15 @@ describe("ElectionDetailsHeaderButtons", () => {
     render(<ElectionDetailsHeaderButtons role="admin" />);
 
     expect(screen.getByTestId("block-flex-vert-sb")).toBeInTheDocument();
-    expect(screen.getByTestId("btn-Admin In")).toHaveClass("mb-5");
+    expect(screen.getByTestId("btn-Admin In")).toHaveClass("mb-5p");
   });
 
   it("sets the right block type and class for landscape orientation", () => {
-    (useOrientation as jest.Mock).mockReturnValue(false);
+    (useOrientation as Mock).mockReturnValue(false);
     render(<ElectionDetailsHeaderButtons role="admin" />);
 
     expect(screen.getByTestId("block-flex-horz-sb")).toBeInTheDocument();
-    expect(screen.getByTestId("btn-Admin In")).toHaveClass("mr-5");
+    expect(screen.getByTestId("btn-Admin In")).toHaveClass("mr-5p");
   });
 
   it("navigates to /admin when admin clicks Admin In", () => {

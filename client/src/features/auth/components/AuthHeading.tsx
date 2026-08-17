@@ -13,7 +13,7 @@ export interface AuthHeadingProps {
  */
 export default function AuthHeading({ children }: AuthHeadingProps): JSX.Element {
   return (
-    <Heading type="h1" className="text-2xl lh-2r fw-600 ta-center">
+    <Heading type="h1" className="text-2xl-r lh-2r fw-600 ta-center">
       {children}
     </Heading>
   );

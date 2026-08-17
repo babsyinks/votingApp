@@ -1,7 +1,7 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import BaseInput from "components/ui/BaseInput";
 import { BaseInputProps } from "components/ui/BaseInput";
+import { vi } from "vitest";
 
 describe("<BaseInput />", () => {
   let defaultProps: BaseInputProps;
@@ -11,10 +11,10 @@ describe("<BaseInput />", () => {
       type: "text",
       name: "username",
       value: "test",
-      onChange: jest.fn(),
-      onInput: jest.fn(),
+      onChange: vi.fn(),
+      onInput: vi.fn(),
     };
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("renders input with default props", () => {

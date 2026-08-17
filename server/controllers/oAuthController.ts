@@ -3,7 +3,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import {
   passportCallbackWrapper,
   getOauthStartMiddleware,
-} from "../helpers/oAuthControllerHelpers";
+} from "../helpers/oAuthHelpers";
 import type { UserAttributesWithRoles } from "../models/user";
 
 // Google OAuth

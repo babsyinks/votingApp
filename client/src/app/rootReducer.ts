@@ -1,4 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import userAuthReducer from "features/auth/userAuthSlice";
+import verificationReducer from "features/auth/verificationSlice";
+import electionReducer from "features/election/electionSlice";
+import timerReducer from "features/timer/timerSlice";
+import userInfoReducer from "features/user/userSlice";
 import {
   persistStore,
   persistReducer,
@@ -12,11 +17,6 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import loaderReducer from "./loaderSlice";
-import userInfoReducer from "features/user/userSlice";
-import userAuthReducer from "features/auth/userAuthSlice";
-import timerReducer from "features/timer/timerSlice";
-import electionReducer from "features/election/electionSlice";
-import verificationReducer from "features/auth/verificationSlice";
 
 const rootReducer = combineReducers({
   loader: loaderReducer,

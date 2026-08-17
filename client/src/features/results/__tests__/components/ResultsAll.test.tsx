@@ -1,18 +1,17 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsAll from "features/results/components/ResultsAll";
 import getSortedResults from "../../helpers/getSortedResults";
 import { result as mockResult } from "../testData/result";
 import type { ResultsPositionsTabsProps } from "features/results/components/ResultsPositionsTabs";
 import type { ContestantType } from "features/election/types/contestantType";
+import { vi } from "vitest";
 
-jest.mock("../../helpers/getSortedResults");
+vi.mock("../../helpers/getSortedResults");
 
-const getSortedResultsMock = jest.mocked(getSortedResults);
+const getSortedResultsMock = vi.mocked(getSortedResults);
 
-jest.mock("features/results/components/ResultsPositionsTabs", () => {
+vi.mock("features/results/components/ResultsPositionsTabs", () => {
   return function MockResultsPositionsTabs({
-    result,
     currentIndex,
     setCurrentIndex,
   }: ResultsPositionsTabsProps) {
@@ -25,8 +24,10 @@ jest.mock("features/results/components/ResultsPositionsTabs", () => {
   };
 });
 
-jest.mock("features/results/components/ResultForAllContestants", () => {
-  return function MockResultForAllContestants({ sortedResults }: {
+vi.mock("features/results/components/ResultForAllContestants", () => {
+  return function MockResultForAllContestants({
+    sortedResults,
+  }: {
     sortedResults: ContestantType[];
   }) {
     return (
@@ -38,7 +39,6 @@ jest.mock("features/results/components/ResultForAllContestants", () => {
 });
 
 describe("ResultsAll", () => {
-
   beforeEach(() => {
     getSortedResultsMock.mockImplementation((result, index) => {
       return result[index].contestants;
@@ -46,7 +46,7 @@ describe("ResultsAll", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders heading and child components with correct props", () => {

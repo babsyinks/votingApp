@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+/* eslint-disable max-len */
 import {
   Shield,
   ShieldCheck,
@@ -14,6 +14,7 @@ import {
   FormInput,
 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 export interface ContentItem {
   id: string;

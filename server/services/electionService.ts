@@ -6,8 +6,8 @@ import {
   getAllVotesForAPosition,
   getVotesForAContestant,
   getAllContestantsElectionDetails,
-} from "../helpers/electionControllerHelpers";
-import type { ElectionDetails } from "../helpers/electionControllerHelpers";
+} from "../helpers/electionHelpers";
+import type { ElectionDetails } from "../helpers/electionHelpers";
 import type {
   ContestantsAttributes,
   ContestantsCreationAttributes,

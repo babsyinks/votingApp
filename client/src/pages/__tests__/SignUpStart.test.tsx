@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import SignUpStart from "pages/SignUpStart";
+import { vi } from "vitest";
 
-jest.mock("features/auth/components/AuthHeading", () => () => (
+vi.mock("features/auth/components/AuthHeading", () => () => (
   <h1>Create your account</h1>
 ));
 
-jest.mock("features/auth/components/signup/SignUpStartAccountDoesNotExist", () => () => (
+vi.mock("features/auth/components/signup/SignUpStartAccountDoesNotExist", () => () => (
   <div data-testid="account-does-not-exist">Account Does Not Exist Component</div>
 ));
 
-jest.mock("features/auth/components/signup/SignUpStartAccountExists", () => () => (
+vi.mock("features/auth/components/signup/SignUpStartAccountExists", () => () => (
   <div data-testid="account-exists">Account Exists Component</div>
 ));
 

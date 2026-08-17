@@ -1,10 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsPositionsTabs from "features/results/components/ResultsPositionsTabs";
 import { result } from "../testData/result";
+import { vi } from "vitest";
 
 describe("ResultsPositionsTabs", () => {
   const setup = (overrideProps = {}) => {
-    const setCurrentIndex = jest.fn();
+    const setCurrentIndex = vi.fn();
 
     const props = {
       result,

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { render, screen, waitFor } from "@testing-library/react";
 import OAuthSuccess from "pages/OAuthSuccess";
 import * as userSlice from "features/user/userSlice";
@@ -6,42 +6,55 @@ import * as authSlice from "features/auth/userAuthSlice";
 import * as useAxiosHook from "hooks/useAxios";
 import useStatusOfElectionRedirect from "features/auth/hooks/useStatusOfElectionRedirect";
 import type { ParagraphProps } from "components/ui/Paragraph";
+import { vi } from "vitest";
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom",
+  );
 
-const mockDispatch = jest.fn();
-jest.mock("react-redux", () => ({
-  ...jest.requireActual("react-redux"),
-  useDispatch: () => mockDispatch,
-}));
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
-jest.mock("features/auth/hooks/useStatusOfElectionRedirect");
+const mockDispatch = vi.fn();
+vi.mock("react-redux", async () => {
+  const actual = await vi.importActual<typeof import("react-redux")>(
+    "react-redux",
+  );
 
-jest.mock("components/ui/Paragraph", () => ({
+  return {
+    ...actual,
+    useDispatch: () => mockDispatch,
+  };
+});
+
+vi.mock("features/auth/hooks/useStatusOfElectionRedirect");
+
+vi.mock("components/ui/Paragraph", () => ({
   __esModule: true,
   default: ({ children }: ParagraphProps) => <div>{children}</div>,
 }));
 
 describe("OAuthSuccess", () => {
-  const mockUseStatusOfElectionRedirect = jest.mocked(
+  const mockUseStatusOfElectionRedirect = vi.mocked(
     useStatusOfElectionRedirect,
   );
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("redirects if redirect path is returned", () => {
     mockUseStatusOfElectionRedirect.mockReturnValue("/dashboard");
 
-    jest.spyOn(useAxiosHook, "useAxios").mockReturnValue({
+    vi.spyOn(useAxiosHook, "useAxios").mockReturnValue({
       response: null,
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<OAuthSuccess />);
@@ -53,11 +66,11 @@ describe("OAuthSuccess", () => {
     const mockUser = { username: "John", userId: "123", role: "user" };
 
     mockUseStatusOfElectionRedirect.mockReturnValue("");
-    jest.spyOn(useAxiosHook, "useAxios").mockReturnValue({
+    vi.spyOn(useAxiosHook, "useAxios").mockReturnValue({
       response: { user: mockUser },
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<OAuthSuccess />);
@@ -77,11 +90,11 @@ describe("OAuthSuccess", () => {
 
   it("dispatches userNotAuthenticated and redirects to /signin if error occurs", async () => {
     mockUseStatusOfElectionRedirect.mockReturnValue("");
-    jest.spyOn(useAxiosHook, "useAxios").mockReturnValue({
+    vi.spyOn(useAxiosHook, "useAxios").mockReturnValue({
       response: null,
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       error: new Error("Something went wrong"),
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<OAuthSuccess />);
@@ -97,11 +110,11 @@ describe("OAuthSuccess", () => {
 
   it("renders loading text", () => {
     mockUseStatusOfElectionRedirect.mockReturnValue("");
-    jest.spyOn(useAxiosHook, "useAxios").mockReturnValue({
+    vi.spyOn(useAxiosHook, "useAxios").mockReturnValue({
       response: null,
-      triggerRequest: jest.fn(),
+      triggerRequest: vi.fn(),
       error: null,
-      clearError: jest.fn(),
+      clearError: vi.fn(),
     });
 
     render(<OAuthSuccess />);

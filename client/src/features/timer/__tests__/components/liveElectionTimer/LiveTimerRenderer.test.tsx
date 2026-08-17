@@ -2,8 +2,9 @@ import { render, screen } from "@testing-library/react";
 import LiveTimerRenderer from "features/timer/components/liveElectionTimer/LiveTimerRenderer";
 import type { SpanProps } from "components/ui/Span";
 import type { LiveTimerElectionOngoingProps } from "features/timer/components/liveElectionTimer/LiveTimerElectionOngoing";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Span", () => {
+vi.mock("components/ui/Span", () => {
   return ({ children, className }: SpanProps) => (
     <span data-testid="mock-span" className={className}>
       {children}
@@ -11,11 +12,11 @@ jest.mock("components/ui/Span", () => {
   );
 });
 
-jest.mock(
+vi.mock(
   "features/timer/components/liveElectionTimer/LiveTimerElectionOver",
   () => () => <div data-testid="election-over">Election is now over</div>,
 );
-jest.mock(
+vi.mock(
   "features/timer/components/liveElectionTimer/LiveTimerElectionOngoing",
   () =>
     ({ days, hours, minutes, seconds }: LiveTimerElectionOngoingProps) => (
@@ -42,7 +43,7 @@ describe("LiveTimerRenderer", () => {
 
     const span = screen.getByTestId("mock-span");
     expect(span).toHaveClass(
-      "text-sky-blue fw-bold px-0-py-10 text-responsive-1p5",
+      "text-sky-blue fw-bold px-0-py-10p text-responsive-1p5",
     );
   });
 
@@ -63,7 +64,7 @@ describe("LiveTimerRenderer", () => {
 
     const span = screen.getByTestId("mock-span");
     expect(span).toHaveClass(
-      "text-sky-blue fw-bold px-0-py-10 text-responsive-1p5",
+      "text-sky-blue fw-bold px-0-py-10p text-responsive-1p5",
     );
   });
 });

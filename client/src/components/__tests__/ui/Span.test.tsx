@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Span from "components/ui/Span";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Base.module.css", () => ({
+vi.mock("components/ui/Base.module.css", () => ({
   inline: "base-inline",
   "inline-block": "base-inline-block",
 }));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Span />", () => {
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe("<Span />", () => {
     render(
       <Span type="inline-block" className="extra-class">
         Custom Span
-      </Span>
+      </Span>,
     );
 
     const span = screen.getByText("Custom Span");
@@ -46,7 +46,7 @@ describe("<Span />", () => {
   });
 
   test("calls onClick when clicked", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Span onClick={handleClick}>Clickable</Span>);
 
     const span = screen.getByText("Clickable");
@@ -57,13 +57,9 @@ describe("<Span />", () => {
 
   test("wraps with Accessibility", () => {
     render(
-      <Span
-        role="button"
-        aria-label="Clickable Span"
-        title="Click me"
-      >
+      <Span role="button" aria-label="Clickable Span" title="Click me">
         Accessible Span
-      </Span>
+      </Span>,
     );
 
     const span = screen.getByText("Accessible Span");

@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SignUpRegistrationForm from "features/auth/components/signup/SignUpRegistrationForm";
 import { mockResponseType, mockErrorType } from "../types/authResults";
+import { vi } from "vitest";
 
-const mockDispatch = jest.fn();
-const mockTriggerRequest = jest.fn();
-const mockTriggerFailureToast = jest.fn();
+const mockDispatch = vi.fn();
+const mockTriggerRequest = vi.fn();
+const mockTriggerFailureToast = vi.fn();
 let mockResponse: mockResponseType = null;
 let mockError: mockErrorType = null;
 let mockToast = { status: "failure", message: "Something went wrong" };
@@ -12,11 +13,11 @@ let mockToastDetailsSet = () => false;
 
 type nonNullmockResponseType = NonNullable<mockResponseType>;
 
-jest.mock("react-redux", () => ({
+vi.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
-jest.mock("hooks/useAxios", () => ({
+vi.mock("hooks/useAxios", () => ({
   useAxios: () => ({
     triggerRequest: mockTriggerRequest,
     response: mockResponse,
@@ -24,7 +25,7 @@ jest.mock("hooks/useAxios", () => ({
   }),
 }));
 
-jest.mock("hooks/useToastMessage", () => ({
+vi.mock("hooks/useToastMessage", () => ({
   useToastMessage: () => ({
     toast: mockToast,
     triggerFailureToast: mockTriggerFailureToast,
@@ -32,7 +33,7 @@ jest.mock("hooks/useToastMessage", () => ({
   }),
 }));
 
-jest.mock("features/auth/userAuthSlice", () => ({
+vi.mock("features/auth/userAuthSlice", () => ({
   userAuthenticated: (user: nonNullmockResponseType["user"]) => ({
     type: "user/authenticated",
     payload: user,
@@ -40,14 +41,14 @@ jest.mock("features/auth/userAuthSlice", () => ({
   userNotAuthenticated: () => ({ type: "user/notAuthenticated" }),
 }));
 
-jest.mock("features/user/userSlice", () => ({
+vi.mock("features/user/userSlice", () => ({
   setUserInfo: (user: nonNullmockResponseType["user"]) => ({
     type: "user/setInfo",
     payload: user,
   }),
 }));
 
-jest.mock("features/auth/verificationSlice", () => ({
+vi.mock("features/auth/verificationSlice", () => ({
   resetUserJustVerified: () => ({ type: "user/resetVerified" }),
 }));
 

@@ -16,7 +16,7 @@ const ContestantBasicInfo: React.FC<ContestantBasicInfoProps> = ({ type, value }
   return (
     <ContestantTextInfoWrapper>
       {type}:{" "}
-      <Span className="tt-cap ff-berkshire px-0-py-5 text-blue">{value}</Span>
+      <Span className="tt-cap ff-berkshire px-0-py-5p text-blue">{value}</Span>
     </ContestantTextInfoWrapper>
   );
 };

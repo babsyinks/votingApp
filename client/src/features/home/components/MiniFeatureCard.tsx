@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
 import Block from "components/ui/Block";
-import Paragraph from "components/ui/Paragraph";
 import Heading from "components/ui/Heading";
+import Paragraph from "components/ui/Paragraph";
+import { motion } from "framer-motion";
+
 import { ContentItem } from "../data/featureCardConfig";
 
 export type MiniFeatureCardProps = Omit<ContentItem, "id">;
@@ -22,10 +23,10 @@ export default function MiniFeatureCard({
     >
       <Block className="flex items-center mb-1r">
         <Icon
-          className="fw-500 text-white bg-blueviolet-mute p-20 border-rounded-10"
+          className="fw-500 text-white bg-blueviolet-mute p-20p border-rounded-10 mb-3"
           size={90}
         />
-        <Heading type="h3" className="text-xl fw-600">
+        <Heading type="h3" className="text-xl-r fw-600">
           {title}
         </Heading>
       </Block>

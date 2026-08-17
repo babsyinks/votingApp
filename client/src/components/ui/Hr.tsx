@@ -1,4 +1,5 @@
-import {CSSProperties, JSX} from "react";
+import { CSSProperties, JSX } from "react";
+
 import defaultStyle from "./Hr.module.css";
 import getCompClasses from "../../util/getCompClasses";
 

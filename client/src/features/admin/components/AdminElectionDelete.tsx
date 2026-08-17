@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch } from "app/rootReducer";
-import { useAxios } from "hooks/useAxios";
-import { useToastMessage } from "hooks/useToastMessage";
-import { setTimerData } from "features/timer/timerSlice";
+import ToastMessage from "components/ui/ToastMessage";
 import {
   updateElectionStatusFromTimer,
   electionStatus,
 } from "features/election/electionSlice";
-import ToastMessage from "components/ui/ToastMessage";
-import AdminElectionDeleteWarningModal from "./AdminElectionDeleteWarningModal";
+import { setTimerData } from "features/timer/timerSlice";
+import { useAxios } from "hooks/useAxios";
+import { useToastMessage } from "hooks/useToastMessage";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import AdminElectionDeleteButton from "./AdminElectionDeleteButton";
+import AdminElectionDeleteWarningModal from "./AdminElectionDeleteWarningModal";
 
 /**
  * AdminElectionDelete component.
  *
  * Handles deletion of an election after it has ended,
  * showing warning modal and success/failure toast messages.
- * 
+ *
  * @returns The rendered AdminElectionDelete component.
  */
 const AdminElectionDelete: React.FC = () => {

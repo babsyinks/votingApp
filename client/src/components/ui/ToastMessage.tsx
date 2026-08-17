@@ -1,4 +1,5 @@
 import React from "react";
+
 import style from "./ToastMessage.module.css";
 
 export interface Toast {

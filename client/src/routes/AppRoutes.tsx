@@ -1,18 +1,20 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "pages/HomePage";
-import Admin from "pages/Admin";
-import Help from "pages/Help";
-import NotFound from "pages/NotFound";
-import ElectionTimerSettings from "pages/ElectionTimerSettings";
-import VotingProcess from "pages/VotingProcess";
-import Results from "pages/Results";
-import Register from "pages/Register";
-import SignIn from "pages/SignIn";
-import SignUpStart from "pages/SignUpStart";
-import VerifyCode from "pages/VerifyCode";
-import OAuthSuccess from "pages/OAuthSuccess";
-import ForgotPassword from "pages/ForgotPassword";
-import ResetPassword from "pages/ResetPassword";
+
+import Admin from "@/pages/Admin";
+import DashBoard from "@/pages/DashBoard";
+import ElectionTimerSettings from "@/pages/ElectionTimerSettings";
+import ForgotPassword from "@/pages/ForgotPassword";
+import Help from "@/pages/Help";
+import HomePage from "@/pages/HomePage";
+import NotFound from "@/pages/NotFound";
+import OAuthSuccess from "@/pages/OAuthSuccess";
+import Register from "@/pages/Register";
+import ResetPassword from "@/pages/ResetPassword";
+import Results from "@/pages/Results";
+import SignIn from "@/pages/SignIn";
+import SignUpStart from "@/pages/SignUpStart";
+import VerifyCode from "@/pages/VerifyCode";
+import VotingProcess from "@/pages/VotingProcess";
 
 export default function AppRoutes() {
   return (
@@ -30,6 +32,7 @@ export default function AppRoutes() {
       <Route path="/time" element={<ElectionTimerSettings />} />
       <Route path="/help" element={<Help />} />
       <Route path="/results" element={<Results />} />
+      <Route path="/dashboard" element={<DashBoard />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

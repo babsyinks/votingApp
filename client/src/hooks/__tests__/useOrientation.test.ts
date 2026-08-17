@@ -1,29 +1,30 @@
 import { renderHook, act } from "@testing-library/react";
 import useOrientation from "hooks/useOrientation";
+import { vi, type Mock } from "vitest";
 
 describe("useOrientation", () => {
   let matchMediaMock: (matches?: boolean) => MediaQueryList & {
-    addEventListener: jest.Mock;
-    removeEventListener: jest.Mock;
+    addEventListener: Mock;
+    removeEventListener: Mock;
   };
 
   beforeEach(() => {
     matchMediaMock = (matches: boolean = true) => {
       const mql: MediaQueryList & {
-        addEventListener: jest.Mock;
-        removeEventListener: jest.Mock;
+        addEventListener: Mock;
+        removeEventListener: Mock;
       } = {
         matches,
         media: "(orientation: portrait)",
         onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
       };
 
-      (window as any).matchMedia = jest.fn().mockReturnValue(mql);
+      (window as any).matchMedia = vi.fn().mockReturnValue(mql);
 
       return mql;
     };

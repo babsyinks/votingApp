@@ -1,10 +1,10 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ContestantButtonManifesto from 'features/election/components/contestant/buttons/ContestantButtonManifesto';
+import { vi } from 'vitest';
 
 describe('ContestantButtonManifesto', () => {
   it('renders "Read Manifesto" when showManifesto is false', () => {
-    const setShowManifesto = jest.fn();
+    const setShowManifesto = vi.fn();
 
     render(
       <ContestantButtonManifesto
@@ -18,7 +18,7 @@ describe('ContestantButtonManifesto', () => {
   });
 
   it('renders "Close Manifesto" when showManifesto is true', () => {
-    const setShowManifesto = jest.fn();
+    const setShowManifesto = vi.fn();
 
     render(
       <ContestantButtonManifesto
@@ -33,7 +33,7 @@ describe('ContestantButtonManifesto', () => {
   });
 
   it('calls setShowManifesto(true) when clicking "Read Manifesto"', () => {
-    const setShowManifesto = jest.fn();
+    const setShowManifesto = vi.fn();
 
     render(
       <ContestantButtonManifesto
@@ -46,7 +46,7 @@ describe('ContestantButtonManifesto', () => {
   });
 
   it('calls setShowManifesto(false) when clicking "Close Manifesto"', () => {
-    const setShowManifesto = jest.fn();
+    const setShowManifesto = vi.fn();
 
     render(
       <ContestantButtonManifesto

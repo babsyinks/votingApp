@@ -1,8 +1,9 @@
 import React from "react";
-import Input from "./Input";
+
 import { BaseInputProps } from "./BaseInput";
 import Block from "./Block";
 import I from "./I";
+import Input from "./Input";
 import defaultStyle from "./InputWithIcon.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
@@ -34,7 +35,7 @@ export default function InputWithIcon({
         {...inputProps}
         className={`${defaultStyle["input-with-icon"]} ${getCompClasses(
           defaultStyle,
-          className
+          className,
         )}`}
       />
       {rightIcon && (

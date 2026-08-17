@@ -4,17 +4,18 @@ import useOrientation from "hooks/useOrientation";
 import { useSelector } from "react-redux";
 import { BlockProps } from "components/ui/Block";
 import { ElectionDetailsHeaderMessageProps } from "features/election/components/ElectionDetailsHeaderMessage";
+import { vi, type Mock } from "vitest";
 
-jest.mock("hooks/useOrientation", () => ({
+vi.mock("hooks/useOrientation", () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 }));
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "components/ui/Block",
   () =>
     ({ children, type, ...props }: BlockProps) => (
@@ -24,15 +25,15 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectionDetailsHeaderButtons",
   () => () => <div data-testid="buttons" />,
 );
-jest.mock(
+vi.mock(
   "features/election/components/ElectionDetailsHeaderHomeIcon",
   () => () => <div data-testid="home-icon" />,
 );
-jest.mock(
+vi.mock(
   "features/election/components/ElectionDetailsHeaderMessage",
   () =>
     ({ message, username }: ElectionDetailsHeaderMessageProps) => (
@@ -41,11 +42,11 @@ jest.mock(
 );
 
 describe("ElectionDetailsHeader", () => {
-  let useSelectorMock = useSelector as jest.Mock;
-  let useOrientationMock = useOrientation as jest.Mock;
+  let useSelectorMock = useSelector as Mock;
+  let useOrientationMock = useOrientation as Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders with portrait font size and all child components", () => {

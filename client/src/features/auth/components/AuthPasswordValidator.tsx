@@ -34,17 +34,17 @@ export default function AuthPasswordValidator({
     <AuthFrame type="flex" isFull={false} className="align-items-start">
       <Heading
         type="h4"
-        className="mb-1r fw-600 text-base text-black-firm ta-center"
+        className="mb-1r fw-600 text-base-r text-black-firm ta-center"
       >
         Password must have:
       </Heading>
-      <List className="no-list-style m-0 pl-0 no-left-padding">
+      <List className="no-list-style m-0p pl-0p no-left-padding">
         {criteria.map((criterion, index) => (
           <Li
             key={index}
             className={`${
               results[index] ? "text-green" : "text-red"
-            } flex align-items-center mb-0p5r text-base transition-color`}
+            } flex align-items-center mb-0p5r text-base-r transition-color`}
           >
             <AuthValidationIndicator
               label={criterion.label}

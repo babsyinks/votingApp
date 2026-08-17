@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 
-import { hashPassWord } from "../helpers/authControllerHelpers";
+import { hashPassWord } from "../helpers/authHelpers";
 import { User } from "../models/user";
 import type {
   UserAttributesWithRoles,

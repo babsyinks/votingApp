@@ -3,8 +3,9 @@ import ContestantManifestoView from "features/election/components/contestant/Con
 import { ContestantFrameProps } from "features/election/components/contestant/ContestantFrame";
 import { ContestantManifestoInfoProps } from "features/election/components/contestant/info/ContestantManifestoInfo";
 import { ContestantButtonManifestoProps } from "features/election/components/contestant/buttons/ContestantButtonManifesto";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantFrame",
   () =>
     ({ children }: ContestantFrameProps) => (
@@ -12,7 +13,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/info/ContestantManifestoInfo",
   () =>
     ({ manifesto }: ContestantManifestoInfoProps) => (
@@ -20,7 +21,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/buttons/ContestantButtonManifesto",
   () =>
     ({ manifestoControl }: ContestantButtonManifestoProps) => (
@@ -35,7 +36,7 @@ jest.mock(
 
 describe("ContestantManifestoView", () => {
   const manifesto = "This is the candidate's manifesto.";
-  const mockSetManifestoVisible = jest.fn();
+  const mockSetManifestoVisible = vi.fn();
   const manifestoControl = {
     showManifesto: true,
     setShowManifesto: mockSetManifestoVisible,

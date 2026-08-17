@@ -1,4 +1,5 @@
 import React from "react";
+
 import defaultStyle from "./Base.module.css";
 import getCompClasses from "../../util/getCompClasses";
 

@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import PreElectionCountDownTimerPart from "features/timer/components/preElectionTimer/PreElectionCountDownTimerPart";
 import type { PreElectionCountDownTimerValueProps } from "features/timer/components/preElectionTimer/PreElectionCountDownTimerValue";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/timer/components/preElectionTimer/PreElectionCountDownTimerValue",
   () =>
     ({ dimension, time }: PreElectionCountDownTimerValueProps) => (
@@ -26,7 +27,7 @@ interface CountdownCircleTimerProps {
   [key: string]: unknown;
 }
 
-jest.mock("react-countdown-circle-timer", () => ({
+vi.mock("react-countdown-circle-timer", () => ({
   CountdownCircleTimer: ({ children, ...props }: CountdownCircleTimerProps) => {
     (global as any).lastCountdownProps = props;
     return (

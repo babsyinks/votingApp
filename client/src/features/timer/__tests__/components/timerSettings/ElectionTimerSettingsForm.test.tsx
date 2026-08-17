@@ -1,22 +1,23 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionTimerSettingsForm from "features/timer/components/timerSettings/ElectionTimerSettingsForm";
 import * as useTimerSchedule from "features/timer/hooks/useTimerSchedule";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/timer/components/timerSettings/ElectionTimerSettingsFormInput",
   () => () => <input type="date" data-testid="mock-input" />,
 );
 
 describe("ElectionTimerSettingsForm", () => {
-  let triggerFailureToast = jest.fn();
-  let setElectionSchedule = jest.fn();
-  let setEnableDone = jest.fn();
+  let triggerFailureToast = vi.fn();
+  let setElectionSchedule = vi.fn();
+  let setEnableDone = vi.fn();
   const now = new Date("2025-08-09T08:00").getTime();
   let startDate: string;
   let endDate: string;
 
   const spyOnTimerSchedule = (startDate: string, endDate: string) => {
-    jest.spyOn(useTimerSchedule, "default").mockReturnValue({
+    vi.spyOn(useTimerSchedule, "default").mockReturnValue({
       mergedTimerState: [
         {
           label: "Start Date",
@@ -46,14 +47,14 @@ describe("ElectionTimerSettingsForm", () => {
   };
 
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(now);
+    vi.useFakeTimers();
+    vi.setSystemTime(now);
   });
 
   beforeEach(() => {
-    triggerFailureToast = jest.fn();
-    setElectionSchedule = jest.fn();
-    setEnableDone = jest.fn();
+    triggerFailureToast = vi.fn();
+    setElectionSchedule = vi.fn();
+    setEnableDone = vi.fn();
 
     startDate = "2025-08-10T10:00";
     endDate = "2025-08-11T10:00";
@@ -62,7 +63,7 @@ describe("ElectionTimerSettingsForm", () => {
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it("schedules election period properly when correctly set (startDate after now and startDate before endDate)", async () => {
@@ -130,7 +131,7 @@ describe("ElectionTimerSettingsForm", () => {
   it("time-setting functions and status triggers are not run when any date or time value is unset", async () => {
     endDate = "";
 
-    jest.spyOn(useTimerSchedule, "default").mockReturnValue({
+    vi.spyOn(useTimerSchedule, "default").mockReturnValue({
       mergedTimerState: [
         {
           label: "Start Date",

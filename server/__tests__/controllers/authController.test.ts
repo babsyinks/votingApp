@@ -19,7 +19,7 @@ import {
   failIfPasswordWeak,
 } from "../../validators/authValidators";
 
-import { generateTokensAndSendResponse } from "../../helpers/authControllerHelpers";
+import { generateTokensAndSendResponse } from "../../helpers/authHelpers";
 import sendSignupCode from "../../helpers/sendSignupCode";
 import sendPasswordResetLink from "../../helpers/sendPasswordResetLink";
 import sendPasswordResetSuccessNotification from "../../helpers/sendPasswordResetSuccessNotification";
@@ -46,13 +46,15 @@ jest.mock("../../validators/authValidators", () => ({
   failIfPasswordWeak: jest.fn(),
 }));
 
-jest.mock("../../helpers/authControllerHelpers", () => ({
+jest.mock("../../helpers/authHelpers", () => ({
   generateTokensAndSendResponse: jest.fn(),
 }));
 
 jest.mock("../../helpers/sendSignupCode", () => jest.fn());
 jest.mock("../../helpers/sendPasswordResetLink", () => jest.fn());
-jest.mock("../../helpers/sendPasswordResetSuccessNotification", () => jest.fn());
+jest.mock("../../helpers/sendPasswordResetSuccessNotification", () =>
+  jest.fn(),
+);
 
 describe("authController", () => {
   let req: Partial<Request>;
@@ -75,7 +77,9 @@ describe("authController", () => {
     (failIfPasswordWeak as jest.Mock).mockImplementation(() => {});
     (failIfUserExists as jest.Mock).mockImplementation(() => {});
     (validateCredentials as jest.Mock).mockImplementation(() => {});
-    (failIfVerificationCodeIsNotValid as jest.Mock).mockImplementation(() => {});
+    (failIfVerificationCodeIsNotValid as jest.Mock).mockImplementation(
+      () => {},
+    );
   });
 
   describe("requestSignUpCode", () => {
@@ -87,13 +91,20 @@ describe("authController", () => {
       await requestSignUpCode(req as Request, res as Response, next);
 
       expect(failIfEmpty).toHaveBeenCalledWith({ email: "test@example.com" });
-      expect(authService.getUserByEmail).toHaveBeenCalledWith("test@example.com");
-      expect(authService.createSignupCode).toHaveBeenCalledWith("test@example.com");
+      expect(authService.getUserByEmail).toHaveBeenCalledWith(
+        "test@example.com",
+      );
+      expect(authService.createSignupCode).toHaveBeenCalledWith(
+        "test@example.com",
+      );
       expect(sendSignupCode).toHaveBeenCalledWith({
         toEmail: "test@example.com",
         otpCode: "123456",
       });
-      expect(res.json).toHaveBeenCalledWith({ success: true, email: "test@example.com" });
+      expect(res.json).toHaveBeenCalledWith({
+        success: true,
+        email: "test@example.com",
+      });
     });
 
     it("should call next with error if something fails", async () => {
@@ -112,12 +123,19 @@ describe("authController", () => {
     it("should verify and destroy signup code", async () => {
       req.body = { email: "test@example.com", code: "123456" };
       const row = { destroy: jest.fn() };
-      (authService.getLatestValidSignupCode as jest.Mock).mockResolvedValue(row);
+      (authService.getLatestValidSignupCode as jest.Mock).mockResolvedValue(
+        row,
+      );
 
       await verifySignUpCode(req as Request, res as Response, next);
 
-      expect(authService.getLatestValidSignupCode).toHaveBeenCalledWith("test@example.com");
-      expect(failIfVerificationCodeIsNotValid).toHaveBeenCalledWith("123456", row);
+      expect(authService.getLatestValidSignupCode).toHaveBeenCalledWith(
+        "test@example.com",
+      );
+      expect(failIfVerificationCodeIsNotValid).toHaveBeenCalledWith(
+        "123456",
+        row,
+      );
       expect(row.destroy).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith({ success: true });
     });
@@ -125,7 +143,9 @@ describe("authController", () => {
     it("should call next with error if verification fails", async () => {
       req.body = { email: "test@example.com", code: "bad" };
       const row = { destroy: jest.fn() };
-      (authService.getLatestValidSignupCode as jest.Mock).mockResolvedValue(row);
+      (authService.getLatestValidSignupCode as jest.Mock).mockResolvedValue(
+        row,
+      );
       (failIfVerificationCodeIsNotValid as jest.Mock).mockImplementation(() => {
         throw new Error("Invalid code");
       });
@@ -152,11 +172,18 @@ describe("authController", () => {
       await register(req as Request, res as Response, next);
 
       expect(failIfPasswordWeak).toHaveBeenCalledWith("pass");
-      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({ res, user: { id: 1 } });
+      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({
+        res,
+        user: { id: 1 },
+      });
     });
 
     it("should call next with error if user already exists", async () => {
-      req.body = { username: "user", email: "test@example.com", password: "pass" };
+      req.body = {
+        username: "user",
+        email: "test@example.com",
+        password: "pass",
+      };
       (authService.findExistingUser as jest.Mock).mockResolvedValue({ id: 1 });
       (failIfUserExists as jest.Mock).mockImplementation(() => {
         throw new Error("User exists");
@@ -181,7 +208,10 @@ describe("authController", () => {
         username: "user",
       });
       expect(validateCredentials).toHaveBeenCalledWith({ id: 1 }, "pass");
-      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({ res, user: { id: 1 } });
+      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({
+        res,
+        user: { id: 1 },
+      });
     });
 
     it("should validate credentials and send tokens (email login)", async () => {
@@ -190,13 +220,19 @@ describe("authController", () => {
 
       await signin(req as Request, res as Response, next);
 
-      expect(failIfEmpty).toHaveBeenCalledWith({ email: "test@example.com", password: "pass" });
+      expect(failIfEmpty).toHaveBeenCalledWith({
+        email: "test@example.com",
+        password: "pass",
+      });
       expect(authService.getUserByIdentity).toHaveBeenCalledWith({
         email: "test@example.com",
         username: undefined,
       });
       expect(validateCredentials).toHaveBeenCalledWith({ id: 1 }, "pass");
-      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({ res, user: { id: 1 } });
+      expect(generateTokensAndSendResponse).toHaveBeenCalledWith({
+        res,
+        user: { id: 1 },
+      });
     });
 
     it("should call next if credentials invalid", async () => {
@@ -257,35 +293,50 @@ describe("authController", () => {
     it("should update password if reset code valid", async () => {
       req.body = { resetCode: "code123", password: "newpass" };
       const resetCodeRecord = { email: "test@example.com", destroy: jest.fn() };
-      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(resetCodeRecord);
+      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(
+        resetCodeRecord,
+      );
 
       await resetPassword(req as Request, res as Response, next);
 
-      expect(authService.updatePassword).toHaveBeenCalledWith("test@example.com", "newpass");
+      expect(authService.updatePassword).toHaveBeenCalledWith(
+        "test@example.com",
+        "newpass",
+      );
       expect(resetCodeRecord.destroy).toHaveBeenCalled();
       expect(sendPasswordResetSuccessNotification).toHaveBeenCalledWith({
         toEmail: "test@example.com",
       });
-      expect(res.json).toHaveBeenCalledWith({ message: "Password successfully updated" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Password successfully updated",
+      });
     });
 
     it("should return 400 if reset code invalid", async () => {
       req.body = { resetCode: "invalid", password: "newpass" };
-      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(null);
+      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(
+        null,
+      );
 
       await resetPassword(req as Request, res as Response, next);
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: "Invalid or expired token" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Invalid or expired token",
+      });
     });
 
     it("should call next with error if notification fails", async () => {
       req.body = { resetCode: "good", password: "pass" };
       const resetCodeRecord = { email: "test@example.com", destroy: jest.fn() };
-      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(resetCodeRecord);
-      (sendPasswordResetSuccessNotification as jest.Mock).mockImplementation(() => {
-        throw new Error("Notify fail");
-      });
+      (authService.findValidResetCodeRecord as jest.Mock).mockResolvedValue(
+        resetCodeRecord,
+      );
+      (sendPasswordResetSuccessNotification as jest.Mock).mockImplementation(
+        () => {
+          throw new Error("Notify fail");
+        },
+      );
 
       await resetPassword(req as Request, res as Response, next);
 

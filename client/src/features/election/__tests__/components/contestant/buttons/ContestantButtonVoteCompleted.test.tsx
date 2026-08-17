@@ -2,15 +2,16 @@ import { render, screen } from "@testing-library/react";
 import ContestantButtonVoteCompleted from "features/election/components/contestant/buttons/ContestantButtonVoteCompleted";
 import { ButtonProps } from "components/ui/Button";
 import { IProps } from "components/ui/I";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Button",
   () =>
     ({ children, ...props }: ButtonProps) => (
       <button {...props}>{children}</button>
     ),
 );
-jest.mock("components/ui/I", () => (props: IProps) => (
+vi.mock("components/ui/I", () => (props: IProps) => (
   <i data-testid="vote-icon" {...props} />
 ));
 

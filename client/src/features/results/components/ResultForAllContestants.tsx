@@ -11,7 +11,7 @@ export default function ResultForAllContestants({
   let highestVote = sortedResults[0].votes.length;
   return (
     <Block>
-      <Block type="flex-horz" className="flex-wrap px-0-py-10">
+      <Block type="flex-horz" className="flex-wrap px-0-py-10p">
         {sortedResults.map((contestant, i) => {
           const isTie = getTieStatus({
             sortedResults,

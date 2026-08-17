@@ -1,4 +1,5 @@
 import { ImgHTMLAttributes, CSSProperties, JSX } from "react";
+
 import defaultStyle from "./Img.module.css";
 import getCompClasses from "../../util/getCompClasses";
 

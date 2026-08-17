@@ -2,31 +2,32 @@ import { renderHook, act } from "@testing-library/react";
 import useCountdownStatus from "hooks/useCountdownStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { updateElectionStatusFromTimer } from "features/election/electionSlice";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useDispatch: jest.fn(),
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useDispatch: vi.fn(),
+  useSelector: vi.fn(),
 }));
 
-jest.mock("features/election/electionSlice", () => ({
-  updateElectionStatusFromTimer: jest.fn(),
+vi.mock("features/election/electionSlice", () => ({
+  updateElectionStatusFromTimer: vi.fn(),
 }));
 
 beforeEach(() => {
-  jest.clearAllMocks();
-  jest.useFakeTimers();
+  vi.clearAllMocks();
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 describe("useCountdownStatus", () => {
-  const mockUseDispatch = useDispatch as jest.Mock;
-  const mockUseSelector = useSelector as jest.Mock;
+  const mockUseDispatch = useDispatch as Mock;
+  const mockUseSelector = useSelector as Mock;
 
   it("immediately sets countDownOver if time is in the past", () => {
-    const fakeDispatch = jest.fn();
+    const fakeDispatch = vi.fn();
     mockUseDispatch.mockReturnValue(fakeDispatch);
     mockUseSelector.mockReturnValue({
       startDate: 1759251240957,
@@ -39,7 +40,7 @@ describe("useCountdownStatus", () => {
 
     expect(result.current).toBe(false);
     act(() => {
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
     });
 
     expect(result.current).toBe(false);
@@ -47,7 +48,7 @@ describe("useCountdownStatus", () => {
   });
 
   it("sets countDownOver to true after time elapses", () => {
-    const fakeDispatch = jest.fn();
+    const fakeDispatch = vi.fn();
     const fakeTimerState = {
       startDate: 1759251240957,
       endDate: 1759251461273,
@@ -62,7 +63,7 @@ describe("useCountdownStatus", () => {
     expect(result.current).toBe(false);
 
     act(() => {
-      jest.advanceTimersByTime(4000);
+      vi.advanceTimersByTime(4000);
     });
 
     expect(result.current).toBe(true);
@@ -73,13 +74,13 @@ describe("useCountdownStatus", () => {
   });
 
   it("clears interval on unmount", () => {
-    const fakeDispatch = jest.fn();
+    const fakeDispatch = vi.fn();
     mockUseDispatch.mockReturnValue(fakeDispatch);
     mockUseSelector.mockReturnValue({ phase: "running" });
 
     const futureTime = Date.now() + 5000;
 
-    const clearSpy = jest.spyOn(global, "clearInterval");
+    const clearSpy = vi.spyOn(global, "clearInterval");
 
     const { unmount } = renderHook(() => useCountdownStatus(futureTime));
 
@@ -89,12 +90,12 @@ describe("useCountdownStatus", () => {
   });
 
   it("starts an interval when time is in the future", () => {
-    const fakeDispatch = jest.fn();
+    const fakeDispatch = vi.fn();
     mockUseDispatch.mockReturnValue(fakeDispatch);
     mockUseSelector.mockReturnValue({ phase: "running" });
 
     const futureTime = Date.now() + 2000;
-    const setSpy = jest.spyOn(global, "setInterval");
+    const setSpy = vi.spyOn(global, "setInterval");
 
     renderHook(() => useCountdownStatus(futureTime));
 

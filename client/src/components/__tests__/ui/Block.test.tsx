@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Block from "components/ui/Block";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Base.module.css", () => ({
+vi.mock("components/ui/Base.module.css", () => ({
   block: "base-block",
   "flex-vert": "base-flex-vert",
 }));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Block />", () => {
   beforeEach(() => {

@@ -2,8 +2,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import ForgotPasswordStartForm from "features/auth/components/forgotPassword/ForgotPasswordStartForm";
 import { AuthFieldBaseProps } from "features/auth/types/authFieldTypes";
 import { ForgotPasswordCommonFormProps } from "features/auth/components/forgotPassword/ForgotPasswordCommonForm";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFieldEmail",
   () =>
     ({ value, onChange }: AuthFieldBaseProps) => (
@@ -15,7 +16,7 @@ jest.mock(
       />
     ),
 );
-jest.mock(
+vi.mock(
   "features/auth/components/forgotPassword/ForgotPasswordCommonForm",
   () =>
     ({

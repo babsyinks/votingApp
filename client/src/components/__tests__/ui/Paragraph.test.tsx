@@ -1,11 +1,11 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Paragraph from "components/ui/Paragraph";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Paragraph />", () => {
   beforeEach(() => {
@@ -27,7 +27,10 @@ describe("<Paragraph />", () => {
     render(<Paragraph className="custom-class">Styled text</Paragraph>);
     const paragraph = screen.getByText("Styled text");
     expect(paragraph).toHaveClass("resolved-class");
-    expect(mockedGetCompClasses).toHaveBeenCalledWith(expect.any(Object), "custom-class");
+    expect(mockedGetCompClasses).toHaveBeenCalledWith(
+      expect.any(Object),
+      "custom-class",
+    );
   });
 
   it("applies default and resolved class from module CSS", () => {

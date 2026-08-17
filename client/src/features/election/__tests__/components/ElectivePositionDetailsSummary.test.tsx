@@ -1,16 +1,16 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ElectivePositionDetailsSummary from "features/election/components/ElectivePositionDetailsSummary";
 import { BlockProps } from "components/ui/Block";
 import { ElectivePositionDetailsSummaryPartProps } from "features/election/components/ElectivePositionDetailsSummaryPart";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
+vi.mock("components/ui/Block", () => ({ children, ...props }: BlockProps) => (
   <div data-testid="mock-block" {...props}>
     {children}
   </div>
 ));
 
-jest.mock(
+vi.mock(
   "features/election/components/ElectivePositionDetailsSummaryPart",
   () =>
     ({ label, value }: ElectivePositionDetailsSummaryPartProps) => (
@@ -47,7 +47,7 @@ describe("ElectivePositionDetailsSummary", () => {
     expect(wrapper).toHaveClass("bg-black");
     expect(wrapper).toHaveClass("text-white");
     expect(wrapper).toHaveClass("ff-patrick");
-    expect(wrapper).toHaveClass("mx-5-my-10");
+    expect(wrapper).toHaveClass("mx-5-my-10p");
     expect(wrapper).toHaveClass("tt-cap");
   });
 });

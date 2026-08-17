@@ -2,8 +2,9 @@ import { render, screen } from "@testing-library/react";
 import HeroSectionMessage from "features/home/components/HeroSectionMessage";
 import { HeadingProps } from "components/ui/Heading";
 import { ParagraphProps } from "components/ui/Paragraph";
+import { vi } from "vitest";
 
-jest.mock(
+vi.mock(
   "components/ui/Heading",
   () =>
     ({ children, type, className }: HeadingProps) => (
@@ -13,7 +14,7 @@ jest.mock(
     ),
 );
 
-jest.mock(
+vi.mock(
   "components/ui/Paragraph",
   () =>
     ({ children, className }: ParagraphProps) => (
@@ -30,7 +31,7 @@ describe("HeroSectionMessage", () => {
 
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent("Welcome to VoteNow");
-    expect(heading.className).toContain("text-4xl");
+    expect(heading.className).toContain("text-4xl-r");
     expect(heading.className).toContain("fw-700");
     expect(heading.className).toContain("ta-left");
   });
@@ -43,9 +44,9 @@ describe("HeroSectionMessage", () => {
     expect(paragraph.textContent).toContain(
       "Your secure and reliable online voting platform",
     );
-    expect(paragraph.className).toContain("text-xl");
+    expect(paragraph.className).toContain("text-xl-r");
     expect(paragraph.className).toContain(
-      "text-xl mb-2p5r paragraph-white paragraph-md",
+      "text-xl-r mb-2p5r paragraph-white paragraph-md",
     );
   });
 });

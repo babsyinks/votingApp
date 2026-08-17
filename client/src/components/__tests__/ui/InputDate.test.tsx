@@ -1,9 +1,9 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import InputDate from "components/ui/InputDate";
 import { BaseInputProps } from "components/ui/BaseInput";
+import { vi } from "vitest";
 
-jest.mock("components/ui/BaseInput", () => (props: BaseInputProps) => (
+vi.mock("components/ui/BaseInput", () => (props: BaseInputProps) => (
   <input data-testid="mock-baseinput" {...props} />
 ));
 
@@ -11,7 +11,7 @@ describe("<InputDate />", () => {
   const baseProps = {
     name: "dob",
     value: "2025-07-23",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     placeholder: "Enter your birth date",
     disabled: false,
     className: "custom-date-input",

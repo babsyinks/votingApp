@@ -1,14 +1,14 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Select from "components/ui/Select";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses");
-jest.mock("./Select.module.css", () => ({
+vi.mock("util/getCompClasses");
+vi.mock("./Select.module.css", () => ({
   sel: "default-sel-class",
 }));
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Select />", () => {
 
@@ -21,13 +21,13 @@ describe("<Select />", () => {
   const baseProps = {
     name: "test-select",
     value: "a",
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     selectOptions: mockOptions,
   };
 
   beforeEach(() => {
     mockedGetCompClasses.mockReturnValue("resolved-class");
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders with default props and options", () => {

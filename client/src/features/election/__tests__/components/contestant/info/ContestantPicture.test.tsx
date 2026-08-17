@@ -1,15 +1,17 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ContestantPicture from "features/election/components/contestant/info/ContestantPicture";
 import { BlockProps } from "components/ui/Block";
+import { vi } from "vitest";
 
-jest.mock("../ContestantPicture.module.css", () => ({
+vi.mock("../ContestantPicture.module.css", () => ({
   "contestant-picture-wrapper": "contestant-picture-wrapper",
   "contestant-picture": "contestant-picture",
   "contestant-picture-full": "contestant-picture-full",
 }));
 
-jest.mock("components/ui/Block", () => (props: BlockProps) => <div data-testid="contestant-picture-wrapper" {...props}></div>);
+vi.mock("components/ui/Block", () => (props: BlockProps) => (
+  <div data-testid="contestant-picture-wrapper" {...props}></div>
+));
 
 describe("ContestantPicture", () => {
   const pictureUrl = "https://example.com/image.jpg";
@@ -25,7 +27,7 @@ describe("ContestantPicture", () => {
 
   it("applies the default styling class to the wrapper", () => {
     render(<ContestantPicture picture={pictureUrl} />);
-    const wrapper = screen.getByTestId("contestant-picture-wrapper")
+    const wrapper = screen.getByTestId("contestant-picture-wrapper");
     expect(wrapper).toHaveClass("contestant-picture-wrapper");
   });
 

@@ -1,25 +1,26 @@
-import React from "react";
+
 import { render, screen, fireEvent } from "@testing-library/react";
 import ElectionDetailsHeaderHomeIcon from "features/election/components/ElectionDetailsHeaderHomeIcon";
 import useBreakpoint from "hooks/useBreakpoint";
 import { IProps } from "components/ui/I";
+import { vi, type Mock } from "vitest";
 
-jest.mock("components/ui/I", () => ({ className, onClick }: IProps) => (
+vi.mock("components/ui/I", () => ({ className, onClick }: IProps) => (
   <i data-testid="home-icon" className={className} onClick={onClick} />
 ));
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock("hooks/useBreakpoint", () => jest.fn());
+vi.mock("hooks/useBreakpoint", () => vi.fn());
 
 describe("ElectionDetailsHeaderHomeIcon", () => {
-  const mockUseBreakpoint = useBreakpoint as jest.Mock;
+  const mockUseBreakpoint = useBreakpoint as Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders with mobile breakpoint and applies 'fa-2x'", () => {

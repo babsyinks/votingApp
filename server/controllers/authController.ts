@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { generateTokensAndSendResponse } from "../helpers/authControllerHelpers";
+import { generateTokensAndSendResponse } from "../helpers/authHelpers";
 import sendPasswordResetLink from "../helpers/sendPasswordResetLink";
 import sendPasswordResetSuccessNotification from "../helpers/sendPasswordResetSuccessNotification";
 import sendSignupCode from "../helpers/sendSignupCode";
@@ -142,10 +142,8 @@ export const forgotPassword = async (
     const message = `A reset link has been sent to ${email}`;
 
     if (!user) return res.status(200).json({ message });
-
     const resetCode = await authService.createResetCode(email);
     await sendPasswordResetLink({ toEmail: email, resetCode });
-
     res.json({ success: true, message });
   } catch (e) {
     next(e);

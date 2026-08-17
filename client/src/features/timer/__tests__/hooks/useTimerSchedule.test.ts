@@ -2,8 +2,9 @@ import React from "react";
 import { renderHook, act } from "@testing-library/react";
 import useTimerSchedule from "../../hooks/useTimerSchedule";
 import timerLabelsWithTypes from "../../data/timerLabelsWithTypes";
+import { vi } from "vitest";
 
-jest.mock("../../data/timerLabelsWithTypes", () => [
+vi.mock("../../data/timerLabelsWithTypes", () => [
   { label: "Election Start Day", type: "date" },
   { label: "Election Start Time", type: "time" },
   { label: "Election End Day", type: "date" },

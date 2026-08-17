@@ -1,4 +1,5 @@
 import React from "react";
+
 import defaultStyle from "./Base.module.css";
 import getCompClasses from "../../util/getCompClasses";
 
@@ -45,7 +46,7 @@ export default function Section({
     <section
       className={`${defaultStyle.section} ${defaultStyle[type]} ${getCompClasses(
         defaultStyle,
-        className
+        className,
       )}`}
       style={style}
       {...rest}

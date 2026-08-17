@@ -5,22 +5,23 @@ import { BlockProps } from "components/ui/Block";
 import { BaseInputProps } from "components/ui/BaseInput";
 import { IProps } from "components/ui/I";
 import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
-jest.mock("../../ui/Input", () => (props: BaseInputProps) => (
+vi.mock("../../ui/Input", () => (props: BaseInputProps) => (
   <input data-testid="mock-input" {...props} />
 ));
 
-jest.mock("../../ui/Block", () => (props: BlockProps) => (
+vi.mock("../../ui/Block", () => (props: BlockProps) => (
   <div data-testid="mock-block" {...props} />
 ));
 
-jest.mock("../../ui/I", () => (props: IProps) => (
+vi.mock("../../ui/I", () => (props: IProps) => (
   <i data-testid="mock-icon" {...props} />
 ));
 
-jest.mock("util/getCompClasses");
+vi.mock("util/getCompClasses");
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<InputWithIcon />", () => {
   let baseProps: InputWithIconProps;
@@ -30,7 +31,7 @@ describe("<InputWithIcon />", () => {
       type: "text",
       name: "testInput",
       value: "",
-      onChange: jest.fn(),
+      onChange: vi.fn(),
       placeholder: "Enter value",
       className: "test-class",
       style: { color: "blue" },

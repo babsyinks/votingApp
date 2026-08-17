@@ -1,15 +1,15 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Hr from "components/ui/Hr";
 import getCompClasses from "util/getCompClasses";
+import { vi } from "vitest";
 
-jest.mock("util/getCompClasses", () => jest.fn());
+vi.mock("util/getCompClasses", () => vi.fn());
 
-const mockedGetCompClasses = jest.mocked(getCompClasses);
+const mockedGetCompClasses = vi.mocked(getCompClasses);
 
 describe("<Hr />", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders an <hr> element", () => {
@@ -20,7 +20,7 @@ describe("<Hr />", () => {
   });
 
   it("applies default and custom classes", () => {
-    mockedGetCompClasses.mockReturnValue("resolved-class")
+    mockedGetCompClasses.mockReturnValue("resolved-class");
     render(<Hr className="custom-class" />);
     const hr = screen.getByRole("separator");
     expect(hr).toHaveClass("hr-line");

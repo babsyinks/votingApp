@@ -1,15 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import MultiLayerWrapper from "layout/MultiLayerWrapper";
 import useWindowSize from "hooks/useWindowSize";
+import { vi } from "vitest";
 
-jest.mock("hooks/useWindowSize");
-const mockedUseWindowSize = jest.mocked(useWindowSize);
+vi.mock("hooks/useWindowSize");
+const mockedUseWindowSize = vi.mocked(useWindowSize);
 
 describe("MultiLayerWrapper", () => {
   const TestContent = () => <div>Wrapped content</div>;
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("renders children inside the inner Block", () => {

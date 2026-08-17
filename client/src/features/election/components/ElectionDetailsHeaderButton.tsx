@@ -14,7 +14,7 @@ const ElectionDetailsHeaderButton: React.FC<ElectionDetailsHeaderButtonProps> = 
   return (
     <Button
       onClick={onClick}
-      className={`bg-slateblue text-white border-rounded-5 p-10 ${className}`}
+      className={`bg-slateblue text-white border-rounded-5 p-10p ${className}`}
     >
       {btnLabel}
     </Button>

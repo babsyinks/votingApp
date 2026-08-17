@@ -5,22 +5,23 @@ import { ListProps } from "components/ui/List";
 import { LiProps } from "components/ui/Li";
 import { AuthFrameProps } from "features/auth/components/AuthFrame";
 import { AuthValidationIndicatorProps } from "features/auth/components/AuthValidationIndicator";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Heading", () => ({ children }: HeadingProps) => (
+vi.mock("components/ui/Heading", () => ({ children }: HeadingProps) => (
   <h4>{children}</h4>
 ));
-jest.mock("components/ui/List", () => ({ children }: ListProps) => (
+vi.mock("components/ui/List", () => ({ children }: ListProps) => (
   <ul>{children}</ul>
 ));
-jest.mock("components/ui/Li", () => ({ children, ...props }: LiProps) => (
+vi.mock("components/ui/Li", () => ({ children, ...props }: LiProps) => (
   <li {...props}>{children}</li>
 ));
-jest.mock(
+vi.mock(
   "features/auth/components/AuthFrame",
   () =>
     ({ children }: AuthFrameProps) => <div>{children}</div>,
 );
-jest.mock(
+vi.mock(
   "features/auth/components/AuthValidationIndicator",
   () =>
     ({ label, isValid }: AuthValidationIndicatorProps) => (
@@ -32,7 +33,7 @@ jest.mock(
 
 describe("AuthPasswordValidator", () => {
   it("renders heading and all validation indicators", () => {
-    const mockSetPasswordValid = jest.fn();
+    const mockSetPasswordValid = vi.fn();
     render(
       <AuthPasswordValidator
         password="weak"
@@ -63,7 +64,7 @@ describe("AuthPasswordValidator", () => {
   });
 
   it("calls setPasswordValid with false when password does not meet all criteria", () => {
-    const mockSetPasswordValid = jest.fn();
+    const mockSetPasswordValid = vi.fn();
     render(
       <AuthPasswordValidator
         password="weak"
@@ -75,7 +76,7 @@ describe("AuthPasswordValidator", () => {
   });
 
   it("calls setPasswordValid with true when password meets all criteria", () => {
-    const mockSetPasswordValid = jest.fn();
+    const mockSetPasswordValid = vi.fn();
     render(
       <AuthPasswordValidator
         password="StrongP@ssw0rd!"
@@ -87,7 +88,7 @@ describe("AuthPasswordValidator", () => {
   });
 
   it("renders indicators with correct valid/invalid state", () => {
-    const mockSetPasswordValid = jest.fn();
+    const mockSetPasswordValid = vi.fn();
     render(
       <AuthPasswordValidator
         password="Strongpass"

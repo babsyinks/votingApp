@@ -1,30 +1,31 @@
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 import HeroSectionLink from 'features/home/components/HeroSectionLink';
 import { useSelector } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { BlockProps } from 'components/ui/Block';
 import { ButtonProps } from 'components/ui/Button';
+import { vi, type Mock } from 'vitest';
 
 
-jest.mock('react-redux', () => ({
-  useSelector: jest.fn(),
+vi.mock('react-redux', () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock('components/ui/Block', () => ({ children, ...props }: BlockProps) => (
+vi.mock('components/ui/Block', () => ({ children, ...props }: BlockProps) => (
   <div data-testid="block" {...props}>
     {children}
   </div>
 ));
 
-jest.mock('components/ui/Button', () => ({ children, ...props }: ButtonProps) => (
+vi.mock('components/ui/Button', () => ({ children, ...props }: ButtonProps) => (
   <button data-testid="button" {...props}>
     {children}
   </button>
 ));
 
 describe('HeroSectionLink', () => {
-  const mockUseSelector = useSelector as jest.Mock;
+  const mockUseSelector = useSelector as Mock;
   const renderComponent = (props = { userIsAuthenticated: true }) =>
     render(
       <MemoryRouter>
@@ -33,7 +34,7 @@ describe('HeroSectionLink', () => {
     );
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders vote button for authenticated users when election is ongoing', () => {

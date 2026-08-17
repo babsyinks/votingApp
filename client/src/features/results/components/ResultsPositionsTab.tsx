@@ -16,7 +16,7 @@ export default function ResultsPositionsTab({
   const currentTabIndicator = tabIndex === currentIndex ? "bg-red" : "";
   return (
     <Span
-      className={`bg-blue-mute text-white fw-bold m-5 p-5 border-rounded-5 text-responsive-1p2 cs-pointer ff-nanum tt-cap ${currentTabIndicator}`}
+      className={`bg-blue-mute text-white fw-bold m-5p p-5p border-rounded-5 text-responsive-1p2 cs-pointer ff-nanum tt-cap ${currentTabIndicator}`}
       onClick={() => {
         setCurrentIndex(tabIndex);
       }}

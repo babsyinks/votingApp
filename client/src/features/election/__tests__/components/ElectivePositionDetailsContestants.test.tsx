@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import ElectivePositionDetailsContestants from "features/election/components/ElectivePositionDetailsContestants";
 import { useSelector } from "react-redux";
@@ -6,17 +5,18 @@ import assignVoteStatusColor from "../../helpers/assignVoteStatusColor";
 import { ContestantViewProps } from "features/election/components/contestant/ContestantView";
 import { mockContestants } from "../testData/mockContestants";
 import { ContestantType } from "features/election/types/contestantType";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
 }));
 
-jest.mock("../../helpers/assignVoteStatusColor", () => ({
+vi.mock("../../helpers/assignVoteStatusColor", () => ({
   __esModule: true,
-  default: jest.fn(),
+  default: vi.fn(),
 }));
 
-jest.mock(
+vi.mock(
   "features/election/components/contestant/ContestantView",
   () =>
     ({
@@ -40,16 +40,16 @@ jest.mock(
 describe("ElectivePositionDetailsContestants", () => {
   let votes: string[];
   const mockUserId = "user-123";
-  const mockedAssignVoteStatusColor = jest.mocked(assignVoteStatusColor);
+  const mockedAssignVoteStatusColor = vi.mocked(assignVoteStatusColor);
 
   const contestantsList: ContestantType[] = mockContestants;
 
   const position = "President";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (useSelector as jest.Mock).mockReturnValue({ userId: mockUserId });
+    (useSelector as Mock).mockReturnValue({ userId: mockUserId });
 
     mockedAssignVoteStatusColor.mockReturnValue({
       1: "lime",

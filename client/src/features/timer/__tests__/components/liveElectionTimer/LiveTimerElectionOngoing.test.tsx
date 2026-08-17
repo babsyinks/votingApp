@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import LiveTimerElectionOngoing from "features/timer/components/liveElectionTimer/LiveTimerElectionOngoing";
 import type { SpanProps } from "components/ui/Span";
+import { vi } from "vitest";
 
-jest.mock("components/ui/Span", () => {
+vi.mock("components/ui/Span", () => {
   return ({ children, className }: SpanProps) => (
     <span data-testid="custom-span" className={className}>
       {children}

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,48 +16,57 @@ import {
 } from "features/election/electionSlice";
 import { setUserInfo } from "features/user/userSlice";
 import { ElectionCategory } from "features/election/types/electionCategoryType";
+import { vi, type Mock } from "vitest";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useNavigate: vi.fn(),
 }));
 
-jest.mock("hooks/useAxios", () => ({
-  useAxios: jest.fn(),
+vi.mock("hooks/useAxios", () => ({
+  useAxios: vi.fn(),
 }));
 
-jest.mock("features/election/components/ElectionDetailsAllData", () => ({
+vi.mock("features/election/components/ElectionDetailsAllData", () => ({
   __esModule: true,
-  default: ({ listOfElectionData }: { listOfElectionData: ElectionCategory[] }) => (
-    <div data-testid="all-data">{JSON.stringify(listOfElectionData)}</div>
-  ),
+  default: ({
+    listOfElectionData,
+  }: {
+    listOfElectionData: ElectionCategory[];
+  }) => <div data-testid="all-data">{JSON.stringify(listOfElectionData)}</div>,
 }));
 
-jest.mock("features/election/components/ElectionDetailsNoData", () => ({
+vi.mock("features/election/components/ElectionDetailsNoData", () => ({
   __esModule: true,
   default: () => <div data-testid="no-data">No Election Data</div>,
 }));
 
 describe("ElectionDetails", () => {
-  const mockDispatch = jest.fn();
-  const mockNavigate = jest.fn();
-  const mockUseDispatch = jest.mocked(useDispatch);
-  const mockUseSelector = jest.mocked(useSelector);
-  const mockUseNavigate = jest.mocked(useNavigate);
+  const mockDispatch = vi.fn();
+  const mockNavigate = vi.fn();
+  const mockUseDispatch = vi.mocked(useDispatch);
+  const mockUseSelector = vi.mocked(useSelector);
+  const mockUseNavigate = vi.mocked(useNavigate);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockUseDispatch.mockReturnValue(mockDispatch);
     mockUseNavigate.mockReturnValue(mockNavigate);
   });
 
-  const mockUseAxios = ({ response = null, error = null }: { response?: any; error?: any }) => {
-    const triggerRequest = jest.fn(() => Promise.resolve());
-    (useAxios as jest.Mock).mockReturnValue({
+  const mockUseAxios = ({
+    response = null,
+    error = null,
+  }: {
+    response?: any;
+    error?: any;
+  }) => {
+    const triggerRequest = vi.fn(() => Promise.resolve());
+    (useAxios as Mock).mockReturnValue({
       response,
       error,
       triggerRequest,
